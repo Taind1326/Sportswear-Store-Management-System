@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đăng ký – SportZone</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/register.css" />
+</head>
+<body>
+
+  <!-- LEFT PANEL -->
+  <div class="panel-left">
+    <a href="index.html" class="brand">
+      <div class="brand-icon">⚡</div>
+      <span class="brand-name">SPORTZONE</span>
+    </a>
+    <div class="panel-copy">
+      <h2 class="tagline">GIA NHẬP<br><span>CỘNG ĐỒNG</span><br>SPORT<br>ZONE.</h2>
+      <p>Tạo tài khoản miễn phí và khám phá hàng nghìn sản phẩm thể thao chính hãng.</p>
+    </div>
+    <div class="perks">
+      <div class="perk-item">
+        <i class="bi bi-gift-fill"></i>
+        <span>Ưu đãi thành viên độc quyền mỗi tháng</span>
+      </div>
+      <div class="perk-item">
+        <i class="bi bi-truck"></i>
+        <span>Miễn phí vận chuyển cho đơn từ 500.000đ</span>
+      </div>
+      <div class="perk-item">
+        <i class="bi bi-arrow-repeat"></i>
+        <span>Đổi trả dễ dàng trong vòng 30 ngày</span>
+      </div>
+      <div class="perk-item">
+        <i class="bi bi-shield-check-fill"></i>
+        <span>100% sản phẩm chính hãng có tem bảo hành</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="panel-right">
+    <div class="form-box">
+
+      <div class="form-header">
+        <h1>ĐĂNG KÝ</h1>
+        <p>Đã có tài khoản? <a href="login.html">Đăng nhập ngay</a></p>
+      </div>
+
+      <!-- Step Indicator -->
+      <div style="display:flex; align-items:center; gap:0; margin-bottom:1.75rem;">
+        <div class="step-wrap">
+          <div class="step-dot active" id="dot1">1</div>
+          <div class="step-label">Thông tin</div>
+        </div>
+        <div class="step-line" id="line1" style="margin-bottom:14px;"></div>
+        <div class="step-wrap">
+          <div class="step-dot" id="dot2">2</div>
+          <div class="step-label">Mật khẩu</div>
+        </div>
+        <div class="step-line" id="line2" style="margin-bottom:14px;"></div>
+        <div class="step-wrap">
+          <div class="step-dot" id="dot3">3</div>
+          <div class="step-label">Xác nhận</div>
+        </div>
+      </div>
+
+      <form id="registerForm" novalidate>
+
+        <!-- STEP 1: Thông tin cá nhân -->
+        <div id="step1">
+          <div class="row-2col">
+            <div class="field-group">
+              <label for="firstName">Họ</label>
+              <div class="input-wrap">
+                <i class="bi bi-person icon-left"></i>
+                <input type="text" id="firstName" class="field-input" placeholder="Nguyễn" />
+              </div>
+              <div class="error-msg" id="firstNameError">
+                <i class="bi bi-x-circle-fill"></i>
+                <span>Vui lòng nhập họ của bạn.</span>
+              </div>
+            </div>
+            <div class="field-group">
+              <label for="lastName">Tên</label>
+              <div class="input-wrap">
+                <i class="bi bi-person icon-left"></i>
+                <input type="text" id="lastName" class="field-input" placeholder="Văn A" />
+              </div>
+              <div class="error-msg" id="lastNameError">
+                <i class="bi bi-x-circle-fill"></i>
+                <span>Vui lòng nhập tên của bạn.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="email">Địa chỉ email</label>
+            <div class="input-wrap">
+              <i class="bi bi-envelope icon-left"></i>
+              <input type="email" id="email" class="field-input" placeholder="ten@email.com" />
+            </div>
+            <div class="error-msg" id="emailError">
+              <i class="bi bi-x-circle-fill"></i>
+              <span id="emailErrMsg">Vui lòng nhập email hợp lệ.</span>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="phone">Số điện thoại</label>
+            <div class="input-wrap">
+              <i class="bi bi-telephone icon-left"></i>
+              <input type="tel" id="phone" class="field-input" placeholder="0987 654 321" />
+            </div>
+            <div class="error-msg" id="phoneError">
+              <i class="bi bi-x-circle-fill"></i>
+              <span>Số điện thoại không hợp lệ (10 chữ số, bắt đầu bằng 0).</span>
+            </div>
+          </div>
+
+          <button type="button" class="btn-submit" id="nextBtn">
+            <span class="btn-text">TIẾP THEO <i class="bi bi-arrow-right"></i></span>
+          </button>
+        </div>
+
+        <!-- STEP 2: Mật khẩu -->
+        <div id="step2" style="display:none;">
+          <div class="field-group">
+            <label for="password">Mật khẩu</label>
+            <div class="input-wrap">
+              <i class="bi bi-lock icon-left"></i>
+              <input type="password" id="password" class="field-input" placeholder="Nhập mật khẩu mạnh..." />
+              <button type="button" class="icon-right" id="togglePw">
+                <i class="bi bi-eye" id="eyeIcon1"></i>
+              </button>
+            </div>
+            <div class="strength-wrap">
+              <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+              <div class="strength-text" id="strengthText"></div>
+            </div>
+            <div class="error-msg" id="passwordError">
+              <i class="bi bi-x-circle-fill"></i>
+              <span id="passwordErrMsg">Mật khẩu phải có ít nhất 8 ký tự.</span>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="confirmPassword">Xác nhận mật khẩu</label>
+            <div class="input-wrap">
+              <i class="bi bi-lock-fill icon-left"></i>
+              <input type="password" id="confirmPassword" class="field-input" placeholder="Nhập lại mật khẩu..." />
+              <button type="button" class="icon-right" id="togglePw2">
+                <i class="bi bi-eye" id="eyeIcon2"></i>
+              </button>
+            </div>
+            <div class="error-msg" id="confirmPasswordError">
+              <i class="bi bi-x-circle-fill"></i>
+              <span>Mật khẩu xác nhận không khớp.</span>
+            </div>
+          </div>
+
+          <!-- Password hint -->
+          <div style="background:var(--bg-input); border-radius:10px; padding:12px 14px; margin-bottom:1rem; border:1px solid var(--border);">
+            <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:8px; font-weight:500;">Mật khẩu mạnh cần có:</p>
+            <div style="display:flex; flex-direction:column; gap:5px;">
+              <div class="hint-item" id="hint-length"><i class="bi bi-circle" style="font-size:0.6rem;"></i> <span style="font-size:0.78rem;">Ít nhất 8 ký tự</span></div>
+              <div class="hint-item" id="hint-upper"><i class="bi bi-circle" style="font-size:0.6rem;"></i> <span style="font-size:0.78rem;">Chữ hoa (A–Z)</span></div>
+              <div class="hint-item" id="hint-number"><i class="bi bi-circle" style="font-size:0.6rem;"></i> <span style="font-size:0.78rem;">Chữ số (0–9)</span></div>
+              <div class="hint-item" id="hint-special"><i class="bi bi-circle" style="font-size:0.6rem;"></i> <span style="font-size:0.78rem;">Ký tự đặc biệt (!@#$...)</span></div>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px;">
+            <button type="button" class="btn-submit" id="backBtn" style="background:var(--bg-input); color:var(--text-primary); border:1px solid var(--border); flex:0 0 auto; width:auto; padding:14px 20px; letter-spacing:1px;">
+              <span class="btn-text"><i class="bi bi-arrow-left"></i></span>
+            </button>
+            <button type="button" class="btn-submit" id="nextBtn2" style="flex:1;">
+              <span class="btn-text">TIẾP THEO <i class="bi bi-arrow-right"></i></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 3: Xác nhận & Điều khoản -->
+        <div id="step3" style="display:none;">
+          <!-- Tóm tắt thông tin -->
+          <div style="background:var(--bg-input); border:1px solid var(--border); border-radius:12px; padding:1.25rem; margin-bottom:1.25rem;">
+            <p style="font-size:0.72rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-label); margin-bottom:12px;">Xác nhận thông tin</p>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div style="display:flex; justify-content:space-between; font-size:0.88rem;">
+                <span style="color:var(--text-muted);">Họ tên</span>
+                <span id="summaryName" style="font-weight:500;">–</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:0.88rem;">
+                <span style="color:var(--text-muted);">Email</span>
+                <span id="summaryEmail" style="font-weight:500; font-size:0.82rem;">–</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:0.88rem;">
+                <span style="color:var(--text-muted);">Điện thoại</span>
+                <span id="summaryPhone" style="font-weight:500;">–</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="terms-row" id="termsRow">
+            <input type="checkbox" id="terms" />
+            <label for="terms">
+              Tôi đã đọc và đồng ý với <a href="#">Điều khoản dịch vụ</a> và <a href="#">Chính sách bảo mật</a> của SportZone.
+            </label>
+          </div>
+          <div class="error-msg" id="termsError" style="margin-top:-8px; margin-bottom:12px;">
+            <i class="bi bi-x-circle-fill"></i>
+            <span>Bạn cần đồng ý với điều khoản để tiếp tục.</span>
+          </div>
+
+          <div class="terms-row">
+            <input type="checkbox" id="newsletter" />
+            <label for="newsletter">
+              Nhận thông báo về khuyến mãi và sản phẩm mới (không bắt buộc).
+            </label>
+          </div>
+
+          <div style="display:flex; gap:10px; margin-top:0.5rem;">
+            <button type="button" class="btn-submit" id="backBtn2" style="background:var(--bg-input); color:var(--text-primary); border:1px solid var(--border); flex:0 0 auto; width:auto; padding:14px 20px; letter-spacing:1px;">
+              <span class="btn-text"><i class="bi bi-arrow-left"></i></span>
+            </button>
+            <button type="submit" class="btn-submit" id="submitBtn" style="flex:1;">
+              <span class="btn-text"><i class="bi bi-person-check"></i> TẠO TÀI KHOẢN</span>
+              <span class="spinner"><span class="spinner-ring"></span></span>
+            </button>
+          </div>
+        </div>
+
+      </form>
+
+      <div class="divider">HOẶC ĐĂNG KÝ VỚI</div>
+      <div class="social-row">
+        <a href="#" class="btn-social">
+          <svg width="18" height="18" viewBox="0 0 48 48" fill="none">
+            <path fill="#4285F4" d="M47.5 24.5c0-1.6-.1-3.2-.4-4.7H24v8.9h13.2c-.6 3-2.3 5.5-5 7.2v6h8c4.7-4.3 7.3-10.7 7.3-17.4z"/>
+            <path fill="#34A853" d="M24 48c6.5 0 12-2.1 16-5.8l-8-6c-2.1 1.4-4.8 2.3-8 2.3-6.1 0-11.3-4.1-13.2-9.7H2.7v6.1C6.7 42.6 14.8 48 24 48z"/>
+            <path fill="#FBBC05" d="M10.8 28.8c-.5-1.4-.8-2.9-.8-4.8s.3-3.4.8-4.8v-6.1H2.7C1 16.6 0 20.2 0 24s1 7.4 2.7 10.9l8.1-6.1z"/>
+            <path fill="#EA4335" d="M24 9.5c3.4 0 6.4 1.2 8.8 3.4l6.6-6.6C35.9 2.4 30.5 0 24 0 14.8 0 6.7 5.4 2.7 13.1l8.1 6.1C12.7 13.6 17.9 9.5 24 9.5z"/>
+          </svg>
+          Google
+        </a>
+        <a href="#" class="btn-social">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+          Facebook
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Success Overlay -->
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-icon"><i class="bi bi-person-check-fill"></i></div>
+    <p>TẠO TÀI KHOẢN THÀNH CÔNG!</p>
+    <small style="color:var(--text-muted); font-size:0.85rem;">Đang chuyển đến trang đăng nhập...</small>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="register.js" >
+ 
+  </script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi Tiết Sản Phẩm | SportZone</title>
+    <link rel="icon" type="image/png" href="Images/IconLogo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/product-detail.css" />
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">🗲 SportZone</a>
+            <button class="navbar-toggler border-0" data-bs-toggle="collapse" data-bs-target="#navMain">
+                <i class="bi bi-list text-light fs-4"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navMain">
+                <ul class="navbar-nav mx-auto gap-3">
+                    <li class="nav-item"><a class="nav-link" href="#">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="product-list.html">Sản phẩm</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Thể thao</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Khuyến mãi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Liên hệ</a></li>
+                </ul>
+                <a class="nav-link cart-btn" href="cart.html">
+                    <i class="bi bi-bag"></i> Giỏ hàng
+                    <span class="cart-badge" id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb-bar">
+        <div class="container">
+            <a href="#">Trang chủ</a> &nbsp;/&nbsp;
+            <a href="product-list.html">Sản phẩm</a> &nbsp;/&nbsp;
+            <span id="breadProduct">Chi tiết sản phẩm</span>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="container py-5">
+        <div class="row g-5">
+
+            <!-- GALLERY -->
+            <div class="col-lg-6">
+                <div class="main-img-wrap" id="mainImgWrap">
+                    <img id="mainImg" src="" alt="" />
+                    <span class="badge-detail" id="mainBadge"></span>
+                </div>
+                <div class="thumb-list" id="thumbList"></div>
+            </div>
+
+            <!-- INFO -->
+            <div class="col-lg-6">
+                <div class="product-info">
+                    <div class="brand-tag" id="infoBrand"></div>
+                    <h1 class="product-title" id="infoName"></h1>
+
+                    <div class="rating-row">
+                        <span class="stars">★★★★☆</span>
+                        <span class="rating-count">(128 đánh giá)</span>
+                        <span style="color:var(--muted);font-size:0.85rem">|</span>
+                        <span style="color:#4caf50;font-size:0.85rem"><i class="bi bi-check-circle-fill"></i> Còn hàng</span>
+                    </div>
+
+                    <div class="price-block">
+                        <span class="price-main" id="infoPrice"></span>
+                        <span class="price-old" id="infoOldPrice"></span>
+                        <span class="discount-tag" id="infoDiscount" style="display:none"></span>
+                    </div>
+
+                    <!-- COLOR -->
+                    <div class="option-label">Màu sắc: <strong id="colorLabel">Đen</strong></div>
+                    <div class="color-swatches" id="colorSwatches">
+                        <div class="color-swatch active" style="background:#1a1a1a;border:1px solid #444" data-color="Đen"></div>
+                        <div class="color-swatch" style="background:#fff;border:1px solid #444" data-color="Trắng"></div>
+                        <div class="color-swatch" style="background:#E8FF00" data-color="Vàng chanh"></div>
+                        <div class="color-swatch" style="background:#ff3c3c" data-color="Đỏ"></div>
+                        <div class="color-swatch" style="background:#3c8cff" data-color="Xanh dương"></div>
+                    </div>
+
+                    <!-- SIZE -->
+                    <div class="option-label">Kích thước: <strong id="sizeLabel">Chưa chọn</strong></div>
+                    <div class="size-buttons" id="sizeButtons"></div>
+
+                    <!-- QTY -->
+                    <div class="option-label">Số lượng:</div>
+                    <div class="qty-row">
+                        <button class="qty-btn" onclick="thayDoiSoLuong(-1)">−</button>
+                        <input type="number" class="qty-input" id="qtyInput" value="1" min="1" max="99" />
+                        <button class="qty-btn" onclick="thayDoiSoLuong(1)">+</button>
+                    </div>
+
+                    <!-- BUTTONS -->
+                    <div class="d-flex gap-3 mt-4">
+                        <button class="btn-add" onclick="themVaoGio()"><i class="bi bi-bag-plus"></i> Thêm vào giỏ hàng</button>
+                        <button class="btn-wishlist" id="wishBtn" onclick="batTatYeuThich()" title="Yêu thích"><i class="bi bi-heart"></i></button>
+                    </div>
+
+                    <!-- INFO TAGS -->
+                    <div class="info-tags">
+                        <div class="info-tag"><i class="bi bi-truck"></i> Miễn phí vận chuyển từ 500k</div>
+                        <div class="info-tag"><i class="bi bi-arrow-return-left"></i> Đổi trả 30 ngày</div>
+                        <div class="info-tag"><i class="bi bi-shield-check"></i> Hàng chính hãng 100%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="tab-wrap">
+            <div class="tab-btns">
+                <button class="tab-btn active" onclick="chuyenTab('desc', this)">Mô tả</button>
+                <button class="tab-btn" onclick="chuyenTab('spec', this)">Thông số</button>
+                <button class="tab-btn" onclick="chuyenTab('review', this)">Đánh giá (128)</button>
+            </div>
+            <div class="tab-content active" id="tab-desc">
+                <p id="tabDescription"></p>
+            </div>
+            <div class="tab-content" id="tab-spec">
+                <table class="spec-table" id="specTable"></table>
+            </div>
+            <div class="tab-content" id="tab-review">
+                <div style="display:flex;flex-direction:column;gap:1.2rem" id="reviewList"></div>
+            </div>
+        </div>
+
+        <!-- RELATED -->
+        <div class="mt-5">
+            <div class="section-title">Sản Phẩm Liên Quan</div>
+            <div class="row g-3" id="relatedGrid"></div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast-wrap" id="toastWrap"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="product-data.js"></script>
+    <script src="product-detail.js"></script>
+</body>
+</html>

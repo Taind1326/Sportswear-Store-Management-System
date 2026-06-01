@@ -1,0 +1,206 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - SportZone</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">⚡</div>
+                <span>SPORTZONE</span>
+            </div>
+
+            <div class="menu">
+                <button class="menu-item active" data-page="dashboard">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </button>
+
+                <button class="menu-item" data-page="products">
+                    <i class="bi bi-box-seam"></i> Quản lí sản phẩm
+                </button>
+
+                <button class="menu-item" data-page="orders">
+                    <i class="bi bi-receipt"></i> Quản lí đơn hàng
+                </button>
+
+                <button class="menu-item" data-page="customers">
+                    <i class="bi bi-people"></i> Quản lí khách hàng
+                </button>
+
+                <button class="menu-item" data-page="categories">
+                    <i class="bi bi-tags"></i> Quản lí danh mục
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <div class="topbar">
+                <div>
+                    <h1 id="pageTitle">Dashboard</h1>
+                    <p>Quản trị hệ thống cửa hàng thể thao SportZone</p>
+                </div>
+
+                <a href="index.html" class="btn btn-outline-light btn-sm">
+                    <i class="bi bi-house"></i> Về trang chủ
+                </a>
+            </div>
+
+            <!-- DASHBOARD -->
+            <section id="dashboard" class="content-page active">
+                <div class="row g-3">
+
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <i class="bi bi-box-seam"></i>
+                            <p>Tổng sản phẩm</p>
+                            <h3 id="totalProducts">0</h3>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <i class="bi bi-receipt"></i>
+                            <p>Tổng đơn hàng</p>
+                            <h3 id="totalOrders">0</h3>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <i class="bi bi-people"></i>
+                            <p>Tổng khách hàng</p>
+                            <h3 id="totalCustomers">0</h3>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <i class="bi bi-cash-stack"></i>
+                            <p>Doanh thu</p>
+                            <h3 id="totalRevenue">0đ</h3>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="admin-card mt-4">
+                    <h4>Báo cáo nhanh</h4>
+                    <p class="text-muted mb-0">
+                        Khu vực này dùng để tổng hợp nhanh số lượng sản phẩm, đơn hàng, khách hàng và doanh thu.
+                    </p>
+                </div>
+            </section>
+
+            <!-- PRODUCTS -->
+            <section id="products" class="content-page">
+                <div class="admin-card">
+                    <div class="section-header">
+                        <div>
+                            <h3>Quản lí sản phẩm</h3>
+                            <p>Thêm, sửa, xóa và tìm kiếm sản phẩm</p>
+                        </div>
+                        <button class="btn btn-warning">
+                            <i class="bi bi-plus-circle"></i> Thêm sản phẩm
+                        </button>
+                    </div>
+
+                    <input type="text" class="form-control search-input mb-3" placeholder="Tìm sản phẩm...">
+
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Mã</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Danh mục</th>
+                                    <th>Giá</th>
+                                    <th>Tồn kho</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ORDERS -->
+            <section id="orders" class="content-page">
+                <div class="admin-card">
+                    <h3>Quản lí đơn hàng</h3>
+                    <p>Danh sách đơn hàng và trạng thái xử lí</p>
+
+                    <table class="table table-dark table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Mã đơn</th>
+                                <th>Khách hàng</th>
+                                <th>Ngày đặt</th>
+                                <th>Tổng tiền</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderTable"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- CUSTOMERS -->
+            <section id="customers" class="content-page">
+                <div class="admin-card">
+                    <h3>Quản lí khách hàng</h3>
+                    <p>Danh sách thông tin khách hàng</p>
+
+                    <table class="table table-dark table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Mã KH</th>
+                                <th>Họ tên</th>
+                                <th>Email</th>
+                                <th>Số điện thoại</th>
+                                <th>Số đơn</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTable"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- CATEGORIES -->
+            <section id="categories" class="content-page">
+                <div class="admin-card">
+                    <h3>Quản lí danh mục</h3>
+                    <p>Danh mục sản phẩm trong cửa hàng</p>
+
+                    <table class="table table-dark table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Mã DM</th>
+                                <th>Tên danh mục</th>
+                                <th>Số sản phẩm</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryTable"></tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

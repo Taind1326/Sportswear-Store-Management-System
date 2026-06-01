@@ -1,0 +1,37 @@
+﻿body {
+    background: #0a0a0a;
+    color: #fff;
+}
+
+.form-control, .form-select {
+    background: #141414;
+    color: #fff;
+    border: 1px solid #333;
+}
+
+.total-box {
+    background: #141414;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.total-price {
+    color: #E8FF00;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.order-item {
+    border-bottom: 1px solid #333;
+    padding: 10px 0;
+}
+
+    .order-item:last-child {
+        border-bottom: none;
+    }
+
+.success-box {
+    display: none;
+    text-align: center;
+    padding: 40px;
+}

@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sản Phẩm | SportZone</title>
+    <link rel="icon" type="image/png" href="Images/IconLogo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/product-list.css" />
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">🗲 SportZone</a>
+            <button class="navbar-toggler border-0" data-bs-toggle="collapse" data-bs-target="#navMain">
+                <i class="bi bi-list text-light fs-4"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navMain">
+                <ul class="navbar-nav mx-auto gap-3">
+                    <li class="nav-item"><a class="nav-link" href="#">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">Sản phẩm</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Thể thao</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Khuyến mãi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Liên hệ</a></li>
+                </ul>
+                <a class="nav-link cart-btn" href="cart.html">
+                    <i class="bi bi-bag"></i> Giỏ hàng <span class="cart-badge" id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+        <div class="container">
+            <p style="color:var(--muted);font-size:0.8rem;letter-spacing:2px;text-transform:uppercase">
+                Trang chủ / <span style="color:var(--primary)">Sản phẩm</span>
+            </p>
+            <h1>Tất Cả Sản Phẩm</h1>
+            <p style="color:var(--muted);margin-top:0.5rem">Trang bị đẳng cấp — thi đấu không giới hạn</p>
+        </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="container py-4">
+
+        <!-- SEARCH BAR TOP -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div class="search-wrap">
+                <i class="bi bi-search"></i>
+                <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." />
+            </div>
+            <div style="color:var(--muted);font-size:0.85rem">
+                Tìm thấy <span id="totalCount" style="color:var(--primary);font-weight:700">0</span> sản phẩm
+            </div>
+        </div>
+
+        <div class="row g-4">
+
+            <!-- SIDEBAR -->
+            <div class="col-lg-3">
+                <div class="sidebar">
+                    <div class="sidebar-title">Bộ Lọc</div>
+
+                    <!-- Category -->
+                    <div class="filter-group">
+                        <h6>Danh mục</h6>
+                        <button class="filter-btn active" data-filter="category" data-value="all">Tất cả</button>
+                        <button class="filter-btn" data-filter="category" data-value="giay">👟 Giày thể thao</button>
+                        <button class="filter-btn" data-filter="category" data-value="ao">👕 Áo quần</button>
+                        <button class="filter-btn" data-filter="category" data-value="gym">🏋️ Dụng cụ gym</button>
+                        <button class="filter-btn" data-filter="category" data-value="bongda">⚽ Bóng đá</button>
+                        <button class="filter-btn" data-filter="category" data-value="phukien">🎒 Phụ kiện</button>
+                    </div>
+
+                    <!-- Brand -->
+                    <div class="filter-group">
+                        <h6>Thương hiệu</h6>
+                        <button class="filter-btn active" data-filter="brand" data-value="all">Tất cả</button>
+                        <button class="filter-btn" data-filter="brand" data-value="Nike">Nike</button>
+                        <button class="filter-btn" data-filter="brand" data-value="Adidas">Adidas</button>
+                        <button class="filter-btn" data-filter="brand" data-value="Puma">Puma</button>
+                        <button class="filter-btn" data-filter="brand" data-value="Under Armour">Under Armour</button>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="filter-group">
+                        <h6>Giá tối đa</h6>
+                        <div class="price-range">
+                            <input type="range" id="priceRange" min="0" max="5000000" value="5000000" step="100000" />
+                            <div class="price-labels">
+                                <span>0đ</span>
+                                <span id="priceLabel" style="color:var(--primary);font-weight:600">5.000.000đ</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="filter-btn" style="border:1.5px solid var(--accent);color:var(--accent);margin-top:0.5rem" onclick="resetFilters()">
+                        <i class="bi bi-arrow-counterclockwise"></i> Xóa bộ lọc
+                    </button>
+                </div>
+            </div>
+
+            <!-- PRODUCTS -->
+            <div class="col-lg-9">
+                <!-- Sort -->
+                <div class="sort-bar">
+                    <div class="result-count">Hiển thị <span id="showingCount">0</span> sản phẩm</div>
+                    <select id="sortSelect" onchange="applyFilters()">
+                        <option value="default">Mặc định</option>
+                        <option value="price-asc">Giá: Thấp → Cao</option>
+                        <option value="price-desc">Giá: Cao → Thấp</option>
+                        <option value="name-asc">Tên A–Z</option>
+                    </select>
+                </div>
+
+                <!-- Grid -->
+                <div class="row g-3" id="productGrid"></div>
+
+                <!-- Pagination -->
+                <nav class="mt-4 d-flex justify-content-center" id="paginationWrap">
+                    <ul class="pagination" id="pagination"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast-wrap" id="toastWrap"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="product-data.js"></script>
+    <script src="product-list.js"></script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đăng nhập – SportZone</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/login.css" />
+</head>
+<body>
+  
+  <div class="panel-left">
+    <a href="#" class="brand">
+      <div class="brand-icon">⚡</div>
+      <span class="brand-name">SPORTZONE</span>
+    </a>
+    <div class="dots">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="panel-copy">
+      <h2 class="tagline">TRANG BỊ<br>ĐỈNH CAO.<br><span>THI ĐẤU</span><br>KHÔNG NGỪNG.</h2>
+      <p>Hàng nghìn sản phẩm thể thao chính hãng — từ giày chạy đến đồ bơi chuyên nghiệp.</p>
+    </div>
+  </div>
+<!-- Trước mắt chưa có trang chủ nên tạm thời để link contact.html -->
+  <div class="panel-right">
+     <a href="contact.html" class="contact-link">
+  <i class="bi bi-arrow-left"></i> Liên hệ hỗ trợ
+</a>
+    <div class="form-box">
+      <div class="form-header">
+        <h1>ĐĂNG NHẬP</h1>
+        <p>Chưa có tài khoản? <a href="register.html">Đăng ký ngay</a></p>
+      </div>
+
+      <div class="alert-box" id="alertBox">
+        <i class="bi bi-exclamation-circle-fill"></i>
+        <span id="alertMsg">Email hoặc mật khẩu không chính xác.</span>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <div class="field-group">
+          <label for="email">Địa chỉ email</label>
+          <div class="input-wrap">
+            <i class="bi bi-envelope icon-left"></i>
+            <input type="email" id="email" class="field-input" placeholder="ten@email.com" autocomplete="email" />
+          </div>
+          <div class="error-msg" id="emailError">
+            <i class="bi bi-x-circle-fill"></i>
+            <span id="emailErrorMsg">Vui lòng nhập email hợp lệ.</span>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="password">Mật khẩu</label>
+          <div class="input-wrap">
+            <i class="bi bi-lock icon-left"></i>
+            <input type="password" id="password" class="field-input" placeholder="Nhập mật khẩu..." autocomplete="current-password" />
+            <button type="button" class="icon-right" id="togglePw" aria-label="Hiển thị mật khẩu">
+              <i class="bi bi-eye" id="eyeIcon"></i>
+            </button>
+          </div>
+          <div class="error-msg" id="passwordError">
+            <i class="bi bi-x-circle-fill"></i>
+            <span id="passwordErrorMsg">Vui lòng nhập mật khẩu (ít nhất 6 ký tự).</span>
+          </div>
+        </div>
+
+        <div class="options-row">
+          <label class="remember-label">
+            <input type="checkbox" id="remember" />
+            Ghi nhớ đăng nhập
+          </label>
+          <a href="forgot-password.html" class="forgot-link">Quên mật khẩu?</a>
+        </div>
+
+        <button type="submit" class="btn-login" id="loginBtn">
+          <span class="btn-text"><i class="bi bi-box-arrow-in-right"></i> ĐĂNG NHẬP</span>
+          <span class="spinner"><span class="spinner-ring"></span></span>
+        </button>
+      </form>
+
+      <div class="divider">HOẶC TIẾP TỤC VỚI</div>
+
+      <div class="social-row">
+        <a href="#" class="btn-social">
+          <svg width="18" height="18" viewBox="0 0 48 48" fill="none">
+            <path fill="#4285F4" d="M47.5 24.5c0-1.6-.1-3.2-.4-4.7H24v8.9h13.2c-.6 3-2.3 5.5-5 7.2v6h8c4.7-4.3 7.3-10.7 7.3-17.4z"/>
+            <path fill="#34A853" d="M24 48c6.5 0 12-2.1 16-5.8l-8-6c-2.1 1.4-4.8 2.3-8 2.3-6.1 0-11.3-4.1-13.2-9.7H2.7v6.1C6.7 42.6 14.8 48 24 48z"/>
+            <path fill="#FBBC05" d="M10.8 28.8c-.5-1.4-.8-2.9-.8-4.8s.3-3.4.8-4.8v-6.1H2.7C1 16.6 0 20.2 0 24s1 7.4 2.7 10.9l8.1-6.1z"/>
+            <path fill="#EA4335" d="M24 9.5c3.4 0 6.4 1.2 8.8 3.4l6.6-6.6C35.9 2.4 30.5 0 24 0 14.8 0 6.7 5.4 2.7 13.1l8.1 6.1C12.7 13.6 17.9 9.5 24 9.5z"/>
+          </svg>
+          Google
+        </a>
+        <a href="#" class="btn-social">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+          Facebook
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-icon"><i class="bi bi-check-lg"></i></div>
+    <p>ĐĂNG NHẬP THÀNH CÔNG</p>
+    <small style="color: var(--text-muted); font-size: 0.85rem;">Đang chuyển hướng...</small>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- JS tách riêng -->
+  <script src="login.js"></script>
+</body>
+</html>
