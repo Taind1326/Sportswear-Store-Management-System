@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="Images/IconLogo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../css/product-list.css" />
+    <link rel="stylesheet" href="product-list.css" />
 </head>
 <body>
 
@@ -21,7 +21,7 @@
             <div class="collapse navbar-collapse" id="navMain">
                 <ul class="navbar-nav mx-auto gap-3">
                     <li class="nav-item"><a class="nav-link" href="#">Trang chủ</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="#">Sản phẩm</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="product-list.html">Sản phẩm</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Thể thao</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Khuyến mãi</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Liên hệ</a></li>
@@ -36,89 +36,152 @@
     <!-- PAGE HEADER -->
     <div class="page-header">
         <div class="container">
-            <p style="color:var(--muted);font-size:0.8rem;letter-spacing:2px;text-transform:uppercase">
-                Trang chủ / <span style="color:var(--primary)">Sản phẩm</span>
-            </p>
+            <p class="breadcrumb-txt">Trang chủ / <span>Sản phẩm</span></p>
             <h1>Tất Cả Sản Phẩm</h1>
-            <p style="color:var(--muted);margin-top:0.5rem">Trang bị đẳng cấp — thi đấu không giới hạn</p>
+            <p class="subtitle">Trang bị đẳng cấp — thi đấu không giới hạn</p>
         </div>
     </div>
 
-    <!-- MAIN -->
+    <!-- ======= NEW ARRIVALS STRIP ======= -->
+    <section class="new-arrivals-section">
+        <div class="container">
+            <div class="section-heading">
+                <span class="section-pill new-pill"><i class="bi bi-lightning-fill"></i> Hàng Mới</span>
+                <p class="section-sub">Vừa cập bến — đừng bỏ lỡ</p>
+                <div class="strip-nav">
+                    <button class="strip-arrow" id="stripPrev"><i class="bi bi-chevron-left"></i></button>
+                    <button class="strip-arrow" id="stripNext"><i class="bi bi-chevron-right"></i></button>
+                </div>
+            </div>
+            <div class="new-strip-wrapper">
+                <div class="new-strip" id="newStrip"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======= MAIN CONTENT ======= -->
     <div class="container py-4">
 
-        <!-- SEARCH BAR TOP -->
-        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <!-- SEARCH + COUNT -->
+        <div class="search-row mb-4">
             <div class="search-wrap">
                 <i class="bi bi-search"></i>
-                <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." />
+                <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm, thương hiệu..." />
             </div>
-            <div style="color:var(--muted);font-size:0.85rem">
-                Tìm thấy <span id="totalCount" style="color:var(--primary);font-weight:700">0</span> sản phẩm
+            <div class="found-badge">
+                <i class="bi bi-funnel"></i>
+                <span id="totalCount">0</span> sản phẩm
             </div>
         </div>
 
         <div class="row g-4">
-
             <!-- SIDEBAR -->
             <div class="col-lg-3">
                 <div class="sidebar">
-                    <div class="sidebar-title">Bộ Lọc</div>
+                    <div class="sidebar-header">
+                        <span class="sidebar-title"><i class="bi bi-sliders2"></i> Bộ Lọc</span>
+                        <button class="reset-inline" onclick="resetFilters()"><i class="bi bi-arrow-counterclockwise"></i> Xóa</button>
+                    </div>
 
                     <!-- Category -->
-                    <div class="filter-group">
-                        <h6>Danh mục</h6>
-                        <button class="filter-btn active" data-filter="category" data-value="all">Tất cả</button>
-                        <button class="filter-btn" data-filter="category" data-value="giay">👟 Giày thể thao</button>
-                        <button class="filter-btn" data-filter="category" data-value="ao">👕 Áo quần</button>
-                        <button class="filter-btn" data-filter="category" data-value="gym">🏋️ Dụng cụ gym</button>
-                        <button class="filter-btn" data-filter="category" data-value="bongda">⚽ Bóng đá</button>
-                        <button class="filter-btn" data-filter="category" data-value="phukien">🎒 Phụ kiện</button>
-                    </div>
-
-                    <!-- Brand -->
-                    <div class="filter-group">
-                        <h6>Thương hiệu</h6>
-                        <button class="filter-btn active" data-filter="brand" data-value="all">Tất cả</button>
-                        <button class="filter-btn" data-filter="brand" data-value="Nike">Nike</button>
-                        <button class="filter-btn" data-filter="brand" data-value="Adidas">Adidas</button>
-                        <button class="filter-btn" data-filter="brand" data-value="Puma">Puma</button>
-                        <button class="filter-btn" data-filter="brand" data-value="Under Armour">Under Armour</button>
-                    </div>
-
-                    <!-- Price -->
-                    <div class="filter-group">
-                        <h6>Giá tối đa</h6>
-                        <div class="price-range">
-                            <input type="range" id="priceRange" min="0" max="5000000" value="5000000" step="100000" />
-                            <div class="price-labels">
-                                <span>0đ</span>
-                                <span id="priceLabel" style="color:var(--primary);font-weight:600">5.000.000đ</span>
-                            </div>
+                    <div class="filter-block">
+                        <div class="filter-label">Danh mục</div>
+                        <div class="chip-group" id="catChips">
+                            <button class="chip active" data-filter="category" data-value="all">Tất cả</button>
+                            <button class="chip" data-filter="category" data-value="giay">👟 Giày</button>
+                            <button class="chip" data-filter="category" data-value="ao">👕 Áo quần</button>
+                            <button class="chip" data-filter="category" data-value="gym">🏋️ Gym</button>
+                            <button class="chip" data-filter="category" data-value="bongda">⚽ Bóng đá</button>
+                            <button class="chip" data-filter="category" data-value="phukien">🎒 Phụ kiện</button>
                         </div>
                     </div>
 
-                    <button class="filter-btn" style="border:1.5px solid var(--accent);color:var(--accent);margin-top:0.5rem" onclick="resetFilters()">
-                        <i class="bi bi-arrow-counterclockwise"></i> Xóa bộ lọc
-                    </button>
+                    <div class="filter-divider"></div>
+
+                    <!-- Brand -->
+                    <div class="filter-block">
+                        <div class="filter-label">Thương hiệu</div>
+                        <div class="brand-list" id="brandChips">
+                            <button class="brand-btn active" data-filter="brand" data-value="all">
+                                <span class="brand-dot all-dot"></span> Tất cả
+                            </button>
+                            <button class="brand-btn" data-filter="brand" data-value="Nike">
+                                <span class="brand-dot nike-dot"></span> Nike
+                            </button>
+                            <button class="brand-btn" data-filter="brand" data-value="Adidas">
+                                <span class="brand-dot adidas-dot"></span> Adidas
+                            </button>
+                            <button class="brand-btn" data-filter="brand" data-value="Puma">
+                                <span class="brand-dot puma-dot"></span> Puma
+                            </button>
+                            <button class="brand-btn" data-filter="brand" data-value="Under Armour">
+                                <span class="brand-dot ua-dot"></span> Under Armour
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="filter-divider"></div>
+
+                    <!-- Price -->
+                    <div class="filter-block">
+                        <div class="filter-label" style="display:flex;justify-content:space-between;align-items:center">
+                            Giá tối đa
+                            <span id="priceLabel" class="price-badge">5.000.000đ</span>
+                        </div>
+                        <div class="range-wrap">
+                            <input type="range" id="priceRange" min="0" max="5000000" value="5000000" step="100000" />
+                            <div class="range-track-fill" id="trackFill"></div>
+                        </div>
+                        <div class="range-minmax">
+                            <span>0đ</span><span>5.000.000đ</span>
+                        </div>
+                    </div>
+
+                    <div class="filter-divider"></div>
+
+                    <!-- Sort (inside sidebar on mobile too) -->
+                    <div class="filter-block">
+                        <div class="filter-label">Sắp xếp</div>
+                        <select id="sortSelect" class="sort-select" onchange="applyFilters()">
+                            <option value="default">Mặc định</option>
+                            <option value="price-asc">Giá: Thấp → Cao</option>
+                            <option value="price-desc">Giá: Cao → Thấp</option>
+                            <option value="name-asc">Tên A–Z</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <!-- PRODUCTS -->
+            <!-- PRODUCTS AREA -->
             <div class="col-lg-9">
-                <!-- Sort -->
-                <div class="sort-bar">
-                    <div class="result-count">Hiển thị <span id="showingCount">0</span> sản phẩm</div>
-                    <select id="sortSelect" onchange="applyFilters()">
-                        <option value="default">Mặc định</option>
-                        <option value="price-asc">Giá: Thấp → Cao</option>
-                        <option value="price-desc">Giá: Cao → Thấp</option>
-                        <option value="name-asc">Tên A–Z</option>
-                    </select>
+
+                <!-- SALE SECTION (shown when sale items exist in results) -->
+                <div id="saleSectionWrap" style="display:none" class="mb-4">
+                    <div class="section-heading-inline">
+                        <span class="section-pill sale-pill"><i class="bi bi-fire"></i> Đang Giảm Giá</span>
+                        <div class="fire-bar"></div>
+                    </div>
+                    <div class="row g-3" id="saleGrid"></div>
+                    <div class="sale-divider my-4"></div>
                 </div>
 
-                <!-- Grid -->
+                <!-- ALL / FILTERED PRODUCTS -->
+                <div id="allSectionLabel" class="section-heading-inline mb-3" style="display:none">
+                    <span class="section-pill all-pill"><i class="bi bi-grid-3x3-gap"></i> Tất Cả Sản Phẩm</span>
+                </div>
+
+                <div class="sort-bar-top mb-3">
+                    <span class="showing-txt">Hiển thị <strong id="showingCount">0</strong> sản phẩm</span>
+                </div>
+
                 <div class="row g-3" id="productGrid"></div>
+
+                <!-- Empty state -->
+                <div id="emptyState" style="display:none" class="empty-state">
+                    <i class="bi bi-search"></i>
+                    <p>Không tìm thấy sản phẩm nào.</p>
+                    <button onclick="resetFilters()" class="btn-reset-empty">Xóa bộ lọc</button>
+                </div>
 
                 <!-- Pagination -->
                 <nav class="mt-4 d-flex justify-content-center" id="paginationWrap">
@@ -132,7 +195,6 @@
     <div class="toast-wrap" id="toastWrap"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="product-data.js"></script>
     <script src="product-list.js"></script>
 </body>

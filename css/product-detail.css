@@ -1,12 +1,13 @@
 ﻿:root {
-    --primary: #E8FF00;
-    --dark: #0a0a0a;
-    --dark2: #141414;
-    --dark3: #1e1e1e;
-    --dark4: #2a2a2a;
-    --text: #f0f0f0;
-    --muted: #888;
-    --accent: #ff3c3c;
+    --primary: #0ea5e9;
+    --primary-dark: #0284c7;
+    --dark: #0f172a;
+    --dark2: #1e293b;
+    --dark3: #f8fafc;
+    --dark4: #e2e8f0;
+    --text: #0f172a;
+    --muted: #64748b;
+    --accent: #ef4444;
 }
 
 * {
@@ -16,41 +17,56 @@
 }
 
 body {
-    background: var(--dark);
+    background: #ffffff;
     color: var(--text);
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'Barlow', sans-serif;
 }
 
 /* NAVBAR */
 .navbar {
-    background: var(--dark2);
-    border-bottom: 2px solid var(--primary);
+    background: var(--dark);
+    border-bottom: 3px solid var(--primary);
     padding: 0.75rem 2rem;
 }
 
 .navbar-brand {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-size: 2rem;
     color: var(--primary) !important;
     letter-spacing: 2px;
+    font-weight: 900;
+}
+
+/* Điều chỉnh cho thanh menu lớn và thoáng hơn */
+.navbar-nav {
+    gap: 1.5rem !important; /* Tăng khoảng cách giữa các mục menu */
+    align-items: center;
 }
 
 .nav-link {
-    color: var(--text) !important;
-    font-weight: 500;
+    color: #fff !important;
+    font-weight: 600; /* Làm chữ đậm hơn */
     text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
-    transition: color 0.2s;
+    font-size: 1rem; /* Tăng kích thước chữ lên 16px */
+    letter-spacing: 1.5px; /* Tăng khoảng cách chữ cho cảm giác sang trọng */
+    padding: 0.8rem 1rem !important; /* Tăng vùng nhấn (padding) để menu to hơn */
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent; /* Tạo hiệu ứng gạch chân khi hover */
 }
 
     .nav-link:hover {
         color: var(--primary) !important;
+        border-bottom: 2px solid var(--primary);
+    }
+
+    .nav-link.active {
+        color: var(--primary) !important;
+        border-bottom: 2px solid var(--primary);
     }
 
 .cart-btn {
     background: var(--primary);
-    color: var(--dark) !important;
+    color: #fff !important;
     border-radius: 4px;
     padding: 0.4rem 1rem;
     font-weight: 700;
@@ -67,7 +83,7 @@ body {
 
 /* BREADCRUMB */
 .breadcrumb-bar {
-    background: var(--dark2);
+    background: var(--dark3);
     border-bottom: 1px solid var(--dark4);
     padding: 0.8rem 0;
     font-size: 0.82rem;
@@ -93,6 +109,7 @@ body {
     overflow: hidden;
     aspect-ratio: 1/1;
     position: relative;
+    border: 1px solid var(--dark4);
 }
 
     .main-img-wrap img {
@@ -119,8 +136,8 @@ body {
 }
 
 .badge-new {
-    background: var(--primary);
-    color: var(--dark);
+    background: #10b981;
+    color: #fff;
 }
 
 .badge-sale {
@@ -171,12 +188,13 @@ body {
 }
 
 .product-title {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-size: 2.8rem;
     line-height: 1.05;
     color: var(--text);
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     margin-bottom: 0.5rem;
+    font-weight: 800;
 }
 
 .rating-row {
@@ -187,7 +205,7 @@ body {
 }
 
 .stars {
-    color: var(--primary);
+    color: #fbbf24;
     font-size: 0.95rem;
 }
 
@@ -204,10 +222,10 @@ body {
 }
 
 .price-main {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-size: 2.4rem;
     color: var(--primary);
-    letter-spacing: 2px;
+    letter-spacing: 1px;
 }
 
 .price-old {
@@ -265,12 +283,11 @@ body {
 }
 
 .size-btn {
-    background: var(--dark3);
+    background: #fff;
     border: 2px solid var(--dark4);
     color: var(--text);
     padding: 0.4rem 1rem;
     border-radius: 4px;
-    font-family: 'Times New Roman', Times, serif;
     font-weight: 600;
     font-size: 0.9rem;
     cursor: pointer;
@@ -285,7 +302,7 @@ body {
     .size-btn.active {
         background: var(--primary);
         border-color: var(--primary);
-        color: var(--dark);
+        color: #fff;
     }
 
     .size-btn.unavailable {
@@ -303,7 +320,7 @@ body {
 }
 
 .qty-btn {
-    background: var(--dark3);
+    background: #fff;
     border: 2px solid var(--dark4);
     color: var(--text);
     width: 38px;
@@ -324,14 +341,13 @@ body {
     }
 
 .qty-input {
-    background: var(--dark3);
+    background: #fff;
     border: 2px solid var(--dark4);
     color: var(--text);
     width: 56px;
     height: 38px;
     text-align: center;
     border-radius: 4px;
-    font-family: 'Times New Roman', Times, serif;
     font-size: 1.2rem;
 }
 
@@ -343,26 +359,24 @@ body {
 /* ACTION BUTTONS */
 .btn-add {
     background: var(--primary);
-    color: var(--dark);
+    color: #fff;
     border: none;
     padding: 0.9rem 2rem;
     border-radius: 6px;
-    font-family: 'Times New Roman', Times, serif;
+    font-weight: 700;
     font-size: 1.2rem;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     cursor: pointer;
     transition: all 0.2s;
     flex: 1;
 }
 
     .btn-add:hover {
-        background: var(--primary-dark, #c8dc00);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(232,255,0,0.25);
+        background: var(--primary-dark);
     }
 
 .btn-wishlist {
-    background: var(--dark3);
+    background: #fff;
     border: 2px solid var(--dark4);
     color: var(--text);
     padding: 0.9rem;
@@ -375,12 +389,6 @@ body {
     .btn-wishlist:hover {
         border-color: var(--accent);
         color: var(--accent);
-    }
-
-    .btn-wishlist.liked {
-        color: var(--accent);
-        border-color: var(--accent);
-        background: rgba(255,60,60,0.1);
     }
 
 /* INFO TAGS */
@@ -423,7 +431,6 @@ body {
     border: none;
     color: var(--muted);
     padding: 0.7rem 1.5rem;
-    font-family: 'Times New Roman', Times, serif;
     font-weight: 600;
     font-size: 0.9rem;
     text-transform: uppercase;
@@ -472,15 +479,17 @@ body {
 
 /* RELATED */
 .section-title {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'Barlow Condensed', sans-serif;
     font-size: 2rem;
-    color: var(--primary);
-    letter-spacing: 3px;
+    color: var(--text);
+    letter-spacing: 2px;
     margin-bottom: 1.5rem;
+    font-weight: 800;
 }
 
 .related-card {
-    background: var(--dark2);
+    background: #fff;
+    border: 1px solid var(--dark4);
     border-radius: 8px;
     overflow: hidden;
     transition: transform 0.2s;
@@ -490,6 +499,7 @@ body {
 
     .related-card:hover {
         transform: translateY(-4px);
+        border-color: var(--primary);
     }
 
     .related-card img {
@@ -509,7 +519,7 @@ body {
 }
 
 .related-card-price {
-    font-family: 'Times New Roman', Times, serif;
+    font-weight: 700;
     font-size: 1.1rem;
     color: var(--primary);
 }
@@ -523,9 +533,9 @@ body {
 }
 
 .my-toast {
-    background: var(--dark2);
+    background: var(--dark);
     border: 1.5px solid var(--primary);
-    color: var(--text);
+    color: #fff;
     border-radius: 8px;
     padding: 0.9rem 1.4rem;
     font-size: 0.9rem;
@@ -533,7 +543,7 @@ body {
     align-items: center;
     gap: 0.5rem;
     animation: slideUp 0.3s ease;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
 }
 
 @keyframes slideUp {
