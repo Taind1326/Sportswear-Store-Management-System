@@ -1,118 +1,279 @@
 ﻿const $ = (id) => document.getElementById(id);
 
-let products = [
-    { id: 1, name: "Nike Air Zoom Pegasus 40", category: "Giày", price: 3200000, stock: 20 },
-    { id: 2, name: "Adidas Ultraboost 23", category: "Giày", price: 4500000, stock: 12 },
-    { id: 3, name: "Áo Nike Pro Compression", category: "Áo quần", price: 850000, stock: 35 },
-    { id: 4, name: "Bóng đá Nike Premier League", category: "Bóng đá", price: 950000, stock: 18 }
+const products = [
+  {
+    code: 'SP001',
+    name: 'Giày chạy bộ Nike Air Zoom',
+    category: 'Giày',
+    price: 2450000,
+    stock: 32,
+    sold: 128,
+    image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200'
+  },
+  {
+    code: 'SP002',
+    name: 'Áo thun Adidas Training',
+    category: 'Áo',
+    price: 690000,
+    stock: 54,
+    sold: 96,
+    image: 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=200'
+  },
+  {
+    code: 'SP003',
+    name: 'Balo thể thao SportZone',
+    category: 'Phụ kiện',
+    price: 850000,
+    stock: 8,
+    sold: 74,
+    image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200'
+  },
+  {
+    code: 'SP004',
+    name: 'Bình nước tập gym',
+    category: 'Phụ kiện',
+    price: 220000,
+    stock: 6,
+    sold: 63,
+    image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=200'
+  }
 ];
 
-let orders = [
-    { id: "DH001", customer: "Nguyễn Văn A", date: "05/05/2026", total: 4050000, status: "Hoàn thành" },
-    { id: "DH002", customer: "Trần Thị B", date: "04/05/2026", total: 950000, status: "Đang giao" },
-    { id: "DH003", customer: "Lê Minh C", date: "03/05/2026", total: 1800000, status: "Chờ xử lý" }
+const orders = [
+  {
+    id: '#SZ1024',
+    customer: 'Nguyễn Hải Yến',
+    product: 'Giày chạy bộ Nike Air Zoom',
+    total: 2450000,
+    status: 'done',
+    text: 'Hoàn thành',
+    date: '2026-06-05'
+  },
+  {
+    id: '#SZ1023',
+    customer: 'Lê Minh Chiến',
+    product: 'Áo thun Adidas Training',
+    total: 690000,
+    status: 'pending',
+    text: 'Đang xử lý',
+    date: '2026-06-05'
+  },
+  {
+    id: '#SZ1022',
+    customer: 'Trần Gia Bảo',
+    product: 'Balo thể thao SportZone',
+    total: 850000,
+    status: 'done',
+    text: 'Hoàn thành',
+    date: '2026-06-04'
+  }
 ];
 
-let customers = [
-    { id: "KH001", name: "Nguyễn Văn A", email: "vana@gmail.com", phone: "0987654321", orders: 3 },
-    { id: "KH002", name: "Trần Thị B", email: "thib@gmail.com", phone: "0912345678", orders: 1 },
-    { id: "KH003", name: "Lê Minh C", email: "minhc@gmail.com", phone: "0909123456", orders: 2 }
+const salesData = [
+  { day: 'T2', value: 12500000 },
+  { day: 'T3', value: 18200000 },
+  { day: 'T4', value: 10800000 },
+  { day: 'T5', value: 24600000 },
+  { day: 'T6', value: 0 },
+  { day: 'T7', value: 0 },
+  { day: 'CN', value: 0 }
 ];
 
-let categories = [
-    { id: "DM01", name: "Giày", count: 2 },
-    { id: "DM02", name: "Áo quần", count: 1 },
-    { id: "DM03", name: "Bóng đá", count: 1 }
-];
-
-function formatMoney(number) {
-    return number.toLocaleString("vi-VN") + "đ";
+function formatCurrency(value) {
+  return value.toLocaleString('vi-VN') + 'đ';
 }
 
-/* CHUYỂN TAB SIDEBAR */
-document.querySelectorAll(".menu-item").forEach(button => {
-    button.addEventListener("click", () => {
-        document.querySelectorAll(".menu-item").forEach(btn => btn.classList.remove("active"));
-        button.classList.add("active");
-
-        const page = button.dataset.page;
-
-        document.querySelectorAll(".content-page").forEach(section => {
-            section.classList.remove("active");
-        });
-
-        $(page).classList.add("active");
-        $("pageTitle").textContent = button.textContent.trim();
-    });
-});
-
-/* RENDER DASHBOARD */
-function renderDashboard() {
-    $("totalProducts").textContent = products.length;
-    $("totalOrders").textContent = orders.length;
-    $("totalCustomers").textContent = customers.length;
-
-    const revenue = orders.reduce((sum, item) => sum + item.total, 0);
-    $("totalRevenue").textContent = formatMoney(revenue);
+function formatMillion(value) {
+  return (value / 1000000).toFixed(1) + 'M';
 }
 
-/* RENDER PRODUCTS */
-function renderProducts() {
-    $("productTable").innerHTML = products.map(item => `
-    <tr>
-      <td>${item.id}</td>
-      <td>${item.name}</td>
-      <td>${item.category}</td>
-      <td>${formatMoney(item.price)}</td>
-      <td>${item.stock}</td>
-      <td>
-        <button class="btn btn-sm btn-outline-warning">Sửa</button>
-        <button class="btn btn-sm btn-outline-danger">Xóa</button>
-      </td>
-    </tr>
-  `).join("");
+function getTodayIndex() {
+  const day = new Date().getDay();
+  if (day === 0) return 6;
+  return day - 1;
 }
 
-/* RENDER ORDERS */
+function getVisibleSalesData() {
+  return salesData.slice(0, getTodayIndex() + 1);
+}
+
+function getTodayDate() {
+  const now = new Date();
+  return now.toISOString().slice(0, 10);
+}
+
+function renderStats() {
+  const visibleSales = getVisibleSalesData();
+  const totalRevenue = visibleSales.reduce((sum, item) => sum + item.value, 0);
+  const todayOrders = orders.filter(order => order.date === getTodayDate()).length;
+  const lowStock = products.filter(product => product.stock <= 10).length;
+
+  const stats = [
+    {
+      title: 'Tổng sản phẩm',
+      value: products.length,
+      icon: 'bi-box-seam',
+      color: 'blue'
+    },
+    {
+      title: 'Đơn hôm nay',
+      value: todayOrders,
+      icon: 'bi-receipt',
+      color: 'green'
+    },
+    {
+      title: 'Doanh thu tuần',
+      value: formatMillion(totalRevenue),
+      icon: 'bi-cash-stack',
+      color: 'orange'
+    },
+    {
+      title: 'Sắp hết hàng',
+      value: lowStock,
+      icon: 'bi-exclamation-triangle',
+      color: 'red'
+    }
+  ];
+
+  $('statsGrid').innerHTML = stats.map(item => `
+    <div class="stat-card">
+      <div class="stat-icon ${item.color}">
+        <i class="bi ${item.icon}"></i>
+      </div>
+      <div>
+        <p>${item.title}</p>
+        <h3>${item.value}</h3>
+      </div>
+    </div>
+  `).join('');
+}
+
+function getProductStatus(product) {
+  if (product.stock <= 10) {
+    return {
+      className: 'low',
+      text: 'Sắp hết'
+    };
+  }
+
+  return {
+    className: 'active',
+    text: 'Đang bán'
+  };
+}
+
+function renderProducts(list = products) {
+  $('productTable').innerHTML = list.map(product => {
+    const status = getProductStatus(product);
+
+    return `
+      <tr>
+        <td>
+          <div class="product-info">
+            <img class="product-img" src="${product.image}" alt="${product.name}">
+            <div>
+              <span class="product-name">${product.name}</span>
+              <span class="product-code">${product.code}</span>
+            </div>
+          </div>
+        </td>
+        <td>${product.category}</td>
+        <td>${formatCurrency(product.price)}</td>
+        <td>${product.stock}</td>
+        <td><span class="badge-status ${status.className}">${status.text}</span></td>
+        <td>
+          <button class="btn btn-sm btn-light">
+            <i class="bi bi-three-dots"></i>
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function renderBestSeller() {
+  const bestProducts = [...products]
+    .sort((a, b) => b.sold - a.sold)
+    .slice(0, 3);
+
+  $('bestList').innerHTML = bestProducts.map(product => `
+    <div class="best-item">
+      <img src="${product.image}" alt="${product.name}">
+      <div>
+        <h4>${product.name}</h4>
+        <p>Đã bán ${product.sold} sản phẩm</p>
+      </div>
+    </div>
+  `).join('');
+}
+
 function renderOrders() {
-    $("orderTable").innerHTML = orders.map(item => `
+  $('orderTable').innerHTML = orders.map(order => `
     <tr>
-      <td>${item.id}</td>
-      <td>${item.customer}</td>
-      <td>${item.date}</td>
-      <td>${formatMoney(item.total)}</td>
-      <td><span class="badge bg-warning text-dark">${item.status}</span></td>
+      <td>${order.id}</td>
+      <td>${order.customer}</td>
+      <td>${order.product}</td>
+      <td>${formatCurrency(order.total)}</td>
+      <td><span class="badge-status ${order.status}">${order.text}</span></td>
     </tr>
-  `).join("");
+  `).join('');
 }
 
-/* RENDER CUSTOMERS */
-function renderCustomers() {
-    $("customerTable").innerHTML = customers.map(item => `
-    <tr>
-      <td>${item.id}</td>
-      <td>${item.name}</td>
-      <td>${item.email}</td>
-      <td>${item.phone}</td>
-      <td>${item.orders}</td>
-    </tr>
-  `).join("");
+function renderSalesChart() {
+  const data = getVisibleSalesData();
+  const maxValue = Math.max(...data.map(item => item.value));
+  const todayIndex = data.length - 1;
+
+  $('salesChart').innerHTML = data.map((item, index) => {
+    const height = maxValue === 0 ? 10 : (item.value / maxValue) * 100;
+    const todayClass = index === todayIndex ? 'today' : '';
+
+    return `
+      <div class="chart-bar ${todayClass}" style="height:${height}%" data-value="${formatMillion(item.value)}">
+        <span>${item.day}</span>
+      </div>
+    `;
+  }).join('');
 }
 
-/* RENDER CATEGORIES */
-function renderCategories() {
-    $("categoryTable").innerHTML = categories.map(item => `
-    <tr>
-      <td>${item.id}</td>
-      <td>${item.name}</td>
-      <td>${item.count}</td>
-    </tr>
-  `).join("");
+function initFilter() {
+  const categoryFilter = $('categoryFilter');
+  const searchInput = $('searchInput');
+
+  function applyFilter() {
+    const category = categoryFilter.value;
+    const keyword = searchInput.value.trim().toLowerCase();
+
+    const filteredProducts = products.filter(product => {
+      const matchCategory = category === 'all' || product.category === category;
+      const matchKeyword =
+        product.name.toLowerCase().includes(keyword) ||
+        product.code.toLowerCase().includes(keyword);
+
+      return matchCategory && matchKeyword;
+    });
+
+    renderProducts(filteredProducts);
+  }
+
+  categoryFilter.addEventListener('change', applyFilter);
+  searchInput.addEventListener('input', applyFilter);
 }
 
-/* KHỞI CHẠY */
-renderDashboard();
-renderProducts();
-renderOrders();
-renderCustomers();
-renderCategories();
+function initSidebar() {
+  $('btnMenu').addEventListener('click', () => {
+    $('sidebar').classList.toggle('show');
+  });
+}
+
+function init() {
+  renderStats();
+  renderProducts();
+  renderBestSeller();
+  renderOrders();
+  renderSalesChart();
+  initFilter();
+  initSidebar();
+}
+
+document.addEventListener('DOMContentLoaded', init);
