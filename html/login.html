@@ -8,16 +8,16 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/login.css">
-  <link rel="stylesheet" href="../css/base.css">
 </head>
 <body>
 
   <!-- ── NAVBAR ── -->
   <nav class="sz-navbar navbar navbar-expand-md sticky-top">
     <div class="container">
-      <a href="index.html" class="navbar-brand sz-brand d-flex align-items-center gap-2">
-        <span class="sz-brand-icon"><i class="bi bi-lightning-charge-fill"></i></span>
-        <span>SPORTZONE</span>
+      <a href="index.html" class="navbar-brand sz-brand">
+        <span class="sz-logo-box">
+          <img src="../img/logo.jpg" class="sz-logo" alt="SPORTIX">
+        </span>
       </a>
       <button class="navbar-toggler border-0 shadow-none" type="button"
         data-bs-toggle="collapse" data-bs-target="#navMenu">
@@ -142,99 +142,64 @@
 
   <!-- ── FOOTER ── -->
   <footer class="sz-footer">
-    <div class="container">
-      <div class="row g-5">
+  <div class="container">
+    <div class="row g-4 align-items-start">
 
-        <!-- Col 1: Giới thiệu -->
-        <div class="col-12 col-md-3">
-          <h5 class="sz-footer-title">Giới thiệu</h5>
-          <p class="sz-footer-text">
-            SPORTZONE là nền tảng thương mại điện tử, giúp hỗ trợ quảng bá, tư vấn và tổng hợp các mặt hàng thể thao chính hãng đến từ hệ thống cửa hàng trực thuộc.
-          </p>
-          <div class="sz-bct mt-3">
-            <img style ="margin:0px; width: 150px; height: auto;" src="https://dangkywebvoibocongthuong.com/wp-content/uploads/2021/11/logo-da-thong-bao-bo-cong-thuong.png"
-              alt="Đã thông báo Bộ Công Thương" height="52" style="border-radius:8px;">
-          </div>
-        </div>
-
-        <!-- Col 2: Về SportZone -->
-        <div class="col-6 col-md-3">
-          <h5 class="sz-footer-title">Về SportZone</h5>
-          <ul class="sz-footer-links">
-            <li><a href="#">Liên hệ</a></li>
-            <li><a href="#">Trợ giúp</a></li>
-            <li><a href="#">Hình thức thanh toán</a></li>
-            <li><a href="#">Chính sách bảo hành</a></li>
-            <li><a href="#">Chính sách vận chuyển</a></li>
-            <li><a href="#">Chính sách đổi trả</a></li>
-            <li><a href="#">Chính sách hoàn tiền</a></li>
-            <li><a href="#">Chính sách bảo mật</a></li>
-          </ul>
-        </div>
-
-        <!-- Col 3: Thông tin liên hệ -->
-        <div class="col-6 col-md-3">
-          <h5 class="sz-footer-title">Thông tin liên hệ</h5>
-          <ul class="sz-footer-contact">
-            <li>
-              <i class="bi bi-geo-alt-fill"></i>
-              <span>140 Lê Trọng Tấn, Quận Tân Phú, TP. Hồ Chí Minh</span>
-            </li>
-            <li>
-              <i class="bi bi-telephone-fill"></i>
-              <span>1900 1234</span>
-            </li>
-            <li>
-              <i class="bi bi-send-fill"></i>
-              <span>hotro@sportzone.vn</span>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Col 4: Kết nối -->
-        <div class="col-12 col-md-3">
-    <h5 class="sz-footer-title">Kết nối với SportZone</h5>
-
-    <div class="sz-socials d-flex gap-2 mt-2">
-
-        <!-- Facebook -->
-        <a href="#" class="sz-social-btn" aria-label="Facebook">
-            <i class="bi bi-facebook" style="color:#1877f2;"></i>
-        </a>
-
-        <!-- TikTok -->
-        <a href="#" class="sz-social-btn" aria-label="TikTok">
-            <i class="bi bi-tiktok" style="color:#000;"></i>
-        </a>
-
-        <!-- Instagram -->
-        <a href="#" class="sz-social-btn" aria-label="Instagram">
-            <i class="bi bi-instagram" style="color:#E4405F;"></i>
-        </a>
-
-        <!-- YouTube -->
-        <a href="#" class="sz-social-btn" aria-label="YouTube">
-            <i class="bi bi-youtube" style="color:#ff0000;"></i>
-        </a>
-        <a href="#" class="sz-social-btn" aria-label="Twitter">
-    <i class="bi bi-twitter" style="color:#1da1f2;"></i>
-</a>
-    </div>
-</div>
-
-      </div>
-    </div>
-
-    <!-- Copyright bar -->
-    <div class="sz-footer-bottom">
-      <div class="container">
-        <p class="mb-0">
-          Copyright © 2024 SportZone. Thiết kế bởi nhóm đồ án Web Design |
-          <a href="#">Chính sách bảo mật</a> · <a href="#">Điều khoản dịch vụ</a>
+      <div class="col-12 col-lg-4">
+        <h3 class="sz-footer-brand">SPORTIX</h3>
+        <p class="sz-footer-slogan">
+          Move faster. Train better. Trang mua sắm đồ thể thao hiện đại, trẻ trung và dễ tiếp cận.
         </p>
+
+        <div class="sz-socials d-flex gap-2 mt-3">
+          <a href="#" class="sz-social-btn"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="sz-social-btn"><i class="bi bi-tiktok"></i></a>
+          <a href="#" class="sz-social-btn"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="sz-social-btn"><i class="bi bi-youtube"></i></a>
+        </div>
       </div>
+
+      <div class="col-6 col-lg-2">
+        <h5 class="sz-footer-title">Mua sắm</h5>
+        <ul class="sz-footer-links">
+          <li><a href="#">Giày thể thao</a></li>
+          <li><a href="#">Quần áo thể thao</a></li>
+          <li><a href="#">Phụ kiện</a></li>
+          <li><a href="#">Sản phẩm mới</a></li>
+        </ul>
+      </div>
+
+      <div class="col-6 col-lg-2">
+        <h5 class="sz-footer-title">Hỗ trợ</h5>
+        <ul class="sz-footer-links">
+          <li><a href="#">Liên hệ</a></li>
+          <li><a href="#">Thanh toán</a></li>
+          <li><a href="#">Vận chuyển</a></li>
+          <li><a href="#">Đổi trả</a></li>
+        </ul>
+      </div>
+
+      <div class="col-12 col-lg-4">
+        <h5 class="sz-footer-title">Liên hệ</h5>
+        <ul class="sz-footer-contact">
+          <li><i class="bi bi-geo-alt-fill"></i><span>140 Lê Trọng Tấn, Quận Tân Phú, TP. Hồ Chí Minh</span></li>
+          <li><i class="bi bi-telephone-fill"></i><span>1900 1234</span></li>
+          <li><i class="bi bi-send-fill"></i><span>hotro@sportix.vn</span></li>
+        </ul>
+      </div>
+
     </div>
-  </footer>
+  </div>
+
+  <div class="sz-footer-bottom">
+    <div class="container">
+      <p class="mb-0">
+        Copyright © 2024 SPORTIX. Thiết kế bởi nhóm đồ án Web Design |
+        <a href="#">Chính sách bảo mật</a> · <a href="#">Điều khoản dịch vụ</a>
+      </p>
+    </div>
+  </div>
+</footer>
 
   <!-- Success Overlay -->
   <div class="sz-success-overlay" id="successOverlay">
@@ -246,6 +211,6 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="login.js"></script>
+  <script src="../js/login.js"></script>
 </body>
 </html>

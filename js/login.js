@@ -68,12 +68,12 @@ function setLoading(isLoading) {
 }
 
 function hideAlert() {
-  alertBox.classList.remove('show');
+  alertBox.classList.add('d-none'); alertBox.classList.remove('show');
 }
 
 function showAlert(message) {
   alertMsg.textContent = message;
-  alertBox.classList.add('show');
+  alertBox.classList.remove('d-none'); alertBox.classList.add('show', 'd-flex');
 }
 
 function showSuccessOverlay() {
