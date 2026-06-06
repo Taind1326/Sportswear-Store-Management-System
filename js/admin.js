@@ -1,5 +1,35 @@
-﻿const $ = (id) => document.getElementById(id);
+﻿// ======================
+// HELPERS
+// ======================
+const $ = (id) => document.getElementById(id);
 
+function formatCurrency(value) {
+  return value.toLocaleString('vi-VN') + 'đ';
+}
+
+function formatMillion(value) {
+  return (value / 1000000).toFixed(1) + 'M';
+}
+
+function getTodayIndex() {
+  const day = new Date().getDay();
+
+  if (day === 0) return 6;
+
+  return day - 1;
+}
+
+function getTodayDate() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function getVisibleSalesData() {
+  return salesData.slice(0, getTodayIndex() + 1);
+}
+
+// ======================
+// DATA
+// ======================
 const products = [
   {
     code: 'SP001',
@@ -36,6 +66,15 @@ const products = [
     stock: 6,
     sold: 63,
     image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=200'
+  },
+  {
+    code: 'SP005',
+    name: 'Quần short thể thao nam',
+    category: 'Áo',
+    price: 420000,
+    stock: 26,
+    sold: 58,
+    image: 'https://images.unsplash.com/photo-1506629905607-d9d297d3f5f5?w=200'
   }
 ];
 
@@ -47,7 +86,7 @@ const orders = [
     total: 2450000,
     status: 'done',
     text: 'Hoàn thành',
-    date: '2026-06-05'
+    date: getTodayDate()
   },
   {
     id: '#SZ1023',
@@ -56,7 +95,7 @@ const orders = [
     total: 690000,
     status: 'pending',
     text: 'Đang xử lý',
-    date: '2026-06-05'
+    date: getTodayDate()
   },
   {
     id: '#SZ1022',
@@ -66,6 +105,15 @@ const orders = [
     status: 'done',
     text: 'Hoàn thành',
     date: '2026-06-04'
+  },
+  {
+    id: '#SZ1021',
+    customer: 'Phạm Ngọc Anh',
+    product: 'Bình nước tập gym',
+    total: 220000,
+    status: 'cancel',
+    text: 'Đã hủy',
+    date: '2026-06-03'
   }
 ];
 
@@ -74,62 +122,61 @@ const salesData = [
   { day: 'T3', value: 18200000 },
   { day: 'T4', value: 10800000 },
   { day: 'T5', value: 24600000 },
-  { day: 'T6', value: 0 },
-  { day: 'T7', value: 0 },
-  { day: 'CN', value: 0 }
+  { day: 'T6', value: 20100000 },
+  { day: 'T7', value: 28400000 },
+  { day: 'CN', value: 16700000 }
 ];
 
-function formatCurrency(value) {
-  return value.toLocaleString('vi-VN') + 'đ';
-}
-
-function formatMillion(value) {
-  return (value / 1000000).toFixed(1) + 'M';
-}
-
-function getTodayIndex() {
-  const day = new Date().getDay();
-  if (day === 0) return 6;
-  return day - 1;
-}
-
-function getVisibleSalesData() {
-  return salesData.slice(0, getTodayIndex() + 1);
-}
-
-function getTodayDate() {
-  const now = new Date();
-  return now.toISOString().slice(0, 10);
-}
-
+// ======================
+// STATS
+// ======================
 function renderStats() {
   const visibleSales = getVisibleSalesData();
-  const totalRevenue = visibleSales.reduce((sum, item) => sum + item.value, 0);
-  const todayOrders = orders.filter(order => order.date === getTodayDate()).length;
-  const lowStock = products.filter(product => product.stock <= 10).length;
+
+  const totalRevenue = visibleSales.reduce((sum, item) => {
+    return sum + item.value;
+  }, 0);
+
+  const todayOrders = orders.filter(order => {
+    return order.date === getTodayDate();
+  }).length;
+
+  const lowStock = products.filter(product => {
+    return product.stock <= 10;
+  }).length;
+
+  const customerCount = 1284;
 
   const stats = [
     {
-      title: 'Tổng sản phẩm',
-      value: products.length,
-      icon: 'bi-box-seam',
+      title: 'Doanh thu tuần',
+      value: formatMillion(totalRevenue),
+      note: '+12.4% so với tuần trước',
+      noteClass: 'up',
+      icon: 'bi-cash-stack',
       color: 'blue'
     },
     {
       title: 'Đơn hôm nay',
       value: todayOrders,
+      note: '+18 đơn đang xử lý',
+      noteClass: 'up',
       icon: 'bi-receipt',
       color: 'green'
     },
     {
-      title: 'Doanh thu tuần',
-      value: formatMillion(totalRevenue),
-      icon: 'bi-cash-stack',
+      title: 'Khách hàng',
+      value: customerCount,
+      note: '+35 khách mới',
+      noteClass: 'up',
+      icon: 'bi-people',
       color: 'orange'
     },
     {
       title: 'Sắp hết hàng',
       value: lowStock,
+      note: 'Cần nhập thêm',
+      noteClass: 'down',
       icon: 'bi-exclamation-triangle',
       color: 'red'
     }
@@ -140,14 +187,19 @@ function renderStats() {
       <div class="stat-icon ${item.color}">
         <i class="bi ${item.icon}"></i>
       </div>
+
       <div>
         <p>${item.title}</p>
         <h3>${item.value}</h3>
+        <span class="${item.noteClass}">${item.note}</span>
       </div>
     </div>
   `).join('');
 }
 
+// ======================
+// PRODUCTS
+// ======================
 function getProductStatus(product) {
   if (product.stock <= 10) {
     return {
@@ -177,10 +229,19 @@ function renderProducts(list = products) {
             </div>
           </div>
         </td>
+
         <td>${product.category}</td>
+
         <td>${formatCurrency(product.price)}</td>
+
         <td>${product.stock}</td>
-        <td><span class="badge-status ${status.className}">${status.text}</span></td>
+
+        <td>
+          <span class="badge-status ${status.className}">
+            ${status.text}
+          </span>
+        </td>
+
         <td>
           <button class="btn btn-sm btn-light">
             <i class="bi bi-three-dots"></i>
@@ -191,14 +252,20 @@ function renderProducts(list = products) {
   }).join('');
 }
 
+// ======================
+// BEST SELLER
+// ======================
 function renderBestSeller() {
   const bestProducts = [...products]
     .sort((a, b) => b.sold - a.sold)
     .slice(0, 3);
 
-  $('bestList').innerHTML = bestProducts.map(product => `
+  $('bestList').innerHTML = bestProducts.map((product, index) => `
     <div class="best-item">
+      <div class="best-rank">${index + 1}</div>
+
       <img src="${product.image}" alt="${product.name}">
+
       <div>
         <h4>${product.name}</h4>
         <p>Đã bán ${product.sold} sản phẩm</p>
@@ -207,6 +274,9 @@ function renderBestSeller() {
   `).join('');
 }
 
+// ======================
+// ORDERS
+// ======================
 function renderOrders() {
   $('orderTable').innerHTML = orders.map(order => `
     <tr>
@@ -214,11 +284,19 @@ function renderOrders() {
       <td>${order.customer}</td>
       <td>${order.product}</td>
       <td>${formatCurrency(order.total)}</td>
-      <td><span class="badge-status ${order.status}">${order.text}</span></td>
+      <td>${order.date}</td>
+      <td>
+        <span class="badge-status ${order.status}">
+          ${order.text}
+        </span>
+      </td>
     </tr>
   `).join('');
 }
 
+// ======================
+// CHART
+// ======================
 function renderSalesChart() {
   const data = getVisibleSalesData();
   const maxValue = Math.max(...data.map(item => item.value));
@@ -229,23 +307,35 @@ function renderSalesChart() {
     const todayClass = index === todayIndex ? 'today' : '';
 
     return `
-      <div class="chart-bar ${todayClass}" style="height:${height}%" data-value="${formatMillion(item.value)}">
+      <div
+        class="chart-bar ${todayClass}"
+        style="height:${height}%"
+        data-value="${formatMillion(item.value)}"
+      >
         <span>${item.day}</span>
       </div>
     `;
   }).join('');
 }
 
+// ======================
+// FILTER
+// ======================
 function initFilter() {
-  const categoryFilter = $('categoryFilter');
+  const dropdown = $('categoryDropdown');
+  const categoryText = $('categoryText');
   const searchInput = $('searchInput');
 
+  let currentCategory = 'all';
+
   function applyFilter() {
-    const category = categoryFilter.value;
     const keyword = searchInput.value.trim().toLowerCase();
 
     const filteredProducts = products.filter(product => {
-      const matchCategory = category === 'all' || product.category === category;
+      const matchCategory =
+        currentCategory === 'all' ||
+        product.category === currentCategory;
+
       const matchKeyword =
         product.name.toLowerCase().includes(keyword) ||
         product.code.toLowerCase().includes(keyword);
@@ -256,16 +346,47 @@ function initFilter() {
     renderProducts(filteredProducts);
   }
 
-  categoryFilter.addEventListener('change', applyFilter);
+  dropdown.querySelector('.custom-select-btn').addEventListener('click', () => {
+    dropdown.classList.toggle('open');
+  });
+
+  dropdown.querySelectorAll('.custom-select-menu button').forEach(button => {
+    button.addEventListener('click', () => {
+      currentCategory = button.dataset.value;
+      categoryText.textContent = button.textContent.trim();
+
+      dropdown.querySelectorAll('.custom-select-menu button').forEach(item => {
+        item.classList.remove('active');
+      });
+
+      button.classList.add('active');
+      dropdown.classList.remove('open');
+
+      applyFilter();
+    });
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!dropdown.contains(event.target)) {
+      dropdown.classList.remove('open');
+    }
+  });
+
   searchInput.addEventListener('input', applyFilter);
 }
 
+// ======================
+// SIDEBAR
+// ======================
 function initSidebar() {
   $('btnMenu').addEventListener('click', () => {
     $('sidebar').classList.toggle('show');
   });
 }
 
+// ======================
+// INIT
+// ======================
 function init() {
   renderStats();
   renderProducts();
