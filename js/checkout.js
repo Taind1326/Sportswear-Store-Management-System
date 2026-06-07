@@ -123,8 +123,17 @@ function updateTotal() {
 }
 
 function initLocationSelect() {
-  const province = document.getElementById("province");
-  const district = document.getElementById("district");
+  const provinceInput = document.getElementById("province");
+  const districtInput = document.getElementById("district");
+
+  const provinceBox = document.getElementById("provinceSelect");
+  const districtBox = document.getElementById("districtSelect");
+
+  const provinceBtn = provinceBox.querySelector(".custom-select-btn span");
+  const districtBtn = districtBox.querySelector(".custom-select-btn span");
+
+  const provinceMenu = provinceBox.querySelector(".custom-select-menu");
+  const districtMenu = districtBox.querySelector(".custom-select-menu");
 
   const provinces = window.vietnamData || [
     { name: "TP. Hồ Chí Minh", districts: ["Quận Tân Phú", "Quận 1", "Quận 3", "Quận Bình Thạnh"] },
@@ -132,40 +141,58 @@ function initLocationSelect() {
     { name: "Đà Nẵng", districts: ["Hải Châu", "Thanh Khê", "Sơn Trà"] }
   ];
 
-  province.innerHTML = `<option value="">Chọn tỉnh/thành phố</option>`;
-  provinces.forEach(item => {
-    province.innerHTML += `<option value="${item.name}">${item.name}</option>`;
-  });
+  provinceMenu.innerHTML = provinces.map(item =>
+    `<div class="custom-select-option" data-value="${item.name}">${item.name}</div>`
+  ).join("");
 
-  district.innerHTML = `<option value="">Chọn quận/huyện</option>`;
+  provinceBox.querySelector(".custom-select-btn").onclick = () => {
+    provinceBox.classList.toggle("open");
+    districtBox.classList.remove("open");
+  };
 
-  province.addEventListener("change", () => {
-    const selectedProvince = provinces.find(item => item.name === province.value);
+  districtBox.querySelector(".custom-select-btn").onclick = () => {
+    districtBox.classList.toggle("open");
+    provinceBox.classList.remove("open");
+  };
 
-    district.innerHTML = `<option value="">Chọn quận/huyện</option>`;
+  provinceMenu.querySelectorAll(".custom-select-option").forEach(option => {
+    option.onclick = () => {
+      const value = option.dataset.value;
+      const selectedProvince = provinces.find(item => item.name === value);
 
-    if (selectedProvince) {
-      selectedProvince.districts.forEach(item => {
-        district.innerHTML += `<option value="${item}">${item}</option>`;
+      provinceInput.value = value;
+      provinceBtn.textContent = value;
+      provinceBox.classList.remove("open");
+
+      districtInput.value = "";
+      districtBtn.textContent = "Chọn quận/huyện";
+
+      districtMenu.innerHTML = selectedProvince.districts.map(item =>
+        `<div class="custom-select-option" data-value="${item}">${item}</div>`
+      ).join("");
+
+      districtMenu.querySelectorAll(".custom-select-option").forEach(dis => {
+        dis.onclick = () => {
+          districtInput.value = dis.dataset.value;
+          districtBtn.textContent = dis.dataset.value;
+          districtBox.classList.remove("open");
+          showSuccess(districtInput, "districtError");
+        };
       });
-    }
 
-    if (province.value === "TP. Hồ Chí Minh") {
-      shippingFee = 30000;
-    } else if (province.value) {
-      shippingFee = 50000;
-    } else {
-      shippingFee = 0;
-    }
+      shippingFee = value === "TP. Hồ Chí Minh" ? 30000 : 50000;
 
-    if (province.value) showSuccess(province, "provinceError");
+      if (getSubTotal() >= 2000000) shippingFee = 0;
 
-    clearState(district, "districtError");
-    updateTotal();
+      showSuccess(provinceInput, "provinceError");
+      clearState(districtInput, "districtError");
+      updateTotal();
+    };
   });
 
-  district.addEventListener("change", () => {
-    if (district.value) showSuccess(district, "districtError");
+  document.addEventListener("click", e => {
+    if (!provinceBox.contains(e.target)) provinceBox.classList.remove("open");
+    if (!districtBox.contains(e.target)) districtBox.classList.remove("open");
   });
 }
 

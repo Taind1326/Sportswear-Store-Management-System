@@ -6,6 +6,7 @@
     linear-gradient(180deg,#F7FBFF 0%,#EEF8FF 100%);
 }
 
+/* TOP */
 .checkout-top{
   max-width:1180px;
   margin:0 auto 20px;
@@ -30,7 +31,7 @@
   border:1px solid #DCF5A8;
   color:var(--blue-dark);
   font-size:.72rem;
-  font-weight:900;
+  font-weight:800;
   letter-spacing:1.6px;
   margin-bottom:10px;
 }
@@ -38,7 +39,7 @@
 .checkout-top h1{
   font-family:'Montserrat',sans-serif;
   font-size:2.35rem;
-  font-weight:900;
+  font-weight:800;
   letter-spacing:-1px;
   color:var(--text);
   margin:0 0 4px;
@@ -47,6 +48,7 @@
 .checkout-top p{
   color:var(--muted);
   font-size:.95rem;
+  font-weight:400;
   margin:0;
 }
 
@@ -57,7 +59,7 @@
   border-radius:999px;
   background:var(--blue-soft);
   color:var(--blue-dark);
-  font-weight:900;
+  font-weight:700;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -70,6 +72,7 @@
   background:#DDF0FF;
 }
 
+/* PROGRESS */
 .checkout-progress{
   max-width:1180px;
   margin:0 auto 26px;
@@ -98,7 +101,7 @@
   place-items:center;
   background:#EEF6FF;
   color:#8AA0B8;
-  font-weight:900;
+  font-weight:800;
   flex-shrink:0;
 }
 
@@ -106,14 +109,14 @@
   display:block;
   color:#718298;
   font-size:.9rem;
-  font-weight:900;
+  font-weight:700;
   margin-bottom:2px;
 }
 
 .progress-item small{
   color:#9AACBF;
   font-size:.74rem;
-  font-weight:700;
+  font-weight:500;
 }
 
 .progress-item.active{
@@ -147,6 +150,7 @@
   background:linear-gradient(135deg,var(--blue),var(--lime));
 }
 
+/* LAYOUT */
 .checkout-layout{
   max-width:1180px;
   margin:0 auto;
@@ -159,7 +163,7 @@
 .checkout-left{
   display:flex;
   flex-direction:column;
-  gap:22px;
+  gap:20px;
 }
 
 .checkout-card,
@@ -184,7 +188,7 @@
 .summary-head span{
   font-family:'Montserrat',sans-serif;
   font-size:1.15rem;
-  font-weight:900;
+  font-weight:800;
   color:var(--text);
   margin:0;
 }
@@ -200,18 +204,86 @@
   color:var(--blue-dark);
 }
 
-select.sz-input{
-  appearance:auto;
-  cursor:pointer;
-  background-color:white;
+/* FORM */
+.checkout-card .sz-label{
+  font-weight:600;
+  font-size:.88rem;
   color:var(--text);
 }
 
-select.sz-input option{
+.checkout-card .sz-input{
+  font-weight:500;
+}
+
+.checkout-card .sz-input::placeholder{
+  font-weight:400;
+  color:#9AAAC0;
+}
+
+.checkout-card .sz-error{
+  font-weight:500;
+}
+
+/* CUSTOM SELECT */
+.custom-select{
+  position:relative;
+}
+
+.custom-select-btn{
+  width:100%;
+  height:58px;
+  border:1.5px solid var(--border);
+  border-radius:18px;
+  background:#F8FCFF;
+  color:var(--text);
+  font-weight:500;
+  padding:0 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  transition:.2s;
+}
+
+.custom-select-btn:hover,
+.custom-select.open .custom-select-btn{
+  border-color:var(--blue);
+  box-shadow:0 0 0 4px rgba(17,157,255,.12);
   background:white;
-  color:var(--text);
 }
 
+.custom-select-menu{
+  position:absolute;
+  left:0;
+  right:0;
+  top:66px;
+  z-index:50;
+  max-height:220px;
+  overflow-y:auto;
+  background:white;
+  border:1.5px solid var(--border);
+  border-radius:18px;
+  box-shadow:0 18px 45px rgba(15,23,42,.14);
+  display:none;
+}
+
+.custom-select.open .custom-select-menu{
+  display:block;
+}
+
+.custom-select-option{
+  padding:12px 18px;
+  font-weight:500;
+  color:var(--text);
+  cursor:pointer;
+  transition:.18s;
+}
+
+.custom-select-option:hover{
+  background:linear-gradient(135deg,var(--blue-soft),var(--lime-soft));
+  color:var(--blue-dark);
+}
+
+/* SHIPPING */
 .shipping-info{
   background:#F8FCFF;
   border:1.5px solid var(--border);
@@ -219,6 +291,7 @@ select.sz-input option{
   padding:16px;
   color:var(--muted);
   font-size:.88rem;
+  font-weight:400;
 }
 
 .shipping-info strong{
@@ -226,8 +299,10 @@ select.sz-input option{
   display:flex;
   gap:8px;
   align-items:center;
+  font-weight:700;
 }
 
+/* PAYMENT */
 .payment-item{
   display:flex;
   align-items:flex-start;
@@ -239,6 +314,7 @@ select.sz-input option{
   margin-bottom:12px;
   cursor:pointer;
   transition:.2s;
+  font-weight:500;
 }
 
 .payment-item input{
@@ -251,13 +327,14 @@ select.sz-input option{
 .payment-item strong{
   display:block;
   color:var(--text);
-  font-weight:900;
+  font-weight:700;
 }
 
 .payment-item small{
   display:block;
   color:var(--muted);
   font-size:.8rem;
+  font-weight:400;
 }
 
 .payment-item:has(input:checked){
@@ -265,6 +342,7 @@ select.sz-input option{
   border-color:rgba(17,157,255,.45);
 }
 
+/* QR */
 .qr-box{
   text-align:center;
   margin-top:16px;
@@ -276,7 +354,7 @@ select.sz-input option{
 
 .qr-box h6{
   color:var(--blue-dark);
-  font-weight:900;
+  font-weight:700;
 }
 
 .qr-box img{
@@ -287,9 +365,10 @@ select.sz-input option{
 
 #timer{
   color:var(--danger);
-  font-weight:900;
+  font-weight:700;
 }
 
+/* SUMMARY */
 .checkout-summary{
   position:sticky;
   top:104px;
@@ -303,7 +382,7 @@ select.sz-input option{
 
 .cart-preview h5{
   font-size:.82rem;
-  font-weight:900;
+  font-weight:700;
   color:var(--muted);
   text-transform:uppercase;
 }
@@ -337,7 +416,7 @@ select.sz-input option{
 }
 
 .order-name{
-  font-weight:900;
+  font-weight:700;
   color:var(--text);
   font-size:.9rem;
 }
@@ -345,10 +424,11 @@ select.sz-input option{
 .order-qty{
   font-size:.8rem;
   color:var(--muted);
+  font-weight:400;
 }
 
 .order-price{
-  font-weight:900;
+  font-weight:800;
   color:var(--blue-dark);
   white-space:nowrap;
 }
@@ -361,12 +441,12 @@ select.sz-input option{
 
 .total-row span{
   color:var(--muted);
-  font-weight:800;
+  font-weight:500;
 }
 
 .total-row strong{
   color:var(--text);
-  font-weight:900;
+  font-weight:700;
 }
 
 .total-final{
@@ -377,15 +457,17 @@ select.sz-input option{
 .total-final strong{
   color:var(--blue-dark);
   font-size:1.45rem;
+  font-weight:800;
 }
 
+/* BUTTONS */
 .btn-order,
 .btn-cart{
   width:100%;
   height:52px;
   border:none;
   border-radius:17px;
-  font-weight:900;
+  font-weight:700;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -410,6 +492,7 @@ select.sz-input option{
   transform:translateY(-2px);
 }
 
+/* TOAST */
 .sz-toast{
   position:fixed;
   top:110px;
@@ -451,7 +534,7 @@ select.sz-input option{
 .sz-toast strong{
   display:block;
   color:var(--text);
-  font-weight:900;
+  font-weight:700;
   margin-bottom:3px;
 }
 
@@ -459,8 +542,10 @@ select.sz-input option{
   margin:0;
   color:var(--muted);
   font-size:.86rem;
+  font-weight:400;
 }
 
+/* RESPONSIVE */
 @media(max-width:992px){
   .checkout-layout{
     grid-template-columns:1fr;

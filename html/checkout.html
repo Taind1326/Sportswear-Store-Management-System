@@ -137,17 +137,25 @@
               <i class="bi bi-geo-alt-fill"></i>
             </div>
 
-            <div class="mb-3">
-              <label for="province" class="sz-label">Tỉnh / Thành phố</label>
-              <select id="province" class="sz-input"></select>
-              <div class="sz-error" id="provinceError"><i class="bi bi-x-circle-fill"></i><span>Vui lòng chọn tỉnh/thành phố.</span></div>
+            <div class="custom-select mb-3" id="provinceSelect">
+              <button type="button" class="custom-select-btn">
+                <span>Chọn tỉnh/thành phố</span>
+                <i class="bi bi-chevron-down"></i>
+              </button>
+              <div class="custom-select-menu"></div>
             </div>
 
-            <div class="mb-3">
-              <label for="district" class="sz-label">Quận / Huyện</label>
-              <select id="district" class="sz-input"></select>
-              <div class="sz-error" id="districtError"><i class="bi bi-x-circle-fill"></i><span>Vui lòng chọn quận/huyện.</span></div>
+            <input type="hidden" id="province">
+
+            <div class="custom-select mb-3" id="districtSelect">
+              <button type="button" class="custom-select-btn">
+                <span>Chọn quận/huyện</span>
+                <i class="bi bi-chevron-down"></i>
+              </button>
+              <div class="custom-select-menu"></div>
             </div>
+
+            <input type="hidden" id="district">
 
             <div class="mb-3">
               <label for="address" class="sz-label">Địa chỉ chi tiết</label>

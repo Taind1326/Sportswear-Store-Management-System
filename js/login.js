@@ -80,10 +80,16 @@ function showAlert(message) {
 }
 
 function showSuccessOverlay() {
+  localStorage.setItem("sportix_user", JSON.stringify({
+    email: emailInput.value.trim()
+  }));
+
   successOverlay.classList.add("show");
 
   setTimeout(() => {
-    window.location.href = "index.html";
+    const redirect = sessionStorage.getItem("redirectAfterLogin") || "index.html";
+    sessionStorage.removeItem("redirectAfterLogin");
+    window.location.href = redirect;
   }, 1500);
 }
 
