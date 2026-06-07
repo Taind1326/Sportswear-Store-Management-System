@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  document.body.classList.add("reveal-ready");
   initScrollReveal();
 });
 
@@ -19,10 +20,15 @@ function initScrollReveal() {
       });
     },
     {
-      threshold: 0.35,
-      rootMargin: "0px 0px -120px 0px"
+      threshold: 0.12,
+      rootMargin: "0px 0px -40px 0px"
     }
   );
 
   revealItems.forEach((item) => observer.observe(item));
+}
+
+function goWithSplash(url) {
+  sessionStorage.setItem("nextPage", url);
+  window.location.href = "splash.html";
 }

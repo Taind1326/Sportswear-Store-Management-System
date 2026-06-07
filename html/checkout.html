@@ -1,88 +1,306 @@
 ﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <title>Thanh toán | SPORT ZONE</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thanh toán - SPORTIX</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/checkout.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/checkout.css">
 </head>
 
-<body class="p-4">
+<body>
+  <nav class="sz-navbar navbar navbar-expand-md sticky-top">
+    <div class="container">
+      <a href="#" class="navbar-brand sz-brand" onclick="goWithSplash('index.html'); return false;">
+        <span class="sz-logo-box">
+          <img src="../img/logo.jpg" class="sz-logo" alt="SPORTIX">
+        </span>
+      </a>
 
-    <h2 class="mb-4">💳 Thanh toán</h2>
+      <button class="navbar-toggler border-0 shadow-none" type="button"
+        data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <i class="bi bi-list fs-3"></i>
+      </button>
 
-    <div class="row">
-
-        <div class="col-md-7">
-            <div class="mb-3">
-                <label>Họ tên</label>
-                <input type="text" class="form-control" id="name" list="nameList">
-                <datalist id="nameList"></datalist>
-            </div>
-
-            <div class="mb-3">
-                <label>Số điện thoại</label>
-                <input type="text" class="form-control" id="phone" list="phoneList"
-                       oninput="this.value = this.value.replace(/\D/g,'')">
-                <datalist id="phoneList"></datalist>
-            </div>
-
-            <div class="mb-3">
-                <label>Địa chỉ</label>
-                <input type="text" class="form-control" id="address" list="addressList">
-                <datalist id="addressList"></datalist>
-            </div>
-
-            <div class="mb-3">
-                <label>Phương thức thanh toán</label>
-                <select class="form-select" id="payment">
-                    <option value="cod">Thanh toán khi nhận hàng</option>
-                    <option value="bank">Chuyển khoản</option>
-                </select>
-            </div>
-            <div id="qrBox" class="mt-3 text-center" style="display:none;">
-    <h6>Quét mã để thanh toán</h6>
-
-    <img id="qrImg" width="220" class="mb-2">
-
-    <div style="font-size:14px;color:#ccc">
-        Ngân hàng: <b>Vietcombank</b><br>
-        STK: <b>1050497105</b><br>
-        Chủ TK: <b>NGUYEN HOAI PHU</b>
+      <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+        <ul class="navbar-nav gap-1 align-items-md-center mt-3 mt-md-0">
+          <li class="nav-item"><a href="#" onclick="goWithSplash('index.html'); return false;" class="nav-link sz-nav-link">Trang chủ</a></li>
+          <li class="nav-item"><a href="#" onclick="goWithSplash('DSSanPham.html'); return false;" class="nav-link sz-nav-link">Sản phẩm</a></li>
+          <li class="nav-item"><a href="#" onclick="goWithSplash('about.html'); return false;" class="nav-link sz-nav-link">Giới thiệu</a></li>
+          <li class="nav-item"><a href="#" onclick="goWithSplash('contact.html'); return false;" class="nav-link sz-nav-link">Liên hệ</a></li>
+          <li class="nav-item ms-md-2"><a href="#" onclick="goWithSplash('login.html'); return false;" class="nav-link sz-nav-btn">Đăng nhập</a></li>
+        </ul>
+      </div>
     </div>
+  </nav>
 
-    <div class="mt-2">
-        Nội dung: <b id="transferNote"></b>
-    </div>
+  <main class="checkout-main">
+    <div class="container">
 
-    <p class="mt-2">⏳ Hết hạn sau: <span id="timer">05:00</span></p>
-
-    <button class="btn btn-warning btn-sm" onclick="generateQR()">Tạo QR mới</button>
-</div>
-            <button onclick="placeOrder()" class="btn btn-success w-100">
-                Xác nhận đơn hàng
-            </button>
+      <section class="checkout-top reveal">
+        <div>
+          <span class="checkout-tag"><i class="bi bi-credit-card-fill"></i> SPORTIX CHECKOUT</span>
+          <h1>Thanh toán đơn hàng</h1>
+          <p>Hoàn tất thông tin giao hàng và xác nhận đơn hàng của bạn.</p>
         </div>
 
-        <div class="col-md-5">
-            <div class="total-box">
-                <h5 class="mb-3">🧾 Đơn hàng của bạn</h5>
-                <div id="orderList"></div>
-                <hr>
-                <h4>Tổng tiền</h4>
-                <div id="totalPrice" class="total-price">0đ</div>
-            </div>
+        <button class="checkout-back-btn" onclick="goCart()">
+          <i class="bi bi-arrow-left"></i>
+          Quay lại giỏ hàng
+        </button>
+      </section>
+
+      <section class="checkout-progress reveal">
+        <div class="progress-item done">
+          <span><i class="bi bi-check-lg"></i></span>
+          <div>
+            <strong>Sản phẩm</strong>
+            <small>Đã chọn giỏ hàng</small>
+          </div>
         </div>
 
+        <div class="progress-line active"></div>
+
+        <div class="progress-item active">
+          <span>2</span>
+          <div>
+            <strong>Thông tin</strong>
+            <small>Giao hàng</small>
+          </div>
+        </div>
+
+        <div class="progress-line"></div>
+
+        <div class="progress-item">
+          <span>3</span>
+          <div>
+            <strong>Hoàn tất</strong>
+            <small>Xác nhận đơn</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="checkout-layout reveal-scale">
+        <div class="checkout-left">
+
+          <div class="checkout-card">
+            <div class="card-title">
+              <h5>Thông tin khách hàng</h5>
+              <i class="bi bi-person-lines-fill"></i>
+            </div>
+
+            <div class="mb-3">
+              <label for="name" class="sz-label">Họ và tên</label>
+              <div class="sz-input-wrap">
+                <i class="bi bi-person sz-icon-left"></i>
+                <input type="text" id="name" list="nameList" class="sz-input" placeholder="Nguyễn Văn A">
+              </div>
+              <datalist id="nameList"></datalist>
+              <div class="sz-error" id="nameError"><i class="bi bi-x-circle-fill"></i><span>Vui lòng nhập họ tên.</span></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="phone" class="sz-label">Số điện thoại</label>
+              <div class="sz-input-wrap">
+                <i class="bi bi-telephone-fill sz-icon-left"></i>
+                <input type="text" id="phone" list="phoneList" class="sz-input" placeholder="0987654321">
+              </div>
+              <datalist id="phoneList"></datalist>
+              <div class="sz-error" id="phoneError"><i class="bi bi-x-circle-fill"></i><span>Số điện thoại phải có 10 số và bắt đầu bằng 0.</span></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="note" class="sz-label">Ghi chú</label>
+              <div class="sz-input-wrap">
+                <i class="bi bi-chat-left-text-fill sz-icon-left"></i>
+                <input type="text" id="note" class="sz-input" placeholder="Yêu cầu khác (không bắt buộc)">
+              </div>
+            </div>
+
+            <div>
+              <label class="sz-label">Mã giảm giá</label>
+              <div class="sz-input-wrap">
+                <i class="bi bi-ticket-perforated-fill sz-icon-left"></i>
+                <input type="text" class="sz-input" placeholder="Mã giảm giá hoặc SĐT giới thiệu">
+              </div>
+            </div>
+          </div>
+
+          <div class="checkout-card">
+            <div class="card-title">
+              <h5>Địa chỉ giao hàng</h5>
+              <i class="bi bi-geo-alt-fill"></i>
+            </div>
+
+            <div class="mb-3">
+              <label for="province" class="sz-label">Tỉnh / Thành phố</label>
+              <select id="province" class="sz-input"></select>
+              <div class="sz-error" id="provinceError"><i class="bi bi-x-circle-fill"></i><span>Vui lòng chọn tỉnh/thành phố.</span></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="district" class="sz-label">Quận / Huyện</label>
+              <select id="district" class="sz-input"></select>
+              <div class="sz-error" id="districtError"><i class="bi bi-x-circle-fill"></i><span>Vui lòng chọn quận/huyện.</span></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="address" class="sz-label">Địa chỉ chi tiết</label>
+              <div class="sz-input-wrap">
+                <i class="bi bi-house-door-fill sz-icon-left"></i>
+                <input type="text" id="address" list="addressList" class="sz-input" placeholder="Số nhà, tên đường, phường/xã">
+              </div>
+              <datalist id="addressList"></datalist>
+              <div class="sz-error" id="addressError"><i class="bi bi-x-circle-fill"></i><span>Vui lòng nhập địa chỉ giao hàng.</span></div>
+            </div>
+
+            <div id="shippingNotice" class="shipping-info">
+              <strong><i class="bi bi-truck"></i> Chính sách vận chuyển</strong>
+              <ul class="mb-0 mt-2">
+                <li>TP. Hồ Chí Minh: 30.000đ</li>
+                <li>Các tỉnh/thành khác: 50.000đ</li>
+                <li>Miễn phí vận chuyển cho đơn hàng từ 2.000.000đ</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="checkout-card">
+            <div class="card-title">
+              <h5>Phương thức thanh toán</h5>
+              <i class="bi bi-wallet2"></i>
+            </div>
+
+            <label class="payment-item">
+              <input type="radio" name="payment" value="cod" checked>
+              <span>
+                <strong>Thanh toán khi nhận hàng</strong>
+                <small>Trả tiền mặt khi shipper giao hàng</small>
+              </span>
+            </label>
+
+            <label class="payment-item">
+              <input type="radio" name="payment" value="bank">
+              <span>
+                <strong>Thanh toán QR</strong>
+                <small>Ngân hàng / MoMo / ví điện tử</small>
+              </span>
+            </label>
+
+            <div id="qrBox" class="qr-box" style="display:none;">
+              <h6>Quét mã QR để thanh toán</h6>
+              <img id="qrImg" width="220" alt="QR thanh toán">
+              <div class="mt-2">Nội dung: <b id="transferNote"></b></div>
+              <div class="mt-2">Hết hạn: <span id="timer">05:00</span></div>
+            </div>
+          </div>
+
+        </div>
+
+        <aside class="checkout-summary">
+          <div class="summary-head">
+            <span>Đơn hàng của bạn</span>
+            <i class="bi bi-bag-check-fill"></i>
+          </div>
+
+          <div class="cart-preview">
+            <h5>Sản phẩm đã chọn</h5>
+            <div id="orderList"></div>
+          </div>
+
+          <div class="checkout-total">
+            <div class="total-row">
+              <span>Tạm tính</span>
+              <strong id="subTotal">0đ</strong>
+            </div>
+
+            <div class="total-row">
+              <span>Phí vận chuyển</span>
+              <strong id="shippingFee">0đ</strong>
+            </div>
+
+            <div class="total-row total-final">
+              <span>Tổng thanh toán</span>
+              <strong id="totalPrice">0đ</strong>
+            </div>
+          </div>
+
+          <button class="btn-order" onclick="placeOrder()">
+            Đặt hàng
+            <i class="bi bi-arrow-right"></i>
+          </button>
+
+          <button class="btn-cart" onclick="goCart()">
+            <i class="bi bi-arrow-left"></i>
+            Sửa giỏ hàng
+          </button>
+        </aside>
+      </section>
+
+    </div>
+  </main>
+
+  <div class="sz-toast" id="checkoutToast">
+    <div class="sz-toast-icon">
+      <i class="bi bi-exclamation-lg"></i>
+    </div>
+    <div>
+      <strong>Thông tin chưa hợp lệ</strong>
+      <p>Vui lòng kiểm tra lại thông tin giao hàng.</p>
+    </div>
+  </div>
+
+  <footer class="sz-footer">
+    <div class="container">
+      <div class="row g-4 align-items-start">
+        <div class="col-12 col-lg-4">
+          <h3 class="sz-footer-brand">SPORTIX</h3>
+          <p class="sz-footer-slogan">Move faster. Train better. Trang mua sắm đồ thể thao hiện đại, trẻ trung và dễ tiếp cận.</p>
+        </div>
+
+        <div class="col-6 col-lg-2">
+          <h5 class="sz-footer-title">Mua sắm</h5>
+          <ul class="sz-footer-links">
+            <li><a href="#">Giày thể thao</a></li>
+            <li><a href="#">Quần áo thể thao</a></li>
+            <li><a href="#">Phụ kiện</a></li>
+          </ul>
+        </div>
+
+        <div class="col-6 col-lg-2">
+          <h5 class="sz-footer-title">Hỗ trợ</h5>
+          <ul class="sz-footer-links">
+            <li><a href="#">Thanh toán</a></li>
+            <li><a href="#">Vận chuyển</a></li>
+            <li><a href="#">Đổi trả</a></li>
+          </ul>
+        </div>
+
+        <div class="col-12 col-lg-4">
+          <h5 class="sz-footer-title">Liên hệ</h5>
+          <ul class="sz-footer-contact">
+            <li><i class="bi bi-geo-alt-fill"></i><span>140 Lê Trọng Tấn, Quận Tân Phú, TP. Hồ Chí Minh</span></li>
+            <li><i class="bi bi-telephone-fill"></i><span>1900 1234</span></li>
+            <li><i class="bi bi-send-fill"></i><span>hotro@sportix.vn</span></li>
+          </ul>
+        </div>
+      </div>
     </div>
 
-    <div class="success-box" id="successBox">
-        <h2>🎉 Đặt hàng thành công!</h2>
-        <p>Cảm ơn bạn đã mua hàng tại SportZone</p>
-        <button class="btn btn-primary mt-3" onclick="goHome()">Quay về trang sản phẩm</button>
+    <div class="sz-footer-bottom">
+      <div class="container">
+        <p class="mb-0">Copyright © 2026 SPORTIX.</p>
+      </div>
     </div>
+  </footer>
 
-    <script src="checkout.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/common.js"></script>
+  <script src="../js/vietnam.js"></script>
+  <script src="../js/checkout.js"></script>
 </body>
 </html>

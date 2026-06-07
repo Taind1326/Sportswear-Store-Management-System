@@ -14,28 +14,45 @@
 <body>
 
   <nav class="sz-navbar navbar navbar-expand-md sticky-top">
-    <div class="container">
-      <a href="index.html" class="navbar-brand sz-brand">
-        <span class="sz-logo-box">
-          <img src="../img/logo.jpg" class="sz-logo" alt="SPORTIX">
-        </span>
-      </a>
+  <div class="container">
 
-      <button class="navbar-toggler border-0 shadow-none" type="button"
-        data-bs-toggle="collapse" data-bs-target="#navMenu">
-        <i class="bi bi-list fs-3"></i>
-      </button>
+    <a href="#"
+       class="navbar-brand sz-brand"
+       onclick="goWithSplash('index.html'); return false;">
+      <span class="sz-logo-box">
+        <img src="../img/logo.jpg" class="sz-logo" alt="SPORTIX">
+      </span>
+    </a>
 
-      <div class="collapse navbar-collapse justify-content-end" id="navMenu">
-        <ul class="navbar-nav gap-1 align-items-md-center mt-3 mt-md-0">
-          <li class="nav-item"><a href="index.html" class="nav-link sz-nav-link">Trang chủ</a></li>
-          <li class="nav-item"><a href="DSSanPham.html" class="nav-link sz-nav-link">Sản phẩm</a></li>
-          <li class="nav-item"><a href="contact.html" class="nav-link sz-nav-link active">Liên hệ</a></li>
-          <li class="nav-item ms-md-2"><a href="login.html" class="nav-link sz-nav-btn">Đăng nhập</a></li>
-        </ul>
-      </div>
+    <button class="navbar-toggler border-0 shadow-none"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navMenu">
+      <i class="bi bi-list fs-3"></i>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+      <ul class="navbar-nav gap-1 align-items-md-center mt-3 mt-md-0">
+        <li class="nav-item">
+          <a href="#" onclick="goWithSplash('index.html'); return false;" class="nav-link sz-nav-link">Trang chủ</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" onclick="goWithSplash('DSSanPham.html'); return false;" class="nav-link sz-nav-link">Sản phẩm</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" onclick="goWithSplash('about.html'); return false;" class="nav-link sz-nav-link">Giới thiệu</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" onclick="goWithSplash('contact.html'); return false;" class="nav-link sz-nav-link">Liên hệ</a>
+        </li>
+        <li class="nav-item ms-md-2">
+          <a href="#" onclick="goWithSplash('login.html'); return false;" class="nav-link sz-nav-btn">Đăng nhập</a>
+        </li>
+      </ul>
     </div>
-  </nav>
+
+  </div>
+</nav>
 
   <section class="sz-page-hero text-center reveal">
     <div class="sz-hero-tag d-inline-flex align-items-center gap-2 mb-3">

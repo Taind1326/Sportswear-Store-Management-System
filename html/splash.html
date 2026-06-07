@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>SPORTIX</title>
+
+  <style>
+    :root{
+      --blue:#119DFF;
+      --blue-dark:#006FE6;
+      --lime:#A8E82E;
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    body{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      font-family:Arial,sans-serif;
+      background:#EEF5FC;
+    }
+
+    .splash-card{
+      width:460px;
+      height:460px;
+      border-radius:46px;
+      background:rgba(255,255,255,.72);
+      backdrop-filter:blur(18px);
+      box-shadow:0 28px 80px rgba(15,23,42,.12);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      overflow:hidden;
+      animation:cardIn .7s ease both;
+    }
+
+    .splash-card::before{
+      content:"";
+      position:absolute;
+      width:210px;
+      height:210px;
+      right:-72px;
+      top:-72px;
+      border-radius:50%;
+      background:linear-gradient(135deg,rgba(17,157,255,.16),rgba(168,232,46,.46));
+    }
+
+    .logo{
+      width:300px;
+      max-width:82%;
+      height:auto;
+      object-fit:contain;
+      position:relative;
+      z-index:2;
+      animation:logoPop .8s ease both;
+    }
+
+    .brand{
+      position:relative;
+      z-index:2;
+      margin-top:18px;
+      font-size:2rem;
+      font-weight:900;
+      letter-spacing:4px;
+      color:var(--blue-dark);
+      animation:textUp .8s ease .15s both;
+    }
+
+    .loading{
+      position:relative;
+      z-index:2;
+      width:260px;
+      height:8px;
+      border-radius:999px;
+      background:#D9EAF8;
+      overflow:hidden;
+      margin-top:30px;
+    }
+
+    .loading span{
+      display:block;
+      width:0%;
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(135deg,var(--blue),var(--lime));
+      animation:load 1.35s ease forwards;
+    }
+
+    @keyframes cardIn{
+      from{
+        opacity:0;
+        transform:translateY(30px) scale(.94);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+      }
+    }
+
+    @keyframes logoPop{
+      from{
+        opacity:0;
+        transform:scale(.55) rotate(-6deg);
+      }
+      to{
+        opacity:1;
+        transform:scale(1) rotate(0);
+      }
+    }
+
+    @keyframes textUp{
+      from{
+        opacity:0;
+        transform:translateY(14px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    @keyframes load{
+      to{
+        width:100%;
+      }
+    }
+
+    @media(max-width:576px){
+      .splash-card{
+        width:86vw;
+        height:86vw;
+        max-height:430px;
+      }
+
+      .logo{
+        width:260px;
+      }
+
+      .brand{
+        font-size:1.65rem;
+      }
+
+      .loading{
+        width:220px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="splash-card">
+    <img src="../img/logo.jpg" class="logo" alt="SPORTIX">
+    <div class="brand">SPORTIX</div>
+    <div class="loading"><span></span></div>
+  </div>
+
+  <script>
+    const target = sessionStorage.getItem("nextPage") || "index.html";
+
+    setTimeout(() => {
+      window.location.href = target;
+    }, 1450);
+  </script>
+</body>
+</html>

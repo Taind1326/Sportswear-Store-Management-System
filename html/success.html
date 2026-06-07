@@ -1,16 +1,16 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Giỏ hàng - SPORTIX</title>
+  <title>Hoàn tất đơn hàng - SPORTIX</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/components.css">
-  <link rel="stylesheet" href="../css/cart.css">
+  <link rel="stylesheet" href="../css/success.css">
 </head>
 
 <body>
@@ -39,45 +39,45 @@
     </div>
   </nav>
 
-  <main class="cart-main">
+  <main class="success-main">
     <div class="container">
 
-      <section class="cart-top reveal">
+      <section class="success-top reveal">
         <div>
-          <span class="cart-tag"><i class="bi bi-bag-check-fill"></i> SPORTIX CART</span>
-          <h1>Giỏ hàng của bạn</h1>
-          <p>Kiểm tra sản phẩm, số lượng và tổng tiền trước khi thanh toán.</p>
+          <span class="success-tag"><i class="bi bi-check-circle-fill"></i> SPORTIX SUCCESS</span>
+          <h1>Đặt hàng thành công</h1>
+          <p>Cảm ơn bạn đã mua sắm tại SPORTIX. Đơn hàng của bạn đang được xử lý.</p>
         </div>
 
-        <button class="cart-continue-btn" onclick="goWithSplash('DSSanPham.html')">
-          <i class="bi bi-arrow-left"></i>
+        <button class="success-back-btn" onclick="goWithSplash('DSSanPham.html')">
+          <i class="bi bi-bag-plus"></i>
           Tiếp tục mua sắm
         </button>
       </section>
 
-      <section class="cart-progress reveal">
-        <div class="progress-item active">
-          <span>1</span>
+      <section class="success-progress reveal">
+        <div class="progress-item done">
+          <span><i class="bi bi-check-lg"></i></span>
           <div>
             <strong>Sản phẩm</strong>
-            <small>Kiểm tra giỏ hàng</small>
+            <small>Đã chọn giỏ hàng</small>
           </div>
         </div>
 
-        <div class="progress-line"></div>
+        <div class="progress-line active"></div>
 
-        <div class="progress-item">
-          <span>2</span>
+        <div class="progress-item done">
+          <span><i class="bi bi-check-lg"></i></span>
           <div>
             <strong>Thông tin</strong>
-            <small>Giao hàng</small>
+            <small>Đã nhập giao hàng</small>
           </div>
         </div>
 
-        <div class="progress-line"></div>
+        <div class="progress-line active"></div>
 
-        <div class="progress-item">
-          <span>3</span>
+        <div class="progress-item active">
+          <span><i class="bi bi-check-lg"></i></span>
           <div>
             <strong>Hoàn tất</strong>
             <small>Xác nhận đơn</small>
@@ -85,46 +85,107 @@
         </div>
       </section>
 
-      <section class="cart-layout reveal-scale">
-        <div class="cart-panel">
-          <div class="cart-panel-head">
-            <div class="select-all-box">
-              <input type="checkbox" id="selectAll" onchange="toggleAll()">
-              <label for="selectAll">Chọn tất cả sản phẩm</label>
+      <section class="success-layout reveal-scale">
+
+        <div class="success-left">
+          <div class="success-card success-thank">
+            <div class="success-icon">
+              <i class="bi bi-check-lg"></i>
             </div>
 
-            <span class="cart-note">Miễn phí vận chuyển cho đơn từ 2.000.000đ</span>
+            <h2>Cảm ơn bạn!</h2>
+            <p>
+              Đơn hàng đã được ghi nhận. SPORTIX sẽ liên hệ xác nhận
+              và giao hàng trong thời gian sớm nhất.
+            </p>
+
+            <div class="order-code-box">
+              <span>Mã đơn hàng</span>
+              <strong id="orderId">SPX000000</strong>
+            </div>
           </div>
 
-          <div id="cartList"></div>
+          <div class="success-card">
+            <div class="card-title">
+              <h5>Thông tin đặt hàng</h5>
+              <i class="bi bi-person-vcard-fill"></i>
+            </div>
+
+            <div class="info-grid">
+              <div class="info-item">
+                <span>Người nhận</span>
+                <strong id="customerName">---</strong>
+              </div>
+
+              <div class="info-item">
+                <span>Số điện thoại</span>
+                <strong id="customerPhone">---</strong>
+              </div>
+
+              <div class="info-item full">
+                <span>Địa chỉ giao hàng</span>
+                <strong id="customerAddress">---</strong>
+              </div>
+
+              <div class="info-item">
+                <span>Ngày đặt</span>
+                <strong id="orderDate">---</strong>
+              </div>
+
+              <div class="info-item">
+                <span>Phương thức</span>
+                <strong id="paymentMethod">---</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="success-card">
+            <div class="card-title">
+              <h5>Sản phẩm đã mua</h5>
+              <i class="bi bi-bag-check-fill"></i>
+            </div>
+
+            <div id="productList"></div>
+          </div>
         </div>
 
-        <aside class="total-box">
-          <div class="total-head">
-            <span>Tổng đơn hàng</span>
+        <aside class="success-summary">
+          <div class="summary-head">
+            <span>Tổng thanh toán</span>
             <i class="bi bi-receipt-cutoff"></i>
           </div>
 
-          <div class="total-row">
-            <span>Tổng tiền hàng</span>
-            <strong id="totalPrice">0đ</strong>
+          <div class="summary-row">
+            <span>Tạm tính</span>
+            <strong id="subTotal">0đ</strong>
           </div>
 
-          <div class="total-benefit">
+          <div class="summary-row">
+            <span>Phí vận chuyển</span>
+            <strong id="shippingFee">0đ</strong>
+          </div>
+
+          <div class="summary-row total">
+            <span>Tổng cộng</span>
+            <strong id="finalTotal">0đ</strong>
+          </div>
+
+          <div class="success-note">
             <i class="bi bi-truck"></i>
-            <span>Phí vận chuyển sẽ được tính ở bước thanh toán.</span>
+            <span>Đơn hàng sẽ được chuẩn bị và giao đến bạn trong thời gian sớm nhất.</span>
           </div>
 
-          <button onclick="goCheckout()" class="btn-checkout">
-            Thanh toán ngay
+          <button class="btn-shop" onclick="goWithSplash('DSSanPham.html')">
+            Tiếp tục mua sắm
             <i class="bi bi-arrow-right"></i>
           </button>
 
-          <button class="btn-more" onclick="goWithSplash('DSSanPham.html')">
-            <i class="bi bi-plus-circle"></i>
-            Mua thêm sản phẩm
+          <button class="btn-home" onclick="goWithSplash('index.html')">
+            <i class="bi bi-house-door"></i>
+            Về trang chủ
           </button>
         </aside>
+
       </section>
 
     </div>
@@ -174,18 +235,8 @@
     </div>
   </footer>
 
-  <div class="sz-toast" id="cartToast">
-  <div class="sz-toast-icon">
-    <i class="bi bi-exclamation-lg"></i>
-  </div>
-  <div>
-    <strong>Chưa chọn sản phẩm</strong>
-    <p>Bạn cần chọn ít nhất 1 sản phẩm để thanh toán.</p>
-  </div>
-</div>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../js/common.js"></script>
-  <script src="../js/cart.js"></script>
+  <script src="../js/success.js"></script>
 </body>
 </html>

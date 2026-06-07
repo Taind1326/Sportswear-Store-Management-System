@@ -4,62 +4,67 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Đăng nhập - SPORTIX</title>
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/login.css">
 </head>
-<body>
 
-  <!-- ── NAVBAR ── -->
+<body>
   <nav class="sz-navbar navbar navbar-expand-md sticky-top">
     <div class="container">
-      <a href="index.html" class="navbar-brand sz-brand">
+      <a href="#" class="navbar-brand sz-brand" onclick="goWithSplash('index.html'); return false;">
         <span class="sz-logo-box">
           <img src="../img/logo.jpg" class="sz-logo" alt="SPORTIX">
         </span>
       </a>
+
       <button class="navbar-toggler border-0 shadow-none" type="button"
         data-bs-toggle="collapse" data-bs-target="#navMenu">
         <i class="bi bi-list fs-3"></i>
       </button>
+
       <div class="collapse navbar-collapse justify-content-end" id="navMenu">
         <ul class="navbar-nav gap-1 align-items-md-center mt-3 mt-md-0">
-          <li class="nav-item"><a href="index.html" class="nav-link sz-nav-link">Trang chủ</a></li>
-          <li class="nav-item"><a href="DSSanPham.html" class="nav-link sz-nav-link">Sản phẩm</a></li>
-          <li class="nav-item"><a href="contact.html" class="nav-link sz-nav-link">Liên hệ</a></li>
+          <li class="nav-item">
+            <a href="#" onclick="goWithSplash('index.html'); return false;" class="nav-link sz-nav-link">Trang chủ</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" onclick="goWithSplash('DSSanPham.html'); return false;" class="nav-link sz-nav-link">Sản phẩm</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" onclick="goWithSplash('about.html'); return false;" class="nav-link sz-nav-link">Giới thiệu</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" onclick="goWithSplash('contact.html'); return false;" class="nav-link sz-nav-link">Liên hệ</a>
+          </li>
           <li class="nav-item ms-md-2">
-            <a href="register.html" class="nav-link sz-nav-btn">Đăng ký</a>
+            <a href="#" onclick="goWithSplash('login.html'); return false;" class="nav-link sz-nav-btn">Đăng nhập</a>
           </li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <!-- ── MAIN: FORM CENTERED ── -->
   <main class="sz-main">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-sm-10 col-md-9 col-lg-7 col-xl-6">
-
-          <div class="sz-card">
+          <div class="sz-card reveal-scale">
             <div class="sz-card-header">
               <span class="sz-eyebrow">WELCOME BACK</span>
               <h1 class="sz-title">Đăng nhập</h1>
               <p class="sz-subtitle">Đăng nhập để tiếp tục mua sắm tại SPORTIX.</p>
             </div>
 
-            <!-- Alert -->
             <div class="alert alert-danger d-none align-items-center gap-2 sz-alert" id="alertBox" role="alert">
               <i class="bi bi-exclamation-circle-fill flex-shrink-0"></i>
               <span id="alertMsg">Email hoặc mật khẩu không chính xác.</span>
             </div>
 
             <form id="loginForm" novalidate>
-
-              <!-- Email -->
               <div class="mb-3">
                 <label for="email" class="sz-label">Email</label>
                 <div class="sz-input-wrap">
@@ -72,7 +77,6 @@
                 </div>
               </div>
 
-              <!-- Password -->
               <div class="mb-3">
                 <label for="password" class="sz-label">Mật khẩu</label>
                 <div class="sz-input-wrap">
@@ -88,16 +92,14 @@
                 </div>
               </div>
 
-              <!-- Remember & Forgot -->
               <div class="d-flex align-items-center justify-content-between mb-4">
                 <div class="form-check">
                   <input class="form-check-input sz-check" type="checkbox" id="remember">
                   <label class="form-check-label sz-check-label" for="remember">Ghi nhớ đăng nhập</label>
                 </div>
-                <a href="forgot-password.html" class="sz-forgot-link">Quên mật khẩu?</a>
+                <a href="#" onclick="goWithSplash('forgot-password.html'); return false;" class="sz-forgot-link">Quên mật khẩu?</a>
               </div>
 
-              <!-- Submit -->
               <button type="submit" class="sz-btn-login w-100 mb-3" id="loginBtn">
                 <span class="sz-btn-text">
                   <i class="bi bi-box-arrow-in-right"></i> Đăng nhập
@@ -105,10 +107,8 @@
                 <span class="sz-spinner"><span class="sz-spinner-ring"></span></span>
               </button>
 
-              <!-- Divider -->
               <div class="sz-divider">Hoặc tiếp tục với</div>
 
-              <!-- Social -->
               <div class="row g-2 mb-3">
                 <div class="col-6">
                   <a href="#" class="sz-btn-social w-100">
@@ -129,12 +129,10 @@
                 </div>
               </div>
 
-              <!-- Register link -->
               <p class="text-center sz-bottom-text mb-0">
                 Chưa có tài khoản?
-                <a href="register.html" class="sz-link-bold">Đăng ký tài khoản mới</a>
+                <a href="#" onclick="goWithSplash('register.html'); return false;" class="sz-link-bold">Đăng ký tài khoản mới</a>
               </p>
-
             </form>
           </div>
         </div>
@@ -142,85 +140,65 @@
     </div>
   </main>
 
-  <!-- ── FOOTER ── -->
   <footer class="sz-footer">
-  <div class="container">
-    <div class="row g-4 align-items-start">
-
-      <div class="col-12 col-lg-4">
-        <h3 class="sz-footer-brand">SPORTIX</h3>
-        <p class="sz-footer-slogan">
-          Move faster. Train better. Trang mua sắm đồ thể thao hiện đại, trẻ trung và dễ tiếp cận.
-        </p>
-
-        <div class="sz-socials d-flex gap-3 mt-3">
-
-    <a href="#" class="sz-social-btn">
-        <i class="bi bi-facebook facebook-icon"></i>
-    </a>
-
-    <a href="#" class="sz-social-btn">
-    <i class="bi bi-tiktok tiktok-icon"></i>
-</a>
-
-    <a href="#" class="sz-social-btn">
-    <i class="bi bi-instagram instagram-icon"></i>
-  </a>
-
-    <a href="#" class="sz-social-btn">
-        <i class="bi bi-youtube text-danger"></i>
-    </a>
-
-    <a href="#" class="sz-social-btn">
-        <i class="bi bi-twitter" style="color:#1DA1F2;"></i>
-    </a>
-
-</div>
-      </div>
-
-      <div class="col-6 col-lg-2">
-        <h5 class="sz-footer-title">Mua sắm</h5>
-        <ul class="sz-footer-links">
-          <li><a href="#">Giày thể thao</a></li>
-          <li><a href="#">Quần áo thể thao</a></li>
-          <li><a href="#">Phụ kiện</a></li>
-          <li><a href="#">Sản phẩm mới</a></li>
-        </ul>
-      </div>
-
-      <div class="col-6 col-lg-2">
-        <h5 class="sz-footer-title">Hỗ trợ</h5>
-        <ul class="sz-footer-links">
-          <li><a href="#">Liên hệ</a></li>
-          <li><a href="#">Thanh toán</a></li>
-          <li><a href="#">Vận chuyển</a></li>
-          <li><a href="#">Đổi trả</a></li>
-        </ul>
-      </div>
-
-      <div class="col-12 col-lg-4">
-        <h5 class="sz-footer-title">Liên hệ</h5>
-        <ul class="sz-footer-contact">
-          <li><i class="bi bi-geo-alt-fill"></i><span>140 Lê Trọng Tấn, Quận Tân Phú, TP. Hồ Chí Minh</span></li>
-          <li><i class="bi bi-telephone-fill"></i><span>1900 1234</span></li>
-          <li><i class="bi bi-send-fill"></i><span>hotro@sportix.vn</span></li>
-        </ul>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="sz-footer-bottom">
     <div class="container">
-      <p class="mb-0">
-        Copyright © 2026 SPORTIX. Thiết kế bởi nhóm đề tài số 27 |
-        <a href="#">Chính sách bảo mật</a> · <a href="#">Điều khoản dịch vụ</a>
-      </p>
-    </div>
-  </div>
-</footer>
+      <div class="row g-4 align-items-start">
+        <div class="col-12 col-lg-4">
+          <h3 class="sz-footer-brand">SPORTIX</h3>
+          <p class="sz-footer-slogan">
+            Move faster. Train better. Trang mua sắm đồ thể thao hiện đại, trẻ trung và dễ tiếp cận.
+          </p>
 
-  <!-- Success Overlay -->
+          <div class="sz-socials d-flex gap-3 mt-3">
+            <a href="#" class="sz-social-btn"><i class="bi bi-facebook facebook-icon"></i></a>
+            <a href="#" class="sz-social-btn"><i class="bi bi-tiktok tiktok-icon"></i></a>
+            <a href="#" class="sz-social-btn"><i class="bi bi-instagram instagram-icon"></i></a>
+            <a href="#" class="sz-social-btn"><i class="bi bi-youtube text-danger"></i></a>
+            <a href="#" class="sz-social-btn"><i class="bi bi-twitter" style="color:#1DA1F2;"></i></a>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg-2">
+          <h5 class="sz-footer-title">Mua sắm</h5>
+          <ul class="sz-footer-links">
+            <li><a href="#">Giày thể thao</a></li>
+            <li><a href="#">Quần áo thể thao</a></li>
+            <li><a href="#">Phụ kiện</a></li>
+            <li><a href="#">Sản phẩm mới</a></li>
+          </ul>
+        </div>
+
+        <div class="col-6 col-lg-2">
+          <h5 class="sz-footer-title">Hỗ trợ</h5>
+          <ul class="sz-footer-links">
+            <li><a href="#">Liên hệ</a></li>
+            <li><a href="#">Thanh toán</a></li>
+            <li><a href="#">Vận chuyển</a></li>
+            <li><a href="#">Đổi trả</a></li>
+          </ul>
+        </div>
+
+        <div class="col-12 col-lg-4">
+          <h5 class="sz-footer-title">Liên hệ</h5>
+          <ul class="sz-footer-contact">
+            <li><i class="bi bi-geo-alt-fill"></i><span>140 Lê Trọng Tấn, Quận Tân Phú, TP. Hồ Chí Minh</span></li>
+            <li><i class="bi bi-telephone-fill"></i><span>1900 1234</span></li>
+            <li><i class="bi bi-send-fill"></i><span>hotro@sportix.vn</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sz-footer-bottom">
+      <div class="container">
+        <p class="mb-0">
+          Copyright © 2026 SPORTIX. Thiết kế bởi nhóm đề tài số 27 |
+          <a href="#">Chính sách bảo mật</a> · <a href="#">Điều khoản dịch vụ</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
   <div class="sz-success-overlay" id="successOverlay">
     <div class="sz-success-icon">
       <i class="bi bi-check-lg"></i>
@@ -230,6 +208,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/common.js"></script>
   <script src="../js/login.js"></script>
 </body>
 </html>
