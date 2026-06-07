@@ -7,26 +7,53 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-  <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/admin.css">
 </head>
 
 <body>
   <div class="admin-layout">
 
+    <!-- SIDEBAR -->
     <aside class="admin-sidebar" id="sidebar">
-      <a href="#" class="admin-brand">
+      <a href="#tongquan" class="admin-brand">
         <img src="../img/logo.jpg" alt="SPORTIX">
       </a>
 
       <nav class="admin-menu">
-        <a href="#" class="admin-menu-link active"><i class="bi bi-grid-1x2-fill"></i>Tổng quan</a>
-        <a href="#" class="admin-menu-link"><i class="bi bi-box-seam-fill"></i>Sản phẩm</a>
-        <a href="#" class="admin-menu-link"><i class="bi bi-bag-check-fill"></i>Đơn hàng</a>
-        <a href="#" class="admin-menu-link"><i class="bi bi-people-fill"></i>Khách hàng</a>
-        <a href="#" class="admin-menu-link"><i class="bi bi-tags-fill"></i>Danh mục</a>
-        <a href="#" class="admin-menu-link"><i class="bi bi-bar-chart-fill"></i>Thống kê</a>
-        <a href="#" class="admin-menu-link"><i class="bi bi-gear-fill"></i>Cài đặt</a>
+        <a href="#tongquan" class="admin-menu-link active">
+          <i class="bi bi-grid-1x2-fill"></i>
+          Tổng quan
+        </a>
+
+        <a href="#sanpham" class="admin-menu-link">
+          <i class="bi bi-box-seam-fill"></i>
+          Sản phẩm
+        </a>
+
+        <a href="#donhang" class="admin-menu-link">
+          <i class="bi bi-bag-check-fill"></i>
+          Đơn hàng
+        </a>
+
+        <a href="#khachhang" class="admin-menu-link">
+          <i class="bi bi-people-fill"></i>
+          Khách hàng
+        </a>
+
+        <a href="#danhmuc" class="admin-menu-link">
+          <i class="bi bi-tags-fill"></i>
+          Danh mục
+        </a>
+
+        <a href="#thongke" class="admin-menu-link">
+          <i class="bi bi-bar-chart-fill"></i>
+          Thống kê
+        </a>
+
+        <a href="#caidat" class="admin-menu-link">
+          <i class="bi bi-gear-fill"></i>
+          Cài đặt
+        </a>
       </nav>
 
       <div class="sidebar-promo">
@@ -36,7 +63,10 @@
       </div>
     </aside>
 
+    <!-- MAIN -->
     <main class="admin-main">
+
+      <!-- TOPBAR -->
       <header class="admin-topbar">
         <button class="menu-toggle" id="btnMenu">
           <i class="bi bi-list"></i>
@@ -54,6 +84,7 @@
 
           <div class="admin-user">
             <div class="avatar">A</div>
+
             <div>
               <strong>Admin</strong>
               <span>Quản trị viên</span>
@@ -62,28 +93,84 @@
         </div>
       </header>
 
-      <section class="hero-admin">
-        <div>
-          <span class="eyebrow hero-eyebrow">SPORTIX ADMIN</span>
-          <h1>Quản lý cửa hàng thể thao</h1>
-          <p>Theo dõi doanh thu, đơn hàng, sản phẩm và tồn kho trong cùng một bảng điều khiển.</p>
+      <!-- HERO SLIDER -->
+      <section class="hero-slider reveal" id="tongquan">
+  <div class="hero-slide active" style="background-image:url('../img/banner-quanao.jpg')">
+    <div class="hero-content">
+      <span>SPORTIX SELLER CENTER</span>
+      <h1>Quản lý cửa hàng thể thao dễ dàng hơn</h1>
+      <p>Theo dõi doanh thu, đơn hàng, sản phẩm và tồn kho trong một bảng điều khiển.</p>
+      <button class="btn-add"><i class="bi bi-plus-lg"></i> Thêm sản phẩm</button>
+    </div>
+  </div>
+
+  <div class="hero-slide" style="background-image:url('../img/adidas.jpg')">
+    <div class="hero-content">
+      <span>SMART DASHBOARD</span>
+      <h1>Nắm bắt doanh thu theo thời gian thực</h1>
+      <p>Xem biểu đồ, sản phẩm bán chạy và tình trạng đơn hàng nhanh chóng.</p>
+      <button class="btn-add"><i class="bi bi-bar-chart-fill"></i> Xem báo cáo</button>
+    </div>
+  </div>
+
+  <div class="hero-slide" style="background-image:url('../img/giay.jpg')">
+    <div class="hero-content">
+      <span>SPORTIX PRO</span>
+      <h1>Tối ưu vận hành bán hàng online</h1>
+      <p>Quản lý sản phẩm, khách hàng và tồn kho chuyên nghiệp hơn mỗi ngày.</p>
+      <button class="btn-add"><i class="bi bi-box-seam-fill"></i> Quản lý sản phẩm</button>
+    </div>
+  </div>
+
+  <button class="hero-arrow prev" id="prevSlide"><i class="bi bi-chevron-left"></i></button>
+  <button class="hero-arrow next" id="nextSlide"><i class="bi bi-chevron-right"></i></button>
+
+  <div class="hero-dots" id="heroDots">
+    <button class="active" data-index="0"></button>
+    <button data-index="1"></button>
+    <button data-index="2"></button>
+  </div>
+</section>
+
+      <!-- STATS -->
+      <section class="stats-grid reveal" id="thongke"></section>
+
+      <!-- QUICK INFO -->
+      <section class="ops-grid reveal">
+        <div class="panel alert-panel">
+          <div class="panel-head">
+            <div>
+              <span class="eyebrow">CẢNH BÁO</span>
+              <h2>Cần xử lý</h2>
+            </div>
+          </div>
+
+          <div class="quick-list" id="alertList"></div>
         </div>
 
-        <button class="btn-add">
-          <i class="bi bi-plus-lg"></i>
-          Thêm sản phẩm
-        </button>
+        <div class="panel activity-panel">
+          <div class="panel-head">
+            <div>
+              <span class="eyebrow">HOẠT ĐỘNG</span>
+              <h2>Gần đây</h2>
+            </div>
+
+            <button class="btn-view">Xem nhật ký</button>
+          </div>
+
+          <div class="quick-list" id="activityList"></div>
+        </div>
       </section>
 
-      <section class="stats-grid" id="statsGrid"></section>
-
-      <section class="dashboard-grid">
+      <!-- REVENUE + BEST SELLER -->
+      <section class="dashboard-grid reveal">
         <div class="panel revenue-panel">
           <div class="panel-head">
             <div>
               <span class="eyebrow">DOANH THU</span>
               <h2>Doanh thu tuần này</h2>
             </div>
+
             <button class="btn-view">Xuất báo cáo</button>
           </div>
 
@@ -107,8 +194,9 @@
         </div>
       </section>
 
-      <section class="dashboard-grid second">
-        <div class="panel product-panel">
+      <!-- PRODUCTS + CATEGORY/STOCK -->
+      <section class="dashboard-grid second reveal">
+        <div class="panel product-panel" id="sanpham">
           <div class="panel-head">
             <div>
               <span class="eyebrow">PRODUCTS</span>
@@ -135,12 +223,13 @@
                   <th></th>
                 </tr>
               </thead>
+
               <tbody id="productTable"></tbody>
             </table>
           </div>
         </div>
 
-        <div class="panel low-stock-panel">
+        <div class="panel low-stock-panel" id="danhmuc">
           <div class="panel-head">
             <div>
               <span class="eyebrow">STOCK</span>
@@ -152,12 +241,14 @@
         </div>
       </section>
 
-      <section class="panel">
+      <!-- ORDERS -->
+      <section class="panel reveal" id="donhang">
         <div class="panel-head">
           <div>
             <span class="eyebrow">ORDERS</span>
             <h2>Đơn hàng gần đây</h2>
           </div>
+
           <button class="btn-view">Xem tất cả</button>
         </div>
 
@@ -173,23 +264,108 @@
                 <th>Trạng thái</th>
               </tr>
             </thead>
+
             <tbody id="orderTable"></tbody>
           </table>
         </div>
       </section>
 
-      <footer class="admin-footer">
-        <div>
-          <h3>SPORTIX</h3>
-          <p>Trang quản trị hỗ trợ theo dõi hoạt động bán hàng thể thao.</p>
+      <!-- CUSTOMERS -->
+      <section class="panel reveal" id="khachhang">
+        <div class="panel-head">
+          <div>
+            <span class="eyebrow">CUSTOMERS</span>
+            <h2>Khách hàng</h2>
+          </div>
+
+          <button class="btn-view">Xem tất cả</button>
         </div>
 
-        <div class="admin-footer-links">
-          <a href="#">Hỗ trợ</a>
-          <a href="#">Chính sách</a>
-          <a href="#">Liên hệ kỹ thuật</a>
+        <div class="table-responsive">
+          <table class="table admin-table align-middle">
+            <thead>
+              <tr>
+                <th>Mã KH</th>
+                <th>Họ tên</th>
+                <th>Email</th>
+                <th>Đơn hàng</th>
+                <th>Chi tiêu</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>KH001</td>
+                <td>Nguyễn Văn A</td>
+                <td>vana@gmail.com</td>
+                <td>12</td>
+                <td>8.500.000đ</td>
+              </tr>
+
+              <tr>
+                <td>KH002</td>
+                <td>Trần Thị B</td>
+                <td>thib@gmail.com</td>
+                <td>7</td>
+                <td>4.200.000đ</td>
+              </tr>
+
+              <tr>
+                <td>KH003</td>
+                <td>Lê Văn C</td>
+                <td>vanc@gmail.com</td>
+                <td>15</td>
+                <td>11.300.000đ</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="panel reveal" id="caidat">
+        <div class="panel-head">
+          <div>
+            <span class="eyebrow">SETTINGS</span>
+            <h2>Cài đặt hệ thống</h2>
+          </div>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="setting-card">
+              <i class="bi bi-shop"></i>
+              <h5>Thông tin cửa hàng</h5>
+              <p>Quản lý tên cửa hàng, logo và thông tin liên hệ.</p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="setting-card">
+              <i class="bi bi-shield-lock-fill"></i>
+              <h5>Tài khoản quản trị</h5>
+              <p>Đổi mật khẩu và bảo mật tài khoản admin.</p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="setting-card">
+              <i class="bi bi-bell-fill"></i>
+              <h5>Thông báo</h5>
+              <p>Quản lý email và thông báo hệ thống.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="admin-footer">
+        <div>
+          <h3>SPORTIX Admin</h3>
+          <p>Phiên bản 1.0 • Cập nhật dữ liệu bán hàng hôm nay</p>
         </div>
       </footer>
+
     </main>
   </div>
 
