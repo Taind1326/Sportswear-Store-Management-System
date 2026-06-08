@@ -836,3 +836,41 @@
     height:260px;
   }
 }
+
+/* ───────── THANH TÌM KIẾM CỐ ĐỊNH KHI CUỘN TRANG ───────── */
+
+/* Khi cuộn xuống, class này được JS kích hoạt */
+.hero-search.is-sticky {
+    position: fixed;
+    top: 85px; /* Nằm ngay sát phía dưới thanh navbar (sticky-top) của bạn */
+    left: 50%;
+    transform: translateX(-50%); /* Căn giữa màn hình chuẩn xác */
+    width: 90%;
+    max-width: 550px; /* Giới hạn độ rộng vừa mắt */
+    z-index: 1020; /* Nằm trên danh sách sản phẩm nhưng dưới menu thả xuống */
+    background: #ffffff; /* Đổ nền trắng để không bị đè chữ từ dưới lên */
+    padding: 10px 20px;
+    border-radius: 40px; /* Bo tròn góc hiện đại */
+    box-shadow: 0 10px 30px rgba(17, 157, 255, 0.25); /* Tạo bóng đổ màu xanh dịu theo tone SPORTIX */
+    border: 2px solid #119dff; /* Tạo viền xanh nổi bật giúp nhận biết đang nhập liệu */
+    animation: slideSearchDown 0.3s ease-out; /* Hiệu ứng xuất hiện mượt mà */
+}
+
+    /* Tùy chỉnh nhẹ icon và input khi ở trạng thái lơ lửng cho cân đối */
+    .hero-search.is-sticky input {
+        height: 40px;
+        font-size: 0.95rem;
+    }
+
+/* Hiệu ứng trượt xuống nhẹ nhàng khi bắt đầu dính */
+@keyframes slideSearchDown {
+    from {
+        top: 40px;
+        opacity: 0;
+    }
+
+    to {
+        top: 85px;
+        opacity: 1;
+    }
+}

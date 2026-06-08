@@ -1,26 +1,5 @@
 const CART_KEY = "sportix_cart";
 
-const demoCart = [
-    {
-        id: "SP001",
-        name: "Giày chạy bộ Nike Air Zoom",
-        category: "Giày",
-        price: 2490000,
-        qty: 1,
-        image: "../img/shoe-1.jpg",
-        selected: true
-    },
-    {
-        id: "SP002",
-        name: "Áo thun Adidas Training",
-        category: "Áo",
-        price: 690000,
-        qty: 2,
-        image: "../img/shirt-1.jpg",
-        selected: true
-    }
-];
-
 let cart = loadCart();
 
 function formatMoney(value) {

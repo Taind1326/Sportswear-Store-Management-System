@@ -20,12 +20,13 @@
       </a>
 
       <nav class="admin-menu">
-        <a href="#tongquan" class="admin-link active"><i class="bi bi-grid-1x2-fill"></i><span>Tổng quan</span></a>
-        <a href="#sanpham" class="admin-link"><i class="bi bi-box-seam-fill"></i><span>Sản phẩm</span></a>
-        <a href="#donhang" class="admin-link"><i class="bi bi-bag-check-fill"></i><span>Đơn hàng</span></a>
-        <a href="#khachhang" class="admin-link"><i class="bi bi-people-fill"></i><span>Khách hàng</span></a>
-        <a href="#thongke" class="admin-link"><i class="bi bi-bar-chart-fill"></i><span>Thống kê</span></a>
-        <a href="#caidat" class="admin-link"><i class="bi bi-gear-fill"></i><span>Cài đặt</span></a>
+          <a href="#tongquan" class="admin-link active"><i class="bi bi-grid-1x2-fill"></i><span>Tổng quan</span></a>
+          <a href="#sanpham" class="admin-link"><i class="bi bi-box-seam-fill"></i><span>Sản phẩm</span></a>
+          <a href="#donhang" class="admin-link"><i class="bi bi-bag-check-fill"></i><span>Đơn hàng</span></a>
+          <a href="#khachhang" class="admin-link"><i class="bi bi-people-fill"></i><span>Khách hàng</span></a>
+          <a href="#magiamgia" class="admin-link"><i class="bi bi-ticket-perforated-fill"></i><span>Mã giảm giá</span></a>
+          <a href="#thongke" class="admin-link"><i class="bi bi-bar-chart-fill"></i><span>Thống kê</span></a>
+          <a href="#caidat" class="admin-link"><i class="bi bi-gear-fill"></i><span>Cài đặt</span></a>
       </nav>
 
       <div class="sidebar-card">
@@ -36,197 +37,224 @@
     </aside>
 
     <main class="admin-main">
-      <header class="admin-topbar">
-        <button class="menu-toggle" id="btnMenu" type="button"><i class="bi bi-list"></i></button>
+        <header class="admin-topbar">
+            <button class="menu-toggle" id="btnMenu" type="button"><i class="bi bi-list"></i></button>
 
-        <div class="admin-search">
-          <i class="bi bi-search"></i>
-          <input type="text" id="searchInput" placeholder="Tìm sản phẩm, đơn hàng, khách hàng...">
-        </div>
-
-        <div class="topbar-right">
-          <button class="top-icon" type="button"><i class="bi bi-bell-fill"></i></button>
-
-          <div class="admin-user-wrap" id="adminUserWrap">
-            <button class="admin-user" id="adminUserBtn" type="button">
-              <div class="admin-avatar" id="adminAvatar">A</div>
-              <div class="admin-user-info">
-                <strong id="adminName">Admin</strong>
-                <span>Quản trị viên</span>
-              </div>
-              <i class="bi bi-chevron-down user-arrow"></i>
-            </button>
-
-            <div class="admin-dropdown" id="adminUserDropdown">
-              <button type="button"><i class="bi bi-person-circle"></i>Tài khoản admin</button>
-              <button type="button" class="logout" id="adminLogoutBtn"><i class="bi bi-box-arrow-right"></i>Đăng xuất</button>
+            <div class="admin-search">
+                <i class="bi bi-search"></i>
+                <input type="text" id="searchInput" placeholder="Tìm sản phẩm">
             </div>
-          </div>
-        </div>
-      </header>
 
-      <section class="admin-hero reveal" id="tongquan">
-        <div class="hero-slide active" style="background-image:url('../img/banner-quanao.jpg')">
-          <div class="hero-content">
-            <span>SPORTIX SELLER CENTER</span>
-            <h1>Quản lý cửa hàng thể thao dễ dàng hơn</h1>
-            <p>Theo dõi doanh thu, đơn hàng, sản phẩm và tồn kho trong một bảng điều khiển hiện đại.</p>
-            <a href="#sanpham" class="admin-primary-btn"><i class="bi bi-plus-lg"></i> Thêm sản phẩm</a>
-          </div>
-        </div>
+            <div class="topbar-right">
+                <button class="top-icon" type="button"><i class="bi bi-bell-fill"></i></button>
 
-        <div class="hero-slide" style="background-image:url('../img/adidas.jpg')">
-          <div class="hero-content">
-            <span>SMART DASHBOARD</span>
-            <h1>Nắm bắt doanh thu theo thời gian thực</h1>
-            <p>Xem biểu đồ, sản phẩm bán chạy và tình trạng đơn hàng nhanh chóng.</p>
-            <a href="#thongke" class="admin-primary-btn"><i class="bi bi-bar-chart-fill"></i> Xem báo cáo</a>
-          </div>
-        </div>
+                <div class="admin-user-wrap" id="adminUserWrap">
+                    <button class="admin-user" id="adminUserBtn" type="button">
+                        <div class="admin-avatar" id="adminAvatar">A</div>
+                        <div class="admin-user-info">
+                            <strong id="adminName">Admin</strong>
+                            <span>Quản trị viên</span>
+                        </div>
+                        <i class="bi bi-chevron-down user-arrow"></i>
+                    </button>
 
-        <div class="hero-slide" style="background-image:url('../img/giay.jpg')">
-          <div class="hero-content">
-            <span>SPORTIX PRO</span>
-            <h1>Tối ưu vận hành bán hàng online</h1>
-            <p>Quản lý sản phẩm, khách hàng và tồn kho chuyên nghiệp hơn mỗi ngày.</p>
-            <a href="#donhang" class="admin-primary-btn"><i class="bi bi-bag-check-fill"></i> Xem đơn hàng</a>
-          </div>
-        </div>
-
-        <button class="hero-arrow prev" id="prevSlide" type="button"><i class="bi bi-chevron-left"></i></button>
-        <button class="hero-arrow next" id="nextSlide" type="button"><i class="bi bi-chevron-right"></i></button>
-        <div class="hero-dots" id="heroDots"></div>
-      </section>
-
-      <section class="stats-grid reveal" id="thongke"></section>
-
-      <section class="admin-grid reveal">
-        <div class="admin-panel">
-          <div class="panel-head">
-            <div><span class="eyebrow">CẢNH BÁO</span><h2>Cần xử lý</h2></div>
-          </div>
-          <div class="quick-list" id="alertList"></div>
-        </div>
-
-        <div class="admin-panel">
-          <div class="panel-head">
-            <div><span class="eyebrow">HOẠT ĐỘNG</span><h2>Gần đây</h2></div>
-            <button class="admin-soft-btn" type="button">Xem nhật ký</button>
-          </div>
-          <div class="quick-list" id="activityList"></div>
-        </div>
-      </section>
-
-      <section class="dashboard-grid reveal">
-        <div class="admin-panel revenue-panel">
-          <div class="panel-head">
-            <div><span class="eyebrow">DOANH THU</span><h2>Doanh thu tuần này</h2></div>
-            <button class="admin-soft-btn" type="button">Xuất báo cáo</button>
-          </div>
-          <div class="chart-note"><span><b class="dot blue"></b>Doanh thu</span><span><b class="dot lime"></b>Hôm nay</span></div>
-          <div class="sales-chart" id="salesChart"></div>
-        </div>
-
-        <div class="admin-panel">
-          <div class="panel-head"><div><span class="eyebrow">BEST SELLER</span><h2>Bán chạy</h2></div></div>
-          <div class="best-list" id="bestList"></div>
-        </div>
-      </section>
-
-      <section class="dashboard-grid second reveal">
-        <div class="admin-panel product-panel" id="sanpham">
-          <div class="panel-head product-head">
-            <div><span class="eyebrow">PRODUCTS</span><h2>Danh sách sản phẩm</h2></div>
-
-            <div class="admin-custom-select" id="categoryFilter" data-value="all">
-              <button type="button" class="admin-custom-select-btn">
-                <span>Tất cả danh mục</span>
-                <i class="bi bi-chevron-down"></i>
-              </button>
-              <div class="admin-custom-select-menu">
-                <button type="button" class="admin-custom-option active" data-value="all">Tất cả danh mục</button>
-                <button type="button" class="admin-custom-option" data-value="Giày">Giày</button>
-                <button type="button" class="admin-custom-option" data-value="Áo">Áo</button>
-                <button type="button" class="admin-custom-option" data-value="Phụ kiện">Phụ kiện</button>
-              </div>
+                    <div class="admin-dropdown" id="adminUserDropdown">
+                        <button type="button"><i class="bi bi-person-circle"></i>Tài khoản admin</button>
+                        <button type="button" class="logout" id="adminLogoutBtn"><i class="bi bi-box-arrow-right"></i>Đăng xuất</button>
+                    </div>
+                </div>
             </div>
-          </div>
+        </header>
 
-          <div class="table-responsive">
-            <table class="table admin-table align-middle">
-              <thead>
-                <tr>
-                  <th>Sản phẩm</th>
-                  <th>Danh mục</th>
-                  <th>Giá</th>
-                  <th>Tồn kho</th>
-                  <th>Trạng thái</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="productTable"></tbody>
-            </table>
-          </div>
-        </div>
+        <section class="admin-hero reveal" id="tongquan">
+            <div class="hero-slide active" style="background-image:url('../img/banner-quanao.jpg')">
+                <div class="hero-content">
+                    <span>SPORTIX SELLER CENTER</span>
+                    <h1>Quản lý cửa hàng thể thao dễ dàng hơn</h1>
+                    <p>Theo dõi doanh thu, đơn hàng, sản phẩm và tồn kho trong một bảng điều khiển hiện đại.</p>
+                    <a href="#sanpham" class="admin-primary-btn"><i class="bi bi-plus-lg"></i> Thêm sản phẩm</a>
+                </div>
+            </div>
 
-        <div class="admin-panel" id="danhmuc">
-          <div class="panel-head"><div><span class="eyebrow">STOCK</span><h2>Sắp hết hàng</h2></div></div>
-          <div class="low-stock-list" id="lowStockList"></div>
-        </div>
-      </section>
+            <div class="hero-slide" style="background-image:url('../img/adidas.jpg')">
+                <div class="hero-content">
+                    <span>SMART DASHBOARD</span>
+                    <h1>Nắm bắt doanh thu theo thời gian thực</h1>
+                    <p>Xem biểu đồ, sản phẩm bán chạy và tình trạng đơn hàng nhanh chóng.</p>
+                    <a href="#thongke" class="admin-primary-btn"><i class="bi bi-bar-chart-fill"></i> Xem báo cáo</a>
+                </div>
+            </div>
 
-      <section class="admin-panel reveal" id="donhang">
-        <div class="panel-head">
-          <div><span class="eyebrow">ORDERS</span><h2>Đơn hàng gần đây</h2></div>
-          <button class="admin-soft-btn" type="button">Xem tất cả</button>
-        </div>
-        <div class="table-responsive">
-          <table class="table admin-table align-middle">
-            <thead>
-              <tr>
-                <th>Mã đơn</th>
-                <th>Khách hàng</th>
-                <th>Sản phẩm</th>
-                <th>Tổng tiền</th>
-                <th>Thanh toán</th>
-                <th>Trạng thái</th>
-              </tr>
-            </thead>
-            <tbody id="orderTable"></tbody>
-          </table>
-        </div>
-      </section>
+            <div class="hero-slide" style="background-image:url('../img/giay.jpg')">
+                <div class="hero-content">
+                    <span>SPORTIX PRO</span>
+                    <h1>Tối ưu vận hành bán hàng online</h1>
+                    <p>Quản lý sản phẩm, khách hàng và tồn kho chuyên nghiệp hơn mỗi ngày.</p>
+                    <a href="#donhang" class="admin-primary-btn"><i class="bi bi-bag-check-fill"></i> Xem đơn hàng</a>
+                </div>
+            </div>
 
-      <section class="admin-panel reveal" id="khachhang">
-        <div class="panel-head">
-          <div><span class="eyebrow">CUSTOMERS</span><h2>Khách hàng</h2></div>
-          <button class="admin-soft-btn" type="button">Xem tất cả</button>
-        </div>
-        <div class="table-responsive">
-          <table class="table admin-table align-middle">
-            <thead>
-              <tr>
-                <th>Mã KH</th>
-                <th>Họ tên</th>
-                <th>Email</th>
-                <th>Đơn hàng</th>
-                <th>Chi tiêu</th>
-              </tr>
-            </thead>
-            <tbody id="customerTable"></tbody>
-          </table>
-        </div>
-      </section>
+            <button class="hero-arrow prev" id="prevSlide" type="button"><i class="bi bi-chevron-left"></i></button>
+            <button class="hero-arrow next" id="nextSlide" type="button"><i class="bi bi-chevron-right"></i></button>
+            <div class="hero-dots" id="heroDots"></div>
+        </section>
 
-      <section class="admin-panel reveal" id="caidat">
-        <div class="panel-head"><div><span class="eyebrow">SETTINGS</span><h2>Cài đặt hệ thống</h2></div></div>
-        <div class="row g-3" id="settingGrid"></div>
-      </section>
+        <section class="stats-grid reveal" id="thongke"></section>
 
-      <footer class="admin-footer">
-        <h3>SPORTIX Admin</h3>
-        <p>Phiên bản 1.0 • Cập nhật dữ liệu bán hàng hôm nay</p>
-      </footer>
+        <section class="admin-grid reveal">
+            <div class="admin-panel">
+                <div class="panel-head">
+                    <div><span class="eyebrow">CẢNH BÁO</span><h2>Cần xử lý</h2></div>
+                </div>
+                <div class="quick-list" id="alertList"></div>
+            </div>
+
+            <div class="admin-panel">
+                <div class="panel-head">
+                    <div><span class="eyebrow">HOẠT ĐỘNG</span><h2>Gần đây</h2></div>
+                    <button class="admin-soft-btn" type="button">Xem nhật ký</button>
+                </div>
+                <div class="quick-list" id="activityList"></div>
+            </div>
+        </section>
+
+        <section class="dashboard-grid reveal">
+            <div class="admin-panel revenue-panel">
+                <div class="panel-head">
+                    <div><span class="eyebrow">DOANH THU</span><h2>Doanh thu tuần này</h2></div>
+                    <button class="admin-soft-btn" type="button">Xuất báo cáo</button>
+                </div>
+                <div class="chart-note"><span><b class="dot blue"></b>Doanh thu</span><span><b class="dot lime"></b>Hôm nay</span></div>
+                <div class="sales-chart" id="salesChart"></div>
+            </div>
+
+            <div class="admin-panel">
+                <div class="panel-head"><div><span class="eyebrow">BEST SELLER</span><h2>Bán chạy</h2></div></div>
+                <div class="best-list" id="bestList"></div>
+            </div>
+        </section>
+
+        <section class="dashboard-grid second reveal">
+            <div class="admin-panel product-panel" id="sanpham">
+                <div class="panel-head product-head">
+                    <div><span class="eyebrow">PRODUCTS</span><h2>Danh sách sản phẩm</h2></div>
+
+                    <div class="admin-custom-select" id="categoryFilter" data-value="all">
+                        <button type="button" class="admin-custom-select-btn">
+                            <span>Tất cả danh mục</span>
+                            <i class="bi bi-chevron-down"></i>
+                        </button>
+                        <div class="admin-custom-select-menu">
+                            <button type="button" class="admin-custom-option active" data-value="all">Tất cả danh mục</button>
+                            <button type="button" class="admin-custom-option" data-value="Giày">Giày</button>
+                            <button type="button" class="admin-custom-option" data-value="Áo">Áo</button>
+                            <button type="button" class="admin-custom-option" data-value="Phụ kiện">Phụ kiện</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table admin-table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Danh mục</th>
+                                <th>Giá</th>
+                                <th>Tồn kho</th>
+                                <th>Trạng thái</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="productTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="admin-panel" id="danhmuc">
+                <div class="panel-head"><div><span class="eyebrow">STOCK</span><h2>Sắp hết hàng</h2></div></div>
+                <div class="low-stock-list" id="lowStockList"></div>
+            </div>
+        </section>
+
+        <section class="admin-panel reveal" id="donhang">
+            <div class="panel-head">
+                <div><span class="eyebrow">ORDERS</span><h2>Đơn hàng gần đây</h2></div>
+                <button class="admin-soft-btn" type="button">Xem tất cả</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table admin-table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Mã đơn</th>
+                            <th>Khách hàng</th>
+                            <th>Sản phẩm</th>
+                            <th>Tổng tiền</th>
+                            <th>Thanh toán</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="admin-panel reveal" id="khachhang">
+            <div class="panel-head">
+                <div><span class="eyebrow">CUSTOMERS</span><h2>Khách hàng</h2></div>
+                <button class="admin-soft-btn" type="button">Xem tất cả</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table admin-table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Mã KH</th>
+                            <th>Họ tên</th>
+                            <th>Email</th>
+                            <th>Đơn hàng</th>
+                            <th>Chi tiêu</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customerTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="admin-panel reveal" id="magiamgia">
+            <div class="panel-head">
+                <div>
+                    <span class="eyebrow">DISCOUNTS</span>
+                    <h2>Quản lý mã giảm giá</h2>
+                </div>
+                <button class="admin-primary-btn" type="button" onclick="openVoucherModal()">
+                    <i class="bi bi-plus-lg"></i> Thêm mã mới
+                </button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Mã giảm giá</th>
+                            <th>Loại giảm giá</th>
+                            <th>Giá trị giảm</th>
+                            <th>Đơn tối thiểu</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="voucherTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="admin-panel reveal" id="caidat">
+            <div class="panel-head"><div><span class="eyebrow">SETTINGS</span><h2>Cài đặt hệ thống</h2></div></div>
+            <div class="row g-3" id="settingGrid"></div>
+        </section>
+
+        <footer class="admin-footer">
+            <h3>SPORTIX Admin</h3>
+            <p>Phiên bản 1.0 • Cập nhật dữ liệu bán hàng hôm nay</p>
+        </footer>
     </main>
   </div>
 
