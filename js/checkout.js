@@ -1,4 +1,23 @@
-const CHECKOUT_KEY = "sportix_checkout";
+function getCurrentUser() {
+    return JSON.parse(localStorage.getItem("sportix_user")) ||
+           JSON.parse(localStorage.getItem("sportix_current_user")) ||
+           JSON.parse(localStorage.getItem("currentUser")) ||
+           null;
+}
+
+function getUserAccount() {
+    const user = getCurrentUser();
+    return user?.email || user?.phone || user?.username || user?.id || null;
+}
+
+function getUserKey(key) {
+    const account = getUserAccount();
+    return account ? `${key}_${account}` : key;
+}
+
+const CART_KEY = getUserKey("sportix_cart");
+const CHECKOUT_KEY = getUserKey("sportix_checkout");
+const ORDERS_KEY = "sportix_orders";
 
 let orderItems = [];
 let shippingFee = 30000;
@@ -57,7 +76,7 @@ function clearState(input, errorId) {
 
 function loadCheckoutItems() {
     const checkoutData = localStorage.getItem(CHECKOUT_KEY);
-    const cartData = localStorage.getItem("sportix_cart");
+    const cartData = localStorage.getItem(CART_KEY);
 
     if (checkoutData) {
         orderItems = JSON.parse(checkoutData);
@@ -79,26 +98,26 @@ function renderOrderList() {
 
     if (!orderItems.length) {
         orderList.innerHTML = `
-      <div class="text-center text-muted py-3">
-        Chưa có sản phẩm nào được chọn.
-      </div>
-    `;
+            <div class="text-center text-muted py-3">
+                Chưa có sản phẩm nào được chọn.
+            </div>
+        `;
         updateTotal();
         return;
     }
 
     orderList.innerHTML = orderItems.map(item => `
-    <div class="order-item">
-      <div class="order-info">
-        <img src="${item.image}" alt="${item.name}">
-        <div>
-          <div class="order-name">${item.name}</div>
-          <div class="order-qty">Số lượng: ${item.qty}</div>
+        <div class="order-item">
+            <div class="order-info">
+                <img src="${item.image}" alt="${item.name}">
+                <div>
+                    <div class="order-name">${item.name}</div>
+                    <div class="order-qty">Số lượng: ${item.qty}</div>
+                </div>
+            </div>
+            <div class="order-price">${formatMoney(item.price * item.qty)}</div>
         </div>
-      </div>
-      <div class="order-price">${formatMoney(item.price * item.qty)}</div>
-    </div>
-  `).join("");
+    `).join("");
 
     updateTotal();
 }
@@ -124,31 +143,27 @@ function getDiscountAmount(subTotal) {
 
     if (!code) return 0;
 
-    // 1. Đọc và kiểm tra mã giảm giá được lưu từ trang Admin
     const vouchersData = localStorage.getItem("sportix_vouchers");
+
     if (vouchersData) {
         const vouchers = JSON.parse(vouchersData);
-        // Tìm mã tương ứng trong danh sách
         const voucher = vouchers.find(v => v.code === code);
 
         if (voucher) {
-            // Kiểm tra xem tổng giá trị đơn hàng có đạt mức tối thiểu (minOrder) không
             if (subTotal >= (voucher.minOrder || 0)) {
                 if (voucher.type === "percent") {
-                    // Giảm giá theo phần trăm (%)
                     return Math.round(subTotal * (voucher.value / 100));
-                } else if (voucher.type === "fixed") {
-                    // Giảm giá theo số tiền cố định (đ)
+                }
+
+                if (voucher.type === "fixed") {
                     return voucher.value;
                 }
-            } else {
-                // Đã tìm thấy mã nhưng chưa đủ điều kiện giá trị đơn hàng tối thiểu
-                return 0;
             }
+
+            return 0;
         }
     }
 
-    // 2. Giữ lại logic dự phòng cũ (nếu cần)
     if (code === "SPORTIX10") {
         return Math.round(subTotal * 0.1);
     }
@@ -176,7 +191,8 @@ function updateTotal() {
 
     const discountEl = document.getElementById("discountPrice");
     if (discountEl) {
-        discountEl.textContent = discountAmount > 0 ? "-" + formatMoney(discountAmount) : "0đ";
+        discountEl.textContent =
+            discountAmount > 0 ? "-" + formatMoney(discountAmount) : "0đ";
     }
 
     document.getElementById("totalPrice").textContent = formatMoney(total);
@@ -307,8 +323,17 @@ function initLocationSelect() {
 
     districtBox.querySelector(".custom-select-btn").onclick = () => {
         if (!provinceInput.value) {
-            showCheckoutToast("Chưa chọn tỉnh/thành phố", "Vui lòng chọn tỉnh/thành phố trước.");
-            showError(provinceInput, "provinceError", "Vui lòng chọn tỉnh/thành phố trước.");
+            showCheckoutToast(
+                "Chưa chọn tỉnh/thành phố",
+                "Vui lòng chọn tỉnh/thành phố trước."
+            );
+
+            showError(
+                provinceInput,
+                "provinceError",
+                "Vui lòng chọn tỉnh/thành phố trước."
+            );
+
             return;
         }
 
@@ -404,7 +429,11 @@ function initCheckoutValidation() {
         if (/^0[0-9]{9}$/.test(phoneInput.value.trim())) {
             showSuccess(phoneInput, "phoneError");
         } else {
-            showError(phoneInput, "phoneError", "Số điện thoại phải có 10 số và bắt đầu bằng 0.");
+            showError(
+                phoneInput,
+                "phoneError",
+                "Số điện thoại phải có 10 số và bắt đầu bằng 0."
+            );
         }
     });
 
@@ -428,31 +457,52 @@ function validateForm() {
     if (!nameInput.value.trim()) {
         showError(nameInput, "nameError", "Vui lòng nhập họ tên.");
         isValid = false;
-    } else showSuccess(nameInput, "nameError");
+    } else {
+        showSuccess(nameInput, "nameError");
+    }
 
     if (!/^0[0-9]{9}$/.test(phoneInput.value.trim())) {
-        showError(phoneInput, "phoneError", "Số điện thoại phải có 10 số và bắt đầu bằng 0.");
+        showError(
+            phoneInput,
+            "phoneError",
+            "Số điện thoại phải có 10 số và bắt đầu bằng 0."
+        );
         isValid = false;
-    } else showSuccess(phoneInput, "phoneError");
+    } else {
+        showSuccess(phoneInput, "phoneError");
+    }
 
     if (!provinceInput.value) {
         showError(provinceInput, "provinceError", "Vui lòng chọn tỉnh/thành phố.");
         isValid = false;
-    } else showSuccess(provinceInput, "provinceError");
+    } else {
+        showSuccess(provinceInput, "provinceError");
+    }
 
     if (!districtInput.value) {
         showError(districtInput, "districtError", "Vui lòng chọn phường/xã.");
         isValid = false;
-    } else showSuccess(districtInput, "districtError");
+    } else {
+        showSuccess(districtInput, "districtError");
+    }
 
     if (!addressInput.value.trim()) {
         showError(addressInput, "addressError", "Vui lòng nhập địa chỉ giao hàng.");
         isValid = false;
-    } else showSuccess(addressInput, "addressError");
+    } else {
+        showSuccess(addressInput, "addressError");
+    }
 
     if (!isValid) {
-        showCheckoutToast("Thông tin chưa hợp lệ", "Vui lòng kiểm tra lại các ô đang báo lỗi.");
-        document.querySelector(".is-invalid")?.scrollIntoView({ behavior: "smooth", block: "center" });
+        showCheckoutToast(
+            "Thông tin chưa hợp lệ",
+            "Vui lòng kiểm tra lại các ô đang báo lỗi."
+        );
+
+        document.querySelector(".is-invalid")?.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
     }
 
     return isValid;
@@ -464,7 +514,10 @@ function goCart() {
 
 function placeOrder() {
     if (!orderItems.length) {
-        showCheckoutToast("Chưa có sản phẩm", "Không có sản phẩm nào để đặt hàng.");
+        showCheckoutToast(
+            "Chưa có sản phẩm",
+            "Không có sản phẩm nào để đặt hàng."
+        );
         return;
     }
 
@@ -482,6 +535,7 @@ function placeOrder() {
 
     const order = {
         id: "SPX" + Date.now().toString().slice(-6),
+        userAccount: getUserAccount(),
         date: new Date().toLocaleDateString("vi-VN"),
         customer: {
             name: name,
@@ -489,7 +543,9 @@ function placeOrder() {
             address: `${address}, ${district}, ${province}`
         },
         payment: payment,
-        paymentText: payment === "cod" ? "Thanh toán khi nhận hàng" : "Thanh toán QR",
+        paymentText: payment === "cod"
+            ? "Thanh toán khi nhận hàng"
+            : "Thanh toán QR",
         items: orderItems,
         subTotal: subTotal,
         discount: discountAmount,
@@ -497,10 +553,14 @@ function placeOrder() {
         total: total
     };
 
+    let orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
+    orders.push(order);
+    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+
     localStorage.setItem("sportix_last_order", JSON.stringify(order));
 
     localStorage.removeItem(CHECKOUT_KEY);
-    localStorage.removeItem("sportix_cart");
+    localStorage.removeItem(CART_KEY);
 
     goWithSplash("success.html");
 }

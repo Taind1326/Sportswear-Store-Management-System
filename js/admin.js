@@ -7,14 +7,8 @@ let editingProductId = null;
 
 /* ───────── DATA ───────── */
 
-const products = [
-    { id: "SP001", name: "Giày chạy bộ Nike Air Zoom", category: "Giày", price: 2490000, stock: 12, sold: 128, image: "../img/1/1.jpg" },
-    { id: "SP002", name: "Áo thun Adidas Training", category: "Áo", price: 690000, stock: 54, sold: 96, image: "../img/4/2.jpg" },
-    { id: "SP003", name: "Balo thể thao SPORTIX", category: "Phụ kiện", price: 450000, stock: 8, sold: 74, image: "../img/14/1.jpg" },
-    { id: "SP004", name: "Bình nước tập gym Active", category: "Phụ kiện", price: 150000, stock: 5, sold: 61, image: "../img/12/1.jpg" },
-    { id: "SP005", name: "Áo khoác thể thao Runner", category: "Áo", price: 890000, stock: 18, sold: 52, image: "../img/6/1.jpg" },
-    { id: "SP006", name: "Giày bóng rổ Pro Court", category: "Giày", price: 1890000, stock: 22, sold: 88, image: "../img/15/3.jpg" }
-];
+let products =
+    JSON.parse(localStorage.getItem("sportix_products")) || [];
 
 const orders = [
     { id: "#SX1024", customer: "Nguyễn Hải Yến", product: "Nike Air Zoom", total: 2490000, payment: "MoMo", status: "Đang giao" },
@@ -146,7 +140,7 @@ function renderBestProducts() {
         .map((item, i) => `
       <div class="best-item">
         <span class="best-rank">${i + 1}</span>
-        <img src="${item.image}" class="product-thumb" alt="${item.name}">
+        <img src="${item.img}" class="product-thumb" alt="${item.name}">
         <div class="item-info"><h4>${item.name}</h4><p>Đã bán <b>${item.sold}</b> · ${formatMoney(item.price)}</p></div>
       </div>
     `).join("");
@@ -331,15 +325,23 @@ document.addEventListener("DOMContentLoaded", () => {
 function renderLowStock() {
     const list = $("lowStockList");
     if (!list) return;
-    list.innerHTML = products
+
+    list.innerHTML = [...products]
         .filter(p => p.stock <= 12)
+        .sort((a, b) => a.stock - b.stock)
+        .slice(0, 4)
         .map(item => `
-      <div class="low-stock-item">
-        <img src="${item.image}" class="product-thumb" alt="${item.name}">
-        <div class="item-info"><h4>${item.name}</h4><p>Còn <b>${item.stock}</b> sản phẩm</p></div>
-        <span class="badge-status ${item.stock <= 5 ? "cancel" : "pending"}">${item.stock <= 5 ? "Sắp hết" : "Cần nhập"}</span>
-      </div>
-    `).join("");
+            <div class="low-stock-item">
+                <img src="${item.img}" class="product-thumb" alt="${item.name}">
+                <div class="item-info">
+                    <h4>${item.name}</h4>
+                    <p>Còn ${item.stock} sản phẩm</p>
+                </div>
+                <span class="badge-status ${item.stock <= 5 ? "cancel" : "pending"}">
+                    ${item.stock <= 5 ? "Sắp hết" : "Cần nhập"}
+                </span>
+            </div>
+        `).join("");
 }
 
 /* ───────── QUICK INFO ───────── */
@@ -390,8 +392,22 @@ function renderProducts() {
         const status = getProductStatus(item.stock);
         return `
       <tr>
-        <td><div class="product-cell"><img src="${item.image}" class="product-thumb" alt="${item.name}"><div><strong>${item.name}</strong><span>${item.id}</span></div></div></td>
-        <td>${item.category}</td>
+        <td><div class="product-cell"><img src="${item.img}" class="product-thumb" alt="${item.name}"><div><strong>${item.name}</strong><span>${item.id}</span></div></div></td>
+        <td>
+         ${
+            item.category === "giay"
+                ? "Giày"
+                : item.category === "ao"
+                    ? "Áo"
+                    : item.category === "phukien"
+                    ? "Phụ kiện"
+                    : item.category === "gym"
+                        ? "Gym"
+                        : item.category === "bongda"
+                            ?"Bóng đá "
+                        : item.category
+           }
+        </td>
         <td>${formatMoney(item.price)}</td>
         <td>${item.stock}</td>
         <td><span class="badge-status ${status.className}">${status.text}</span></td>

@@ -1,5 +1,4 @@
-﻿
-const PRODUCTS = [
+﻿const PRODUCTS = [
     {
         id: 1, name: 'Nike Air Zoom Pegasus 40', category: 'giay', brand: 'Nike',
         price: 3200000, oldPrice: 3800000, badge: 'sale',
@@ -180,3 +179,38 @@ const DANH_GIA = [
     { user: 'Trần Thị B', rating: 4, date: '05/04/2025', text: 'Chất lượng ổn, mang khá êm. Trừ 1 sao vì size hơi lớn hơn so với thông thường, nên order nhỏ hơn 1 size.' },
     { user: 'Lê Minh C', rating: 5, date: '28/03/2025', text: 'Hàng chính hãng, màu sắc đẹp như ảnh. Rất hài lòng!' },
 ];
+
+const PRODUCT_DATA = {
+    1: { stock: 25, sold: 120 },
+    2: { stock: 18, sold: 98 },
+    3: { stock: 30, sold: 150 },
+    4: { stock: 45, sold: 75 },
+    5: { stock: 20, sold: 64 },
+    6: { stock: 15, sold: 88 },
+    7: { stock: 12, sold: 45 },
+    8: { stock: 35, sold: 132 },
+    9: { stock: 22, sold: 90 },
+    10: { stock: 40, sold: 70 },
+    11: { stock: 16, sold: 110 },
+    12: { stock: 50, sold: 180 },
+    13: { stock: 60, sold: 210 },
+    14: { stock: 14, sold: 40 },
+    15: { stock: 10, sold: 55 },
+    16: { stock: 28, sold: 83 },
+    17: { stock: 17, sold: 61 },
+    18: { stock: 24, sold: 92 },
+    19: { stock: 11, sold: 38 }
+};
+
+PRODUCTS.forEach(product => {
+    const data = PRODUCT_DATA[product.id];
+
+    product.stock = data?.stock || 0;
+    product.sold = data?.sold || 0;
+});
+
+// LUÔN cập nhật localStorage
+localStorage.setItem(
+    "sportix_products",
+    JSON.stringify(PRODUCTS)
+);
