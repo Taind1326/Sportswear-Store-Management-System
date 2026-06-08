@@ -165,11 +165,12 @@
   </div>
 
   <script>
-    const target = sessionStorage.getItem("nextPage") || "index.html";
+  const target = sessionStorage.getItem("nextPage") || "index.html";
 
-    setTimeout(() => {
-      window.location.href = target;
-    }, 1450);
-  </script>
+  setTimeout(() => {
+    sessionStorage.removeItem("nextPage");
+    window.location.replace(target);
+  }, 1450);
+</script>
 </body>
 </html>

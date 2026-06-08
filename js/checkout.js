@@ -1,7 +1,8 @@
 const CHECKOUT_KEY = "sportix_checkout";
 
 let orderItems = [];
-let shippingFee = 0;
+let shippingFee = 30000;
+let discountAmount = 0;
 let qrTimer = null;
 let qrSeconds = 300;
 
@@ -17,7 +18,6 @@ function showCheckoutToast(title, message) {
   toast.querySelector("p").textContent = message;
 
   toast.classList.add("show");
-
   clearTimeout(showCheckoutToast.timer);
 
   showCheckoutToast.timer = setTimeout(() => {
@@ -56,7 +56,7 @@ function clearState(input, errorId) {
 }
 
 function loadCheckoutItems() {
-  const checkoutData = localStorage.getItem("sportix_checkout");
+  const checkoutData = localStorage.getItem(CHECKOUT_KEY);
   const cartData = localStorage.getItem("sportix_cart");
 
   if (checkoutData) {
@@ -67,7 +67,7 @@ function loadCheckoutItems() {
   if (cartData) {
     const cartItems = JSON.parse(cartData);
     orderItems = cartItems.filter(item => item.selected);
-    localStorage.setItem("sportix_checkout", JSON.stringify(orderItems));
+    localStorage.setItem(CHECKOUT_KEY, JSON.stringify(orderItems));
     return;
   }
 
@@ -107,19 +107,57 @@ function getSubTotal() {
   return orderItems.reduce((sum, item) => sum + item.price * item.qty, 0);
 }
 
+function getBaseShippingFee() {
+  const subTotal = getSubTotal();
+  const province = document.getElementById("province")?.value;
+
+  if (subTotal >= 2000000) return 0;
+  if (province === "TP. Hồ Chí Minh") return 30000;
+  if (province) return 50000;
+
+  return 30000;
+}
+
+function getDiscountAmount(subTotal) {
+  const codeInput = document.getElementById("discountCode");
+  const code = codeInput ? codeInput.value.trim().toUpperCase() : "";
+
+  if (code === "SPORTIX10") {
+    return Math.round(subTotal * 0.1);
+  }
+
+  if (/^0[0-9]{9}$/.test(code)) {
+    return 30000;
+  }
+
+  return 0;
+}
+
 function updateTotal() {
   const subTotal = getSubTotal();
 
-  if (subTotal >= 2000000) {
-    shippingFee = 0;
-  }
+  shippingFee = getBaseShippingFee();
+  discountAmount = getDiscountAmount(subTotal);
 
-  const total = subTotal + shippingFee;
+  let total = subTotal - discountAmount + shippingFee;
+  if (total < 0) total = 0;
 
   document.getElementById("subTotal").textContent = formatMoney(subTotal);
+
   document.getElementById("shippingFee").textContent =
     shippingFee === 0 ? "Miễn phí" : formatMoney(shippingFee);
+
+  const discountEl = document.getElementById("discountPrice");
+  if (discountEl) {
+    discountEl.textContent = discountAmount > 0 ? "-" + formatMoney(discountAmount) : "0đ";
+  }
+
   document.getElementById("totalPrice").textContent = formatMoney(total);
+
+  const payment = document.querySelector("input[name='payment']:checked");
+  if (payment && payment.value === "bank") {
+    showQrBox();
+  }
 }
 
 function initLocationSelect() {
@@ -180,10 +218,6 @@ function initLocationSelect() {
         };
       });
 
-      shippingFee = value === "TP. Hồ Chí Minh" ? 30000 : 50000;
-
-      if (getSubTotal() >= 2000000) shippingFee = 0;
-
       showSuccess(provinceInput, "provinceError");
       clearState(districtInput, "districtError");
       updateTotal();
@@ -213,8 +247,14 @@ function initPayment() {
   });
 }
 
+function getFinalTotal() {
+  const subTotal = getSubTotal();
+  let total = subTotal - discountAmount + shippingFee;
+  return total < 0 ? 0 : total;
+}
+
 function showQrBox() {
-  const total = getSubTotal() + shippingFee;
+  const total = getFinalTotal();
   const note = "SPORTIX" + Date.now().toString().slice(-6);
 
   document.getElementById("qrBox").style.display = "block";
@@ -252,6 +292,7 @@ function initCheckoutValidation() {
   const nameInput = document.getElementById("name");
   const phoneInput = document.getElementById("phone");
   const addressInput = document.getElementById("address");
+  const discountInput = document.getElementById("discountCode");
 
   nameInput.addEventListener("input", () => {
     if (!nameInput.value.trim()) return clearState(nameInput, "nameError");
@@ -274,6 +315,8 @@ function initCheckoutValidation() {
     if (!addressInput.value.trim()) return clearState(addressInput, "addressError");
     showSuccess(addressInput, "addressError");
   });
+
+  discountInput?.addEventListener("input", updateTotal);
 }
 
 function validateForm() {
@@ -338,7 +381,7 @@ function placeOrder() {
   const payment = document.querySelector("input[name='payment']:checked").value;
 
   const subTotal = getSubTotal();
-  const total = subTotal + shippingFee;
+  const total = getFinalTotal();
 
   const order = {
     id: "SPX" + Date.now().toString().slice(-6),
@@ -352,13 +395,14 @@ function placeOrder() {
     paymentText: payment === "cod" ? "Thanh toán khi nhận hàng" : "Thanh toán QR",
     items: orderItems,
     subTotal: subTotal,
+    discount: discountAmount,
     shippingFee: shippingFee,
     total: total
   };
 
   localStorage.setItem("sportix_last_order", JSON.stringify(order));
 
-  localStorage.removeItem("sportix_checkout");
+  localStorage.removeItem(CHECKOUT_KEY);
   localStorage.removeItem("sportix_cart");
 
   goWithSplash("success.html");
@@ -370,4 +414,10 @@ document.addEventListener("DOMContentLoaded", () => {
   initLocationSelect();
   initPayment();
   initCheckoutValidation();
+  updateTotal();
 });
+
+function goCheckoutCategory(category){
+  sessionStorage.setItem("sportix_home_category", category);
+  goWithSplash("product-list.html");
+}

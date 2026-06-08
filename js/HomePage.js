@@ -5,14 +5,11 @@ const cartCount = document.getElementById("cartCount");
 
 let currentSlide = 0;
 let slideTimer = null;
-let expanded = false;
 
 const slides = document.querySelectorAll(".hero-slide");
 const dotsWrap = document.getElementById("heroDots");
 
-const products = [...PRODUCTS]
-  .sort(() => Math.random() - 0.5)
-  .slice(0, 8);
+const products = [...PRODUCTS].sort(() => Math.random() - 0.5).slice(0, 8);
 
 function formatPrice(value){
   return value.toLocaleString("vi-VN") + "đ";
@@ -30,7 +27,14 @@ function getCategoryName(category){
   return names[category] || category;
 }
 
+function goCategory(category){
+  sessionStorage.setItem("sportix_home_category", category);
+  goWithSplash("product-list.html");
+}
+
 function initSlider(){
+  if(!dotsWrap || !slides.length) return;
+
   dotsWrap.innerHTML = "";
 
   slides.forEach((_, index) => {
@@ -40,11 +44,11 @@ function initSlider(){
     dotsWrap.appendChild(dot);
   });
 
-  document.getElementById("prevSlide").addEventListener("click", () => {
+  document.getElementById("prevSlide")?.addEventListener("click", () => {
     showSlide(currentSlide - 1);
   });
 
-  document.getElementById("nextSlide").addEventListener("click", () => {
+  document.getElementById("nextSlide")?.addEventListener("click", () => {
     showSlide(currentSlide + 1);
   });
 
@@ -58,12 +62,12 @@ function showSlide(index){
   if(index >= slides.length) index = 0;
 
   slides[currentSlide].classList.remove("active");
-  dots[currentSlide].classList.remove("active");
+  dots[currentSlide]?.classList.remove("active");
 
   currentSlide = index;
 
   slides[currentSlide].classList.add("active");
-  dots[currentSlide].classList.add("active");
+  dots[currentSlide]?.classList.add("active");
 
   startAutoSlide();
 }
@@ -77,6 +81,8 @@ function startAutoSlide(){
 }
 
 function renderProducts(showAll = false){
+  if(!featuredProducts) return;
+
   featuredProducts.innerHTML = "";
 
   const visibleProducts = showAll ? products : products.slice(0, 4);
@@ -110,10 +116,10 @@ function renderProducts(showAll = false){
           </div>
 
           <div class="home-product-actions">
-            <button class="btn-view" onclick="goWithSplash('product-detail.html?id=${product.id}')">
+            <button class="btn-view" type="button" onclick="goWithSplash('product-detail.html?id=${product.id}')">
               Xem
             </button>
-            <button class="btn-add" onclick="addToCart('${product.id}')">
+            <button class="btn-add" type="button" onclick="addToCart('${product.id}')">
               <i class="bi bi-bag-plus"></i>
             </button>
           </div>
@@ -125,7 +131,6 @@ function renderProducts(showAll = false){
   });
 }
 
-
 function getCart(){
   return JSON.parse(localStorage.getItem("sportix_cart") || "[]");
 }
@@ -135,20 +140,22 @@ function saveCart(cart){
 }
 
 function updateCartCount(){
+  if(!cartCount) return;
+
   const cart = getCart();
   const total = cart.reduce((sum, item) => sum + item.qty, 0);
   cartCount.textContent = total;
 }
 
 function addToCart(id){
-  const product = PRODUCTS.find(item => item.id === id);
+  const product = PRODUCTS.find(item => String(item.id) === String(id));
   if(!product) return;
 
   const cart = getCart();
-  const existed = cart.find(item => item.id === id);
+  const existed = cart.find(item => String(item.id) === String(id));
 
   if(existed){
-    existed.qty++;
+    existed.qty += 1;
   }else{
     cart.push({
       id:product.id,
@@ -167,6 +174,8 @@ function addToCart(id){
 
 function showToast(message){
   const toast = document.getElementById("homeToast");
+  if(!toast) return;
+
   toast.querySelector("span").textContent = message;
   toast.classList.add("show");
 
@@ -178,6 +187,8 @@ function showToast(message){
 }
 
 function initBackToTop(){
+  if(!backToTop) return;
+
   window.addEventListener("scroll", () => {
     if(window.scrollY > 500){
       backToTop.classList.add("show");
@@ -192,7 +203,7 @@ function initBackToTop(){
 }
 
 function scrollToProducts(){
-  document.getElementById("products").scrollIntoView({
+  document.getElementById("products")?.scrollIntoView({
     behavior:"smooth",
     block:"start"
   });
@@ -213,18 +224,17 @@ function requireLogin(targetPage){
   return true;
 }
 
-
 function buyNow(){
   requireLogin("product-list.html");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   initSlider();
-  renderProducts();
+  renderProducts(false);
   updateCartCount();
   initBackToTop();
 
-btnToggleProducts.addEventListener("click", () => {
-  goWithSplash("product-list.html");
-});
+  btnToggleProducts?.addEventListener("click", () => {
+    goWithSplash("product-list.html");
+  });
 });

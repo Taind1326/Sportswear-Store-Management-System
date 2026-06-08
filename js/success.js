@@ -85,3 +85,8 @@ function renderEmptyOrder(){
 }
 
 document.addEventListener("DOMContentLoaded", renderSuccessPage);
+
+function goSuccessCategory(category){
+  sessionStorage.setItem("sportix_home_category", category);
+  goWithSplash("product-list.html");
+}

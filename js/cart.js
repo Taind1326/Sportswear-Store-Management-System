@@ -1,86 +1,114 @@
 const CART_KEY = "sportix_cart";
 
 const demoCart = [
-  {
-    id: "SP001",
-    name: "Giày chạy bộ Nike Air Zoom",
-    category: "Giày",
-    price: 2490000,
-    qty: 1,
-    image: "../img/shoe-1.jpg",
-    selected: true
-  },
-  {
-    id: "SP002",
-    name: "Áo thun Adidas Training",
-    category: "Áo",
-    price: 690000,
-    qty: 2,
-    image: "../img/shirt-1.jpg",
-    selected: true
-  }
+    {
+        id: "SP001",
+        name: "Giày chạy bộ Nike Air Zoom",
+        category: "Giày",
+        price: 2490000,
+        qty: 1,
+        image: "../img/shoe-1.jpg",
+        selected: true
+    },
+    {
+        id: "SP002",
+        name: "Áo thun Adidas Training",
+        category: "Áo",
+        price: 690000,
+        qty: 2,
+        image: "../img/shirt-1.jpg",
+        selected: true
+    }
 ];
 
 let cart = loadCart();
 
 function formatMoney(value) {
-  return value.toLocaleString("vi-VN") + "đ";
+    return value.toLocaleString("vi-VN") + "đ";
 }
 
 function loadCart() {
-  const data = localStorage.getItem(CART_KEY);
+    const data = localStorage.getItem(CART_KEY);
 
-  if (!data) {
-    localStorage.setItem(CART_KEY, JSON.stringify(demoCart));
-    return demoCart;
-  }
+    if (!data) {
+        localStorage.setItem(CART_KEY, JSON.stringify(demoCart));
+        return demoCart;
+    }
 
-  return JSON.parse(data);
+    return JSON.parse(data);
+}
+
+const CATEGORY_LABELS = {
+    giay: 'Giày',
+    ao: 'Quần áo',
+    gym: 'Dụng cụ gym',
+    bongda: 'Bóng đá',
+    phukien: 'Phụ kiện'
+};
+
+// Chạy sau DOMContentLoaded để PRODUCTS đã sẵn sàng
+// Bổ sung category cho các item cũ trong localStorage chưa có field này
+function migrateCartCategories() {
+    let changed = false;
+
+    cart = cart.map(item => {
+        if (item.category) return item;
+
+        const found = typeof PRODUCTS !== "undefined"
+            ? PRODUCTS.find(p => String(p.id) === String(item.id))
+            : null;
+
+        changed = true;
+        const slug = found ? found.category : '';
+        return { ...item, category: CATEGORY_LABELS[slug] || slug };
+    });
+
+    if (changed) saveCart();
 }
 
 function saveCart() {
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
 }
 
 function renderCart() {
-  const cartList = document.getElementById("cartList");
-  const selectAll = document.getElementById("selectAll");
+    const cartList = document.getElementById("cartList");
+    const selectAll = document.getElementById("selectAll");
 
-  if (!cart.length) {
-    cartList.innerHTML = `
+    if (!cart.length) {
+        cartList.innerHTML = `
       <div class="cart-empty">
         <i class="bi bi-cart-x"></i>
         <h5>Giỏ hàng đang trống</h5>
         <p>Hãy chọn thêm sản phẩm yêu thích của bạn.</p>
       </div>
     `;
-    selectAll.checked = false;
-    updateTotal();
-    return;
-  }
+        selectAll.checked = false;
+        updateTotal();
+        return;
+    }
 
-  cartList.innerHTML = cart.map(item => `
+    cartList.innerHTML = cart.map(item => `
     <div class="cart-item">
       <input type="checkbox"
              class="cart-item-check"
              ${item.selected ? "checked" : ""}
              onchange="toggleItem('${item.id}')">
-
+ 
       <img src="${item.image}" class="cart-img" alt="${item.name}">
-
+ 
       <div>
         <div class="cart-name">${item.name}</div>
-        <div class="cart-meta">${item.category}</div>
+        <div class="cart-meta">${item.category || ''}</div>
         <div class="cart-price">${formatMoney(item.price)}</div>
       </div>
-
+ 
       <div class="cart-actions">
         <div class="qty-box">
           <button onclick="changeQty('${item.id}', -1)">−</button>
           <span>${item.qty}</span>
           <button onclick="changeQty('${item.id}', 1)">+</button>
         </div>
-
+ 
         <button class="btn-remove" onclick="removeItem('${item.id}')">
           <i class="bi bi-trash"></i> Xóa
         </button>
@@ -88,127 +116,127 @@ function renderCart() {
     </div>
   `).join("");
 
-  selectAll.checked = cart.every(item => item.selected);
-  updateTotal();
+    selectAll.checked = cart.every(item => item.selected);
+    updateTotal();
 }
 
 function updateTotal() {
-  const total = cart
-    .filter(item => item.selected)
-    .reduce((sum, item) => sum + item.price * item.qty, 0);
+    const total = cart
+        .filter(item => item.selected)
+        .reduce((sum, item) => sum + item.price * item.qty, 0);
 
-  document.getElementById("totalPrice").textContent = formatMoney(total);
+    document.getElementById("totalPrice").textContent = formatMoney(total);
 }
 
 function toggleAll() {
-  const checked = document.getElementById("selectAll").checked;
+    const checked = document.getElementById("selectAll").checked;
 
-  cart = cart.map(item => ({
-    ...item,
-    selected: checked
-  }));
+    cart = cart.map(item => ({
+        ...item,
+        selected: checked
+    }));
 
-  saveCart();
-  renderCart();
+    saveCart();
+    renderCart();
 }
 
 function toggleItem(id) {
-  cart = cart.map(item => {
-    if (item.id === id) {
-      return {
-        ...item,
-        selected: !item.selected
-      };
-    }
+    cart = cart.map(item => {
+        if (String(item.id) === String(id)) {
+            return { ...item, selected: !item.selected };
+        }
+        return item;
+    });
 
-    return item;
-  });
-
-  saveCart();
-  renderCart();
+    saveCart();
+    renderCart();
 }
 
 function changeQty(id, amount) {
-  cart = cart.map(item => {
-    if (item.id === id) {
-      return {
-        ...item,
-        qty: Math.max(1, item.qty + amount)
-      };
-    }
+    cart = cart.map(item => {
+        if (String(item.id) === String(id)) {
+            return { ...item, qty: Math.max(1, item.qty + amount) };
+        }
+        return item;
+    });
 
-    return item;
-  });
-
-  saveCart();
-  renderCart();
+    saveCart();
+    renderCart();
 }
 
 function removeItem(id) {
-  cart = cart.filter(item => item.id !== id);
-  saveCart();
-  renderCart();
+    cart = cart.filter(item => String(item.id) !== String(id));
+    saveCart();
+    renderCart();
 }
 
-function isLoggedIn(){
-  const user = localStorage.getItem("sportix_user");
+function isLoggedIn() {
+    const user = localStorage.getItem("sportix_user");
 
-  if(!user) return false;
+    if (!user) return false;
 
-  try{
-    const data = JSON.parse(user);
-    return !!(data && data.email);
-  }catch{
-    return false;
-  }
+    try {
+        const data = JSON.parse(user);
+        return !!(data && data.email);
+    } catch {
+        return false;
+    }
 }
 
-function goCheckout(){
-  const selectedItems = cart.filter(item => item.selected);
+function goCheckout() {
+    const selectedItems = cart.filter(item => item.selected);
 
-  if(!selectedItems.length){
-    showCartToast(
-      "Chưa chọn sản phẩm",
-      "Bạn cần chọn ít nhất 1 sản phẩm để thanh toán."
-    );
-    return;
-  }
+    if (!selectedItems.length) {
+        showCartToast(
+            "Chưa chọn sản phẩm",
+            "Bạn cần chọn ít nhất 1 sản phẩm để thanh toán."
+        );
+        return;
+    }
 
-  localStorage.setItem("sportix_checkout", JSON.stringify(selectedItems));
+    localStorage.setItem("sportix_checkout", JSON.stringify(selectedItems));
 
-  if(!isLoggedIn()){
-    sessionStorage.setItem("redirectAfterLogin", "checkout.html");
-    showCartToast(
-      "Cần đăng nhập",
-      "Vui lòng đăng nhập trước khi thanh toán."
-    );
+    if (!isLoggedIn()) {
+        sessionStorage.setItem("redirectAfterLogin", "checkout.html");
+        showCartToast(
+            "Cần đăng nhập",
+            "Vui lòng đăng nhập trước khi thanh toán."
+        );
 
-    setTimeout(() => {
-      goWithSplash("login.html");
-    }, 900);
+        setTimeout(() => {
+            goWithSplash("login.html");
+        }, 900);
 
-    return;
-  }
+        return;
+    }
 
-  goWithSplash("checkout.html");
+    goWithSplash("checkout.html");
 }
 
-document.addEventListener("DOMContentLoaded", renderCart);
-
+document.addEventListener("DOMContentLoaded", () => {
+    migrateCartCategories();
+    renderCart();
+});
 
 function showCartToast(title, message) {
-  const toast = document.getElementById("cartToast");
+    const toast = document.getElementById("cartToast");
 
-  if (!toast) return;
+    if (!toast) return;
 
-  toast.querySelector("strong").textContent = title;
-  toast.querySelector("p").textContent = message;
+    toast.querySelector("strong").textContent = title;
+    toast.querySelector("p").textContent = message;
 
-  toast.classList.add("show");
+    toast.classList.add("show");
 
-  clearTimeout(showCartToast.timer);
+    clearTimeout(showCartToast.timer);
 
-  showCartToast.timer = setTimeout(() => {
-    toast.classList.remove("show");
-  }, 2600);
+    showCartToast.timer = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2600);
+}
+
+
+function goCartCategory(category){
+  sessionStorage.setItem("sportix_home_category", category);
+  goWithSplash("product-list.html");
 }

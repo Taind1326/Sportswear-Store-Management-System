@@ -1,191 +1,199 @@
 ﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Giỏ hàng - SPORTIX</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng - SPORTIX</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-  <link rel="stylesheet" href="../css/base.css">
-  <link rel="stylesheet" href="../css/components.css">
-  <link rel="stylesheet" href="../css/cart.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/cart.css">
 </head>
 
 <body>
-  <nav class="sz-navbar navbar navbar-expand-md sticky-top">
-    <div class="container">
-      <a href="#" class="navbar-brand sz-brand" onclick="goWithSplash('index.html'); return false;">
-        <span class="sz-logo-box">
-          <img src="../img/logo.jpg" class="sz-logo" alt="SPORTIX">
-        </span>
-      </a>
+    <nav class="sz-navbar navbar navbar-expand-md sticky-top">
+        <div class="container">
+            <a href="#" class="navbar-brand sz-brand" onclick="goWithSplash('index.html'); return false;">
+                <span class="sz-logo-box">
+                    <img src="../img/logo.jpg" class="sz-logo" alt="SPORTIX">
+                </span>
+            </a>
 
-      <button class="navbar-toggler border-0 shadow-none" type="button"
-        data-bs-toggle="collapse" data-bs-target="#navMenu">
-        <i class="bi bi-list fs-3"></i>
-      </button>
+            <button class="navbar-toggler border-0 shadow-none" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <i class="bi bi-list fs-3"></i>
+            </button>
 
-      <div class="collapse navbar-collapse justify-content-end" id="navMenu">
-        <ul class="navbar-nav gap-1 align-items-md-center mt-3 mt-md-0">
-          <li class="nav-item"><a href="#" onclick="goWithSplash('index.html'); return false;" class="nav-link sz-nav-link">Trang chủ</a></li>
-          <li class="nav-item"><a href="#" onclick="goWithSplash('product-list.html'); return false;" class="nav-link sz-nav-link">Sản phẩm</a></li>
-          <li class="nav-item"><a href="#" onclick="goWithSplash('about.html'); return false;" class="nav-link sz-nav-link">Giới thiệu</a></li>
-          <li class="nav-item"><a href="#" onclick="goWithSplash('contact.html'); return false;" class="nav-link sz-nav-link">Liên hệ</a></li>
-          <li class="nav-item ms-md-2"><a href="#" onclick="goWithSplash('login.html'); return false;" class="nav-link sz-nav-btn">Đăng nhập</a></li>
+            <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+                <ul class="navbar-nav gap-1 align-items-md-center mt-3 mt-md-0">
+                    <li class="nav-item"><a href="#" onclick="goWithSplash('index.html'); return false;" class="nav-link sz-nav-link">Trang chủ</a></li>
+                    <li class="nav-item"><a href="#" onclick="goWithSplash('product-list.html'); return false;" class="nav-link sz-nav-link">Sản phẩm</a></li>
+                    <li class="nav-item"><a href="#" onclick="goWithSplash('about.html'); return false;" class="nav-link sz-nav-link">Giới thiệu</a></li>
+                    <li class="nav-item"><a href="#" onclick="goWithSplash('contact.html'); return false;" class="nav-link sz-nav-link">Liên hệ</a></li>
+                    <li class="nav-item ms-md-2"><a href="#" onclick="goWithSplash('login.html'); return false;" class="nav-link sz-nav-btn">Đăng nhập</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="cart-main">
+        <div class="container">
+
+            <section class="cart-top reveal">
+                <div>
+                    <span class="cart-tag"><i class="bi bi-bag-check-fill"></i> SPORTIX CART</span>
+                    <h1>Giỏ hàng của bạn</h1>
+                    <p>Kiểm tra sản phẩm, số lượng và tổng tiền trước khi thanh toán.</p>
+                </div>
+
+                <button class="cart-continue-btn" onclick="goWithSplash('product-list.html')">
+                    <i class="bi bi-arrow-left"></i>
+                    Tiếp tục mua sắm
+                </button>
+            </section>
+
+            <section class="cart-progress reveal">
+                <div class="progress-item active">
+                    <span>1</span>
+                    <div>
+                        <strong>Sản phẩm</strong>
+                        <small>Kiểm tra giỏ hàng</small>
+                    </div>
+                </div>
+
+                <div class="progress-line"></div>
+
+                <div class="progress-item">
+                    <span>2</span>
+                    <div>
+                        <strong>Thông tin</strong>
+                        <small>Giao hàng</small>
+                    </div>
+                </div>
+
+                <div class="progress-line"></div>
+
+                <div class="progress-item">
+                    <span>3</span>
+                    <div>
+                        <strong>Hoàn tất</strong>
+                        <small>Xác nhận đơn</small>
+                    </div>
+                </div>
+            </section>
+
+            <section class="cart-layout reveal-scale">
+                <div class="cart-panel">
+                    <div class="cart-panel-head">
+                        <div class="select-all-box">
+                            <input type="checkbox" id="selectAll" onchange="toggleAll()">
+                            <label for="selectAll">Chọn tất cả sản phẩm</label>
+                        </div>
+
+                        <span class="cart-note">Miễn phí vận chuyển cho đơn từ 2.000.000đ</span>
+                    </div>
+
+                    <div id="cartList"></div>
+                </div>
+
+                <aside class="total-box">
+                    <div class="total-head">
+                        <span>Tổng đơn hàng</span>
+                        <i class="bi bi-receipt-cutoff"></i>
+                    </div>
+
+                    <div class="total-row">
+                        <span>Tổng tiền hàng</span>
+                        <strong id="totalPrice">0đ</strong>
+                    </div>
+
+                    <div class="total-benefit">
+                        <i class="bi bi-truck"></i>
+                        <span>Phí vận chuyển sẽ được tính ở bước thanh toán.</span>
+                    </div>
+
+                    <button onclick="goCheckout()" class="btn-checkout">
+                        Thanh toán ngay
+                        <i class="bi bi-arrow-right"></i>
+                    </button>
+
+                    <button class="btn-more" onclick="goWithSplash('product-list.html')">
+                        <i class="bi bi-plus-circle"></i>
+                        Mua thêm sản phẩm
+                    </button>
+                </aside>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="sz-footer">
+  <div class="container">
+    <div class="row g-4 align-items-start">
+      <div class="col-12 col-lg-4">
+        <h3 class="sz-footer-brand">SPORTIX</h3>
+        <p class="sz-footer-slogan">
+          Move faster. Train better. Trang mua sắm đồ thể thao hiện đại, trẻ trung và dễ tiếp cận.
+        </p>
+      </div>
+
+      <div class="col-6 col-lg-2">
+        <h5 class="sz-footer-title">Mua sắm</h5>
+        <ul class="sz-footer-links">
+          <li><a href="#" onclick="goCartCategory('giay'); return false;">Giày thể thao</a></li>
+          <li><a href="#" onclick="goCartCategory('ao'); return false;">Quần áo thể thao</a></li>
+          <li><a href="#" onclick="goCartCategory('phukien'); return false;">Phụ kiện</a></li>
+          <li><a href="#" onclick="goCartCategory('new'); return false;">Sản phẩm mới</a></li>
+        </ul>
+      </div>
+
+      <div class="col-6 col-lg-2">
+        <h5 class="sz-footer-title">Hỗ trợ</h5>
+        <ul class="sz-footer-links">
+          <li><a href="contact.html">Liên hệ</a></li>
+          <li><a href="thanh-toan.html">Thanh toán</a></li>
+          <li><a href="van-chuyen.html">Vận chuyển</a></li>
+          <li><a href="doi-tra.html">Đổi trả</a></li>
+        </ul>
+      </div>
+
+      <div class="col-12 col-lg-4">
+        <h5 class="sz-footer-title">Liên hệ</h5>
+        <ul class="sz-footer-contact">
+          <li><i class="bi bi-geo-alt-fill"></i><span>140 Lê Trọng Tấn, Tây Thạnh, Hồ Chí Minh, Việt Nam</span></li>
+          <li><i class="bi bi-telephone-fill"></i><span>1900 1234</span></li>
+          <li><i class="bi bi-send-fill"></i><span>hotro@sportix.vn</span></li>
         </ul>
       </div>
     </div>
-  </nav>
+  </div>
 
-  <main class="cart-main">
+  <div class="sz-footer-bottom">
     <div class="container">
+      <p class="mb-0">
+        Copyright © 2026 SPORTIX. Thiết kế bởi nhóm đề tài số 27 |
+        <a href="#">Chính sách bảo mật</a> · <a href="#">Điều khoản dịch vụ</a>
+      </p>
+    </div>
+  </div>
+</footer>
 
-      <section class="cart-top reveal">
+    <div class="sz-toast" id="cartToast">
+        <div class="sz-toast-icon">
+            <i class="bi bi-exclamation-lg"></i>
+        </div>
         <div>
-          <span class="cart-tag"><i class="bi bi-bag-check-fill"></i> SPORTIX CART</span>
-          <h1>Giỏ hàng của bạn</h1>
-          <p>Kiểm tra sản phẩm, số lượng và tổng tiền trước khi thanh toán.</p>
+            <strong>Chưa chọn sản phẩm</strong>
+            <p>Bạn cần chọn ít nhất 1 sản phẩm để thanh toán.</p>
         </div>
-
-        <button class="cart-continue-btn" onclick="goWithSplash('product-list.html')">
-          <i class="bi bi-arrow-left"></i>
-          Tiếp tục mua sắm
-        </button>
-      </section>
-
-      <section class="cart-progress reveal">
-        <div class="progress-item active">
-          <span>1</span>
-          <div>
-            <strong>Sản phẩm</strong>
-            <small>Kiểm tra giỏ hàng</small>
-          </div>
-        </div>
-
-        <div class="progress-line"></div>
-
-        <div class="progress-item">
-          <span>2</span>
-          <div>
-            <strong>Thông tin</strong>
-            <small>Giao hàng</small>
-          </div>
-        </div>
-
-        <div class="progress-line"></div>
-
-        <div class="progress-item">
-          <span>3</span>
-          <div>
-            <strong>Hoàn tất</strong>
-            <small>Xác nhận đơn</small>
-          </div>
-        </div>
-      </section>
-
-      <section class="cart-layout reveal-scale">
-        <div class="cart-panel">
-          <div class="cart-panel-head">
-            <div class="select-all-box">
-              <input type="checkbox" id="selectAll" onchange="toggleAll()">
-              <label for="selectAll">Chọn tất cả sản phẩm</label>
-            </div>
-
-            <span class="cart-note">Miễn phí vận chuyển cho đơn từ 2.000.000đ</span>
-          </div>
-
-          <div id="cartList"></div>
-        </div>
-
-        <aside class="total-box">
-          <div class="total-head">
-            <span>Tổng đơn hàng</span>
-            <i class="bi bi-receipt-cutoff"></i>
-          </div>
-
-          <div class="total-row">
-            <span>Tổng tiền hàng</span>
-            <strong id="totalPrice">0đ</strong>
-          </div>
-
-          <div class="total-benefit">
-            <i class="bi bi-truck"></i>
-            <span>Phí vận chuyển sẽ được tính ở bước thanh toán.</span>
-          </div>
-
-          <button onclick="goCheckout()" class="btn-checkout">
-            Thanh toán ngay
-            <i class="bi bi-arrow-right"></i>
-          </button>
-
-          <button class="btn-more" onclick="goWithSplash('product-list.html')">
-            <i class="bi bi-plus-circle"></i>
-            Mua thêm sản phẩm
-          </button>
-        </aside>
-      </section>
-
-    </div>
-  </main>
-
-  <footer class="sz-footer">
-    <div class="container">
-      <div class="row g-4 align-items-start">
-        <div class="col-12 col-lg-4">
-          <h3 class="sz-footer-brand">SPORTIX</h3>
-          <p class="sz-footer-slogan">Move faster. Train better. Trang mua sắm đồ thể thao hiện đại, trẻ trung và dễ tiếp cận.</p>
-        </div>
-
-        <div class="col-6 col-lg-2">
-          <h5 class="sz-footer-title">Mua sắm</h5>
-          <ul class="sz-footer-links">
-            <li><a href="#">Giày thể thao</a></li>
-            <li><a href="#">Quần áo thể thao</a></li>
-            <li><a href="#">Phụ kiện</a></li>
-          </ul>
-        </div>
-
-        <div class="col-6 col-lg-2">
-          <h5 class="sz-footer-title">Hỗ trợ</h5>
-          <ul class="sz-footer-links">
-            <li><a href="thanh-toan.html">Thanh toán</a></li>
-            <li><a href="van-chuyen.html">Vận chuyển</a></li>
-            <li><a href="doi-tra.html">Đổi trả</a></li>
-          </ul>
-        </div>
-
-        <div class="col-12 col-lg-4">
-          <h5 class="sz-footer-title">Liên hệ</h5>
-          <ul class="sz-footer-contact">
-            <li><i class="bi bi-geo-alt-fill"></i><span>140 Lê Trọng Tấn, Quận Tân Phú, TP. Hồ Chí Minh</span></li>
-            <li><i class="bi bi-telephone-fill"></i><span>1900 1234</span></li>
-            <li><i class="bi bi-send-fill"></i><span>hotro@sportix.vn</span></li>
-          </ul>
-        </div>
-      </div>
     </div>
 
-    <div class="sz-footer-bottom">
-      <div class="container">
-        <p class="mb-0">Copyright © 2026 SPORTIX.</p>
-      </div>
-    </div>
-  </footer>
-
-  <div class="sz-toast" id="cartToast">
-  <div class="sz-toast-icon">
-    <i class="bi bi-exclamation-lg"></i>
-  </div>
-  <div>
-    <strong>Chưa chọn sản phẩm</strong>
-    <p>Bạn cần chọn ít nhất 1 sản phẩm để thanh toán.</p>
-  </div>
-</div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../js/common.js"></script>
-  <script src="../js/cart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/product-data.js"></script>  <!-- THÊM: để migrate category từ PRODUCTS -->
+    <script src="../js/cart.js"></script>
 </body>
 </html>

@@ -1,6 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("reveal-ready");
   initScrollReveal();
+
+  const isAdminPage = document.querySelector(".admin-layout");
+
+  if (!isAdminPage) {
+    updateAuthNavbar();
+    showSaleModal();
+  }
 });
 
 function initScrollReveal() {
@@ -33,28 +40,46 @@ function goWithSplash(url) {
   window.location.href = "splash.html";
 }
 
-function updateAuthNavbar(){
-  const loginBtn = document.querySelector(".sz-nav-btn");
+/* =====================
+   USER NAVBAR
+===================== */
+function updateAuthNavbar() {
+  const authBtn = document.querySelector(".sz-nav-btn");
   const user = localStorage.getItem("sportix_user");
 
-  if(!loginBtn) return;
+  if (!authBtn) return;
 
-  const navItem = loginBtn.closest(".nav-item");
+  const navItem = authBtn.closest(".nav-item");
+  const currentPage = window.location.pathname.split("/").pop();
 
-  if(!user){
-    loginBtn.innerHTML = "Đăng nhập";
-    loginBtn.onclick = function(){
-      goWithSplash("login.html");
-      return false;
-    };
+  navItem.classList.remove("user-nav", "open");
+
+  const oldDropdown = navItem.querySelector(".user-dropdown");
+  if (oldDropdown) oldDropdown.remove();
+
+  if (!user) {
+    if (currentPage === "login.html") {
+      authBtn.innerHTML = "Đăng ký";
+      authBtn.onclick = function () {
+        goWithSplash("register.html");
+        return false;
+      };
+    } else {
+      authBtn.innerHTML = "Đăng nhập";
+      authBtn.onclick = function () {
+        goWithSplash("login.html");
+        return false;
+      };
+    }
+
     return;
   }
 
   let data = {};
 
-  try{
+  try {
     data = JSON.parse(user);
-  }catch{
+  } catch {
     data = {};
   }
 
@@ -62,38 +87,41 @@ function updateAuthNavbar(){
 
   navItem.classList.add("user-nav");
 
-  loginBtn.innerHTML = `
+  authBtn.innerHTML = `
     <i class="bi bi-person-check-fill"></i>
     Xin chào, ${name}
     <i class="bi bi-chevron-down ms-1"></i>
   `;
 
-  if(!navItem.querySelector(".user-dropdown")){
-    navItem.insertAdjacentHTML("beforeend", `
-      <div class="user-dropdown">
-        <button type="button" onclick="showLogoutModal()">
-          <i class="bi bi-box-arrow-right"></i>
-          Đăng xuất
-        </button>
-      </div>
-    `);
-  }
+  navItem.insertAdjacentHTML("beforeend", `
+    <div class="user-dropdown">
+      <button type="button" onclick="showLogoutModal()">
+        <i class="bi bi-box-arrow-right"></i>
+        Đăng xuất
+      </button>
+    </div>
+  `);
 
-  loginBtn.onclick = function(e){
+  authBtn.onclick = function (e) {
     e.preventDefault();
     navItem.classList.toggle("open");
     return false;
   };
 
-  document.addEventListener("click", function(e){
-    if(!navItem.contains(e.target)){
+  document.addEventListener("click", function (e) {
+    if (!navItem.contains(e.target)) {
       navItem.classList.remove("open");
     }
   });
 }
 
-function showLogoutModal(){
-  if(!document.getElementById("logoutModal")){
+/* =====================
+   LOGOUT MODAL
+===================== */
+function showLogoutModal() {
+  document.querySelector(".user-nav")?.classList.remove("open");
+
+  if (!document.getElementById("logoutModal")) {
     document.body.insertAdjacentHTML("beforeend", `
       <div class="logout-modal" id="logoutModal">
         <div class="logout-box">
@@ -113,26 +141,27 @@ function showLogoutModal(){
   document.getElementById("logoutModal").classList.add("show");
 }
 
-function hideLogoutModal(){
+function hideLogoutModal() {
   document.getElementById("logoutModal")?.classList.remove("show");
 }
 
-function logoutUser(){
+function logoutUser() {
   localStorage.removeItem("sportix_user");
   hideLogoutModal();
   location.reload();
 }
 
-document.addEventListener("DOMContentLoaded", updateAuthNavbar);
-
-function showSaleModal(){
+/* =====================
+   SALE MODAL
+===================== */
+function showSaleModal() {
   const modal = document.getElementById("saleModal");
 
-  if(!modal) return;
+  if (!modal) return;
 
   const skipSale = sessionStorage.getItem("skipSaleOnProduct");
 
-  if(skipSale === "true"){
+  if (skipSale === "true") {
     sessionStorage.removeItem("skipSaleOnProduct");
     return;
   }
@@ -142,13 +171,11 @@ function showSaleModal(){
   }, 1200);
 }
 
-function closeSaleModal(){
+function closeSaleModal() {
   document.getElementById("saleModal")?.classList.remove("show");
 }
 
-function goSaleProduct(){
+function goSaleProduct() {
   sessionStorage.setItem("skipSaleOnProduct", "true");
   goWithSplash("product-list.html");
 }
-
-document.addEventListener("DOMContentLoaded", showSaleModal);

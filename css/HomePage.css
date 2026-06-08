@@ -41,10 +41,10 @@
 
 .hero-text h1{
   font-family:'Montserrat',sans-serif;
-  font-size:clamp(2.8rem,6vw,5.6rem);
-  font-weight:900;
-  line-height:.95;
-  letter-spacing:-3px;
+  font-size:clamp(2.4rem,5vw,4.4rem);
+  font-weight:800;
+  line-height:1.05;
+  letter-spacing:-2px;
   color:var(--text);
   margin-bottom:20px;
 }
@@ -721,4 +721,109 @@
     right:16px;
     top:90px;
   }
+}
+
+.category-card{
+  cursor:pointer;
+}
+
+.category-card:active{
+  transform:translateY(-3px);
+}
+
+
+/* SPORT BANNER */
+.sport-banner-section{
+  padding:64px 0 0;
+}
+
+.sport-banner{
+  min-height:240px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:28px;
+  padding:42px;
+  border-radius:34px;
+  overflow:hidden;
+  position:relative;
+  background:
+    linear-gradient(90deg,rgba(15,23,42,.86),rgba(17,157,255,.35)),
+    url("../img/banner-2.jpg") center/cover;
+  box-shadow:0 24px 70px rgba(17,157,255,.2);
+}
+
+.sport-banner::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 85% 25%,rgba(168,232,46,.35),transparent 24%);
+  pointer-events:none;
+}
+
+.sport-banner > *{
+  position:relative;
+  z-index:1;
+}
+
+.sport-banner span{
+  color:var(--lime);
+  font-weight:900;
+  letter-spacing:1.5px;
+}
+
+.sport-banner h2{
+  margin:10px 0;
+  color:white;
+  font-family:"Montserrat",sans-serif;
+  font-size:clamp(1.8rem,4vw,3rem);
+  font-weight:900;
+}
+
+.sport-banner p{
+  color:rgba(255,255,255,.86);
+  margin:0;
+}
+
+.sport-banner button{
+  height:52px;
+  border:none;
+  border-radius:16px;
+  padding:0 26px;
+  background:white;
+  color:var(--blue-dark);
+  font-weight:900;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-shrink:0;
+}
+
+@media(max-width:768px){
+  .sport-banner{
+    flex-direction:column;
+    align-items:flex-start;
+    padding:30px;
+  }
+}
+
+.category-img-card{
+  padding:0;
+  overflow:hidden;
+}
+
+.category-img-card img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+  display:block;
+  transition:.45s;
+}
+
+.category-img-card:hover img{
+  transform:scale(1.06);
+}
+
+.category-content{
+  padding:22px 24px 26px;
 }

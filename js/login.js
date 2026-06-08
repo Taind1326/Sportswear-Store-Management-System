@@ -216,3 +216,9 @@ loginForm.addEventListener("submit", (event) => {
     passwordInput.value = "";
   }, 1200);
 });
+
+
+function goLoginCategory(category){
+  sessionStorage.setItem("sportix_home_category", category);
+  goWithSplash("product-list.html");
+}

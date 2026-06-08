@@ -160,27 +160,26 @@ function renderNewStrip(){
 
 function updateStripButtons(){
   const wrapper = document.querySelector(".new-strip-wrap");
-  const visible = Math.floor(wrapper.offsetWidth / STRIP_CARD_WIDTH);
-  const total = PRODUCTS.filter(item => item.badge === "new").length;
-  const maxOffset = Math.max(0, total - visible);
+  const prevBtn = document.getElementById("stripPrev");
+  const nextBtn = document.getElementById("stripNext");
 
-  document.getElementById("stripPrev").disabled = stripOffset <= 0;
-  document.getElementById("stripNext").disabled = stripOffset >= maxOffset;
+  if(!wrapper || !prevBtn || !nextBtn) return;
+
+  prevBtn.disabled = wrapper.scrollLeft <= 2;
+  nextBtn.disabled = wrapper.scrollLeft + wrapper.clientWidth >= wrapper.scrollWidth - 2;
 }
+
 
 function moveStrip(direction){
   const wrapper = document.querySelector(".new-strip-wrap");
-  const visible = Math.floor(wrapper.offsetWidth / STRIP_CARD_WIDTH);
-  const total = PRODUCTS.filter(item => item.badge === "new").length;
-  const maxOffset = Math.max(0, total - visible);
+  if(!wrapper) return;
 
-  stripOffset += direction;
+  wrapper.scrollBy({
+    left: direction * STRIP_CARD_WIDTH,
+    behavior: "smooth"
+  });
 
-  if(stripOffset < 0) stripOffset = 0;
-  if(stripOffset > maxOffset) stripOffset = maxOffset;
-
-  newStrip.style.transform = `translateX(-${stripOffset * STRIP_CARD_WIDTH}px)`;
-  updateStripButtons();
+  setTimeout(updateStripButtons, 350);
 }
 
 function getFilteredProducts(){
@@ -418,11 +417,47 @@ function initFilterEvents(){
   document.getElementById("stripNext").addEventListener("click", () => moveStrip(1));
 
   window.addEventListener("resize", updateStripButtons);
+  document.querySelector(".new-strip-wrap")?.addEventListener("scroll", updateStripButtons);
 }
 
+
 document.addEventListener("DOMContentLoaded", () => {
+  const homeCategory = sessionStorage.getItem("sportix_home_category");
+
+  if(homeCategory){
+    if(homeCategory === "new"){
+      searchText = "";
+      sortType = "default";
+      filters.category = "all";
+    }else{
+      filters.category = homeCategory;
+    }
+  }
+
   updateCartCount();
   renderNewStrip();
-  renderProducts();
+
+  if(homeCategory && homeCategory !== "new"){
+    setCustomSelectValue("categorySelect", homeCategory);
+  }
+
+  if(homeCategory === "new"){
+    const newProducts = PRODUCTS.filter(item => item.badge === "new");
+
+    document.getElementById("totalCount").textContent = newProducts.length;
+    renderSaleProducts([]);
+    renderProductPage(newProducts);
+    renderPagination(newProducts.length);
+  }else{
+    renderProducts();
+  }
+
   initFilterEvents();
+
+  sessionStorage.removeItem("sportix_home_category");
 });
+
+function goHomeCategory(category){
+  sessionStorage.setItem("sportix_home_category", category);
+  goWithSplash("product-list.html");
+}

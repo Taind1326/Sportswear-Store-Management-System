@@ -49,17 +49,21 @@
     <section class="product-hero reveal">
       <div class="container">
         <div class="product-hero-card">
-          <div>
+          <div class="product-hero-info">
             <span class="product-tag"><i class="bi bi-lightning-charge-fill"></i> SPORTIX STORE</span>
             <h1>Sản phẩm thể thao</h1>
             <p>Khám phá giày, áo quần và phụ kiện thể thao hiện đại, năng động và dễ mua sắm.</p>
-          </div>
 
-          <div class="hero-search">
-            <i class="bi bi-search"></i>
-            <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm, thương hiệu...">
-          </div>
-        </div>
+            <div class="hero-search">
+              <i class="bi bi-search"></i>
+              <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm, thương hiệu...">
+    </div>
+  </div>
+
+  <div class="product-hero-image">
+    <img src="../img/product-hero.jpg" alt="SPORTIX Sport">
+  </div>
+</div>
       </div>
     </section>
 
@@ -225,42 +229,55 @@
   </main>
 
   <footer class="sz-footer">
-    <div class="container">
-      <div class="row g-4 align-items-start">
-        <div class="col-12 col-lg-4">
-          <h3 class="sz-footer-brand">SPORTIX</h3>
-          <p class="sz-footer-slogan">Move faster. Train better. Trang mua sắm đồ thể thao hiện đại, trẻ trung và dễ tiếp cận.</p>
-        </div>
+  <div class="container">
+    <div class="row g-4 align-items-start">
+      <div class="col-12 col-lg-4">
+        <h3 class="sz-footer-brand">SPORTIX</h3>
+        <p class="sz-footer-slogan">
+          Move faster. Train better. Trang mua sắm đồ thể thao hiện đại, trẻ trung và dễ tiếp cận.
+        </p>
+      </div>
 
-        <div class="col-6 col-lg-2">
-          <h5 class="sz-footer-title">Mua sắm</h5>
-          <ul class="sz-footer-links">
-            <li><a href="#">Giày thể thao</a></li>
-            <li><a href="#">Quần áo thể thao</a></li>
-            <li><a href="#">Phụ kiện</a></li>
-          </ul>
-        </div>
+      <div class="col-6 col-lg-2">
+        <h5 class="sz-footer-title">Mua sắm</h5>
+        <ul class="sz-footer-links">
+          <li><a href="#" onclick="goHomeCategory('giay'); return false;">Giày thể thao</a></li>
+          <li><a href="#" onclick="goHomeCategory('ao'); return false;">Quần áo thể thao</a></li>
+          <li><a href="#" onclick="goHomeCategory('phukien'); return false;">Phụ kiện</a></li>
+          <li><a href="#" onclick="goHomeCategory('new'); return false;">Sản phẩm mới</a></li>
+        </ul>
+      </div>
 
-        <div class="col-6 col-lg-2">
-          <h5 class="sz-footer-title">Hỗ trợ</h5>
-          <ul class="sz-footer-links">
-            <li><a href="thanh-toan.html">Thanh toán</a></li>
-            <li><a href="van-chuyen.html">Vận chuyển</a></li>
-            <li><a href="doi-tra.html">Đổi trả</a></li>
-          </ul>
-        </div>
+      <div class="col-6 col-lg-2">
+        <h5 class="sz-footer-title">Hỗ trợ</h5>
+        <ul class="sz-footer-links">
+          <li><a href="contact.html">Liên hệ</a></li>
+          <li><a href="thanh-toan.html">Thanh toán</a></li>
+          <li><a href="van-chuyen.html">Vận chuyển</a></li>
+          <li><a href="doi-tra.html">Đổi trả</a></li>
+        </ul>
+      </div>
 
-        <div class="col-12 col-lg-4">
-          <h5 class="sz-footer-title">Liên hệ</h5>
-          <ul class="sz-footer-contact">
-            <li><i class="bi bi-geo-alt-fill"></i><span>140 Lê Trọng Tấn, Quận Tân Phú, TP. Hồ Chí Minh</span></li>
-            <li><i class="bi bi-telephone-fill"></i><span>1900 1234</span></li>
-            <li><i class="bi bi-send-fill"></i><span>hotro@sportix.vn</span></li>
-          </ul>
-        </div>
+      <div class="col-12 col-lg-4">
+        <h5 class="sz-footer-title">Liên hệ</h5>
+        <ul class="sz-footer-contact">
+          <li><i class="bi bi-geo-alt-fill"></i><span>140 Lê Trọng Tấn, Tây Thạnh, Hồ Chí Minh, Việt Nam</span></li>
+          <li><i class="bi bi-telephone-fill"></i><span>1900 1234</span></li>
+          <li><i class="bi bi-send-fill"></i><span>hotro@sportix.vn</span></li>
+        </ul>
       </div>
     </div>
-  </footer>
+  </div>
+
+  <div class="sz-footer-bottom">
+    <div class="container">
+      <p class="mb-0">
+        Copyright © 2026 SPORTIX. Thiết kế bởi nhóm đề tài số 27 |
+        <a href="#">Chính sách bảo mật</a> · <a href="#">Điều khoản dịch vụ</a>
+      </p>
+    </div>
+  </div>
+</footer>
 
   <div class="product-toast" id="productToast">
     <i class="bi bi-check-circle-fill"></i>

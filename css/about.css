@@ -49,12 +49,12 @@
 
 .about-hero h1{
   font-family:'Montserrat',sans-serif;
-  font-size:clamp(2.6rem,6vw,4.8rem);
-  font-weight:900;
-  letter-spacing:-3px;
-  line-height:.95;
+  font-size:clamp(2.4rem,5vw,4.4rem);
+  font-weight:800;
+  line-height:1.05;
+  letter-spacing:-2px;
   color:var(--text);
-  margin-bottom:18px;
+  margin-bottom:20px;
 }
 
 .about-hero p{
