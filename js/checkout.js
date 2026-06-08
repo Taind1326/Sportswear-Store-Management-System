@@ -202,11 +202,103 @@ function initLocationSelect() {
 
     const provinces = window.vietnamData || [];
 
-    provinceMenu.innerHTML = provinces.map(item =>
-        `<div class="custom-select-option" data-value="${item.name}">
-      ${item.name}
-   </div>`
-    ).join("");
+    function removeVietnameseTones(str) {
+        return str
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/đ/g, "d")
+            .replace(/Đ/g, "D")
+            .toLowerCase();
+    }
+
+    function renderProvinceOptions() {
+        provinceMenu.innerHTML = `
+            <div class="select-search-box">
+                <input type="text" id="provinceSearch" placeholder="Tìm tỉnh/thành phố...">
+            </div>
+            ${provinces.map(item => `
+                <div class="custom-select-option" data-value="${item.name}">
+                    ${item.name}
+                </div>
+            `).join("")}
+        `;
+
+        const provinceSearch = document.getElementById("provinceSearch");
+
+        provinceSearch?.addEventListener("click", e => e.stopPropagation());
+        provinceSearch?.addEventListener("keydown", e => e.stopPropagation());
+
+        provinceSearch?.addEventListener("input", function () {
+            const keyword = removeVietnameseTones(this.value.trim());
+
+            provinceMenu.querySelectorAll(".custom-select-option").forEach(option => {
+                const text = removeVietnameseTones(option.textContent.trim());
+                option.style.display = text.includes(keyword) ? "flex" : "none";
+            });
+        });
+
+        provinceMenu.querySelectorAll(".custom-select-option").forEach(option => {
+            option.onclick = () => {
+                const value = option.dataset.value;
+                const selectedProvince = provinces.find(item => item.name === value);
+
+                provinceInput.value = value;
+                provinceBtn.textContent = value;
+                provinceBox.classList.remove("open");
+
+                districtInput.value = "";
+                districtBtn.textContent = "Chọn quận/huyện";
+
+                renderDistrictOptions(selectedProvince?.districts || []);
+
+                showSuccess(provinceInput, "provinceError");
+                clearState(districtInput, "districtError");
+                updateTotal();
+            };
+        });
+    }
+
+    function renderDistrictOptions(districts) {
+        districtMenu.innerHTML = `
+            <div class="select-search-box">
+                <input type="text" id="districtSearch" placeholder="Tìm quận/huyện...">
+            </div>
+            ${districts.map(item => {
+                const name = typeof item === "string" ? item : item.name;
+
+                return `
+                    <div class="custom-select-option" data-value="${name}">
+                        ${name}
+                    </div>
+                `;
+            }).join("")}
+        `;
+
+        const districtSearch = document.getElementById("districtSearch");
+
+        districtSearch?.addEventListener("click", e => e.stopPropagation());
+        districtSearch?.addEventListener("keydown", e => e.stopPropagation());
+
+        districtSearch?.addEventListener("input", function () {
+            const keyword = removeVietnameseTones(this.value.trim());
+
+            districtMenu.querySelectorAll(".custom-select-option").forEach(option => {
+                const text = removeVietnameseTones(option.textContent.trim());
+                option.style.display = text.includes(keyword) ? "flex" : "none";
+            });
+        });
+
+        districtMenu.querySelectorAll(".custom-select-option").forEach(dis => {
+            dis.onclick = () => {
+                districtInput.value = dis.dataset.value;
+                districtBtn.textContent = dis.dataset.value;
+                districtBox.classList.remove("open");
+                showSuccess(districtInput, "districtError");
+            };
+        });
+    }
+
+    renderProvinceOptions();
 
     provinceBox.querySelector(".custom-select-btn").onclick = () => {
         provinceBox.classList.toggle("open");
@@ -214,43 +306,15 @@ function initLocationSelect() {
     };
 
     districtBox.querySelector(".custom-select-btn").onclick = () => {
+        if (!provinceInput.value) {
+            showCheckoutToast("Chưa chọn tỉnh/thành phố", "Vui lòng chọn tỉnh/thành phố trước.");
+            showError(provinceInput, "provinceError", "Vui lòng chọn tỉnh/thành phố trước.");
+            return;
+        }
+
         districtBox.classList.toggle("open");
         provinceBox.classList.remove("open");
     };
-
-    provinceMenu.querySelectorAll(".custom-select-option").forEach(option => {
-        option.onclick = () => {
-
-            const value = option.dataset.value;
-            const selectedProvince = provinces.find(item => item.name === value);
-
-            provinceInput.value = value;
-            provinceBtn.textContent = value;
-            provinceBox.classList.remove("open");
-
-            districtInput.value = "";
-            districtBtn.textContent = "Chọn phường/xã";
-
-            districtMenu.innerHTML = selectedProvince.districts.map(item =>
-                `<div class="custom-select-option" data-value="${item.name}">
-          ${item.name}
-       </div>`
-            ).join("");
-
-            districtMenu.querySelectorAll(".custom-select-option").forEach(dis => {
-                dis.onclick = () => {
-                    districtInput.value = dis.dataset.value;
-                    districtBtn.textContent = dis.dataset.value;
-                    districtBox.classList.remove("open");
-                    showSuccess(districtInput, "districtError");
-                };
-            });
-
-            showSuccess(provinceInput, "provinceError");
-            clearState(districtInput, "districtError");
-            updateTotal();
-        };
-    });
 
     document.addEventListener("click", e => {
         if (!provinceBox.contains(e.target)) {
@@ -377,7 +441,7 @@ function validateForm() {
     } else showSuccess(provinceInput, "provinceError");
 
     if (!districtInput.value) {
-        showError(districtInput, "districtError", "Vui lòng chọn quận/huyện.");
+        showError(districtInput, "districtError", "Vui lòng chọn phường/xã.");
         isValid = false;
     } else showSuccess(districtInput, "districtError");
 

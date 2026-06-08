@@ -392,16 +392,6 @@ function initFilterEvents(){
     searchText = event.target.value.trim();
     currentPage = 1;
     renderProducts();
-
-    // Tự động cuộn đến khu vực hiển thị sản phẩm (thanh công cụ hoặc lưới sản phẩm)
-    const targetScroll = document.querySelector(".product-toolbar") || document.getElementById("productGrid");
-    // Chỉ cuộn khi ô tìm kiếm không trống
-    if (targetScroll && searchText !== "") {
-      targetScroll.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-    }
   });
 
   document.getElementById("priceRange").addEventListener("input", event => {
@@ -432,17 +422,7 @@ function initFilterEvents(){
 
 
 document.addEventListener("DOMContentLoaded", () => {
-    const heroSearch = document.querySelector(".hero-search");
-    if (heroSearch) {
-        // Xác định điểm cuộn quá Banner (khoảng 300px từ đỉnh trang)
-        window.addEventListener("scroll", () => {
-            if (window.scrollY > 320) {
-                heroSearch.classList.add("is-sticky");
-            } else {
-                heroSearch.classList.remove("is-sticky");
-            }
-        });
-    }
+   
 
     const homeCategory = sessionStorage.getItem("sportix_home_category");
 

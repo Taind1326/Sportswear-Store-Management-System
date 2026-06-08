@@ -147,29 +147,9 @@ function updateCartCount(){
   cartCount.textContent = total;
 }
 
-function addToCart(id){
-  const product = PRODUCTS.find(item => String(item.id) === String(id));
-  if(!product) return;
-
-  const cart = getCart();
-  const existed = cart.find(item => String(item.id) === String(id));
-
-  if(existed){
-    existed.qty += 1;
-  }else{
-    cart.push({
-      id:product.id,
-      name:product.name,
-      price:product.price,
-      image:product.img,
-      qty:1,
-      selected:true
-    });
-  }
-
-  saveCart(cart);
-  updateCartCount();
-  showToast(`Đã thêm ${product.name} vào giỏ hàng.`);
+function addToCart(id) {
+    sessionStorage.setItem("sportix_need_option", "true");
+    goWithSplash(`product-detail.html?id=${id}`);
 }
 
 function showToast(message){
