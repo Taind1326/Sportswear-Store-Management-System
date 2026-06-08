@@ -109,8 +109,7 @@ function renderSalesChart() {
   const max = Math.max(...sales.map(i => i.value));
 
   chart.innerHTML = sales.map(item => `
-    <div class="chart-bar"
-         style="height:${(item.value / max) * 100}%">
+    <div class="chart-bar" style="height:${(item.value / max) * 100}%">
       <strong>${item.value}M</strong>
       <span>${item.day}</span>
     </div>
@@ -124,9 +123,7 @@ function renderBestProducts() {
   const bestList = $("bestList");
   if (!bestList) return;
 
-  const best = [...products]
-    .sort((a, b) => b.sold - a.sold)
-    .slice(0, 4);
+  const best = [...products].sort((a, b) => b.sold - a.sold).slice(0, 4);
 
   bestList.innerHTML = best.map(item => `
     <div class="best-item">
@@ -166,13 +163,12 @@ function renderProducts() {
   const table = $("productTable");
   if (!table) return;
 
-  const keyword =
-    $("searchInput")?.value.toLowerCase() || "";
+  const keyword = $("searchInput")?.value.toLowerCase() || "";
+  const category = $("categoryFilter")?.value || "all";
 
   table.innerHTML = products
-    .filter(item =>
-      item.name.toLowerCase().includes(keyword)
-    )
+    .filter(item => item.name.toLowerCase().includes(keyword))
+    .filter(item => category === "all" || item.category === category)
     .map(item => {
       const status = getProductStatus(item.stock);
 
@@ -190,18 +186,9 @@ function renderProducts() {
         <td>${item.category}</td>
         <td>${formatMoney(item.price)}</td>
         <td>${item.stock}</td>
-        <td>
-          <span class="badge-status ${status.className}">
-            ${status.text}
-          </span>
-        </td>
-        <td>
-          <button class="action-btn">
-            <i class="bi bi-three-dots"></i>
-          </button>
-        </td>
-      </tr>
-      `;
+        <td><span class="badge-status ${status.className}">${status.text}</span></td>
+        <td><button class="action-btn"><i class="bi bi-three-dots"></i></button></td>
+      </tr>`;
     }).join("");
 }
 
@@ -219,18 +206,11 @@ function renderOrders() {
       <td>${item.product}</td>
       <td>${formatMoney(item.total)}</td>
       <td>${item.payment}</td>
-      <td>
-        <span class="badge-status ${getOrderStatusClass(item.status)}">
-          ${item.status}
-        </span>
-      </td>
+      <td><span class="badge-status ${getOrderStatusClass(item.status)}">${item.status}</span></td>
     </tr>
   `).join("");
 }
 
-// =====================
-// HERO SLIDER
-// =====================
 // =====================
 // HERO SLIDER
 // =====================
@@ -309,6 +289,103 @@ function reveal() {
   });
 }
 
+// =====================
+// ADMIN LOGOUT
+// =====================
+function getCurrentAdminName() {
+  const user = localStorage.getItem("sportix_user") || localStorage.getItem("admin_user");
+
+  if (!user) return "Admin";
+
+  try {
+    const data = JSON.parse(user);
+    return data.name || data.email || "Admin";
+  } catch {
+    return "Admin";
+  }
+}
+
+function showAdminToast(message) {
+  const toast = $("adminToast");
+  if (!toast) return;
+
+  toast.querySelector("span").textContent = message;
+  toast.classList.add("show");
+
+  clearTimeout(showAdminToast.timer);
+  showAdminToast.timer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 1800);
+}
+
+function openLogoutModal() {
+  $("logoutModal")?.classList.add("show");
+}
+
+function closeLogoutModal() {
+  $("logoutModal")?.classList.remove("show");
+}
+
+function logoutAdmin() {
+  localStorage.removeItem("sportix_user");
+  localStorage.removeItem("admin_user");
+  sessionStorage.removeItem("redirectAfterLogin");
+  sessionStorage.removeItem("nextPage");
+
+  closeLogoutModal();
+  showAdminToast("Đăng xuất thành công.");
+
+  setTimeout(() => {
+    window.location.href = "login.html";
+  }, 900);
+}
+
+function initAdminUserMenu() {
+  const wrap = $("adminUserWrap");
+  const btn = $("adminUserBtn");
+  const logoutBtn = $("adminLogoutBtn");
+  const cancelBtn = $("cancelLogoutBtn");
+  const confirmBtn = $("confirmLogoutBtn");
+  const modal = $("logoutModal");
+  const adminName = $("adminName");
+  const adminAvatar = $("adminAvatar");
+
+  if (!wrap || !btn) return;
+
+  const name = getCurrentAdminName();
+  adminName.textContent = name;
+  adminAvatar.textContent = name.trim().charAt(0).toUpperCase() || "A";
+
+  btn.addEventListener("click", (event) => {
+    event.stopPropagation();
+    wrap.classList.toggle("open");
+  });
+
+  logoutBtn?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    wrap.classList.remove("open");
+    openLogoutModal();
+  });
+
+  cancelBtn?.addEventListener("click", closeLogoutModal);
+  confirmBtn?.addEventListener("click", logoutAdmin);
+
+  modal?.addEventListener("click", (event) => {
+    if (event.target === modal) closeLogoutModal();
+  });
+
+  document.addEventListener("click", () => {
+    wrap.classList.remove("open");
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      wrap.classList.remove("open");
+      closeLogoutModal();
+    }
+  });
+}
+
 window.addEventListener("scroll", reveal);
 
 // =====================
@@ -322,8 +399,10 @@ document.addEventListener("DOMContentLoaded", () => {
   renderProducts();
   renderOrders();
 
-
   $("searchInput")?.addEventListener("input", renderProducts);
+  $("categoryFilter")?.addEventListener("change", renderProducts);
+
   initHeroSlider();
+  initAdminUserMenu();
   reveal();
 });

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thanh toán - SPORTIX</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/thanh-toan.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="sz-navbar navbar navbar-expand-md sticky-top">
+    <div class="container">
+      <a href="#" class="navbar-brand sz-brand" onclick="goWithSplash('index.html'); return false;">
+        <span class="sz-logo-box">
+          <img src="../img/logo.jpg" class="sz-logo" alt="SPORTIX">
+        </span>
+      </a>
+      <button class="navbar-toggler border-0 shadow-none" type="button"
+        data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <i class="bi bi-list fs-3"></i>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+        <ul class="navbar-nav gap-1 align-items-md-center mt-3 mt-md-0">
+          <li class="nav-item"><a href="#" onclick="goWithSplash('index.html'); return false;" class="nav-link sz-nav-link">Trang chủ</a></li>
+          <li class="nav-item"><a href="#" onclick="goWithSplash('product-list.html'); return false;" class="nav-link sz-nav-link">Sản phẩm</a></li>
+          <li class="nav-item"><a href="#" onclick="goWithSplash('about.html'); return false;" class="nav-link sz-nav-link">Giới thiệu</a></li>
+          <li class="nav-item"><a href="#" onclick="goWithSplash('contact.html'); return false;" class="nav-link sz-nav-link">Liên hệ</a></li>
+          <li class="nav-item ms-md-2"><a href="#" onclick="goWithSplash('login.html'); return false;" class="nav-link sz-nav-btn">Đăng nhập</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="sp-hero text-center reveal">
+    <div class="sp-hero-tag d-inline-flex align-items-center gap-2 mb-3">
+      <i class="bi bi-credit-card-fill"></i> Thanh toán an toàn
+    </div>
+    <h1>PHƯƠNG THỨC <span>THANH TOÁN</span></h1>
+    <p class="mt-2">Đa dạng hình thức thanh toán, bảo mật tuyệt đối — mua sắm dễ dàng hơn bao giờ hết.</p>
+  </section>
+
+  <!-- CONTENT -->
+  <section class="sp-section">
+    <div class="container">
+
+      <!-- PAYMENT METHODS GRID -->
+      <div class="row g-4 mb-5">
+        <div class="col-12">
+          <h2 class="sp-section-title reveal">Các hình thức <span>thanh toán</span></h2>
+        </div>
+
+        <!-- COD -->
+        <div class="col-12 col-md-6 col-lg-3 reveal delay-1">
+          <div class="sp-method-card">
+            <div class="sp-method-icon" style="background:linear-gradient(135deg,#FFF3E0,#FFE0B2);">
+              <i class="bi bi-cash-coin" style="color:#E65100;"></i>
+            </div>
+            <h3>Thanh toán khi nhận hàng</h3>
+            <p class="sp-method-tag">COD</p>
+            <p>Nhận hàng, kiểm tra rồi mới thanh toán. Áp dụng toàn quốc cho đơn hàng dưới 10.000.000đ.</p>
+            <div class="sp-method-badge"><i class="bi bi-check-circle-fill"></i> Phổ biến nhất</div>
+          </div>
+        </div>
+
+        <!-- Bank Transfer -->
+        <div class="col-12 col-md-6 col-lg-3 reveal delay-1">
+          <div class="sp-method-card">
+            <div class="sp-method-icon" style="background:linear-gradient(135deg,#E3F2FD,#BBDEFB);">
+              <i class="bi bi-bank" style="color:#0D47A1;"></i>
+            </div>
+            <h3>Chuyển khoản ngân hàng</h3>
+            <p class="sp-method-tag">Internet Banking</p>
+            <p>Chuyển khoản qua tài khoản ngân hàng. Đơn hàng được xử lý ngay sau khi xác nhận thanh toán.</p>
+            <div class="sp-method-badge sp-badge-blue"><i class="bi bi-shield-check-fill"></i> Bảo mật cao</div>
+          </div>
+        </div>
+
+        <!-- Card -->
+        <div class="col-12 col-md-6 col-lg-3 reveal delay-2">
+          <div class="sp-method-card">
+            <div class="sp-method-icon" style="background:linear-gradient(135deg,#F3E5F5,#E1BEE7);">
+              <i class="bi bi-credit-card-2-front-fill" style="color:#6A1B9A;"></i>
+            </div>
+            <h3>Thẻ ATM / Visa / Mastercard</h3>
+            <p class="sp-method-tag">Thẻ ngân hàng</p>
+            <p>Hỗ trợ tất cả thẻ ATM nội địa và thẻ quốc tế Visa, Mastercard, JCB, American Express.</p>
+            <div class="sp-method-badge sp-badge-purple"><i class="bi bi-globe2"></i> Quốc tế</div>
+          </div>
+        </div>
+
+        <!-- E-Wallet -->
+        <div class="col-12 col-md-6 col-lg-3 reveal delay-2">
+          <div class="sp-method-card">
+            <div class="sp-method-icon" style="background:linear-gradient(135deg,#E8F5E9,#C8E6C9);">
+              <i class="bi bi-phone-fill" style="color:#1B5E20;"></i>
+            </div>
+            <h3>Ví điện tử</h3>
+            <p class="sp-method-tag">E-Wallet</p>
+            <p>Thanh toán nhanh qua MoMo, ZaloPay, VNPay. Nhiều ưu đãi hoàn tiền dành riêng cho người dùng ví.</p>
+            <div class="sp-method-badge sp-badge-green"><i class="bi bi-lightning-fill"></i> Siêu nhanh</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WALLET LOGOS -->
+      <div class="sp-wallet-section reveal mb-5">
+        <p class="sp-wallet-label">Ví điện tử được hỗ trợ</p>
+        <div class="d-flex flex-wrap justify-content-center align-items-center gap-3 mt-3">
+          <div class="sp-wallet-chip"><i class="bi bi-wallet2" style="color:#ae2070;"></i> MoMo</div>
+          <div class="sp-wallet-chip"><i class="bi bi-wallet2" style="color:#006af5;"></i> ZaloPay</div>
+          <div class="sp-wallet-chip"><i class="bi bi-wallet2" style="color:#e50000;"></i> VNPay</div>
+          <div class="sp-wallet-chip"><i class="bi bi-credit-card" style="color:#1a1f71;"></i> Visa</div>
+          <div class="sp-wallet-chip"><i class="bi bi-credit-card" style="color:#eb001b;"></i> Mastercard</div>
+          <div class="sp-wallet-chip"><i class="bi bi-credit-card" style="color:#003087;"></i> JCB</div>
+        </div>
+      </div>
+
+      <!-- BANK INFO -->
+      <div class="row g-4 mb-5">
+        <div class="col-12">
+          <h2 class="sp-section-title reveal">Thông tin <span>chuyển khoản</span></h2>
+        </div>
+        <div class="col-12 col-lg-6 reveal delay-1">
+          <div class="sp-bank-card">
+            <div class="d-flex align-items-center gap-3 mb-4">
+              <div class="sp-bank-icon"><i class="bi bi-bank2"></i></div>
+              <div>
+                <h4 class="mb-0">Ngân hàng Vietcombank</h4>
+                <small class="text-muted">Ngân hàng TMCP Ngoại thương Việt Nam</small>
+              </div>
+            </div>
+            <div class="sp-bank-row">
+              <span class="sp-bank-label">Số tài khoản</span>
+              <strong class="sp-bank-value">1234 5678 9012 3456</strong>
+            </div>
+            <div class="sp-bank-row">
+              <span class="sp-bank-label">Chủ tài khoản</span>
+              <strong class="sp-bank-value">CÔNG TY SPORTIX VIỆT NAM</strong>
+            </div>
+            <div class="sp-bank-row">
+              <span class="sp-bank-label">Chi nhánh</span>
+              <strong class="sp-bank-value">TP. Hồ Chí Minh</strong>
+            </div>
+            <div class="sp-bank-note mt-3">
+              <i class="bi bi-info-circle-fill"></i>
+              Nội dung chuyển khoản: <strong>[Mã đơn hàng] + [Họ tên]</strong>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6 reveal delay-2">
+          <div class="sp-bank-card">
+            <div class="d-flex align-items-center gap-3 mb-4">
+              <div class="sp-bank-icon" style="background:linear-gradient(135deg,#EAF0FF,#D0DCFF);"><i class="bi bi-bank" style="color:#003087;"></i></div>
+              <div>
+                <h4 class="mb-0">Ngân hàng BIDV</h4>
+                <small class="text-muted">Ngân hàng TMCP Đầu tư và Phát triển VN</small>
+              </div>
+            </div>
+            <div class="sp-bank-row">
+              <span class="sp-bank-label">Số tài khoản</span>
+              <strong class="sp-bank-value">9876 5432 1098 7654</strong>
+            </div>
+            <div class="sp-bank-row">
+              <span class="sp-bank-label">Chủ tài khoản</span>
+              <strong class="sp-bank-value">CÔNG TY SPORTIX VIỆT NAM</strong>
+            </div>
+            <div class="sp-bank-row">
+              <span class="sp-bank-label">Chi nhánh</span>
+              <strong class="sp-bank-value">TP. Hồ Chí Minh</strong>
+            </div>
+            <div class="sp-bank-note mt-3">
+              <i class="bi bi-info-circle-fill"></i>
+              Nội dung chuyển khoản: <strong>[Mã đơn hàng] + [Họ tên]</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ PAYMENT -->
+      <div class="sp-faq reveal">
+        <h2 class="sp-faq-header">CÂU HỎI <span>THƯỜNG GẶP</span></h2>
+        <div class="accordion" id="payFaq">
+
+          <div class="accordion-item border-0 sp-faq-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button sp-faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pf0">
+                Thanh toán online có an toàn không? <i class="bi bi-plus-lg"></i>
+              </button>
+            </h2>
+            <div id="pf0" class="accordion-collapse collapse" data-bs-parent="#payFaq">
+              <div class="accordion-body sp-faq-body">Toàn bộ giao dịch tại SPORTIX được mã hóa SSL 256-bit. Chúng tôi <strong>không lưu trữ</strong> thông tin thẻ của bạn — dữ liệu được xử lý trực tiếp qua cổng thanh toán được cấp phép bởi Ngân hàng Nhà nước.</div>
+            </div>
+          </div>
+
+          <div class="accordion-item border-0 sp-faq-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button sp-faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pf1">
+                Tôi có thể trả góp không? <i class="bi bi-plus-lg"></i>
+              </button>
+            </h2>
+            <div id="pf1" class="accordion-collapse collapse" data-bs-parent="#payFaq">
+              <div class="accordion-body sp-faq-body">SPORTIX hỗ trợ trả góp <strong>0% lãi suất</strong> qua thẻ tín dụng Visa/Mastercard cho đơn hàng từ 3.000.000đ trở lên. Kỳ hạn: 3, 6, 9, 12 tháng.</div>
+            </div>
+          </div>
+
+          <div class="accordion-item border-0 sp-faq-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button sp-faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pf2">
+                Thanh toán xong khi nào đơn hàng được xử lý? <i class="bi bi-plus-lg"></i>
+              </button>
+            </h2>
+            <div id="pf2" class="accordion-collapse collapse" data-bs-parent="#payFaq">
+              <div class="accordion-body sp-faq-body">Đơn hàng được xử lý <strong>ngay lập tức</strong> sau khi thanh toán thành công. Riêng chuyển khoản ngân hàng có thể mất 15–30 phút để hệ thống xác nhận. Bạn sẽ nhận email thông báo khi đơn được duyệt.</div>
+            </div>
+          </div>
+
+          <div class="accordion-item border-0 sp-faq-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button sp-faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pf3">
+                Tôi thanh toán sai số tiền thì làm thế nào? <i class="bi bi-plus-lg"></i>
+              </button>
+            </h2>
+            <div id="pf3" class="accordion-collapse collapse" data-bs-parent="#payFaq">
+              <div class="accordion-body sp-faq-body">Vui lòng liên hệ hotline <strong>1900 1234</strong> hoặc email <strong>hotro@sportix.vn</strong> ngay sau khi phát hiện. Đội ngũ CSKH sẽ hỗ trợ hoàn tiền hoặc bù số dư trong vòng 24 giờ.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="sz-footer">
+    <div class="container">
+      <div class="row g-4 align-items-start">
+        <div class="col-12 col-lg-4">
+          <h3 class="sz-footer-brand">SPORTIX</h3>
+          <p class="sz-footer-slogan">Move faster. Train better. Trang mua sắm đồ thể thao hiện đại, trẻ trung và dễ tiếp cận.</p>
+          <div class="sz-socials d-flex gap-3 mt-3">
+            <a href="#" class="sz-social-btn"><i class="bi bi-facebook facebook-icon"></i></a>
+            <a href="#" class="sz-social-btn"><i class="bi bi-tiktok tiktok-icon"></i></a>
+            <a href="#" class="sz-social-btn"><i class="bi bi-instagram instagram-icon"></i></a>
+            <a href="#" class="sz-social-btn"><i class="bi bi-youtube"></i></a>
+            <a href="#" class="sz-social-btn"><i class="bi bi-twitter"></i></a>
+          </div>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5 class="sz-footer-title">Mua sắm</h5>
+          <ul class="sz-footer-links">
+            <li><a href="#">Giày thể thao</a></li>
+            <li><a href="#">Quần áo thể thao</a></li>
+            <li><a href="#">Phụ kiện</a></li>
+            <li><a href="#">Sản phẩm mới</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5 class="sz-footer-title">Hỗ trợ</h5>
+          <ul class="sz-footer-links">
+            <li><a href="contact.html">Liên hệ</a></li>
+            <li><a href="thanh-toan.html">Thanh toán</a></li>
+            <li><a href="van-chuyen.html">Vận chuyển</a></li>
+            <li><a href="doi-tra.html">Đổi trả</a></li>
+          </ul>
+        </div>
+        <div class="col-12 col-lg-4">
+          <h5 class="sz-footer-title">Liên hệ</h5>
+          <ul class="sz-footer-contact">
+            <li><i class="bi bi-geo-alt-fill"></i><span>140 Lê Trọng Tấn, Quận Tân Phú, TP. Hồ Chí Minh</span></li>
+            <li><i class="bi bi-telephone-fill"></i><span>1900 1234</span></li>
+            <li><i class="bi bi-send-fill"></i><span>hotro@sportix.vn</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="sz-footer-bottom">
+      <div class="container">
+        <p class="mb-0">Copyright © 2026 SPORTIX. Thiết kế bởi nhóm đề tài số 27 | <a href="#">Chính sách bảo mật</a> · <a href="#">Điều khoản dịch vụ</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vận chuyển - SPORTIX</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/van-chuyen.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="sz-navbar navbar navbar-expand-md sticky-top">
+    <div class="container">
+      <a href="#" class="navbar-brand sz-brand" onclick="goWithSplash('index.html'); return false;">
+        <span class="sz-logo-box">
+          <img src="../img/logo.jpg" class="sz-logo" alt="SPORTIX">
+        </span>
+      </a>
+      <button class="navbar-toggler border-0 shadow-none" type="button"
+        data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <i class="bi bi-list fs-3"></i>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+        <ul class="navbar-nav gap-1 align-items-md-center mt-3 mt-md-0">
+          <li class="nav-item"><a href="#" onclick="goWithSplash('index.html'); return false;" class="nav-link sz-nav-link">Trang chủ</a></li>
+          <li class="nav-item"><a href="#" onclick="goWithSplash('product-list.html'); return false;" class="nav-link sz-nav-link">Sản phẩm</a></li>
+          <li class="nav-item"><a href="#" onclick="goWithSplash('about.html'); return false;" class="nav-link sz-nav-link">Giới thiệu</a></li>
+          <li class="nav-item"><a href="#" onclick="goWithSplash('contact.html'); return false;" class="nav-link sz-nav-link">Liên hệ</a></li>
+          <li class="nav-item ms-md-2"><a href="#" onclick="goWithSplash('login.html'); return false;" class="nav-link sz-nav-btn">Đăng nhập</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="vc-hero text-center reveal">
+    <div class="vc-hero-tag d-inline-flex align-items-center gap-2 mb-3">
+      <i class="bi bi-truck-front-fill"></i> Giao hàng toàn quốc
+    </div>
+    <h1>CHÍNH SÁCH <span>VẬN CHUYỂN</span></h1>
+    <p class="mt-2">Giao hàng nhanh chóng, an toàn — miễn phí vận chuyển cho đơn hàng từ 500.000đ.</p>
+  </section>
+
+  <!-- STATS ROW -->
+  <div class="vc-stats-bar">
+    <div class="container">
+      <div class="row g-3 text-center">
+        <div class="col-6 col-md-3">
+          <div class="vc-stat reveal delay-1">
+            <span class="vc-stat-num">63</span>
+            <span class="vc-stat-label">Tỉnh thành</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="vc-stat reveal delay-1">
+            <span class="vc-stat-num">24h</span>
+            <span class="vc-stat-label">Nội thành HCM</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="vc-stat reveal delay-2">
+            <span class="vc-stat-num">3–5</span>
+            <span class="vc-stat-label">Ngày toàn quốc</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="vc-stat reveal delay-2">
+            <span class="vc-stat-num">500K</span>
+            <span class="vc-stat-label">Free ship từ</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <section class="vc-section">
+    <div class="container">
+
+      <!-- SHIPPING OPTIONS -->
+      <div class="row g-4 mb-5">
+        <div class="col-12">
+          <h2 class="vc-section-title reveal">Hình thức <span>vận chuyển</span></h2>
+        </div>
+
+        <div class="col-12 col-md-4 reveal delay-1">
+          <div class="vc-option-card">
+            <div class="vc-option-head">
+              <div class="vc-option-icon" style="background:linear-gradient(135deg,#E3F2FD,#BBDEFB);">
+                <i class="bi bi-lightning-charge-fill" style="color:#1565C0;"></i>
+              </div>
+              <div>
+                <h3>Giao hàng nhanh</h3>
+                <span class="vc-badge vc-badge-blue">Nội thành HCM</span>
+              </div>
+            </div>
+            <ul class="vc-option-list">
+              <li><i class="bi bi-check2"></i> Thời gian: <strong>2–4 giờ</strong></li>
+              <li><i class="bi bi-check2"></i> Phí vận chuyển: <strong>25.000đ</strong></li>
+              <li><i class="bi bi-check2"></i> Miễn phí từ <strong>500.000đ</strong></li>
+              <li><i class="bi bi-check2"></i> Giao hàng từ 8:00–21:00</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-4 reveal delay-1">
+          <div class="vc-option-card vc-option-featured">
+            <div class="vc-featured-badge"><i class="bi bi-star-fill"></i> Phổ biến</div>
+            <div class="vc-option-head">
+              <div class="vc-option-icon" style="background:linear-gradient(135deg,var(--blue-soft),var(--lime-soft));">
+                <i class="bi bi-truck-front-fill" style="color:var(--blue-dark);"></i>
+              </div>
+              <div>
+                <h3>Giao hàng tiêu chuẩn</h3>
+                <span class="vc-badge vc-badge-lime">Toàn quốc</span>
+              </div>
+            </div>
+            <ul class="vc-option-list">
+              <li><i class="bi bi-check2"></i> Thời gian: <strong>3–5 ngày</strong></li>
+              <li><i class="bi bi-check2"></i> Phí vận chuyển: <strong>30.000–45.000đ</strong></li>
+              <li><i class="bi bi-check2"></i> Miễn phí từ <strong>500.000đ</strong></li>
+              <li><i class="bi bi-check2"></i> Theo dõi đơn hàng realtime</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-4 reveal delay-2">
+          <div class="vc-option-card">
+            <div class="vc-option-head">
+              <div class="vc-option-icon" style="background:linear-gradient(135deg,#FFF8E1,#FFE082);">
+                <i class="bi bi-box-seam-fill" style="color:#E65100;"></i>
+              </div>
+              <div>
+                <h3>Giao hàng hỏa tốc</h3>
+                <span class="vc-badge vc-badge-orange">Nội thành HCM</span>
+              </div>
+            </div>
+            <ul class="vc-option-list">
+              <li><i class="bi bi-check2"></i> Thời gian: <strong>Trong 60 phút</strong></li>
+              <li><i class="bi bi-check2"></i> Phí vận chuyển: <strong>50.000đ</strong></li>
+              <li><i class="bi bi-check2"></i> Áp dụng giờ hành chính</li>
+              <li><i class="bi bi-check2"></i> Liên hệ để đặt dịch vụ</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- SHIPPING PROCESS -->
+      <div class="mb-5">
+        <h2 class="vc-section-title reveal">Quy trình <span>giao hàng</span></h2>
+        <div class="vc-process reveal delay-1">
+          <div class="vc-step">
+            <div class="vc-step-num">1</div>
+            <div class="vc-step-icon"><i class="bi bi-bag-check-fill"></i></div>
+            <h4>Đặt hàng</h4>
+            <p>Chọn sản phẩm và hoàn tất thanh toán trên SPORTIX</p>
+          </div>
+          <div class="vc-step-arrow"><i class="bi bi-chevron-right"></i></div>
+          <div class="vc-step">
+            <div class="vc-step-num">2</div>
+            <div class="vc-step-icon"><i class="bi bi-check2-all"></i></div>
+            <h4>Xác nhận</h4>
+            <p>Hệ thống xác nhận và chuẩn bị đơn hàng trong 1–2 giờ</p>
+          </div>
+          <div class="vc-step-arrow"><i class="bi bi-chevron-right"></i></div>
+          <div class="vc-step">
+            <div class="vc-step-num">3</div>
+            <div class="vc-step-icon"><i class="bi bi-box2-heart-fill"></i></div>
+            <h4>Đóng gói</h4>
+            <p>Sản phẩm được đóng gói cẩn thận, chống sốc, chống ẩm</p>
+          </div>
+          <div class="vc-step-arrow"><i class="bi bi-chevron-right"></i></div>
+          <div class="vc-step">
+            <div class="vc-step-num">4</div>
+            <div class="vc-step-icon"><i class="bi bi-truck-front-fill"></i></div>
+            <h4>Vận chuyển</h4>
+            <p>Bàn giao đối tác giao hàng — theo dõi trực tuyến 24/7</p>
+          </div>
+          <div class="vc-step-arrow"><i class="bi bi-chevron-right"></i></div>
+          <div class="vc-step">
+            <div class="vc-step-num">5</div>
+            <div class="vc-step-icon"><i class="bi bi-house-heart-fill"></i></div>
+            <h4>Nhận hàng</h4>
+            <p>Nhận hàng, kiểm tra và xác nhận với shipper</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PARTNERS -->
+      <div class="vc-partner-section reveal mb-5">
+        <p class="vc-partner-label">Đối tác vận chuyển</p>
+        <div class="d-flex flex-wrap justify-content-center align-items-center gap-3 mt-3">
+          <div class="vc-partner-chip"><i class="bi bi-truck"></i> GHN – Giao Hàng Nhanh</div>
+          <div class="vc-partner-chip"><i class="bi bi-truck"></i> GHTK – Giao Hàng Tiết Kiệm</div>
+          <div class="vc-partner-chip"><i class="bi bi-truck"></i> J&T Express</div>
+          <div class="vc-partner-chip"><i class="bi bi-truck"></i> Viettel Post</div>
+          <div class="vc-partner-chip"><i class="bi bi-truck"></i> Vietnam Post</div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="vc-faq reveal">
+        <h2 class="vc-faq-header">CÂU HỎI <span>THƯỜNG GẶP</span></h2>
+        <div class="accordion" id="vcFaq">
+
+          <div class="accordion-item border-0 vc-faq-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button vc-faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#vf0">
+                Làm sao theo dõi đơn hàng của tôi? <i class="bi bi-plus-lg"></i>
+              </button>
+            </h2>
+            <div id="vf0" class="accordion-collapse collapse" data-bs-parent="#vcFaq">
+              <div class="accordion-body vc-faq-body">Sau khi đơn hàng được giao cho đối tác vận chuyển, bạn sẽ nhận được <strong>mã vận đơn</strong> qua email/SMS. Truy cập <strong>Tài khoản → Đơn hàng của tôi</strong> để theo dõi trạng thái realtime.</div>
+            </div>
+          </div>
+
+          <div class="accordion-item border-0 vc-faq-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button vc-faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#vf1">
+                Giao hàng đến vùng nông thôn / hải đảo được không? <i class="bi bi-plus-lg"></i>
+              </button>
+            </h2>
+            <div id="vf1" class="accordion-collapse collapse" data-bs-parent="#vcFaq">
+              <div class="accordion-body vc-faq-body">SPORTIX giao hàng đến <strong>63 tỉnh thành</strong> trên toàn quốc. Với khu vực hải đảo hoặc vùng sâu vùng xa, thời gian giao hàng có thể lên đến 7–10 ngày và phí vận chuyển sẽ được tính theo thực tế.</div>
+            </div>
+          </div>
+
+          <div class="accordion-item border-0 vc-faq-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button vc-faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#vf2">
+                Nếu không nhận được hàng trong thời gian dự kiến? <i class="bi bi-plus-lg"></i>
+              </button>
+            </h2>
+            <div id="vf2" class="accordion-collapse collapse" data-bs-parent="#vcFaq">
+              <div class="accordion-body vc-faq-body">Nếu quá thời gian giao hàng dự kiến, vui lòng liên hệ <strong>1900 1234</strong>. SPORTIX sẽ tra cứu đơn và hỗ trợ xử lý trong vòng 24 giờ. Trường hợp hàng thất lạc, chúng tôi sẽ giao lại hoặc hoàn tiền 100%.</div>
+            </div>
+          </div>
+
+          <div class="accordion-item border-0 vc-faq-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button vc-faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#vf3">
+                Tôi có thể thay đổi địa chỉ giao hàng sau khi đặt? <i class="bi bi-plus-lg"></i>
+              </button>
+            </h2>
+            <div id="vf3" class="accordion-collapse collapse" data-bs-parent="#vcFaq">
+              <div class="accordion-body vc-faq-body">Bạn có thể thay đổi địa chỉ giao hàng trong vòng <strong>30 phút</strong> sau khi đặt hàng. Liên hệ ngay hotline 1900 1234 hoặc chat hỗ trợ. Sau khi đơn được xử lý và bàn giao cho đơn vị vận chuyển, sẽ không thể thay đổi địa chỉ.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="sz-footer">
+    <div class="container">
+      <div class="row g-4 align-items-start">
+        <div class="col-12 col-lg-4">
+          <h3 class="sz-footer-brand">SPORTIX</h3>
+          <p class="sz-footer-slogan">Move faster. Train better. Trang mua sắm đồ thể thao hiện đại, trẻ trung và dễ tiếp cận.</p>
+          <div class="sz-socials d-flex gap-3 mt-3">
+            <a href="#" class="sz-social-btn"><i class="bi bi-facebook facebook-icon"></i></a>
+            <a href="#" class="sz-social-btn"><i class="bi bi-tiktok tiktok-icon"></i></a>
+            <a href="#" class="sz-social-btn"><i class="bi bi-instagram instagram-icon"></i></a>
+            <a href="#" class="sz-social-btn"><i class="bi bi-youtube"></i></a>
+            <a href="#" class="sz-social-btn"><i class="bi bi-twitter"></i></a>
+          </div>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5 class="sz-footer-title">Mua sắm</h5>
+          <ul class="sz-footer-links">
+            <li><a href="#">Giày thể thao</a></li>
+            <li><a href="#">Quần áo thể thao</a></li>
+            <li><a href="#">Phụ kiện</a></li>
+            <li><a href="#">Sản phẩm mới</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5 class="sz-footer-title">Hỗ trợ</h5>
+          <ul class="sz-footer-links">
+            <li><a href="contact.html">Liên hệ</a></li>
+            <li><a href="thanh-toan.html">Thanh toán</a></li>
+            <li><a href="van-chuyen.html">Vận chuyển</a></li>
+            <li><a href="doi-tra.html">Đổi trả</a></li>
+          </ul>
+        </div>
+        <div class="col-12 col-lg-4">
+          <h5 class="sz-footer-title">Liên hệ</h5>
+          <ul class="sz-footer-contact">
+            <li><i class="bi bi-geo-alt-fill"></i><span>140 Lê Trọng Tấn, Quận Tân Phú, TP. Hồ Chí Minh</span></li>
+            <li><i class="bi bi-telephone-fill"></i><span>1900 1234</span></li>
+            <li><i class="bi bi-send-fill"></i><span>hotro@sportix.vn</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="sz-footer-bottom">
+      <div class="container">
+        <p class="mb-0">Copyright © 2026 SPORTIX. Thiết kế bởi nhóm đề tài số 27 | <a href="#">Chính sách bảo mật</a> · <a href="#">Điều khoản dịch vụ</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/common.js"></script>
+</body>
+</html>

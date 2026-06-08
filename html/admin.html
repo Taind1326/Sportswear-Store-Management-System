@@ -81,13 +81,28 @@
           <button class="icon-btn">
             <i class="bi bi-bell"></i>
           </button>
+          <div class="admin-user-wrap" id="adminUserWrap">
+            <button class="admin-user" id="adminUserBtn" type="button">
+              <div class="avatar" id="adminAvatar">A</div>
 
-          <div class="admin-user">
-            <div class="avatar">A</div>
+              <div>
+                <strong id="adminName">Admin</strong>
+                <span>Quản trị viên</span>
+              </div>
 
-            <div>
-              <strong>Admin</strong>
-              <span>Quản trị viên</span>
+              <i class="bi bi-chevron-down admin-user-arrow"></i>
+            </button>
+
+            <div class="admin-user-dropdown" id="adminUserDropdown">
+              <button type="button" id="adminProfileBtn">
+                <i class="bi bi-person-circle"></i>
+                Tài khoản admin
+              </button>
+
+              <button type="button" id="adminLogoutBtn" class="logout">
+                <i class="bi bi-box-arrow-right"></i>
+                Đăng xuất
+              </button>
             </div>
           </div>
         </div>
@@ -368,6 +383,33 @@
 
     </main>
   </div>
+
+
+  <div class="admin-modal" id="logoutModal">
+    <div class="admin-modal-card">
+      <div class="admin-modal-icon">
+        <i class="bi bi-box-arrow-right"></i>
+      </div>
+
+      <h3>Đăng xuất tài khoản?</h3>
+      <p>Bạn có chắc chắn muốn đăng xuất khỏi trang quản trị SPORTIX không?</p>
+
+      <div class="admin-modal-actions">
+        <button type="button" class="btn-cancel" id="cancelLogoutBtn">Hủy</button>
+        <button type="button" class="btn-logout" id="confirmLogoutBtn">
+          Đăng xuất
+          <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-toast" id="adminToast">
+    <i class="bi bi-check-circle-fill"></i>
+    <span>Đăng xuất thành công.</span>
+  </div>
+
+  
 
   <script src="../js/admin.js"></script>
 </body>

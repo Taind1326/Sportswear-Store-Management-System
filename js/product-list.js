@@ -1,259 +1,428 @@
-﻿// ==================== TRẠNG THÁI ====================
-let boLoc = { category: 'all', brand: 'all', price: 5000000 };
-let tuKhoaTimKiem = '';
-let sapXepTheo = 'default';
-let trangHienTai = 1;
-const SO_SAN_PHAM_MOI_TRANG = 9;
-let gioHang = JSON.parse(localStorage.getItem('sz_cart') || '[]');
+﻿let filters = {
+  category:"all",
+  brand:"all",
+  price:5000000
+};
 
-// ==================== TIỆN ÍCH ====================
-function dinhDangGia(n) {
-    return n.toLocaleString('vi-VN') + 'đ';
-}
-function nhanDanhMuc(c) {
-    return { giay: 'Giày thể thao', ao: 'Áo quần', gym: 'Dụng cụ gym', bongda: 'Bóng đá', phukien: 'Phụ kiện' }[c] || c;
-}
-function phanTramGiam(oldPrice, price) {
-    return Math.round((1 - price / oldPrice) * 100);
-}
-
-// ==================== CARD HTML ====================
-function taoCardHTML(p, showSaveBadge = false) {
-    const savePct = p.oldPrice ? phanTramGiam(p.oldPrice, p.price) : 0;
-    return `
-    <div class="product-card" onclick="window.location='product-detail.html?id=${p.id}'">
-      <div class="product-img-wrap">
-        <img src="${p.img}" alt="${p.name}" loading="lazy"/>
-        ${p.badge === 'new' ? '<span class="badge-new">Mới</span>' : ''}
-        ${p.badge === 'sale' ? '<span class="badge-sale">Sale</span>' : ''}
-        ${showSaveBadge && p.oldPrice ? `<span class="badge-sale-pct">-${savePct}%</span>` : ''}
-        <button class="quick-add" onclick="event.stopPropagation(); themVaoGio(${p.id})">
-          <i class="bi bi-bag-plus"></i> Thêm giỏ hàng
-        </button>
-      </div>
-      <div class="product-body">
-        <div class="product-category">${nhanDanhMuc(p.category)}</div>
-        <div class="product-name">${p.name}</div>
-        <div class="product-price">
-          <span class="price-current">${dinhDangGia(p.price)}</span>
-          ${p.oldPrice ? `<span class="price-old">${dinhDangGia(p.oldPrice)}</span>` : ''}
-          ${showSaveBadge && p.oldPrice ? `<span class="price-save">-${savePct}%</span>` : ''}
-        </div>
-        <button class="btn-add-card w-100" onclick="event.stopPropagation(); themVaoGio(${p.id})">
-          <i class="bi bi-bag-plus"></i> Thêm vào giỏ
-        </button>
-      </div>
-    </div>`;
-}
-
-// ==================== NEW ARRIVALS STRIP ====================
+let searchText = "";
+let sortType = "default";
+let currentPage = 1;
 let stripOffset = 0;
-const CARD_WIDTH = 224; // 210px card + 14px gap
 
-function hienThiNewStrip() {
-    const newProducts = PRODUCTS.filter(p => p.badge === 'new');
-    const strip = document.getElementById('newStrip');
-    strip.innerHTML = newProducts.map(p => `
-      <div>${taoCardHTML(p, false)}</div>
-    `).join('');
-    stripOffset = 0;
-    strip.style.transform = 'translateX(0)';
+const PRODUCTS_PER_PAGE = 9;
+const STRIP_CARD_WIDTH = 258;
+const CART_KEY = "sportix_cart";
+
+let cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+
+const productGrid = document.getElementById("productGrid");
+const saleGrid = document.getElementById("saleGrid");
+const saleWrap = document.getElementById("saleSectionWrap");
+const emptyState = document.getElementById("emptyState");
+const pagination = document.getElementById("pagination");
+const newStrip = document.getElementById("newStrip");
+const cartCount = document.getElementById("cartCount");
+
+function formatMoney(value){
+  return value.toLocaleString("vi-VN") + "đ";
 }
 
-function capNhatStripNav() {
-    const newProducts = PRODUCTS.filter(p => p.badge === 'new');
-    const wrapper = document.querySelector('.new-strip-wrapper');
-    const visible = Math.floor(wrapper.offsetWidth / CARD_WIDTH);
-    const maxOffset = Math.max(0, newProducts.length - visible);
+function getCategoryName(category){
+  const names = {
+    giay:"Giày thể thao",
+    ao:"Áo quần",
+    gym:"Dụng cụ gym",
+    bongda:"Bóng đá",
+    phukien:"Phụ kiện"
+  };
 
-    document.getElementById('stripPrev').disabled = stripOffset <= 0;
-    document.getElementById('stripNext').disabled = stripOffset >= maxOffset;
+  return names[category] || category;
 }
 
-document.getElementById('stripNext').addEventListener('click', () => {
-    const newProducts = PRODUCTS.filter(p => p.badge === 'new');
-    const wrapper = document.querySelector('.new-strip-wrapper');
-    const visible = Math.floor(wrapper.offsetWidth / CARD_WIDTH);
-    const maxOffset = newProducts.length - visible;
-    if (stripOffset < maxOffset) {
-        stripOffset++;
-        document.getElementById('newStrip').style.transform = `translateX(-${stripOffset * CARD_WIDTH}px)`;
-        capNhatStripNav();
-    }
-});
-
-document.getElementById('stripPrev').addEventListener('click', () => {
-    if (stripOffset > 0) {
-        stripOffset--;
-        document.getElementById('newStrip').style.transform = `translateX(-${stripOffset * CARD_WIDTH}px)`;
-        capNhatStripNav();
-    }
-});
-
-// ==================== LỌC & SẮP XẾP ====================
-function layDanhSachDaLoc() {
-    let ketQua = [...PRODUCTS];
-    if (boLoc.category !== 'all') ketQua = ketQua.filter(p => p.category === boLoc.category);
-    if (boLoc.brand !== 'all') ketQua = ketQua.filter(p => p.brand === boLoc.brand);
-    ketQua = ketQua.filter(p => p.price <= boLoc.price);
-    if (tuKhoaTimKiem) {
-        const q = tuKhoaTimKiem.toLowerCase();
-        ketQua = ketQua.filter(p => p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q));
-    }
-    if (sapXepTheo === 'price-asc') ketQua.sort((a, b) => a.price - b.price);
-    if (sapXepTheo === 'price-desc') ketQua.sort((a, b) => b.price - a.price);
-    if (sapXepTheo === 'name-asc') ketQua.sort((a, b) => a.name.localeCompare(b.name));
-    return ketQua;
+function getSalePercent(oldPrice, price){
+  if(!oldPrice) return 0;
+  return Math.round((1 - price / oldPrice) * 100);
 }
 
-function applyFilters() {
-    sapXepTheo = document.getElementById('sortSelect').value;
-    trangHienTai = 1;
-    hienThiSanPham();
+function getCartCount(){
+  return cart.reduce((sum, item) => sum + item.qty, 0);
 }
 
-function resetFilters() {
-    boLoc = { category: 'all', brand: 'all', price: 5000000 };
-    tuKhoaTimKiem = '';
-    document.getElementById('searchInput').value = '';
-    document.getElementById('priceRange').value = 5000000;
-    document.getElementById('priceLabel').textContent = '5.000.000đ';
-    document.getElementById('sortSelect').value = 'default';
-    sapXepTheo = 'default';
-    // Reset chips
-    document.querySelectorAll('.chip').forEach(b => b.classList.toggle('active', b.dataset.value === 'all'));
-    document.querySelectorAll('.brand-btn').forEach(b => b.classList.toggle('active', b.dataset.value === 'all'));
-    trangHienTai = 1;
-    hienThiSanPham();
+function updateCartCount(){
+  cartCount.textContent = getCartCount();
 }
 
-// ==================== HIỂN THỊ CHÍNH ====================
-function hienThiSanPham() {
-    const tatCa = layDanhSachDaLoc();
-
-    // Tách sale và non-sale
-    const danhSachSale = tatCa.filter(p => p.badge === 'sale');
-
-    // Tổng hiển thị
-    document.getElementById('totalCount').textContent = tatCa.length;
-
-    // ── Sale section ──
-    const saleWrap = document.getElementById('saleSectionWrap');
-    const saleGrid = document.getElementById('saleGrid');
-    if (danhSachSale.length > 0) {
-        saleWrap.style.display = 'block';
-        saleGrid.innerHTML = danhSachSale.map(p => `
-          <div class="col-sm-6 col-xl-4">${taoCardHTML(p, true)}</div>
-        `).join('');
-    } else {
-        saleWrap.style.display = 'none';
-    }
-
-    // ── All section label ──
-    const allLabel = document.getElementById('allSectionLabel');
-    allLabel.style.display = tatCa.length > 0 ? 'flex' : 'none';
-
-    // ── Pagination trên toàn bộ danh sách ──
-    const tongSo = tatCa.length;
-    const soTrang = Math.ceil(tongSo / SO_SAN_PHAM_MOI_TRANG);
-    const sanPhamTrang = tatCa.slice((trangHienTai - 1) * SO_SAN_PHAM_MOI_TRANG, trangHienTai * SO_SAN_PHAM_MOI_TRANG);
-
-    document.getElementById('showingCount').textContent = sanPhamTrang.length;
-
-    const grid = document.getElementById('productGrid');
-    const emptyState = document.getElementById('emptyState');
-
-    if (tatCa.length === 0) {
-        grid.innerHTML = '';
-        emptyState.style.display = 'block';
-    } else {
-        emptyState.style.display = 'none';
-        grid.innerHTML = sanPhamTrang.map(p => `
-          <div class="col-sm-6 col-xl-4">${taoCardHTML(p, true)}</div>
-        `).join('');
-    }
-
-    // Pagination
-    const pag = document.getElementById('pagination');
-    if (soTrang <= 1) { pag.innerHTML = ''; return; }
-    let html = `<li class="page-item ${trangHienTai === 1 ? 'disabled' : ''}">
-      <a class="page-link" href="#" onclick="chuyenTrang(${trangHienTai - 1})">‹</a></li>`;
-    for (let i = 1; i <= soTrang; i++) {
-        html += `<li class="page-item ${i === trangHienTai ? 'active' : ''}">
-        <a class="page-link" href="#" onclick="chuyenTrang(${i})">${i}</a></li>`;
-    }
-    html += `<li class="page-item ${trangHienTai === soTrang ? 'disabled' : ''}">
-      <a class="page-link" href="#" onclick="chuyenTrang(${trangHienTai + 1})">›</a></li>`;
-    pag.innerHTML = html;
+function saveCart(){
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
 }
 
-function chuyenTrang(n) {
-    event.preventDefault();
-    const soTrang = Math.ceil(layDanhSachDaLoc().length / SO_SAN_PHAM_MOI_TRANG);
-    if (n < 1 || n > soTrang) return;
-    trangHienTai = n;
-    hienThiSanPham();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+function showToast(message){
+  const toast = document.getElementById("productToast");
+
+  toast.querySelector("span").textContent = message;
+  toast.classList.add("show");
+
+  clearTimeout(showToast.timer);
+
+  showToast.timer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2200);
 }
 
-// ==================== GIỎ HÀNG ====================
-function themVaoGio(id) {
-    const sanPham = PRODUCTS.find(x => x.id === id);
-    const daCoTrongGio = gioHang.find(x => x.id === id);
-    if (daCoTrongGio) daCoTrongGio.qty++;
-    else gioHang.push({ id, name: sanPham.name, price: sanPham.price, qty: 1 });
-    localStorage.setItem('sz_cart', JSON.stringify(gioHang));
-    document.getElementById('cartCount').textContent = gioHang.reduce((s, x) => s + x.qty, 0);
-    hienThongBao(`<i class="bi bi-check-circle-fill"></i> Đã thêm <strong>${sanPham.name}</strong>`);
-}
+function addToCart(id){
+  const product = PRODUCTS.find(item => item.id == id);
+  if(!product) return;
 
-function hienThongBao(msg) {
-    const wrap = document.getElementById('toastWrap');
-    const el = document.createElement('div');
-    el.className = 'my-toast';
-    el.innerHTML = msg;
-    wrap.appendChild(el);
-    setTimeout(() => el.remove(), 3000);
-}
+  const existed = cart.find(item => item.id == id);
 
-// ==================== SỰ KIỆN ====================
-// Chips danh mục
-document.querySelectorAll('.chip[data-filter]').forEach(btn => {
-    btn.addEventListener('click', function () {
-        document.querySelectorAll(`.chip[data-filter="${this.dataset.filter}"]`).forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        boLoc[this.dataset.filter] = this.dataset.value;
-        trangHienTai = 1;
-        hienThiSanPham();
+  if(existed){
+    existed.qty++;
+  }else{
+    cart.push({
+      id:product.id,
+      name:product.name,
+      price:product.price,
+      image:product.img,
+      qty:1,
+      selected:true
     });
-});
+  }
 
-// Brand buttons
-document.querySelectorAll('.brand-btn[data-filter]').forEach(btn => {
-    btn.addEventListener('click', function () {
-        document.querySelectorAll('.brand-btn[data-filter]').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        boLoc[this.dataset.filter] = this.dataset.value;
-        trangHienTai = 1;
-        hienThiSanPham();
+  saveCart();
+  updateCartCount();
+  showToast(`Đã thêm ${product.name} vào giỏ hàng.`);
+}
+
+function goDetail(id){
+  goWithSplash(`product-detail.html?id=${id}`);
+}
+
+function createProductCard(product, showSalePercent = true){
+  const salePercent = getSalePercent(product.oldPrice, product.price);
+
+  return `
+    <div class="product-card">
+      <div class="product-img-wrap" onclick="goDetail('${product.id}')">
+        <img src="${product.img}" alt="${product.name}" loading="lazy">
+
+        ${product.badge === "new" ? `<span class="badge-new">Mới</span>` : ""}
+        ${product.badge === "sale" ? `<span class="badge-sale">Sale</span>` : ""}
+        ${showSalePercent && product.oldPrice ? `<span class="badge-sale-pct">-${salePercent}%</span>` : ""}
+
+        <button class="quick-add" onclick="event.stopPropagation(); addToCart('${product.id}')">
+          <i class="bi bi-bag-plus"></i>
+          Thêm nhanh
+        </button>
+      </div>
+
+      <div class="product-body">
+        <div class="product-category">${getCategoryName(product.category)}</div>
+
+        <div class="product-rating">
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-half"></i>
+          <span>4.8</span>
+        </div>
+
+        <div class="product-name">${product.name}</div>
+
+        <div class="product-price">
+          <span class="price-current">${formatMoney(product.price)}</span>
+          ${product.oldPrice ? `<span class="price-old">${formatMoney(product.oldPrice)}</span>` : ""}
+          ${showSalePercent && product.oldPrice ? `<span class="price-save">-${salePercent}%</span>` : ""}
+        </div>
+
+        <button class="btn-add-card" onclick="addToCart('${product.id}')">
+          <i class="bi bi-bag-plus"></i>
+          Thêm vào giỏ
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function renderNewStrip(){
+  const newProducts = PRODUCTS.filter(item => item.badge === "new");
+
+  newStrip.innerHTML = newProducts.map(item => `
+    <div class="new-strip-item">
+      ${createProductCard(item, false)}
+    </div>
+  `).join("");
+
+  stripOffset = 0;
+  newStrip.style.transform = "translateX(0)";
+  updateStripButtons();
+}
+
+function updateStripButtons(){
+  const wrapper = document.querySelector(".new-strip-wrap");
+  const visible = Math.floor(wrapper.offsetWidth / STRIP_CARD_WIDTH);
+  const total = PRODUCTS.filter(item => item.badge === "new").length;
+  const maxOffset = Math.max(0, total - visible);
+
+  document.getElementById("stripPrev").disabled = stripOffset <= 0;
+  document.getElementById("stripNext").disabled = stripOffset >= maxOffset;
+}
+
+function moveStrip(direction){
+  const wrapper = document.querySelector(".new-strip-wrap");
+  const visible = Math.floor(wrapper.offsetWidth / STRIP_CARD_WIDTH);
+  const total = PRODUCTS.filter(item => item.badge === "new").length;
+  const maxOffset = Math.max(0, total - visible);
+
+  stripOffset += direction;
+
+  if(stripOffset < 0) stripOffset = 0;
+  if(stripOffset > maxOffset) stripOffset = maxOffset;
+
+  newStrip.style.transform = `translateX(-${stripOffset * STRIP_CARD_WIDTH}px)`;
+  updateStripButtons();
+}
+
+function getFilteredProducts(){
+  let result = [...PRODUCTS];
+
+  if(filters.category !== "all"){
+    result = result.filter(item => item.category === filters.category);
+  }
+
+  if(filters.brand !== "all"){
+    result = result.filter(item => item.brand === filters.brand);
+  }
+
+  result = result.filter(item => item.price <= filters.price);
+
+  if(searchText){
+    const keyword = searchText.toLowerCase();
+
+    result = result.filter(item =>
+      item.name.toLowerCase().includes(keyword) ||
+      item.brand.toLowerCase().includes(keyword)
+    );
+  }
+
+  if(sortType === "price-asc"){
+    result.sort((a, b) => a.price - b.price);
+  }
+
+  if(sortType === "price-desc"){
+    result.sort((a, b) => b.price - a.price);
+  }
+
+  if(sortType === "name-asc"){
+    result.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  return result;
+}
+
+function renderProducts(){
+  const products = getFilteredProducts();
+  const saleProducts = products.filter(item => item.badge === "sale");
+
+  document.getElementById("totalCount").textContent = products.length;
+
+  renderSaleProducts(saleProducts);
+  renderProductPage(products);
+  renderPagination(products.length);
+}
+
+function renderSaleProducts(saleProducts){
+  if(!saleProducts.length){
+    saleWrap.style.display = "none";
+    saleGrid.innerHTML = "";
+    return;
+  }
+
+  saleWrap.style.display = "block";
+  saleGrid.innerHTML = saleProducts.slice(0, 3).map(item => `
+    <div class="col-sm-6 col-xl-4">
+      ${createProductCard(item, true)}
+    </div>
+  `).join("");
+}
+
+function renderProductPage(products){
+  const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
+  const pageProducts = products.slice(start, start + PRODUCTS_PER_PAGE);
+
+  document.getElementById("showingCount").textContent = pageProducts.length;
+
+  if(!products.length){
+    productGrid.innerHTML = "";
+    emptyState.style.display = "block";
+    return;
+  }
+
+  emptyState.style.display = "none";
+
+  productGrid.innerHTML = pageProducts.map(item => `
+    <div class="col-sm-6 col-xl-4">
+      ${createProductCard(item, true)}
+    </div>
+  `).join("");
+}
+
+function renderPagination(totalProducts){
+  const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
+
+  if(totalPages <= 1){
+    pagination.innerHTML = "";
+    return;
+  }
+
+  let html = `
+    <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
+      <a class="page-link" href="#" onclick="changePage(${currentPage - 1}); return false;">‹</a>
+    </li>
+  `;
+
+  for(let i = 1; i <= totalPages; i++){
+    html += `
+      <li class="page-item ${i === currentPage ? "active" : ""}">
+        <a class="page-link" href="#" onclick="changePage(${i}); return false;">${i}</a>
+      </li>
+    `;
+  }
+
+  html += `
+    <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
+      <a class="page-link" href="#" onclick="changePage(${currentPage + 1}); return false;">›</a>
+    </li>
+  `;
+
+  pagination.innerHTML = html;
+}
+
+function changePage(page){
+  const totalPages = Math.ceil(getFilteredProducts().length / PRODUCTS_PER_PAGE);
+
+  if(page < 1 || page > totalPages) return;
+
+  currentPage = page;
+  renderProducts();
+
+  document.querySelector(".product-toolbar").scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+}
+
+function resetFilters(){
+  filters = {
+    category:"all",
+    brand:"all",
+    price:5000000
+  };
+
+  searchText = "";
+  sortType = "default";
+  currentPage = 1;
+
+  document.getElementById("searchInput").value = "";
+  setCustomSelectValue("categorySelect", "all");
+  setCustomSelectValue("brandSelect", "all");
+  document.getElementById("priceRange").value = 5000000;
+  document.getElementById("priceLabel").textContent = "5.000.000đ";
+  setCustomSelectValue("sortSelect", "default");
+
+  renderProducts();
+}
+
+function getCustomSelectValue(id){
+  return document.getElementById(id).dataset.value;
+}
+
+function setCustomSelectValue(id, value){
+  const select = document.getElementById(id);
+  const option = select.querySelector(`.sportix-option[data-value="${value}"]`);
+
+  if(!select || !option) return;
+
+  select.dataset.value = value;
+  select.querySelector(".sportix-select-btn span").textContent = option.textContent;
+
+  select.querySelectorAll(".sportix-option").forEach(item => {
+    item.classList.toggle("active", item.dataset.value === value);
+  });
+}
+
+function initCustomSelect(id, onChange){
+  const select = document.getElementById(id);
+  const button = select.querySelector(".sportix-select-btn");
+  const options = select.querySelectorAll(".sportix-option");
+
+  button.addEventListener("click", event => {
+    event.stopPropagation();
+
+    document.querySelectorAll(".sportix-select.open").forEach(item => {
+      if(item !== select) item.classList.remove("open");
     });
-});
 
-document.getElementById('searchInput').addEventListener('input', function () {
-    tuKhoaTimKiem = this.value.trim();
-    trangHienTai = 1;
-    hienThiSanPham();
-});
+    select.classList.toggle("open");
+  });
 
-document.getElementById('priceRange').addEventListener('input', function () {
-    boLoc.price = parseInt(this.value);
-    document.getElementById('priceLabel').textContent = dinhDangGia(boLoc.price);
-    trangHienTai = 1;
-    hienThiSanPham();
-});
+  options.forEach(option => {
+    option.addEventListener("click", event => {
+      event.stopPropagation();
+      setCustomSelectValue(id, option.dataset.value);
+      select.classList.remove("open");
+      onChange(option.dataset.value);
+    });
+  });
+}
 
-// ==================== KHỞI CHẠY ====================
-document.getElementById('cartCount').textContent = gioHang.reduce((s, x) => s + x.qty, 0);
-hienThiNewStrip();
-capNhatStripNav();
-hienThiSanPham();
+function initFilterEvents(){
+  initCustomSelect("categorySelect", value => {
+    filters.category = value;
+    currentPage = 1;
+    renderProducts();
+  });
+
+  initCustomSelect("brandSelect", value => {
+    filters.brand = value;
+    currentPage = 1;
+    renderProducts();
+  });
+
+  document.getElementById("searchInput").addEventListener("input", event => {
+    searchText = event.target.value.trim();
+    currentPage = 1;
+    renderProducts();
+  });
+
+  document.getElementById("priceRange").addEventListener("input", event => {
+    filters.price = Number(event.target.value);
+    document.getElementById("priceLabel").textContent = formatMoney(filters.price);
+    currentPage = 1;
+    renderProducts();
+  });
+
+  initCustomSelect("sortSelect", value => {
+    sortType = value;
+    currentPage = 1;
+    renderProducts();
+  });
+
+  document.addEventListener("click", () => {
+    document.querySelectorAll(".sportix-select.open").forEach(item => {
+      item.classList.remove("open");
+    });
+  });
+
+  document.getElementById("stripPrev").addEventListener("click", () => moveStrip(-1));
+  document.getElementById("stripNext").addEventListener("click", () => moveStrip(1));
+
+  window.addEventListener("resize", updateStripButtons);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  updateCartCount();
+  renderNewStrip();
+  renderProducts();
+  initFilterEvents();
+});

@@ -723,3 +723,266 @@
   opacity:1;
   transform:scale(1);
 }
+
+.user-nav{
+  position:relative;
+}
+
+.user-dropdown{
+  position:absolute;
+  top:115%;
+  right:0;
+  min-width:190px;
+  padding:8px;
+  border-radius:18px;
+  background:white;
+  border:1px solid #D9EAF8;
+  box-shadow:0 18px 45px rgba(15,23,42,.14);
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(10px);
+  transition:.25s;
+  z-index:9999;
+}
+
+.user-nav.open .user-dropdown{
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0);
+}
+
+.user-dropdown button{
+  width:100%;
+  border:none;
+  background:#FFF5F5;
+  color:#EF4444;
+  border-radius:13px;
+  padding:11px 14px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.logout-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,.35);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:99999;
+}
+
+.logout-modal.show{
+  display:flex;
+}
+
+.logout-box{
+  width:min(360px,90%);
+  padding:26px;
+  border-radius:26px;
+  background:white;
+  text-align:center;
+  box-shadow:0 25px 70px rgba(15,23,42,.22);
+}
+
+.logout-box i{
+  width:54px;
+  height:54px;
+  margin:0 auto 14px;
+  border-radius:18px;
+  display:grid;
+  place-items:center;
+  color:#006FE6;
+  background:linear-gradient(135deg,#EAF6FF,#F3FFE4);
+  font-size:1.5rem;
+}
+
+.logout-box h3{
+  font-weight:900;
+  color:#0F172A;
+  margin-bottom:8px;
+}
+
+.logout-box p{
+  color:#64748B;
+  margin-bottom:20px;
+}
+
+.logout-actions{
+  display:flex;
+  gap:10px;
+}
+
+.logout-actions button{
+  flex:1;
+  height:46px;
+  border:none;
+  border-radius:15px;
+  font-weight:900;
+}
+
+.btn-cancel-logout{
+  background:#EAF6FF;
+  color:#006FE6;
+}
+
+.btn-confirm-logout{
+  color:white;
+  background:linear-gradient(135deg,#119DFF,#006FE6 58%,#A8E82E);
+}
+
+
+.sale-modal{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+
+.sale-modal.show{
+  display:flex;
+}
+
+.sale-modal-bg{
+  position:absolute;
+  inset:0;
+  background:rgba(15,23,42,.42);
+  backdrop-filter:blur(7px);
+}
+
+.sale-card{
+  position:relative;
+  width:min(560px,92vw);
+  border-radius:30px;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 12% 10%, rgba(168,232,46,.35), transparent 28%),
+    linear-gradient(135deg,#119DFF,#006FE6 58%,#A8E82E);
+  box-shadow:0 30px 90px rgba(15,23,42,.35);
+  color:white;
+  animation:salePop .35s ease both;
+}
+
+.sale-card::after{
+  content:"";
+  position:absolute;
+  right:-70px;
+  bottom:-80px;
+  width:230px;
+  height:230px;
+  border-radius:50%;
+  background:rgba(255,255,255,.16);
+}
+
+.sale-card-content{
+  position:relative;
+  z-index:2;
+  padding:42px 38px 34px;
+  text-align:center;
+}
+
+.sale-close{
+  position:absolute;
+  top:16px;
+  right:16px;
+  z-index:3;
+  width:42px;
+  height:42px;
+  border:none;
+  border-radius:50%;
+  background:rgba(255,255,255,.9);
+  color:#0F172A;
+}
+
+.sale-kicker{
+  display:inline-flex;
+  padding:7px 14px;
+  border-radius:999px;
+  background:rgba(255,255,255,.18);
+  font-size:.75rem;
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+.sale-card h2{
+  margin:18px 0 22px;
+  font-family:'Montserrat',sans-serif;
+  font-size:2.2rem;
+  font-weight:900;
+}
+
+.sale-percent-row{
+  display:grid;
+  grid-template-columns:1fr 1px 1fr;
+  align-items:center;
+  gap:22px;
+}
+
+.sale-percent-row span{
+  font-weight:800;
+  opacity:.9;
+}
+
+.sale-percent-row strong{
+  display:block;
+  font-size:4rem;
+  line-height:1;
+  font-weight:900;
+}
+
+.sale-percent-row p{
+  margin:8px 0 0;
+  font-weight:700;
+  opacity:.9;
+}
+
+.sale-divider{
+  height:110px;
+  background:rgba(255,255,255,.35);
+}
+
+.sale-note{
+  margin:24px 0 20px;
+  font-weight:700;
+  opacity:.92;
+}
+
+.sale-btn{
+  width:100%;
+  height:54px;
+  border:none;
+  border-radius:17px;
+  background:white;
+  color:#006FE6;
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+@keyframes salePop{
+  from{
+    opacity:0;
+    transform:scale(.9) translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:scale(1) translateY(0);
+  }
+}
+
+@media(max-width:576px){
+  .sale-card-content{
+    padding:38px 22px 26px;
+  }
+
+  .sale-percent-row{
+    gap:14px;
+  }
+
+  .sale-percent-row strong{
+    font-size:2.8rem;
+  }
+}

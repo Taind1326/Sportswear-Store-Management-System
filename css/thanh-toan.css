@@ -1,0 +1,273 @@
+/* HERO */
+.sp-hero {
+  position: relative;
+  padding: 88px 20px 76px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(168,232,46,.28), transparent 22%),
+    radial-gradient(circle at 80% 25%, rgba(255,255,255,.25), transparent 18%),
+    linear-gradient(135deg, #EAF8FF 0%, #8DD2FF 25%, #2E9CFF 60%, #59C6D1 100%);
+}
+.sp-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 70%, rgba(168,232,46,.22), transparent 22%),
+    radial-gradient(circle at 88% 76%, rgba(255,255,255,.2), transparent 22%);
+  pointer-events: none;
+}
+.sp-hero > * { position: relative; z-index: 1; }
+.sp-hero-tag {
+  background: var(--lime-soft);
+  border: 1px solid #DCF5A8;
+  border-radius: 999px;
+  padding: 7px 17px;
+  font-size: .78rem;
+  letter-spacing: 2px;
+  color: var(--blue-dark);
+  text-transform: uppercase;
+  font-weight: 900;
+}
+.sp-hero h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(2.2rem, 5.5vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1;
+  color: white;
+  text-transform: uppercase;
+  margin-bottom: .75rem;
+  text-shadow: 0 16px 42px rgba(15,23,42,.2);
+}
+.sp-hero h1 span { color: var(--lime); }
+.sp-hero p {
+  color: rgba(255,255,255,.92);
+  font-size: 1rem;
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.7;
+  font-weight: 600;
+}
+
+/* SECTION */
+.sp-section {
+  flex: 1;
+  padding: 70px 0 78px;
+  background:
+    radial-gradient(circle at 5% 20%, rgba(168,232,46,.16), transparent 20%),
+    radial-gradient(circle at 92% 8%, rgba(17,157,255,.14), transparent 22%),
+    #F5FAFF;
+}
+.sp-section-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  font-weight: 900;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 0;
+}
+.sp-section-title span { color: var(--blue-dark); }
+
+/* METHOD CARDS */
+.sp-method-card {
+  background: rgba(255,255,255,.96);
+  border: 1px solid rgba(217,234,248,.9);
+  border-radius: 22px;
+  padding: 26px;
+  box-shadow: 0 18px 50px rgba(17,157,255,.09);
+  height: 100%;
+  transition: .25s;
+}
+.sp-method-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(17,157,255,.35);
+  box-shadow: 0 24px 60px rgba(17,157,255,.13);
+}
+.sp-method-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: 14px;
+}
+.sp-method-card h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: .9rem;
+  font-weight: 900;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.sp-method-tag {
+  font-size: .73rem;
+  font-weight: 800;
+  color: var(--blue-dark);
+  background: var(--blue-soft);
+  border-radius: 999px;
+  padding: 2px 10px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+.sp-method-card p {
+  color: var(--muted);
+  font-size: .86rem;
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+.sp-method-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: .76rem;
+  font-weight: 800;
+  background: var(--lime-soft);
+  color: #3a7900;
+  border: 1px solid #DCF5A8;
+  border-radius: 999px;
+  padding: 5px 12px;
+}
+.sp-badge-blue { background: var(--blue-soft); color: var(--blue-dark); border-color: #B0D8FF; }
+.sp-badge-purple { background: #F3E5F5; color: #6A1B9A; border-color: #CE93D8; }
+.sp-badge-green { background: #E8F5E9; color: #1B5E20; border-color: #A5D6A7; }
+
+/* WALLET SECTION */
+.sp-wallet-section {
+  background: rgba(255,255,255,.96);
+  border: 1px solid rgba(217,234,248,.9);
+  border-radius: 22px;
+  padding: 28px 30px;
+  box-shadow: 0 18px 50px rgba(17,157,255,.09);
+  text-align: center;
+}
+.sp-wallet-label {
+  font-size: .75rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 900;
+}
+.sp-wallet-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #F8FCFF;
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  padding: 9px 18px;
+  font-size: .84rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+/* BANK CARDS */
+.sp-bank-card {
+  background: rgba(255,255,255,.96);
+  border: 1px solid rgba(217,234,248,.9);
+  border-radius: 22px;
+  padding: 28px;
+  box-shadow: 0 18px 50px rgba(17,157,255,.09);
+  height: 100%;
+}
+.sp-bank-icon {
+  width: 52px;
+  height: 52px;
+  background: linear-gradient(135deg, #EAF6FF, #CCEEFF);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: var(--blue-dark);
+  flex-shrink: 0;
+}
+.sp-bank-card h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 900;
+  color: var(--text);
+}
+.sp-bank-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+}
+.sp-bank-label {
+  font-size: .82rem;
+  color: var(--muted);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.sp-bank-value {
+  font-size: .88rem;
+  color: var(--text);
+  text-align: right;
+}
+.sp-bank-note {
+  background: var(--blue-soft);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: .82rem;
+  color: var(--blue-dark);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.sp-bank-note i { flex-shrink: 0; margin-top: 2px; }
+
+/* FAQ */
+.sp-faq {
+  background: rgba(255,255,255,.96);
+  border: 1px solid rgba(217,234,248,.9);
+  border-radius: 30px;
+  padding: 34px 36px;
+  box-shadow: 0 18px 50px rgba(17,157,255,.09);
+}
+.sp-faq-header {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+  color: var(--text);
+}
+.sp-faq-header span { color: var(--blue-dark); }
+.sp-faq-item { border-bottom: 1.5px solid var(--border) !important; background: transparent; }
+.sp-faq-btn {
+  width: 100%;
+  background: transparent !important;
+  border: none;
+  box-shadow: none !important;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: .95rem;
+  font-weight: 800;
+  padding: 1.1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  text-align: left;
+  transition: .2s;
+}
+.sp-faq-btn:hover, .sp-faq-btn:not(.collapsed) { color: var(--blue-dark); }
+.sp-faq-btn::after { display: none; }
+.sp-faq-btn i { font-size: .9rem; color: var(--muted); transition: .3s; margin-left: auto; flex-shrink: 0; }
+.sp-faq-btn:not(.collapsed) i { transform: rotate(45deg); color: var(--blue-dark); }
+.sp-faq-body { color: var(--muted); font-size: .9rem; line-height: 1.75; padding: 0 0 1.15rem; }
+
+@media (max-width: 768px) {
+  .sp-hero { padding: 64px 18px 58px; }
+  .sp-section { padding: 46px 0 58px; }
+  .sp-faq { padding: 28px 22px; border-radius: 24px; }
+}

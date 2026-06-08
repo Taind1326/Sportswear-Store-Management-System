@@ -1,197 +1,284 @@
-﻿// ==================== TRẠNG THÁI ====================
-let sanPhamHienTai = null;
-let sizeDaChon = null;
-let mauDaChon = 'Đen';
-let gioHang = JSON.parse(localStorage.getItem('sz_cart') || '[]');
-let daThich = false;
+﻿let currentProduct = null;
+let selectedSize = null;
+let selectedColor = "Đen";
+let isLiked = false;
 
-// ==================== KHỞI TẠO ====================
-function layIdTuURL() {
-    try {
-        const params = new URLSearchParams(window.location.search);
-        const id = parseInt(params.get('id'));
-        if (id) return id;
-    } catch (e) { }
+const CART_KEY = "sportix_cart";
+let cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
 
-    // Fallback: tách thủ công (hoạt động khi mở file:// trên máy)
-    const match = window.location.href.match(/[?&]id=(\d+)/);
-    if (match) return parseInt(match[1]);
+function getProductIdFromUrl(){
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
 
-    return 1; // mặc định sản phẩm đầu tiên
+  if(id) return String(id);
+
+  const match = window.location.href.match(/[?&]id=([^&]+)/);
+  return match ? String(match[1]) : String(PRODUCTS[0]?.id || "");
 }
 
-function khoiTao() {
-    const id = layIdTuURL();
-    sanPhamHienTai = PRODUCTS.find(p => p.id === id) || PRODUCTS[0];
-    hienThiChiTiet();
-    hienThiSanPhamLienQuan();
-    capNhatSoBadgeGio();
+function formatMoney(value){
+  return value.toLocaleString("vi-VN") + "đ";
 }
 
-function dinhDangGia(n) {
-    return n.toLocaleString('vi-VN') + 'đ';
+function updateCartCount(){
+  const total = cart.reduce((sum, item) => sum + item.qty, 0);
+  document.getElementById("cartCount").textContent = total;
 }
 
-// ==================== HIỂN THỊ CHI TIẾT ====================
-function hienThiChiTiet() {
-    const p = sanPhamHienTai;
-    document.title = `${p.name} | Hawk Shop`;
-    document.getElementById('breadProduct').textContent = p.name;
-    document.getElementById('infoBrand').textContent = p.brand;
-    document.getElementById('infoName').textContent = p.name;
-    document.getElementById('infoPrice').textContent = dinhDangGia(p.price);
+function initDetail(){
+  const id = getProductIdFromUrl();
+  currentProduct = PRODUCTS.find(item => String(item.id) === id) || PRODUCTS[0];
 
-    // Giá gốc & phần trăm giảm
-    if (p.oldPrice) {
-        document.getElementById('infoOldPrice').textContent = dinhDangGia(p.oldPrice);
-        const phanTramGiam = Math.round((1 - p.price / p.oldPrice) * 100);
-        const tagGiam = document.getElementById('infoDiscount');
-        tagGiam.style.display = 'inline';
-        tagGiam.textContent = `-${phanTramGiam}%`;
-    }
+  renderProductDetail();
+  renderRelatedProducts();
+  updateCartCount();
+  initColorEvents();
+}
 
-    // Badge mới / sale
-    const badge = document.getElementById('mainBadge');
-    if (p.badge === 'new') { badge.textContent = 'Mới'; badge.className = 'badge-detail badge-new'; }
-    else if (p.badge === 'sale') { badge.textContent = 'Sale'; badge.className = 'badge-detail badge-sale'; }
-    else badge.style.display = 'none';
+function renderProductDetail(){
+  const product = currentProduct;
 
-    // Ảnh chính & thumbnails
-    const anhChinh = document.getElementById('mainImg');
-    anhChinh.src = p.imgs[0];
-    anhChinh.alt = p.name;
-    document.getElementById('thumbList').innerHTML = p.imgs.map((img, i) => `
-    <div class="thumb ${i === 0 ? 'active' : ''}" onclick="doiAnhChinh('${img}', this)">
-      <img src="${img}" alt=""/>
-    </div>
-  `).join('');
+  document.title = `${product.name} - SPORTIX`;
+  document.getElementById("breadProduct").textContent = product.name;
+  document.getElementById("infoBrand").textContent = product.brand;
+  document.getElementById("infoName").textContent = product.name;
+  document.getElementById("infoPrice").textContent = formatMoney(product.price);
 
-    // Nút chọn size
-    document.getElementById('sizeButtons').innerHTML = p.sizes.map(s => `
-    <button class="size-btn ${p.unavailable.includes(s) ? 'unavailable' : ''}"
-      onclick="${p.unavailable.includes(s) ? '' : `chonSize(this,'${s}')`}">${s}</button>
-  `).join('');
+  const oldPrice = document.getElementById("infoOldPrice");
+  const discount = document.getElementById("infoDiscount");
 
-    // Mô tả
-    document.getElementById('tabDescription').textContent = p.desc;
+  if(product.oldPrice){
+    const percent = Math.round((1 - product.price / product.oldPrice) * 100);
+    oldPrice.textContent = formatMoney(product.oldPrice);
+    discount.style.display = "inline-flex";
+    discount.textContent = `-${percent}%`;
+  }else{
+    oldPrice.textContent = "";
+    discount.style.display = "none";
+  }
 
-    // Thông số kỹ thuật
-    document.getElementById('specTable').innerHTML = p.specs.map(([k, v]) =>
-        `<tr><td>${k}</td><td>${v}</td></tr>`
-    ).join('');
+  const badge = document.getElementById("mainBadge");
 
-    // Đánh giá (dùng DANH_GIA từ product-data.js)
-    document.getElementById('reviewList').innerHTML = DANH_GIA.map(r => `
-    <div style="background:var(--dark3);border-radius:8px;padding:1rem;">
-      <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem">
-        <strong style="color:var(--text)">${r.user}</strong>
-        <span style="color:var(--muted);font-size:0.8rem">${r.date}</span>
+  if(product.badge === "new"){
+    badge.textContent = "Mới";
+    badge.className = "badge-detail badge-new";
+  }else if(product.badge === "sale"){
+    badge.textContent = "Sale";
+    badge.className = "badge-detail badge-sale";
+  }else{
+    badge.textContent = "";
+    badge.className = "badge-detail";
+  }
+
+  const images = product.imgs && product.imgs.length ? product.imgs : [product.img];
+  document.getElementById("mainImg").src = images[0];
+  document.getElementById("mainImg").alt = product.name;
+
+  document.getElementById("thumbList").innerHTML = images.map((image, index) => `
+    <button class="thumb ${index === 0 ? "active" : ""}" onclick="changeMainImage('${image}', this)">
+      <img src="${image}" alt="${product.name}">
+    </button>
+  `).join("");
+
+  document.getElementById("sizeButtons").innerHTML = product.sizes.map(size => {
+    const unavailable = product.unavailable && product.unavailable.includes(size);
+
+    return `
+      <button class="size-btn ${unavailable ? "unavailable" : ""}"
+        ${unavailable ? "disabled" : `onclick="selectSize(this, '${size}')"`}>
+        ${size}
+      </button>
+    `;
+  }).join("");
+
+  document.getElementById("tabDescription").textContent = product.desc;
+  document.getElementById("specTable").innerHTML = product.specs.map(([key, value]) => `
+    <tr>
+      <td>${key}</td>
+      <td>${value}</td>
+    </tr>
+  `).join("");
+
+  renderReviews();
+}
+
+function renderReviews(){
+  const reviewList = document.getElementById("reviewList");
+
+  if(typeof DANH_GIA === "undefined" || !DANH_GIA.length){
+    reviewList.innerHTML = `<div class="review-empty">Chưa có đánh giá nào cho sản phẩm này.</div>`;
+    return;
+  }
+
+  reviewList.innerHTML = DANH_GIA.map(review => `
+    <div class="review-card">
+      <div class="review-head">
+        <strong>${review.user}</strong>
+        <span>${review.date}</span>
       </div>
-      <div style="color:var(--primary);margin-bottom:0.4rem">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
-      <p style="color:var(--muted);font-size:0.9rem;margin:0">${r.text}</p>
+      <div class="review-stars">${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}</div>
+      <p>${review.text}</p>
     </div>
-  `).join('');
+  `).join("");
 }
 
-// ==================== SẢN PHẨM LIÊN QUAN ====================
-function hienThiSanPhamLienQuan() {
-    const p = sanPhamHienTai;
-    const lienQuan = PRODUCTS.filter(x => x.id !== p.id && x.category === p.category).slice(0, 4);
-    const duPhong = PRODUCTS.filter(x => x.id !== p.id).slice(0, 4);
-    const danhSach = lienQuan.length >= 2 ? lienQuan : duPhong;
-    document.getElementById('relatedGrid').innerHTML = danhSach.map(r => `
+function renderRelatedProducts(){
+  const related = PRODUCTS
+    .filter(item => item.id !== currentProduct.id && item.category === currentProduct.category)
+    .slice(0, 4);
+
+  const fallback = PRODUCTS
+    .filter(item => item.id !== currentProduct.id)
+    .slice(0, 4);
+
+  const products = related.length >= 2 ? related : fallback;
+
+  document.getElementById("relatedGrid").innerHTML = products.map(item => `
     <div class="col-6 col-md-3">
-      <a class="related-card" href="product-detail.html?id=${r.id}">
-        <img src="${r.imgs[0]}" alt="${r.name}"/>
+      <a href="#" onclick="goWithSplash('product-detail.html?id=${item.id}'); return false;" class="related-card">
+        <img src="${item.img}" alt="${item.name}">
         <div class="related-card-body">
-          <div class="related-card-name">${r.name}</div>
-          <div class="related-card-price">${dinhDangGia(r.price)}</div>
+          <div class="related-card-name">${item.name}</div>
+          <div class="related-card-price">${formatMoney(item.price)}</div>
         </div>
       </a>
     </div>
-  `).join('');
+  `).join("");
 }
 
-// ==================== THAO TÁC GALLERY ====================
-function doiAnhChinh(src, el) {
-    document.getElementById('mainImg').src = src;
-    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
+function changeMainImage(src, button){
+  document.getElementById("mainImg").src = src;
+
+  document.querySelectorAll(".thumb").forEach(item => {
+    item.classList.remove("active");
+  });
+
+  button.classList.add("active");
 }
 
-// ==================== CHỌN SIZE ====================
-function chonSize(btn, size) {
-    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    sizeDaChon = size;
-    document.getElementById('sizeLabel').textContent = size;
+function selectSize(button, size){
+  document.querySelectorAll(".size-btn").forEach(item => {
+    item.classList.remove("active");
+  });
+
+  button.classList.add("active");
+  selectedSize = size;
+  document.getElementById("sizeLabel").textContent = size;
 }
 
-// ==================== CHỌN MÀU ====================
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.color-swatch').forEach(sw => {
-        sw.addEventListener('click', function () {
-            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-            this.classList.add('active');
-            mauDaChon = this.dataset.color;
-            document.getElementById('colorLabel').textContent = mauDaChon;
-        });
+function initColorEvents(){
+  document.querySelectorAll(".color-swatch").forEach(button => {
+    button.addEventListener("click", () => {
+      document.querySelectorAll(".color-swatch").forEach(item => {
+        item.classList.remove("active");
+      });
+
+      button.classList.add("active");
+      selectedColor = button.dataset.color;
+      document.getElementById("colorLabel").textContent = selectedColor;
     });
-});
-
-// ==================== SỐ LƯỢNG ====================
-function thayDoiSoLuong(buoc) {
-    const input = document.getElementById('qtyInput');
-    let soLuong = parseInt(input.value) + buoc;
-    if (soLuong < 1) soLuong = 1;
-    if (soLuong > 99) soLuong = 99;
-    input.value = soLuong;
+  });
 }
 
-// ==================== GIỎ HÀNG ====================
-function themVaoGio() {
-    if (!sizeDaChon) { hienThongBao('Vui lòng chọn kích thước!'); return; }
-    const p = sanPhamHienTai;
-    const soLuong = parseInt(document.getElementById('qtyInput').value);
-    const khoa = `${p.id}-${sizeDaChon}-${mauDaChon}`;
-    const daCoTrongGio = gioHang.find(x => x.key === khoa);
-    if (daCoTrongGio) daCoTrongGio.qty += soLuong;
-    else gioHang.push({ key: khoa, id: p.id, name: p.name, price: p.price, qty: soLuong, size: sizeDaChon, color: mauDaChon });
-    localStorage.setItem('sz_cart', JSON.stringify(gioHang));
-    capNhatSoBadgeGio();
-    hienThongBao(`Đã thêm <strong>${p.name}</strong> (${sizeDaChon}) vào giỏ!`);
+function changeQuantity(step){
+  const input = document.getElementById("qtyInput");
+  let quantity = Number(input.value) || 1;
+
+  quantity += step;
+
+  if(quantity < 1) quantity = 1;
+  if(quantity > 99) quantity = 99;
+
+  input.value = quantity;
 }
 
-// ==================== YÊU THÍCH ====================
-function batTatYeuThich() {
-    daThich = !daThich;
-    const btn = document.getElementById('wishBtn');
-    btn.classList.toggle('liked', daThich);
-    btn.innerHTML = daThich ? '<i class="bi bi-heart-fill"></i>' : '<i class="bi bi-heart"></i>';
-    hienThongBao(daThich ? 'Đã thêm vào yêu thích!' : 'Đã xóa khỏi yêu thích.');
+function getQuantity(){
+  const quantity = Number(document.getElementById("qtyInput").value) || 1;
+  return Math.min(Math.max(quantity, 1), 99);
 }
 
-// ==================== TAB ====================
-function chuyenTab(id, btn) {
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('tab-' + id).classList.add('active');
-    btn.classList.add('active');
+function addCurrentToCart(){
+  if(!selectedSize){
+    showToast("Vui lòng chọn kích thước trước khi thêm vào giỏ.", false);
+    return false;
+  }
+
+  const quantity = getQuantity();
+  const key = `${currentProduct.id}-${selectedSize}-${selectedColor}`;
+  const existed = cart.find(item => item.key === key);
+
+  if(existed){
+    existed.qty += quantity;
+  }else{
+    cart.push({
+      key:key,
+      id:currentProduct.id,
+      name:currentProduct.name,
+      price:currentProduct.price,
+      image:currentProduct.img,
+      qty:quantity,
+      size:selectedSize,
+      color:selectedColor,
+      selected:true
+    });
+  }
+
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  updateCartCount();
+  showToast(`Đã thêm ${currentProduct.name} vào giỏ hàng.`, true);
+  return true;
 }
 
-// ==================== THÔNG BÁO ====================
-function hienThongBao(msg) {
-    const wrap = document.getElementById('toastWrap');
-    const el = document.createElement('div');
-    el.className = 'my-toast';
-    el.innerHTML = msg;
-    wrap.appendChild(el);
-    setTimeout(() => el.remove(), 3000);
+function isLoggedIn(){
+  return localStorage.getItem("sportix_user") !== null;
 }
 
-function capNhatSoBadgeGio() {
-    document.getElementById('cartCount').textContent = gioHang.reduce((s, x) => s + x.qty, 0);
+function buyCurrentNow(){
+  if(!addCurrentToCart()) return;
+
+  if(!isLoggedIn()){
+    sessionStorage.setItem("redirectAfterLogin", "cart.html");
+    goWithSplash("login.html");
+    return;
+  }
+
+  goWithSplash("cart.html");
 }
 
-// ==================== KHỞI CHẠY ====================
-khoiTao();
+function toggleWishlist(){
+  isLiked = !isLiked;
+
+  const button = document.getElementById("wishBtn");
+  button.classList.toggle("liked", isLiked);
+  button.innerHTML = isLiked ? `<i class="bi bi-heart-fill"></i>` : `<i class="bi bi-heart"></i>`;
+
+  showToast(isLiked ? "Đã thêm vào yêu thích." : "Đã xóa khỏi yêu thích.", true);
+}
+
+function switchTab(id, button){
+  document.querySelectorAll(".tab-content").forEach(item => {
+    item.classList.remove("active");
+  });
+
+  document.querySelectorAll(".tab-btn").forEach(item => {
+    item.classList.remove("active");
+  });
+
+  document.getElementById(`tab-${id}`).classList.add("active");
+  button.classList.add("active");
+}
+
+function showToast(message, success = true){
+  const toast = document.getElementById("detailToast");
+
+  toast.querySelector("span").textContent = message;
+  toast.querySelector("i").className = success ? "bi bi-check-circle-fill" : "bi bi-exclamation-circle-fill";
+  toast.classList.add("show");
+
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2400);
+}
+
+document.addEventListener("DOMContentLoaded", initDetail);

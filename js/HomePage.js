@@ -125,11 +125,6 @@ function renderProducts(showAll = false){
   });
 }
 
-function toggleProducts(){
-  expanded = !expanded;
-  renderProducts(expanded);
-  btnToggleProducts.textContent = expanded ? "Thu gọn" : "Xem thêm";
-}
 
 function getCart(){
   return JSON.parse(localStorage.getItem("sportix_cart") || "[]");
@@ -218,8 +213,9 @@ function requireLogin(targetPage){
   return true;
 }
 
+
 function buyNow(){
-  requireLogin("DSSanPham.html");
+  requireLogin("product-list.html");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -228,5 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
   initBackToTop();
 
-  btnToggleProducts.addEventListener("click", toggleProducts);
+btnToggleProducts.addEventListener("click", () => {
+  goWithSplash("product-list.html");
+});
 });

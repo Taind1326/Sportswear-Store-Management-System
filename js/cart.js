@@ -151,7 +151,16 @@ function removeItem(id) {
 }
 
 function isLoggedIn(){
-  return localStorage.getItem("sportix_user") !== null;
+  const user = localStorage.getItem("sportix_user");
+
+  if(!user) return false;
+
+  try{
+    const data = JSON.parse(user);
+    return !!(data && data.email);
+  }catch{
+    return false;
+  }
 }
 
 function goCheckout(){
@@ -169,12 +178,21 @@ function goCheckout(){
 
   if(!isLoggedIn()){
     sessionStorage.setItem("redirectAfterLogin", "checkout.html");
-    goWithSplash("login.html");
+    showCartToast(
+      "Cần đăng nhập",
+      "Vui lòng đăng nhập trước khi thanh toán."
+    );
+
+    setTimeout(() => {
+      goWithSplash("login.html");
+    }, 900);
+
     return;
   }
 
   goWithSplash("checkout.html");
 }
+
 document.addEventListener("DOMContentLoaded", renderCart);
 
 

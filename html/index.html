@@ -30,7 +30,7 @@
       <div class="collapse navbar-collapse justify-content-end" id="navMenu">
         <ul class="navbar-nav gap-1 align-items-md-center mt-3 mt-md-0">
           <li class="nav-item"><a href="#" onclick="goWithSplash('index.html'); return false;" class="nav-link sz-nav-link active">Trang chủ</a></li>
-          <li class="nav-item"><a href="#" onclick="goWithSplash('DSSanPham.html'); return false;" class="nav-link sz-nav-link">Sản phẩm</a></li>
+          <li class="nav-item"><a href="#" onclick="goWithSplash('product-list.html'); return false;" class="nav-link sz-nav-link">Sản phẩm</a></li>
           <li class="nav-item"><a href="#" onclick="goWithSplash('about.html'); return false;" class="nav-link sz-nav-link">Giới thiệu</a></li>
           <li class="nav-item"><a href="#" onclick="goWithSplash('contact.html'); return false;" class="nav-link sz-nav-link">Liên hệ</a></li>
           <li class="nav-item ms-md-2"><a href="#" onclick="goWithSplash('login.html'); return false;" class="nav-link sz-nav-btn">Đăng nhập</a></li>
@@ -140,7 +140,7 @@
             <h2>Chọn môn thể thao của bạn</h2>
           </div>
 
-          <button onclick="goWithSplash('DSSanPham.html')">
+          <button onclick="goWithSplash('product-list.html')">
             Xem tất cả
           </button>
         </div>
@@ -269,10 +269,10 @@
         <div class="col-6 col-lg-2">
           <h5 class="sz-footer-title">Hỗ trợ</h5>
           <ul class="sz-footer-links">
-            <li><a href="#">Thanh toán</a></li>
-            <li><a href="#">Vận chuyển</a></li>
-            <li><a href="#">Đổi trả</a></li>
-            <li><a href="#">Liên hệ</a></li>
+              <li><a href="#">Liên hệ</a></li>
+              <li><a href="thanh-toan.html">Thanh toán</a></li>
+              <li><a href="van-chuyen.html">Vận chuyển</a></li>
+              <li><a href="doi-tra.html">Đổi trả</a></li>
           </ul>
         </div>
 
@@ -305,6 +305,46 @@
     <i class="bi bi-check-circle-fill"></i>
     <span>Đã thêm sản phẩm vào giỏ hàng.</span>
   </div>
+
+  <div class="sale-modal" id="saleModal">
+  <div class="sale-modal-bg" onclick="closeSaleModal()"></div>
+
+  <div class="sale-card">
+    <button class="sale-close" onclick="closeSaleModal()">
+      <i class="bi bi-x-lg"></i>
+    </button>
+
+    <div class="sale-card-content">
+      <span class="sale-kicker">SPORTIX SALE</span>
+
+      <h2>Ưu đãi chào hè</h2>
+
+      <div class="sale-percent-row">
+        <div>
+          <span>Giảm</span>
+          <strong>30%</strong>
+          <p>Cho giày chạy bộ</p>
+        </div>
+
+        <div class="sale-divider"></div>
+
+        <div>
+          <span>Freeship</span>
+          <strong>0đ</strong>
+          <p>Đơn từ 2.000.000đ</p>
+        </div>
+      </div>
+
+      <p class="sale-note">
+        Áp dụng cho một số sản phẩm nổi bật tại SPORTIX.
+      </p>
+
+      <button class="sale-btn" onclick="goSaleProduct()">
+        Xem ưu đãi ngay
+      </button>
+    </div>
+  </div>
+</div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../js/common.js"></script>
