@@ -1,7 +1,15 @@
+function safeJSON(key, fallback = null) {
+    try {
+        return JSON.parse(localStorage.getItem(key)) || fallback;
+    } catch {
+        return fallback;
+    }
+}
+
 function getCurrentUser() {
-    return JSON.parse(localStorage.getItem("sportix_user")) ||
-           JSON.parse(localStorage.getItem("sportix_current_user")) ||
-           JSON.parse(localStorage.getItem("currentUser")) ||
+    return safeJSON("sportix_user") ||
+           safeJSON("sportix_current_user") ||
+           safeJSON("currentUser") ||
            null;
 }
 
@@ -16,7 +24,7 @@ function getUserKey(key) {
 }
 
 const CART_KEY = getUserKey("sportix_cart");
-const CHECKOUT_KEY = getUserKey("sportix_checkout");
+const CHECKOUT_KEY = "sportix_checkout";
 const ORDERS_KEY = "sportix_orders";
 
 let cart = loadCart();
@@ -26,14 +34,19 @@ function formatMoney(value) {
 }
 
 function loadCart() {
-    const data = localStorage.getItem(CART_KEY);
+    const userCart = safeJSON(CART_KEY, []);
 
-    if (!data) {
-        localStorage.setItem(CART_KEY, JSON.stringify(demoCart));
-        return demoCart;
+    if (userCart.length) return userCart;
+
+    const oldCart = safeJSON("sportix_cart", []);
+
+    if (oldCart.length && CART_KEY !== "sportix_cart") {
+        localStorage.setItem(CART_KEY, JSON.stringify(oldCart));
+        localStorage.removeItem("sportix_cart");
+        return oldCart;
     }
 
-    return JSON.parse(data);
+    return [];
 }
 
 const CATEGORY_LABELS = {
@@ -44,19 +57,37 @@ const CATEGORY_LABELS = {
     phukien: "Phụ kiện"
 };
 
+function getItemCode(item) {
+    return item.key || `${item.id}-${item.size || ""}-${item.color || ""}`;
+}
+
 function migrateCartCategories() {
     let changed = false;
 
     cart = cart.map(item => {
-        if (item.category) return item;
+        let newItem = { ...item };
 
-        const found = typeof PRODUCTS !== "undefined"
-            ? PRODUCTS.find(p => String(p.id) === String(item.id))
-            : null;
+        if (!newItem.key) {
+            newItem.key = getItemCode(newItem);
+            changed = true;
+        }
 
-        changed = true;
-        const slug = found ? found.category : "";
-        return { ...item, category: CATEGORY_LABELS[slug] || slug };
+        if (!newItem.category) {
+            const found = typeof PRODUCTS !== "undefined"
+                ? PRODUCTS.find(p => String(p.id) === String(newItem.id))
+                : null;
+
+            const slug = found ? found.category : "";
+            newItem.category = CATEGORY_LABELS[slug] || slug;
+            changed = true;
+        }
+
+        if (newItem.selected === undefined) {
+            newItem.selected = true;
+            changed = true;
+        }
+
+        return newItem;
     });
 
     if (changed) saveCart();
@@ -70,6 +101,8 @@ function renderCart() {
     const cartList = document.getElementById("cartList");
     const selectAll = document.getElementById("selectAll");
 
+    if (!cartList || !selectAll) return;
+
     if (!cart.length) {
         cartList.innerHTML = `
             <div class="cart-empty">
@@ -78,6 +111,7 @@ function renderCart() {
                 <p>Hãy chọn thêm sản phẩm yêu thích của bạn.</p>
             </div>
         `;
+
         selectAll.checked = false;
         updateTotal();
         return;
@@ -88,24 +122,28 @@ function renderCart() {
             <input type="checkbox"
                    class="cart-item-check"
                    ${item.selected ? "checked" : ""}
-                   onchange="toggleItem('${item.id}')">
+                   onchange="toggleItem('${getItemCode(item)}')">
 
             <img src="${item.image}" class="cart-img" alt="${item.name}">
 
             <div>
                 <div class="cart-name">${item.name}</div>
-                <div class="cart-meta">${item.category || ""}</div>
+                <div class="cart-meta">
+                    ${item.category || ""}
+                    ${item.size ? ` | Size: ${item.size}` : ""}
+                    ${item.color ? ` | Màu: ${item.color}` : ""}
+                </div>
                 <div class="cart-price">${formatMoney(item.price)}</div>
             </div>
 
             <div class="cart-actions">
                 <div class="qty-box">
-                    <button onclick="changeQty('${item.id}', -1)">−</button>
+                    <button onclick="changeQty('${getItemCode(item)}', -1)">−</button>
                     <span>${item.qty}</span>
-                    <button onclick="changeQty('${item.id}', 1)">+</button>
+                    <button onclick="changeQty('${getItemCode(item)}', 1)">+</button>
                 </div>
 
-                <button class="btn-remove" onclick="removeItem('${item.id}')">
+                <button class="btn-remove" onclick="removeItem('${getItemCode(item)}')">
                     <i class="bi bi-trash"></i> Xóa
                 </button>
             </div>
@@ -136,11 +174,12 @@ function toggleAll() {
     renderCart();
 }
 
-function toggleItem(id) {
+function toggleItem(code) {
     cart = cart.map(item => {
-        if (String(item.id) === String(id)) {
+        if (getItemCode(item) === String(code)) {
             return { ...item, selected: !item.selected };
         }
+
         return item;
     });
 
@@ -148,11 +187,12 @@ function toggleItem(id) {
     renderCart();
 }
 
-function changeQty(id, amount) {
+function changeQty(code, amount) {
     cart = cart.map(item => {
-        if (String(item.id) === String(id)) {
+        if (getItemCode(item) === String(code)) {
             return { ...item, qty: Math.max(1, item.qty + amount) };
         }
+
         return item;
     });
 
@@ -160,8 +200,8 @@ function changeQty(id, amount) {
     renderCart();
 }
 
-function removeItem(id) {
-    cart = cart.filter(item => String(item.id) !== String(id));
+function removeItem(code) {
+    cart = cart.filter(item => getItemCode(item) !== String(code));
     saveCart();
     renderCart();
 }
@@ -181,6 +221,18 @@ function goCheckout() {
         return;
     }
 
+    const missingOption = selectedItems.find(item => !item.size || !item.color);
+
+    if (missingOption) {
+        showCartToast(
+            "Thiếu thông tin sản phẩm",
+            `Vui lòng chọn size và màu cho sản phẩm: ${missingOption.name}.`
+        );
+        return;
+    }
+
+    localStorage.setItem(CHECKOUT_KEY, JSON.stringify(selectedItems));
+
     if (!isLoggedIn()) {
         sessionStorage.setItem("redirectAfterLogin", "checkout.html");
 
@@ -196,14 +248,8 @@ function goCheckout() {
         return;
     }
 
-    localStorage.setItem(CHECKOUT_KEY, JSON.stringify(selectedItems));
     goWithSplash("checkout.html");
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-    migrateCartCategories();
-    renderCart();
-});
 
 function showCartToast(title, message) {
     const toast = document.getElementById("cartToast");
@@ -228,18 +274,11 @@ function goCartCategory(category) {
 
 function showOrderHistory() {
     const account = getUserAccount();
-
-    const orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
-
-    const myOrders = account
-        ? orders.filter(order =>
-            order.userAccount === account ||
-            order.customer?.email === account ||
-            order.customer?.phone === account
-        )
-        : [];
+    const orders = safeJSON(ORDERS_KEY, []);
+    const myOrders = orders.filter(order => order.userAccount === account);
 
     const container = document.getElementById("orderHistoryContent");
+    if (!container) return;
 
     if (!myOrders.length) {
         container.innerHTML = `
@@ -251,33 +290,27 @@ function showOrderHistory() {
     } else {
         container.innerHTML = [...myOrders].reverse().map(order => `
             <div class="order-card">
-
                 <div class="order-top">
                     <div class="order-id">Mã đơn: ${order.id}</div>
                     <div class="order-date">${order.date}</div>
                 </div>
 
-                <div>
-                    <strong>${order.customer.name}</strong>
-                </div>
-
+                <div><strong>${order.customer.name}</strong></div>
                 <div>${order.customer.phone}</div>
 
                 <span class="order-status">
                     <i class="bi bi-truck"></i>
-                    Đang giao
+                    ${order.status || "Đang giao"}
                 </span>
-
-                <div class="order-delivery-note">
-                    <i class="bi bi-shield-check-fill"></i>
-                    Dịch vụ Đảm bảo giao hàng đúng hạn cam đoan sẽ có lần đến giao chậm nhất là sau 5 ngày kể từ ngày đặt hàng.
-                    Nhận voucher nếu đơn đến muộn.
-                </div>
 
                 <div class="order-products">
                     ${order.items.map(item => `
                         <div class="order-product">
-                            <span>${item.name} x${item.qty}</span>
+                            <span>
+                                ${item.name} x${item.qty}
+                                ${item.size ? ` - Size ${item.size}` : ""}
+                                ${item.color ? ` - ${item.color}` : ""}
+                            </span>
                             <strong>${formatMoney(item.price * item.qty)}</strong>
                         </div>
                     `).join("")}
@@ -286,14 +319,15 @@ function showOrderHistory() {
                 <div class="order-total">
                     ${formatMoney(order.total)}
                 </div>
-
             </div>
         `).join("");
     }
 
-    const modal = new bootstrap.Modal(
-        document.getElementById("orderHistoryModal")
-    );
-
+    const modal = new bootstrap.Modal(document.getElementById("orderHistoryModal"));
     modal.show();
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    migrateCartCategories();
+    renderCart();
+});

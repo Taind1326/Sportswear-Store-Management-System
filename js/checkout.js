@@ -1,7 +1,15 @@
+function safeJSON(key, fallback = null) {
+    try {
+        return JSON.parse(localStorage.getItem(key)) || fallback;
+    } catch {
+        return fallback;
+    }
+}
+
 function getCurrentUser() {
-    return JSON.parse(localStorage.getItem("sportix_user")) ||
-           JSON.parse(localStorage.getItem("sportix_current_user")) ||
-           JSON.parse(localStorage.getItem("currentUser")) ||
+    return safeJSON("sportix_user") ||
+           safeJSON("sportix_current_user") ||
+           safeJSON("currentUser") ||
            null;
 }
 
@@ -16,7 +24,7 @@ function getUserKey(key) {
 }
 
 const CART_KEY = getUserKey("sportix_cart");
-const CHECKOUT_KEY = getUserKey("sportix_checkout");
+const CHECKOUT_KEY = "sportix_checkout";
 const ORDERS_KEY = "sportix_orders";
 
 let orderItems = [];
@@ -35,10 +43,9 @@ function showCheckoutToast(title, message) {
 
     toast.querySelector("strong").textContent = title;
     toast.querySelector("p").textContent = message;
-
     toast.classList.add("show");
-    clearTimeout(showCheckoutToast.timer);
 
+    clearTimeout(showCheckoutToast.timer);
     showCheckoutToast.timer = setTimeout(() => {
         toast.classList.remove("show");
     }, 2600);
@@ -79,12 +86,12 @@ function loadCheckoutItems() {
     const cartData = localStorage.getItem(CART_KEY);
 
     if (checkoutData) {
-        orderItems = JSON.parse(checkoutData);
+        orderItems = safeJSON(CHECKOUT_KEY, []);
         return;
     }
 
     if (cartData) {
-        const cartItems = JSON.parse(cartData);
+        const cartItems = safeJSON(CART_KEY, []);
         orderItems = cartItems.filter(item => item.selected);
         localStorage.setItem(CHECKOUT_KEY, JSON.stringify(orderItems));
         return;
@@ -95,6 +102,7 @@ function loadCheckoutItems() {
 
 function renderOrderList() {
     const orderList = document.getElementById("orderList");
+    if (!orderList) return;
 
     if (!orderItems.length) {
         orderList.innerHTML = `
@@ -112,7 +120,11 @@ function renderOrderList() {
                 <img src="${item.image}" alt="${item.name}">
                 <div>
                     <div class="order-name">${item.name}</div>
-                    <div class="order-qty">Số lượng: ${item.qty}</div>
+                    <div class="order-qty">
+                        Số lượng: ${item.qty}
+                        ${item.size ? ` | Size: ${item.size}` : ""}
+                        ${item.color ? ` | Màu: ${item.color}` : ""}
+                    </div>
                 </div>
             </div>
             <div class="order-price">${formatMoney(item.price * item.qty)}</div>
@@ -143,24 +155,18 @@ function getDiscountAmount(subTotal) {
 
     if (!code) return 0;
 
-    const vouchersData = localStorage.getItem("sportix_vouchers");
+    const vouchers = safeJSON("sportix_vouchers", []);
+    const voucher = vouchers.find(v => v.code === code);
 
-    if (vouchersData) {
-        const vouchers = JSON.parse(vouchersData);
-        const voucher = vouchers.find(v => v.code === code);
+    if (voucher) {
+        if (subTotal < (voucher.minOrder || 0)) return 0;
 
-        if (voucher) {
-            if (subTotal >= (voucher.minOrder || 0)) {
-                if (voucher.type === "percent") {
-                    return Math.round(subTotal * (voucher.value / 100));
-                }
+        if (voucher.type === "percent") {
+            return Math.round(subTotal * (voucher.value / 100));
+        }
 
-                if (voucher.type === "fixed") {
-                    return voucher.value;
-                }
-            }
-
-            return 0;
+        if (voucher.type === "fixed") {
+            return voucher.value;
         }
     }
 
@@ -203,6 +209,15 @@ function updateTotal() {
     }
 }
 
+function removeVietnameseTones(str) {
+    return str
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/đ/g, "d")
+        .replace(/Đ/g, "D")
+        .toLowerCase();
+}
+
 function initLocationSelect() {
     const provinceInput = document.getElementById("province");
     const districtInput = document.getElementById("district");
@@ -217,15 +232,6 @@ function initLocationSelect() {
     const districtMenu = districtBox.querySelector(".custom-select-menu");
 
     const provinces = window.vietnamData || [];
-
-    function removeVietnameseTones(str) {
-        return str
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .replace(/đ/g, "d")
-            .replace(/Đ/g, "D")
-            .toLowerCase();
-    }
 
     function renderProvinceOptions() {
         provinceMenu.innerHTML = `
@@ -263,7 +269,7 @@ function initLocationSelect() {
                 provinceBox.classList.remove("open");
 
                 districtInput.value = "";
-                districtBtn.textContent = "Chọn quận/huyện";
+                districtBtn.textContent = "Chọn phường/xã";
 
                 renderDistrictOptions(selectedProvince?.districts || []);
 
@@ -277,7 +283,7 @@ function initLocationSelect() {
     function renderDistrictOptions(districts) {
         districtMenu.innerHTML = `
             <div class="select-search-box">
-                <input type="text" id="districtSearch" placeholder="Tìm quận/huyện...">
+                <input type="text" id="districtSearch" placeholder="Tìm phường/xã...">
             </div>
             ${districts.map(item => {
                 const name = typeof item === "string" ? item : item.name;
@@ -323,17 +329,8 @@ function initLocationSelect() {
 
     districtBox.querySelector(".custom-select-btn").onclick = () => {
         if (!provinceInput.value) {
-            showCheckoutToast(
-                "Chưa chọn tỉnh/thành phố",
-                "Vui lòng chọn tỉnh/thành phố trước."
-            );
-
-            showError(
-                provinceInput,
-                "provinceError",
-                "Vui lòng chọn tỉnh/thành phố trước."
-            );
-
+            showCheckoutToast("Chưa chọn tỉnh/thành phố", "Vui lòng chọn tỉnh/thành phố trước.");
+            showError(provinceInput, "provinceError", "Vui lòng chọn tỉnh/thành phố trước.");
             return;
         }
 
@@ -342,13 +339,8 @@ function initLocationSelect() {
     };
 
     document.addEventListener("click", e => {
-        if (!provinceBox.contains(e.target)) {
-            provinceBox.classList.remove("open");
-        }
-
-        if (!districtBox.contains(e.target)) {
-            districtBox.classList.remove("open");
-        }
+        if (!provinceBox.contains(e.target)) provinceBox.classList.remove("open");
+        if (!districtBox.contains(e.target)) districtBox.classList.remove("open");
     });
 }
 
@@ -429,11 +421,7 @@ function initCheckoutValidation() {
         if (/^0[0-9]{9}$/.test(phoneInput.value.trim())) {
             showSuccess(phoneInput, "phoneError");
         } else {
-            showError(
-                phoneInput,
-                "phoneError",
-                "Số điện thoại phải có 10 số và bắt đầu bằng 0."
-            );
+            showError(phoneInput, "phoneError", "Số điện thoại phải có 10 số và bắt đầu bằng 0.");
         }
     });
 
@@ -457,52 +445,31 @@ function validateForm() {
     if (!nameInput.value.trim()) {
         showError(nameInput, "nameError", "Vui lòng nhập họ tên.");
         isValid = false;
-    } else {
-        showSuccess(nameInput, "nameError");
-    }
+    } else showSuccess(nameInput, "nameError");
 
     if (!/^0[0-9]{9}$/.test(phoneInput.value.trim())) {
-        showError(
-            phoneInput,
-            "phoneError",
-            "Số điện thoại phải có 10 số và bắt đầu bằng 0."
-        );
+        showError(phoneInput, "phoneError", "Số điện thoại phải có 10 số và bắt đầu bằng 0.");
         isValid = false;
-    } else {
-        showSuccess(phoneInput, "phoneError");
-    }
+    } else showSuccess(phoneInput, "phoneError");
 
     if (!provinceInput.value) {
         showError(provinceInput, "provinceError", "Vui lòng chọn tỉnh/thành phố.");
         isValid = false;
-    } else {
-        showSuccess(provinceInput, "provinceError");
-    }
+    } else showSuccess(provinceInput, "provinceError");
 
     if (!districtInput.value) {
         showError(districtInput, "districtError", "Vui lòng chọn phường/xã.");
         isValid = false;
-    } else {
-        showSuccess(districtInput, "districtError");
-    }
+    } else showSuccess(districtInput, "districtError");
 
     if (!addressInput.value.trim()) {
         showError(addressInput, "addressError", "Vui lòng nhập địa chỉ giao hàng.");
         isValid = false;
-    } else {
-        showSuccess(addressInput, "addressError");
-    }
+    } else showSuccess(addressInput, "addressError");
 
     if (!isValid) {
-        showCheckoutToast(
-            "Thông tin chưa hợp lệ",
-            "Vui lòng kiểm tra lại các ô đang báo lỗi."
-        );
-
-        document.querySelector(".is-invalid")?.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
+        showCheckoutToast("Thông tin chưa hợp lệ", "Vui lòng kiểm tra lại các ô đang báo lỗi.");
+        document.querySelector(".is-invalid")?.scrollIntoView({ behavior: "smooth", block: "center" });
     }
 
     return isValid;
@@ -514,14 +481,18 @@ function goCart() {
 
 function placeOrder() {
     if (!orderItems.length) {
-        showCheckoutToast(
-            "Chưa có sản phẩm",
-            "Không có sản phẩm nào để đặt hàng."
-        );
+        showCheckoutToast("Chưa có sản phẩm", "Không có sản phẩm nào để đặt hàng.");
         return;
     }
 
     if (!validateForm()) return;
+
+    const account = getUserAccount();
+
+    if (!account) {
+        showCheckoutToast("Cần đăng nhập", "Vui lòng đăng nhập trước khi đặt hàng.");
+        return;
+    }
 
     const name = document.getElementById("name").value.trim();
     const phone = document.getElementById("phone").value.trim();
@@ -535,7 +506,7 @@ function placeOrder() {
 
     const order = {
         id: "SPX" + Date.now().toString().slice(-6),
-        userAccount: getUserAccount(),
+        userAccount: account,
         date: new Date().toLocaleDateString("vi-VN"),
         customer: {
             name: name,
@@ -543,26 +514,30 @@ function placeOrder() {
             address: `${address}, ${district}, ${province}`
         },
         payment: payment,
-        paymentText: payment === "cod"
-            ? "Thanh toán khi nhận hàng"
-            : "Thanh toán QR",
+        paymentText: payment === "cod" ? "Thanh toán khi nhận hàng" : "Thanh toán QR",
         items: orderItems,
         subTotal: subTotal,
         discount: discountAmount,
         shippingFee: shippingFee,
-        total: total
+        total: total,
+        status: "Đang giao"
     };
 
-    let orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
+    const orders = safeJSON(ORDERS_KEY, []);
     orders.push(order);
-    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
 
+    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
     localStorage.setItem("sportix_last_order", JSON.stringify(order));
 
     localStorage.removeItem(CHECKOUT_KEY);
     localStorage.removeItem(CART_KEY);
 
     goWithSplash("success.html");
+}
+
+function goCheckoutCategory(category) {
+    sessionStorage.setItem("sportix_home_category", category);
+    goWithSplash("product-list.html");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -573,8 +548,3 @@ document.addEventListener("DOMContentLoaded", () => {
     initCheckoutValidation();
     updateTotal();
 });
-
-function goCheckoutCategory(category) {
-    sessionStorage.setItem("sportix_home_category", category);
-    goWithSplash("product-list.html");
-}
