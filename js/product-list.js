@@ -1,13 +1,12 @@
 ﻿let filters = {
-  category:"all",
-  brand:"all",
-  price:5000000
+  category: "all",
+  brand: "all",
+  price: 5000000
 };
 
 let searchText = "";
 let sortType = "default";
 let currentPage = 1;
-let stripOffset = 0;
 
 const PRODUCTS_PER_PAGE = 9;
 const STRIP_CARD_WIDTH = 258;
@@ -23,41 +22,39 @@ const pagination = document.getElementById("pagination");
 const newStrip = document.getElementById("newStrip");
 const cartCount = document.getElementById("cartCount");
 
-function formatMoney(value){
+function formatMoney(value) {
   return value.toLocaleString("vi-VN") + "đ";
 }
 
-function getCategoryName(category){
+function getCategoryName(category) {
   const names = {
-    giay:"Giày thể thao",
-    ao:"Áo quần",
-    gym:"Dụng cụ gym",
-    bongda:"Bóng đá",
-    phukien:"Phụ kiện"
+    giay: "Giày thể thao",
+    ao: "Áo quần",
+    gym: "Dụng cụ gym",
+    bongda: "Bóng đá",
+    phukien: "Phụ kiện"
   };
 
   return names[category] || category;
 }
 
-function getSalePercent(oldPrice, price){
-  if(!oldPrice) return 0;
+function getSalePercent(oldPrice, price) {
+  if (!oldPrice) return 0;
   return Math.round((1 - price / oldPrice) * 100);
 }
 
-function getCartCount(){
+function getCartCount() {
   return cart.reduce((sum, item) => sum + item.qty, 0);
 }
 
-function updateCartCount(){
+function updateCartCount() {
+  if (!cartCount) return;
   cartCount.textContent = getCartCount();
 }
 
-function saveCart(){
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
-}
-
-function showToast(message){
+function showToast(message) {
   const toast = document.getElementById("productToast");
+  if (!toast) return;
 
   toast.querySelector("span").textContent = message;
   toast.classList.add("show");
@@ -69,35 +66,16 @@ function showToast(message){
   }, 2200);
 }
 
-function addToCart(id){
-  const product = PRODUCTS.find(item => item.id == id);
-  if(!product) return;
-
-  const existed = cart.find(item => item.id == id);
-
-  if(existed){
-    existed.qty++;
-  }else{
-    cart.push({
-      id:product.id,
-      name:product.name,
-      price:product.price,
-      image:product.img,
-      qty:1,
-      selected:true
-    });
-  }
-
-  saveCart();
-  updateCartCount();
-  showToast(`Đã thêm ${product.name} vào giỏ hàng.`);
-}
-
-function goDetail(id){
+function addToCart(id) {
+  sessionStorage.setItem("sportix_need_option", "true");
   goWithSplash(`product-detail.html?id=${id}`);
 }
 
-function createProductCard(product, showSalePercent = true){
+function goDetail(id) {
+  goWithSplash(`product-detail.html?id=${id}`);
+}
+
+function createProductCard(product, showSalePercent = true) {
   const salePercent = getSalePercent(product.oldPrice, product.price);
 
   return `
@@ -109,9 +87,9 @@ function createProductCard(product, showSalePercent = true){
         ${product.badge === "sale" ? `<span class="badge-sale">Sale</span>` : ""}
         ${showSalePercent && product.oldPrice ? `<span class="badge-sale-pct">-${salePercent}%</span>` : ""}
 
-        <button class="quick-add" onclick="event.stopPropagation(); addToCart('${product.id}')">
+        <button class="quick-add" type="button" onclick="event.stopPropagation(); addToCart('${product.id}')">
           <i class="bi bi-bag-plus"></i>
-          Thêm nhanh
+          Chọn nhanh
         </button>
       </div>
 
@@ -135,16 +113,16 @@ function createProductCard(product, showSalePercent = true){
           ${showSalePercent && product.oldPrice ? `<span class="price-save">-${salePercent}%</span>` : ""}
         </div>
 
-        <button class="btn-add-card" onclick="addToCart('${product.id}')">
+        <button class="btn-add-card" type="button" onclick="addToCart('${product.id}')">
           <i class="bi bi-bag-plus"></i>
-          Thêm vào giỏ
+          Chọn size / màu
         </button>
       </div>
     </div>
   `;
 }
 
-function renderNewStrip(){
+function renderNewStrip() {
   const newProducts = PRODUCTS.filter(item => item.badge === "new");
 
   newStrip.innerHTML = newProducts.map(item => `
@@ -153,26 +131,23 @@ function renderNewStrip(){
     </div>
   `).join("");
 
-  stripOffset = 0;
-  newStrip.style.transform = "translateX(0)";
   updateStripButtons();
 }
 
-function updateStripButtons(){
+function updateStripButtons() {
   const wrapper = document.querySelector(".new-strip-wrap");
   const prevBtn = document.getElementById("stripPrev");
   const nextBtn = document.getElementById("stripNext");
 
-  if(!wrapper || !prevBtn || !nextBtn) return;
+  if (!wrapper || !prevBtn || !nextBtn) return;
 
   prevBtn.disabled = wrapper.scrollLeft <= 2;
   nextBtn.disabled = wrapper.scrollLeft + wrapper.clientWidth >= wrapper.scrollWidth - 2;
 }
 
-
-function moveStrip(direction){
+function moveStrip(direction) {
   const wrapper = document.querySelector(".new-strip-wrap");
-  if(!wrapper) return;
+  if (!wrapper) return;
 
   wrapper.scrollBy({
     left: direction * STRIP_CARD_WIDTH,
@@ -182,20 +157,20 @@ function moveStrip(direction){
   setTimeout(updateStripButtons, 350);
 }
 
-function getFilteredProducts(){
+function getFilteredProducts() {
   let result = [...PRODUCTS];
 
-  if(filters.category !== "all"){
+  if (filters.category !== "all") {
     result = result.filter(item => item.category === filters.category);
   }
 
-  if(filters.brand !== "all"){
+  if (filters.brand !== "all") {
     result = result.filter(item => item.brand === filters.brand);
   }
 
   result = result.filter(item => item.price <= filters.price);
 
-  if(searchText){
+  if (searchText) {
     const keyword = searchText.toLowerCase();
 
     result = result.filter(item =>
@@ -204,22 +179,22 @@ function getFilteredProducts(){
     );
   }
 
-  if(sortType === "price-asc"){
+  if (sortType === "price-asc") {
     result.sort((a, b) => a.price - b.price);
   }
 
-  if(sortType === "price-desc"){
+  if (sortType === "price-desc") {
     result.sort((a, b) => b.price - a.price);
   }
 
-  if(sortType === "name-asc"){
+  if (sortType === "name-asc") {
     result.sort((a, b) => a.name.localeCompare(b.name));
   }
 
   return result;
 }
 
-function renderProducts(){
+function renderProducts() {
   const products = getFilteredProducts();
   const saleProducts = products.filter(item => item.badge === "sale");
 
@@ -230,14 +205,15 @@ function renderProducts(){
   renderPagination(products.length);
 }
 
-function renderSaleProducts(saleProducts){
-  if(!saleProducts.length){
+function renderSaleProducts(saleProducts) {
+  if (!saleProducts.length) {
     saleWrap.style.display = "none";
     saleGrid.innerHTML = "";
     return;
   }
 
   saleWrap.style.display = "block";
+
   saleGrid.innerHTML = saleProducts.slice(0, 3).map(item => `
     <div class="col-sm-6 col-xl-4">
       ${createProductCard(item, true)}
@@ -245,13 +221,13 @@ function renderSaleProducts(saleProducts){
   `).join("");
 }
 
-function renderProductPage(products){
+function renderProductPage(products) {
   const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
   const pageProducts = products.slice(start, start + PRODUCTS_PER_PAGE);
 
   document.getElementById("showingCount").textContent = pageProducts.length;
 
-  if(!products.length){
+  if (!products.length) {
     productGrid.innerHTML = "";
     emptyState.style.display = "block";
     return;
@@ -266,10 +242,10 @@ function renderProductPage(products){
   `).join("");
 }
 
-function renderPagination(totalProducts){
+function renderPagination(totalProducts) {
   const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 
-  if(totalPages <= 1){
+  if (totalPages <= 1) {
     pagination.innerHTML = "";
     return;
   }
@@ -280,7 +256,7 @@ function renderPagination(totalProducts){
     </li>
   `;
 
-  for(let i = 1; i <= totalPages; i++){
+  for (let i = 1; i <= totalPages; i++) {
     html += `
       <li class="page-item ${i === currentPage ? "active" : ""}">
         <a class="page-link" href="#" onclick="changePage(${i}); return false;">${i}</a>
@@ -297,25 +273,25 @@ function renderPagination(totalProducts){
   pagination.innerHTML = html;
 }
 
-function changePage(page){
+function changePage(page) {
   const totalPages = Math.ceil(getFilteredProducts().length / PRODUCTS_PER_PAGE);
 
-  if(page < 1 || page > totalPages) return;
+  if (page < 1 || page > totalPages) return;
 
   currentPage = page;
   renderProducts();
 
   document.querySelector(".product-toolbar").scrollIntoView({
-    behavior:"smooth",
-    block:"start"
+    behavior: "smooth",
+    block: "start"
   });
 }
 
-function resetFilters(){
+function resetFilters() {
   filters = {
-    category:"all",
-    brand:"all",
-    price:5000000
+    category: "all",
+    brand: "all",
+    price: 5000000
   };
 
   searchText = "";
@@ -323,24 +299,22 @@ function resetFilters(){
   currentPage = 1;
 
   document.getElementById("searchInput").value = "";
-  setCustomSelectValue("categorySelect", "all");
-  setCustomSelectValue("brandSelect", "all");
   document.getElementById("priceRange").value = 5000000;
   document.getElementById("priceLabel").textContent = "5.000.000đ";
+
+  setCustomSelectValue("categorySelect", "all");
+  setCustomSelectValue("brandSelect", "all");
   setCustomSelectValue("sortSelect", "default");
 
   renderProducts();
 }
 
-function getCustomSelectValue(id){
-  return document.getElementById(id).dataset.value;
-}
-
-function setCustomSelectValue(id, value){
+function setCustomSelectValue(id, value) {
   const select = document.getElementById(id);
-  const option = select.querySelector(`.sportix-option[data-value="${value}"]`);
+  if (!select) return;
 
-  if(!select || !option) return;
+  const option = select.querySelector(`.sportix-option[data-value="${value}"]`);
+  if (!option) return;
 
   select.dataset.value = value;
   select.querySelector(".sportix-select-btn span").textContent = option.textContent;
@@ -350,8 +324,10 @@ function setCustomSelectValue(id, value){
   });
 }
 
-function initCustomSelect(id, onChange){
+function initCustomSelect(id, onChange) {
   const select = document.getElementById(id);
+  if (!select) return;
+
   const button = select.querySelector(".sportix-select-btn");
   const options = select.querySelectorAll(".sportix-option");
 
@@ -359,7 +335,7 @@ function initCustomSelect(id, onChange){
     event.stopPropagation();
 
     document.querySelectorAll(".sportix-select.open").forEach(item => {
-      if(item !== select) item.classList.remove("open");
+      if (item !== select) item.classList.remove("open");
     });
 
     select.classList.toggle("open");
@@ -368,6 +344,7 @@ function initCustomSelect(id, onChange){
   options.forEach(option => {
     option.addEventListener("click", event => {
       event.stopPropagation();
+
       setCustomSelectValue(id, option.dataset.value);
       select.classList.remove("open");
       onChange(option.dataset.value);
@@ -375,7 +352,7 @@ function initCustomSelect(id, onChange){
   });
 }
 
-function initFilterEvents(){
+function initFilterEvents() {
   initCustomSelect("categorySelect", value => {
     filters.category = value;
     currentPage = 1;
@@ -384,6 +361,12 @@ function initFilterEvents(){
 
   initCustomSelect("brandSelect", value => {
     filters.brand = value;
+    currentPage = 1;
+    renderProducts();
+  });
+
+  initCustomSelect("sortSelect", value => {
+    sortType = value;
     currentPage = 1;
     renderProducts();
   });
@@ -401,12 +384,6 @@ function initFilterEvents(){
     renderProducts();
   });
 
-  initCustomSelect("sortSelect", value => {
-    sortType = value;
-    currentPage = 1;
-    renderProducts();
-  });
-
   document.addEventListener("click", () => {
     document.querySelectorAll(".sportix-select.open").forEach(item => {
       item.classList.remove("open");
@@ -420,46 +397,47 @@ function initFilterEvents(){
   document.querySelector(".new-strip-wrap")?.addEventListener("scroll", updateStripButtons);
 }
 
+function applyHomeCategory() {
+  const homeCategory = sessionStorage.getItem("sportix_home_category");
 
-document.addEventListener("DOMContentLoaded", () => {
-   
+  if (!homeCategory) return false;
 
-    const homeCategory = sessionStorage.getItem("sportix_home_category");
-
-  if(homeCategory){
-    if(homeCategory === "new"){
-      searchText = "";
-      sortType = "default";
-      filters.category = "all";
-    }else{
-      filters.category = homeCategory;
-    }
-  }
-
-  updateCartCount();
-  renderNewStrip();
-
-  if(homeCategory && homeCategory !== "new"){
-    setCustomSelectValue("categorySelect", homeCategory);
-  }
-
-  if(homeCategory === "new"){
+  if (homeCategory === "new") {
     const newProducts = PRODUCTS.filter(item => item.badge === "new");
+
+    searchText = "";
+    sortType = "default";
+    filters.category = "all";
 
     document.getElementById("totalCount").textContent = newProducts.length;
     renderSaleProducts([]);
     renderProductPage(newProducts);
     renderPagination(newProducts.length);
-  }else{
-    renderProducts();
+
+    sessionStorage.removeItem("sportix_home_category");
+    return true;
   }
 
-  initFilterEvents();
-
+  filters.category = homeCategory;
+  setCustomSelectValue("categorySelect", homeCategory);
   sessionStorage.removeItem("sportix_home_category");
-});
 
-function goHomeCategory(category){
+  return false;
+}
+
+function goHomeCategory(category) {
   sessionStorage.setItem("sportix_home_category", category);
   goWithSplash("product-list.html");
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  updateCartCount();
+  renderNewStrip();
+  initFilterEvents();
+
+  const alreadyRendered = applyHomeCategory();
+
+  if (!alreadyRendered) {
+    renderProducts();
+  }
+});
