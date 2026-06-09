@@ -28,12 +28,6 @@
                 <a href="#thongke" class="admin-link"><i class="bi bi-bar-chart-fill"></i><span>Thống kê</span></a>
                 <a href="#caidat" class="admin-link"><i class="bi bi-gear-fill"></i><span>Cài đặt</span></a>
             </nav>
-
-            <div class="sidebar-card">
-                <i class="bi bi-trophy-fill"></i>
-                <h4>SPORTIX Pro</h4>
-                <p>Quản lý cửa hàng thể thao chuyên nghiệp hơn mỗi ngày.</p>
-            </div>
         </aside>
 
         <main class="admin-main">
@@ -59,7 +53,7 @@
                         </button>
 
                         <div class="admin-dropdown" id="adminUserDropdown">
-                            <button type="button"><i class="bi bi-person-circle"></i>Tài khoản admin</button>
+                            <button type="button" onclick="openAdminAccount()"><i class="bi bi-person-circle"></i>Tài khoản admin</button>
                             <button type="button" class="logout" id="adminLogoutBtn"><i class="bi bi-box-arrow-right"></i>Đăng xuất</button>
                         </div>
                     </div>
@@ -124,7 +118,8 @@
                         <div><span class="eyebrow">DOANH THU</span><h2>Doanh thu tuần này</h2></div>
                         <button class="admin-soft-btn" type="button">Xuất báo cáo</button>
                     </div>
-                    <div class="chart-note"><span><b class="dot blue"></b>Doanh thu</span><span><b class="dot lime"></b>Hôm nay</span></div>
+                   <div class="chart-note"><span><b class="dot blue"></b>Doanh thu tuần</span>
+</div>
                     <div class="sales-chart" id="salesChart"></div>
                 </div>
 

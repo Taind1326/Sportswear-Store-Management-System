@@ -117,7 +117,7 @@ function renderOrderList() {
     orderList.innerHTML = orderItems.map(item => `
         <div class="order-item">
             <div class="order-info">
-                <img src="${item.image}" alt="${item.name}">
+                <img src="${item.image || item.img}" alt="${item.name}">
                 <div>
                     <div class="order-name">${item.name}</div>
                     <div class="order-qty">
@@ -478,6 +478,25 @@ function validateForm() {
 function goCart() {
     goWithSplash("cart.html");
 }
+function deductStock(items) {
+    const raw = localStorage.getItem("sportix_products");
+    if (!raw) {
+        console.warn("deductStock: sportix_products trống, không trừ được tồn kho.");
+        return;
+    }
+
+    const products = JSON.parse(raw);
+
+    const updated = products.map(product => {
+        const ordered = items.find(i => String(i.id) === String(product.id));
+        if (!ordered) return product;
+        const newStock = Math.max(0, (product.stock ?? 0) - ordered.qty);
+        console.log(`Trừ tồn kho: ${product.name} | ${product.stock} → ${newStock}`);
+        return { ...product, stock: newStock };
+    });
+
+    localStorage.setItem("sportix_products", JSON.stringify(updated));
+}
 
 function placeOrder() {
     if (!orderItems.length) {
@@ -528,6 +547,8 @@ function placeOrder() {
 
     localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
     localStorage.setItem("sportix_last_order", JSON.stringify(order));
+
+    deductStock(orderItems);
 
     localStorage.removeItem(CHECKOUT_KEY);
     localStorage.removeItem(CART_KEY);

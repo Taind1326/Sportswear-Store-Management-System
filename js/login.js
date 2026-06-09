@@ -80,16 +80,26 @@ function showAlert(message) {
 }
 
 function showSuccessOverlay() {
+  const email = emailInput.value.trim().toLowerCase();
+  const isAdmin = email === "admin@sportix.vn";
+
   localStorage.setItem("sportix_user", JSON.stringify({
-    email: emailInput.value.trim()
+    email: email,
+    role: isAdmin ? "admin" : "user"
   }));
 
   successOverlay.classList.add("show");
 
   setTimeout(() => {
+    if (isAdmin) {
+      sessionStorage.removeItem("redirectAfterLogin");
+      goWithSplash("admin.html");
+      return;
+    }
+
     const redirect = sessionStorage.getItem("redirectAfterLogin") || "index.html";
     sessionStorage.removeItem("redirectAfterLogin");
-    window.location.href = redirect;
+    goWithSplash(redirect);
   }, 1500);
 }
 

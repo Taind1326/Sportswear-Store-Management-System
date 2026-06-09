@@ -204,13 +204,26 @@ const PRODUCT_DATA = {
 
 PRODUCTS.forEach(product => {
     const data = PRODUCT_DATA[product.id];
-
     product.stock = data?.stock || 0;
     product.sold = data?.sold || 0;
 });
 
-// LUÔN cập nhật localStorage
-localStorage.setItem(
-    "sportix_products",
-    JSON.stringify(PRODUCTS)
-);
+// Chỉ ghi lần đầu nếu chưa có data
+// Nếu đã có thì giữ nguyên (để tồn kho đã trừ không bị reset)
+const existingProducts = localStorage.getItem("sportix_products");
+
+if (!existingProducts) {
+    localStorage.setItem("sportix_products", JSON.stringify(PRODUCTS));
+} else {
+    // Merge: giữ stock/sold đã cập nhật, cập nhật các field khác nếu cần
+    const saved = JSON.parse(existingProducts);
+    const merged = PRODUCTS.map(p => {
+        const savedP = saved.find(s => String(s.id) === String(p.id));
+        if (savedP) {
+            // Giữ stock và sold từ localStorage (đã bị trừ)
+            return { ...p, stock: savedP.stock, sold: savedP.sold };
+        }
+        return p; // Sản phẩm mới chưa có trong localStorage
+    });
+    localStorage.setItem("sportix_products", JSON.stringify(merged));
+}

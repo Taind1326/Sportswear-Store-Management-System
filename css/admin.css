@@ -11,6 +11,12 @@
     linear-gradient(180deg,#F7FBFF 0%,#EEF8FF 100%);
 }
 
+.chart-bar.future {
+    opacity: 0.25;
+    background: var(--muted, #ccc) !important;
+    cursor: default;
+}
+
 .admin-sidebar{
   width:268px;
   min-height:100vh;
@@ -81,29 +87,42 @@
   color:var(--blue-dark);
 }
 
-.sidebar-card{
-  margin-top:28px;
-  padding:19px;
-  border-radius:24px;
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.13);
-}
-
-.sidebar-card i{
-  width:46px;
-  height:46px;
-  display:grid;
-  place-items:center;
-  border-radius:16px;
-  background:rgba(168,232,46,.13);
-  color:var(--lime);
-  font-size:1.45rem;
-}
-
-.sidebar-card h4{
-  margin:13px 0 6px;
-  font-weight:900;
+.admin-sidebar{
+  width:268px;
+  min-height:100vh;
+  height:100vh;
+  padding:24px 18px;
+  background:
+    radial-gradient(circle at top left, rgba(168,232,46,.16), transparent 30%),
+    linear-gradient(180deg,#071D36,#0B1B32 58%,#082B48);
   color:white;
+  position:fixed;
+  left:0;
+  top:0;
+  z-index:90;
+  box-shadow:18px 0 45px rgba(15,23,42,.16);
+  overflow-y:auto;
+  overflow-x:hidden;
+}
+
+.admin-menu{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:8px;
+}
+
+.admin-link{
+  min-height:52px;
+  padding:0 16px;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  color:#B8C7D9;
+  text-decoration:none;
+  font-weight:850;
+  transition:.2s;
 }
 
 .sidebar-card p{

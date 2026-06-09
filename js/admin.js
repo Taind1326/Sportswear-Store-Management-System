@@ -18,7 +18,28 @@ const orders = [
     { id: "#SX1020", customer: "Võ Văn Đức", product: "Áo khoác Runner", total: 890000, payment: "COD", status: "Đã huỷ" }
 ];
 
-const allOrders = [...orders];
+let allOrders = [];
+
+function getRealOrders() {
+    const data = JSON.parse(localStorage.getItem("sportix_orders")) || [];
+
+    return data.map(order => ({
+        id: order.id || "SPX000000",
+        customer: order.customer?.name || "Khách hàng",
+        product: order.items?.map(item => item.name).join(", ") || "Sản phẩm",
+        total: order.total || 0,
+        payment: order.paymentText || order.payment || "COD",
+        status: order.status || "Đang giao",
+        date: order.date || ""
+    }));
+}
+
+function syncAllOrders() {
+    allOrders = [
+        ...orders,
+        ...getRealOrders()
+    ];
+}
 
 const customers = [
     { id: "KH001", name: "Nguyễn Văn A", email: "vana@gmail.com", orders: 12, spend: 8500000 },
@@ -28,15 +49,6 @@ const customers = [
     { id: "KH005", name: "Hoàng Văn E", email: "vane@gmail.com", orders: 9, spend: 6700000 }
 ];
 
-const sales = [
-    { day: "T2", value: 12 },
-    { day: "T3", value: 18 },
-    { day: "T4", value: 10 },
-    { day: "T5", value: 24 },
-    { day: "T6", value: 20 },
-    { day: "T7", value: 16 },
-    { day: "CN", value: 14 }
-];
 
 const activities = [
     { icon: "bi-bag-check-fill", title: "Đơn hàng mới", text: "#SX1024 vừa được tạo thành công." },
@@ -103,32 +115,81 @@ function renderStats() {
     const statsBox = document.querySelector(".stats-grid");
     if (!statsBox) return;
 
-    const revenue = orders.reduce((s, o) => s + o.total, 0);
+    syncAllOrders();
+
+    const revenue = allOrders.reduce((s, o) => s + (o.total || 0), 0);
     const lowStock = products.filter(p => p.stock <= 12).length;
     const unread = notifications.filter(n => !n.read).length;
 
     statsBox.innerHTML = `
-    <div class="stat-card"><div class="stat-icon"><i class="bi bi-cash-stack"></i></div><div><p>Doanh thu</p><h3>${(revenue / 1000000).toFixed(1)}M</h3><span>+12.4%</span></div></div>
-    <div class="stat-card"><div class="stat-icon"><i class="bi bi-bag-check-fill"></i></div><div><p>Đơn hàng</p><h3>${orders.length}</h3><span>Hôm nay</span></div></div>
-    <div class="stat-card"><div class="stat-icon"><i class="bi bi-box-seam-fill"></i></div><div><p>Sản phẩm</p><h3>${products.length}</h3><span>Đang bán</span></div></div>
-    <div class="stat-card"><div class="stat-icon"><i class="bi bi-exclamation-triangle-fill"></i></div><div><p>Cảnh báo</p><h3>${lowStock}</h3><span class="danger">Tồn kho thấp</span></div></div>
-  `;
-}
+        <div class="stat-card">
+            <div class="stat-icon"><i class="bi bi-cash-stack"></i></div>
+            <div>
+                <p>Doanh thu</p>
+                <h3>${(revenue / 1000000).toFixed(1)}M</h3>
+                <span>Tổng đơn</span>
+            </div>
+        </div>
 
+        <div class="stat-card">
+            <div class="stat-icon"><i class="bi bi-bag-check-fill"></i></div>
+            <div>
+                <p>Đơn hàng</p>
+                <h3>${allOrders.length}</h3>
+                <span>Demo + thực tế</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon"><i class="bi bi-box-seam-fill"></i></div>
+            <div>
+                <p>Sản phẩm</p>
+                <h3>${products.length}</h3>
+                <span>Đang bán</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+            <div>
+                <p>Cảnh báo</p>
+                <h3>${lowStock}</h3>
+                <span class="danger">Cần nhập thêm</span>
+            </div>
+        </div>
+    `;
+}
 /* ───────── SALES CHART ───────── */
 
 function renderSalesChart() {
     const chart = $("salesChart");
     if (!chart) return;
-    const max = Math.max(...sales.map(s => s.value));
-    chart.innerHTML = sales.map((item, i) => `
-    <div class="chart-bar ${i === 4 ? "today" : ""}" style="height:${(item.value / max) * 100}%" title="${item.day}: ${item.value}M đ">
-      <strong>${item.value}M</strong>
-      <span>${item.day}</span>
-    </div>
-  `).join("");
-}
 
+    syncAllOrders();
+
+    const totalRevenue = allOrders.reduce((sum, order) => {
+        return sum + (order.total || 0);
+    }, 0);
+
+    const weekData = [
+        { label: "T2", value: totalRevenue * 0.18 },
+        { label: "T3", value: totalRevenue * 0.12 },
+        { label: "T4", value: totalRevenue * 0.16 },
+        { label: "T5", value: totalRevenue * 0.14 },
+        { label: "T6", value: totalRevenue * 0.20 },
+        { label: "T7", value: totalRevenue * 0.13 },
+        { label: "CN", value: totalRevenue * 0.07 }
+    ];
+
+    const max = Math.max(...weekData.map(item => item.value), 1);
+
+    chart.innerHTML = weekData.map(item => `
+        <div class="chart-bar" style="height:${Math.max((item.value / max) * 100, 8)}%">
+            <strong>${(item.value / 1000000).toFixed(1)}M</strong>
+            <span>${item.label}</span>
+        </div>
+    `).join("");
+}
 /* ───────── BEST PRODUCTS ───────── */
 
 function renderBestProducts() {
@@ -380,7 +441,7 @@ function renderProducts() {
 
     const keyword = ($("searchInput")?.value || "").toLowerCase().trim();
     const result = products
-        .filter(p => p.name.toLowerCase().includes(keyword) || p.id.toLowerCase().includes(keyword) || p.category.toLowerCase().includes(keyword))
+        .filter(p => p.name.toLowerCase().includes(keyword) || String(p.id).toLowerCase().includes(keyword) || p.category.toLowerCase().includes(keyword))
         .filter(p => selectedCategory === "all" || p.category === selectedCategory);
 
     if (!result.length) {
@@ -425,24 +486,33 @@ function renderProducts() {
 /* ───────── ORDERS TABLE ───────── */
 
 let showAllOrders = false;
-
 function renderOrders() {
     const table = $("orderTable");
     if (!table) return;
+
+    syncAllOrders();
+
     const list = showAllOrders ? allOrders : allOrders.slice(0, 3);
+
     table.innerHTML = list.map(item => `
-    <tr>
-      <td><b>${item.id}</b></td>
-      <td>${item.customer}</td>
-      <td>${item.product}</td>
-      <td>${formatMoney(item.total)}</td>
-      <td>${item.payment}</td>
-      <td>
-        <span class="badge-status ${getOrderStatusClass(item.status)}" style="cursor:pointer" onclick="cycleOrderStatus('${item.id}')" title="Click để đổi trạng thái">${item.status}</span>
-      </td>
-    </tr>
-  `).join("");
+        <tr>
+            <td><b>${item.id}</b></td>
+            <td>${item.customer}</td>
+            <td>${item.product}</td>
+            <td>${formatMoney(item.total)}</td>
+            <td>${item.payment}</td>
+            <td>
+                <span class="badge-status ${getOrderStatusClass(item.status)}"
+                      style="cursor:pointer"
+                      onclick="cycleOrderStatus('${item.id}')"
+                      title="Click để đổi trạng thái">
+                    ${item.status}
+                </span>
+            </td>
+        </tr>
+    `).join("");
 }
+
 
 function cycleOrderStatus(orderId) {
     const order = allOrders.find(o => o.id === orderId);
@@ -524,9 +594,11 @@ function buildProductModal() {
           <div class="col-6">
             <label class="sz-label">Danh mục</label>
             <select id="pm_category" class="sz-input" style="padding:0 14px">
-              <option value="Giày">Giày</option>
-              <option value="Áo">Áo</option>
-              <option value="Phụ kiện">Phụ kiện</option>
+              <option value="giay">Giày</option>
+            <option value="ao">Áo</option>
+            <option value="phukien">Phụ kiện</option>
+            <option value="gym">Gym</option>
+            <option value="bongda">Bóng đá</option>
             </select>
           </div>
           <div class="col-6">
@@ -563,7 +635,7 @@ function openProductModal(productId = null) {
     const title = $("productModalTitle");
 
     if (productId) {
-        const p = products.find(x => x.id === productId);
+        const p = products.find(x => String(x.id) === String(productId));
         if (!p) return;
         label.textContent = "SỬA SẢN PHẨM";
         title.textContent = p.name;
@@ -576,7 +648,7 @@ function openProductModal(productId = null) {
         label.textContent = "THÊM SẢN PHẨM";
         title.textContent = "Sản phẩm mới";
         $("pm_name").value = $("pm_price").value = $("pm_stock").value = $("pm_sold").value = "";
-        $("pm_category").value = "Giày";
+        $("pm_category").value = "giay";
     }
 
     $("productModal").classList.add("show");
@@ -598,15 +670,24 @@ function saveProduct() {
     if (price <= 0) { showAdminToast("Giá phải lớn hơn 0.", "error"); $("pm_price").focus(); return; }
 
     if (editingProductId) {
-        const p = products.find(x => x.id === editingProductId);
+        const p = products.find(x => String(x.id) === String(editingProductId));
         if (p) { p.name = name; p.category = category; p.price = price; p.stock = stock; p.sold = sold; }
         showAdminToast("Đã cập nhật sản phẩm thành công.");
     } else {
         const newId = "SP" + String(products.length + 1).padStart(3, "0");
-        products.push({ id: newId, name, category, price, stock, sold, image: "../img/shoe-1.jpg" });
+        products.push({
+    id: newId,
+    name,
+    category,
+    price,
+    stock,
+    sold,
+    img: "../img/shoe-1.jpg"
+});
         showAdminToast("Đã thêm sản phẩm mới thành công.");
     }
 
+    localStorage.setItem("sportix_products", JSON.stringify(products));
     closeProductModal();
     renderProducts();
     renderStats();
@@ -642,7 +723,7 @@ let pendingDeleteId = null;
 
 function confirmDeleteProduct(productId) {
     buildDeleteModal();
-    const p = products.find(x => x.id === productId);
+    const p = products.find(x => String(x.id) === String(productId));
     if (!p) return;
     pendingDeleteId = productId;
     $("deleteModalText").textContent = `Xoá "${p.name}"? Hành động này không thể hoàn tác.`;
@@ -651,10 +732,11 @@ function confirmDeleteProduct(productId) {
 }
 
 function doDeleteProduct() {
-    const idx = products.findIndex(x => x.id === pendingDeleteId);
+    const idx = products.findIndex(x => String(x.id) === String(pendingDeleteId));
     if (idx !== -1) {
         const name = products[idx].name;
         products.splice(idx, 1);
+        localStorage.setItem("sportix_products", JSON.stringify(products));
         showAdminToast(`Đã xoá "${name}".`);
     }
     $("deleteModal").classList.remove("show");
@@ -1012,6 +1094,11 @@ function initButtonWiring() {
     document.querySelector(".admin-primary-btn[href='#sanpham']")?.addEventListener("click", e => {
         setTimeout(() => openProductModal(), 400);
     });
+
+}
+
+function openAdminAccount() {
+    showAdminToast("Tài khoản admin: admin@sportix.vn");
 }
 
 /* ───────── INIT ───────── */
