@@ -17,13 +17,13 @@ The website also includes an **Admin Dashboard** that supports product managemen
 ### Website
 
 ```text
-https://YOUR_USERNAME.github.io/SPORTIX/
+[https://YOUR_USERNAME.github.io/SPORTIX/](https://taind1326.github.io/Sportswear-Store-Management-System/html/index.html)
 ```
 
 ### GitHub Repository
 
 ```text
-https://github.com/YOUR_USERNAME/SPORTIX
+[https://github.com/YOUR_USERNAME/SPORTIX](https://github.com/Taind1326/Sportswear-Store-Management-System)
 ```
 
 ---
@@ -325,7 +325,7 @@ Recommended Tools:
 Open:
 
 ```text
-html/splash.html
+html/index.html
 ```
 
 or
@@ -373,7 +373,6 @@ This project was developed for educational purposes to practice:
 
 **Nguyen Dai Tai**
 
-**Le Thi Minh Chien**
 
 Student Project – SPORTIX Sports E-commerce Website
 
