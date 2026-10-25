@@ -178,6 +178,7 @@
     <Compile Include="ViewModels\SanPhamChiTietViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
     <None Include="Areas\Admin\Views\Web.config" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -249,7 +250,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Admin\Views\Dashboard\" />
     <Folder Include="Areas\Admin\Views\DonHang\" />
     <Folder Include="Areas\Admin\Views\LoaiHang\" />
     <Folder Include="Areas\Admin\Views\SanPham\" />

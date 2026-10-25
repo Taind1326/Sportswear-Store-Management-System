@@ -1,7 +1,34 @@
-﻿
-@{
-    ViewBag.Title = "_AdminLayout";
-}
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<h2>_AdminLayout</h2>
+    <title>@ViewBag.Title - SPORTIX Admin</title>
 
+    @Styles.Render("~/Content/css")
+</head>
+<body>
+    <header class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand"
+               href="@Url.Action("Index", "Dashboard", new { area = "Admin" })">
+                SPORTIX Admin
+            </a>
+
+            <a class="btn btn-outline-light"
+               href="@Url.Action("Index", "Home", new { area = "" })">
+                Về trang chủ
+            </a>
+        </div>
+    </header>
+
+    <main class="container py-4">
+        @RenderBody()
+    </main>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
