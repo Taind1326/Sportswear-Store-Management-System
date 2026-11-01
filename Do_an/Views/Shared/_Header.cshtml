@@ -1,14 +1,10 @@
 ﻿@{
-    var controller = Convert.ToString(
-        ViewContext.RouteData.Values["controller"]
-    );
-
-    var action = Convert.ToString(
-        ViewContext.RouteData.Values["action"]
-    );
+    var controller = Convert.ToString(ViewContext.RouteData.Values["controller"]);
+    var action = Convert.ToString(ViewContext.RouteData.Values["action"]);
 }
 
-<nav class="sz-navbar navbar navbar-expand-md sticky-top">
+<nav class="sz-navbar navbar navbar-expand-md sticky-top"
+     aria-label="Điều hướng chính">
     <div class="container">
         <a href="@Url.Action("Index", "Home", new { area = "" })"
            class="navbar-brand sz-brand">
@@ -25,7 +21,7 @@
                 data-bs-target="#navMenu"
                 aria-controls="navMenu"
                 aria-expanded="false"
-                aria-label="Mở menu">
+                aria-label="Đóng hoặc mở menu">
             <i class="bi bi-list fs-3" aria-hidden="true"></i>
         </button>
 
@@ -62,7 +58,7 @@
 
                 <li class="nav-item ms-md-2">
                     <a href="@Url.Action("DangNhap", "TaiKhoan", new { area = "" })"
-                       class="nav-link sz-nav-btn">
+                       class="btn sz-nav-btn">
                         Đăng nhập
                     </a>
                 </li>
