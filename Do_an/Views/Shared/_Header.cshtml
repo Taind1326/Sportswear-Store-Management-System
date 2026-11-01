@@ -1,1 +1,72 @@
-﻿
+﻿@{
+    var controller = Convert.ToString(
+        ViewContext.RouteData.Values["controller"]
+    );
+
+    var action = Convert.ToString(
+        ViewContext.RouteData.Values["action"]
+    );
+}
+
+<nav class="sz-navbar navbar navbar-expand-md sticky-top">
+    <div class="container">
+        <a href="@Url.Action("Index", "Home", new { area = "" })"
+           class="navbar-brand sz-brand">
+            <span class="sz-logo-box">
+                <img src="@Url.Content("~/Content/sportix/img/logo.jpg")"
+                     class="sz-logo"
+                     alt="SPORTIX" />
+            </span>
+        </a>
+
+        <button class="navbar-toggler border-0 shadow-none"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navMenu"
+                aria-controls="navMenu"
+                aria-expanded="false"
+                aria-label="Mở menu">
+            <i class="bi bi-list fs-3" aria-hidden="true"></i>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end"
+             id="navMenu">
+            <ul class="navbar-nav gap-1 align-items-md-center mt-3 mt-md-0">
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "Home", new { area = "" })"
+                       class="nav-link sz-nav-link @(controller == "Home" && action == "Index" ? "active" : "")">
+                        Trang chủ
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="@Url.Action("Index", "SanPham", new { area = "" })"
+                       class="nav-link sz-nav-link @(controller == "SanPham" ? "active" : "")">
+                        Sản phẩm
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="@Url.Action("GioiThieu", "Home", new { area = "" })"
+                       class="nav-link sz-nav-link @(controller == "Home" && action == "GioiThieu" ? "active" : "")">
+                        Giới thiệu
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="@Url.Action("LienHe", "Home", new { area = "" })"
+                       class="nav-link sz-nav-link @(controller == "Home" && action == "LienHe" ? "active" : "")">
+                        Liên hệ
+                    </a>
+                </li>
+
+                <li class="nav-item ms-md-2">
+                    <a href="@Url.Action("DangNhap", "TaiKhoan", new { area = "" })"
+                       class="nav-link sz-nav-btn">
+                        Đăng nhập
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
