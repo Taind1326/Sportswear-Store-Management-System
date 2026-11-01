@@ -1,16 +1,28 @@
-﻿@{
+﻿@model IEnumerable<Do_an.Models.SanPham>
+
+@{
     ViewBag.Title = "Trang chủ";
 }
 
 <section class="container py-5">
-    <h1>Chào mừng đến với SPORTIX</h1>
+    <h1 class="mb-4">Sản phẩm SPORTIX</h1>
 
-    <p class="text-secondary">
-        Khám phá giày, trang phục và phụ kiện thể thao.
-    </p>
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h2 class="h5 card-title">
+                            @item.TenSanPham
+                        </h2>
 
-    <a href="@Url.Action("Index", "SanPham", new { area = "" })"
-       class="btn btn-primary">
-        Khám phá sản phẩm
-    </a>
+                        <p class="card-text text-secondary">
+                            @item.MoTa
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </section>
