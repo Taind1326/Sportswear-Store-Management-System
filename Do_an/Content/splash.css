@@ -1,0 +1,165 @@
+﻿/* Lớp phủ toàn màn hình */
+.sportix-splash {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef5fc;
+    font-family: Arial, sans-serif;
+}
+
+    /* Không hiển thị khi có thuộc tính hidden */
+    .sportix-splash[hidden] {
+        display: none !important;
+    }
+
+    .sportix-splash,
+    .sportix-splash * {
+        box-sizing: border-box;
+    }
+
+        /* Khung logo */
+        .sportix-splash .splash-card {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: min(460px, 86vw, 86vh);
+            height: min(460px, 86vw, 86vh);
+            border-radius: 46px;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 28px 80px rgba(15, 23, 42, 0.12);
+            animation: sportix-card-in 0.7s ease both;
+        }
+
+            .sportix-splash .splash-card::before {
+                content: "";
+                position: absolute;
+                top: -72px;
+                right: -72px;
+                width: 210px;
+                height: 210px;
+                border-radius: 50%;
+                background: linear-gradient( 135deg, rgba(17, 157, 255, 0.16), rgba(168, 232, 46, 0.46) );
+            }
+
+        /* Logo và tên thương hiệu */
+        .sportix-splash .splash-logo {
+            position: relative;
+            z-index: 1;
+            width: 300px;
+            max-width: 82%;
+            height: auto;
+            object-fit: contain;
+            animation: sportix-logo-pop 0.8s ease both;
+        }
+
+        .sportix-splash .splash-brand {
+            position: relative;
+            z-index: 1;
+            margin-top: 18px;
+            color: #006fe6;
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: 4px;
+            animation: sportix-text-up 0.8s ease 0.15s both;
+        }
+
+        /* Thanh chuyển động trang trí */
+        .sportix-splash .splash-loading {
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            width: 260px;
+            max-width: 70%;
+            height: 8px;
+            margin-top: 30px;
+            border-radius: 999px;
+            background: #d9eaf8;
+        }
+
+            .sportix-splash .splash-loading span {
+                display: block;
+                width: 0;
+                height: 100%;
+                border-radius: inherit;
+                background: linear-gradient(135deg, #119dff, #a8e82e);
+                animation: sportix-loading 1.35s ease forwards;
+            }
+
+@keyframes sportix-card-in {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.94);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes sportix-logo-pop {
+    from {
+        opacity: 0;
+        transform: scale(0.55) rotate(-6deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+}
+
+@keyframes sportix-text-up {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes sportix-loading {
+    to {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .sportix-splash .splash-card {
+        border-radius: 32px;
+    }
+
+    .sportix-splash .splash-logo {
+        width: 260px;
+    }
+
+    .sportix-splash .splash-brand {
+        font-size: 1.65rem;
+    }
+
+    .sportix-splash .splash-loading {
+        width: 220px;
+    }
+}
+
+/* Hỗ trợ người dùng chọn giảm chuyển động */
+@media (prefers-reduced-motion: reduce) {
+    .sportix-splash *,
+    .sportix-splash *::before {
+        animation: none !important;
+    }
+
+    .sportix-splash .splash-loading span {
+        width: 100%;
+    }
+}
