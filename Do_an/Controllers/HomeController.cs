@@ -1,22 +1,31 @@
-﻿using System.Web.Mvc;
+﻿using Do_an.Models;
+using System.Web.Mvc;
+using System.Linq;
 
 namespace Do_an.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly SPORTIXEntities db = new SPORTIXEntities();
+
         public ActionResult Index()
         {
-            return View();
+            var sanPham = db.SanPhams
+                .Where(sp => sp.DangBan)
+                .OrderByDescending(sp => sp.MaSanPham)
+                .ToList();
+
+            return View(sanPham);
         }
 
-        public ActionResult GioiThieu()
+        protected override void Dispose(bool disposing)
         {
-            return View();
-        }
+            if (disposing)
+            {
+                db.Dispose();
+            }
 
-        public ActionResult LienHe()
-        {
-            return View();
+            base.Dispose(disposing);
         }
     }
 }
