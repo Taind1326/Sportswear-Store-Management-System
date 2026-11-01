@@ -23,6 +23,8 @@ namespace Do_an.Models
     
         public int MaDonHang { get; set; }
         public int MaTaiKhoan { get; set; }
+        public Nullable<int> MaGiamGia { get; set; }
+        public string MaCodeDaDung { get; set; }
         public System.DateTime NgayDat { get; set; }
         public string HoTenNguoiNhan { get; set; }
         public string SoDienThoai { get; set; }
@@ -30,6 +32,7 @@ namespace Do_an.Models
         public string PhuongXa { get; set; }
         public string DiaChiCuThe { get; set; }
         public decimal TienHang { get; set; }
+        public decimal TienGiam { get; set; }
         public decimal PhiVanChuyen { get; set; }
         public Nullable<decimal> TongTien { get; set; }
         public string TrangThai { get; set; }
@@ -38,6 +41,7 @@ namespace Do_an.Models
         public Nullable<System.DateTime> NgayCapNhat { get; set; }
     
         public virtual ICollection<ChiTietDonHang> ChiTietDonHangs { get; set; }
+        public virtual MaGiamGia MaGiamGia1 { get; set; }
         public virtual TaiKhoan TaiKhoan { get; set; }
         public virtual ICollection<ThanhToan> ThanhToans { get; set; }
         public virtual ICollection<ThongBao> ThongBaos { get; set; }

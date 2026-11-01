@@ -22,6 +22,8 @@ namespace Do_an.Models
         public string KichThuoc { get; set; }
         public string MauSac { get; set; }
         public int SoLuong { get; set; }
+        public decimal GiaGoc { get; set; }
+        public int PhanTramGiam { get; set; }
         public decimal DonGia { get; set; }
         public Nullable<decimal> ThanhTien { get; set; }
     

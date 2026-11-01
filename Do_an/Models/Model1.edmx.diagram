@@ -4,35 +4,39 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="3a6ace363d034609bda542d696610894" Name="Diagram1">
-        <EntityTypeShape EntityType="SPORTIXModel.BienTheSanPham" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SPORTIXModel.ChiTietDonHang" Width="1.5" PointX="5.25" PointY="9.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SPORTIXModel.ChiTietGioHang" Width="1.5" PointX="5.25" PointY="14.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SPORTIXModel.DiaChi" Width="1.5" PointX="3" PointY="5.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SPORTIXModel.DonHang" Width="1.5" PointX="3" PointY="9" IsExpanded="true" />
-        <EntityTypeShape EntityType="SPORTIXModel.GioHang" Width="1.5" PointX="3" PointY="14.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SPORTIXModel.HinhAnhSanPham" Width="1.5" PointX="3" PointY="23.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SPORTIXModel.LoaiHang" Width="1.5" PointX="1.5" PointY="17.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SPORTIXModel.SanPham" Width="1.5" PointX="0.75" PointY="4.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SPORTIXModel.TaiKhoan" Width="1.5" PointX="0.75" PointY="9.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SPORTIXModel.ThanhToan" Width="1.5" PointX="8.25" PointY="9.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SPORTIXModel.ThongBao" Width="1.5" PointX="5.25" PointY="6" IsExpanded="true" />
-        <EntityTypeShape EntityType="SPORTIXModel.ThuongHieu" Width="1.5" PointX="1.5" PointY="20.375" IsExpanded="true" />
+      <Diagram DiagramId="ec314a090ebf48d88b4a9dd8e86f5fe1" Name="Diagram1">
+        <EntityTypeShape EntityType="SPORTIXModel.BienTheSanPham" Width="1.5" PointX="8" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPORTIXModel.ChiTietDonHang" Width="1.5" PointX="10.25" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPORTIXModel.ChiTietGioHang" Width="1.5" PointX="5.25" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPORTIXModel.DiaChi" Width="1.5" PointX="3" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPORTIXModel.DonHang" Width="1.5" PointX="8" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPORTIXModel.GioHang" Width="1.5" PointX="3" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPORTIXModel.HinhAnhSanPham" Width="1.5" PointX="8" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPORTIXModel.LoaiHang" Width="1.5" PointX="3.5" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPORTIXModel.MaGiamGia" Width="1.5" PointX="5.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPORTIXModel.SanPham" Width="1.5" PointX="5.75" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPORTIXModel.TaiKhoan" Width="1.5" PointX="0.75" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPORTIXModel.ThanhToan" Width="1.5" PointX="13.25" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPORTIXModel.ThongBao" Width="1.5" PointX="10.25" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPORTIXModel.ThongBaoWebsite" Width="1.5" PointX="3" PointY="20.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SPORTIXModel.ThuongHieu" Width="1.5" PointX="3.5" PointY="4" IsExpanded="true" />
         <AssociationConnector Association="SPORTIXModel.FK__BienTheSa__MaSan__59063A47" ManuallyRouted="false" />
-        <AssociationConnector Association="SPORTIXModel.FK__ChiTietDo__MaBie__787EE5A0" ManuallyRouted="false" />
-        <AssociationConnector Association="SPORTIXModel.FK__ChiTietGi__MaBie__693CA210" ManuallyRouted="false" />
-        <AssociationConnector Association="SPORTIXModel.FK__ChiTietDo__MaDon__778AC167" ManuallyRouted="false" />
-        <AssociationConnector Association="SPORTIXModel.FK__ChiTietGi__MaGio__68487DD7" ManuallyRouted="false" />
+        <AssociationConnector Association="SPORTIXModel.FK__ChiTietDo__MaBie__0A9D95DB" ManuallyRouted="false" />
+        <AssociationConnector Association="SPORTIXModel.FK__ChiTietGi__MaBie__6A30C649" ManuallyRouted="false" />
+        <AssociationConnector Association="SPORTIXModel.FK__ChiTietDo__MaDon__09A971A2" ManuallyRouted="false" />
+        <AssociationConnector Association="SPORTIXModel.FK__ChiTietGi__MaGio__693CA210" ManuallyRouted="false" />
         <AssociationConnector Association="SPORTIXModel.FK__DiaChi__MaTaiKho__403A8C7D" ManuallyRouted="false" />
-        <AssociationConnector Association="SPORTIXModel.FK__DonHang__MaTaiKh__70DDC3D8" ManuallyRouted="false" />
-        <AssociationConnector Association="SPORTIXModel.FK__ThanhToan__MaDon__7F2BE32F" ManuallyRouted="false" />
-        <AssociationConnector Association="SPORTIXModel.FK__ThongBao__MaDonH__07C12930" ManuallyRouted="false" />
-        <AssociationConnector Association="SPORTIXModel.FK__GioHang__MaTaiKh__6383C8BA" ManuallyRouted="false" />
-        <AssociationConnector Association="SPORTIXModel.FK__HinhAnhSa__MaSan__5EBF139D" ManuallyRouted="false" />
-        <AssociationConnector Association="SPORTIXModel.FK__SanPham__MaLoaiH__4D94879B" ManuallyRouted="false" />
-        <AssociationConnector Association="SPORTIXModel.FK__SanPham__MaThuon__4E88ABD4" ManuallyRouted="false" />
-        <AssociationConnector Association="SPORTIXModel.FK__ThanhToan__MaNgu__00200768" ManuallyRouted="false" />
-        <AssociationConnector Association="SPORTIXModel.FK__ThongBao__MaTaiK__06CD04F7" ManuallyRouted="false" />
+        <AssociationConnector Association="SPORTIXModel.FK__DonHang__MaGiamG__00200768" ManuallyRouted="false" />
+        <AssociationConnector Association="SPORTIXModel.FK__DonHang__MaTaiKh__7F2BE32F" ManuallyRouted="false" />
+        <AssociationConnector Association="SPORTIXModel.FK__ThanhToan__MaDon__14270015" ManuallyRouted="false" />
+        <AssociationConnector Association="SPORTIXModel.FK__ThongBao__MaDonH__1F98B2C1" ManuallyRouted="false" />
+        <AssociationConnector Association="SPORTIXModel.FK__GioHang__MaTaiKh__656C112C" ManuallyRouted="false" />
+        <AssociationConnector Association="SPORTIXModel.FK__HinhAnhSa__MaSan__5FB337D6" ManuallyRouted="false" />
+        <AssociationConnector Association="SPORTIXModel.FK__SanPham__MaLoaiH__4E88ABD4" ManuallyRouted="false" />
+        <AssociationConnector Association="SPORTIXModel.FK__SanPham__MaThuon__4F7CD00D" ManuallyRouted="false" />
+        <AssociationConnector Association="SPORTIXModel.FK__ThanhToan__MaNgu__151B244E" ManuallyRouted="false" />
+        <AssociationConnector Association="SPORTIXModel.FK__ThongBao__MaTaiK__1EA48E88" ManuallyRouted="false" />
+        <AssociationConnector Association="SPORTIXModel.FK__ThongBaoW__MaNgu__245D67DE" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

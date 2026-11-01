@@ -33,10 +33,12 @@ namespace Do_an.Models
         public DbSet<GioHang> GioHangs { get; set; }
         public DbSet<HinhAnhSanPham> HinhAnhSanPhams { get; set; }
         public DbSet<LoaiHang> LoaiHangs { get; set; }
+        public DbSet<MaGiamGia> MaGiamGias { get; set; }
         public DbSet<SanPham> SanPhams { get; set; }
         public DbSet<TaiKhoan> TaiKhoans { get; set; }
         public DbSet<ThanhToan> ThanhToans { get; set; }
         public DbSet<ThongBao> ThongBaos { get; set; }
+        public DbSet<ThongBaoWebsite> ThongBaoWebsites { get; set; }
         public DbSet<ThuongHieu> ThuongHieux { get; set; }
     }
 }

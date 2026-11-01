@@ -25,6 +25,7 @@ namespace Do_an.Models
         public int MaThuongHieu { get; set; }
         public string TenSanPham { get; set; }
         public string MoTa { get; set; }
+        public int PhanTramGiam { get; set; }
         public bool NoiBat { get; set; }
         public bool DangBan { get; set; }
         public System.DateTime NgayTao { get; set; }
