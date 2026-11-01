@@ -12,17 +12,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
           rel="stylesheet" />
 
-    <link href="@Url.Content("~/Content/Site.css")"
+    <link href="@Url.Content("~/Content/Site.css")?v=2"
           rel="stylesheet" />
 
-    <link href="@Url.Content("~/Content/splash.css")"
+    <link href="@Url.Content("~/Content/splash.css")?v=2"
           rel="stylesheet" />
 
     @RenderSection("styles", required: false)
 </head>
-<body>
+<body class="sportix-public">
     @Html.Partial("_Splash")
-
     @Html.Partial("_Header")
 
     <main id="mainContent">
