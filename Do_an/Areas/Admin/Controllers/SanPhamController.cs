@@ -52,6 +52,32 @@ namespace Do_an.Areas.Admin.Controllers
             return View(danhSach);
         }
 
+
+        public ActionResult ChiTiet(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return new HttpStatusCodeResult(
+                    System.Net.HttpStatusCode.BadRequest
+                );
+            }
+
+            var sanPham = db.SanPhams
+                .AsNoTracking()
+                .Include(sp => sp.LoaiHang)
+                .Include(sp => sp.ThuongHieu)
+                .Include(sp => sp.HinhAnhSanPhams)
+                .Include(sp => sp.BienTheSanPhams)
+                .SingleOrDefault(sp => sp.MaSanPham == id.Value);
+
+            if (sanPham == null)
+            {
+                return HttpNotFound("Không tìm thấy sản phẩm.");
+            }
+
+            return View(sanPham);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

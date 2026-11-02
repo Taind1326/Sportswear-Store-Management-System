@@ -139,12 +139,16 @@
                                 }
 
                                 <div>
-                                    <div class="fw-semibold">
+                                    <a href="@Url.Action("ChiTiet", "SanPham", new {
+       area = "Admin",
+       id = item.MaSanPham
+   })"
+                                       class="fw-semibold text-decoration-none">
                                         @item.TenSanPham
-                                    </div>
+                                    </a>
 
                                     <small class="text-secondary">
-                                        @item.BienTheSanPhams.Count biến thể
+                                        @item.BienTheSanPhams.Count phân loại
                                     </small>
                                 </div>
                             </div>

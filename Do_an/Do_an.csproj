@@ -234,6 +234,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SanPham\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SanPham\ChiTiet.cshtml" />
     <None Include="Areas\Admin\Views\Web.config" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -326,7 +328,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Views\DonHang\" />
     <Folder Include="Areas\Admin\Views\LoaiHang\" />
-    <Folder Include="Areas\Admin\Views\SanPham\" />
     <Folder Include="Areas\Admin\Views\TaiKhoan\" />
     <Folder Include="Areas\Admin\Views\ThongKe\" />
     <Folder Include="Areas\Admin\Views\ThuongHieu\" />
