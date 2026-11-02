@@ -99,6 +99,117 @@ namespace Do_an.Areas.Admin.Controllers
             return View(model);
         }
 
+
+        [HttpGet]
+        public ActionResult ThemPhanLoai(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return new HttpStatusCodeResult(
+                    System.Net.HttpStatusCode.BadRequest);
+            }
+
+            var sanPham = db.SanPhams
+                .AsNoTracking()
+                .SingleOrDefault(x => x.MaSanPham == id.Value);
+
+            if (sanPham == null)
+            {
+                return HttpNotFound("Không tìm thấy sản phẩm.");
+            }
+
+            var model = new ThemPhanLoaiViewModel
+            {
+                MaSanPham = sanPham.MaSanPham,
+                TenSanPham = sanPham.TenSanPham,
+                SoLuongTon = 0
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ThemPhanLoai(ThemPhanLoaiViewModel model)
+        {
+            var sanPham = db.SanPhams
+                .SingleOrDefault(x => x.MaSanPham == model.MaSanPham);
+
+            if (sanPham == null)
+            {
+                return HttpNotFound("Không tìm thấy sản phẩm.");
+            }
+
+            // Lấy tên từ database, không dùng tên gửi từ trình duyệt.
+            model.TenSanPham = sanPham.TenSanPham;
+            model.MauSac = (model.MauSac ?? "").Trim();
+            model.KichThuoc = (model.KichThuoc ?? "").Trim();
+
+            if (string.IsNullOrWhiteSpace(model.MauSac))
+            {
+                ModelState.AddModelError(
+                    "MauSac", "Nhập màu hoặc Mặc định.");
+            }
+
+            if (string.IsNullOrWhiteSpace(model.KichThuoc))
+            {
+                ModelState.AddModelError(
+                    "KichThuoc", "Nhập size hoặc Mặc định.");
+            }
+
+            bool daTonTai = db.BienTheSanPhams.Any(x =>
+                x.MaSanPham == model.MaSanPham &&
+                x.MauSac == model.MauSac &&
+                x.KichThuoc == model.KichThuoc);
+
+            if (daTonTai)
+            {
+                ModelState.AddModelError(
+                    "",
+                    "Màu và size này đã tồn tại, kể cả phân loại ngừng bán. "
+                    + "Hãy sửa dòng hiện có.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var phanLoai = new BienTheSanPham
+            {
+                MaSanPham = sanPham.MaSanPham,
+                SKU = "SX-" + Guid.NewGuid().ToString("N").ToUpperInvariant(),
+                MauSac = model.MauSac,
+                KichThuoc = model.KichThuoc,
+                GiaBan = model.GiaBan.Value,
+                SoLuongTon = model.SoLuongTon.Value,
+                DangBan = true
+            };
+
+            db.BienTheSanPhams.Add(phanLoai);
+            sanPham.NgayCapNhat = DateTime.Now;
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError(
+                    "",
+                    "Chưa lưu được màu / size. "
+                    + "Hãy kiểm tra dữ liệu hoặc tải lại trang rồi thử lại.");
+
+                return View(model);
+            }
+
+            TempData["ThanhCong"] = "Thêm màu / size thành công.";
+
+            return RedirectToAction(
+                "ChiTiet",
+                new { id = sanPham.MaSanPham });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Them(ThemSanPhamViewModel model)
