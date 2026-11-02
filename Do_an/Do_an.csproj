@@ -231,6 +231,7 @@
     <Compile Include="ViewModels\DatHangViewModel.cs" />
     <Compile Include="ViewModels\GioHangViewModel.cs" />
     <Compile Include="ViewModels\SanPhamChiTietViewModel.cs" />
+    <Compile Include="ViewModels\ThemSanPhamViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
