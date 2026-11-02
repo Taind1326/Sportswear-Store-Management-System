@@ -165,9 +165,9 @@ namespace Do_an.Areas.Admin.Controllers
             if (daTonTai)
             {
                 ModelState.AddModelError(
-                    "",
-                    "Màu và size này đã tồn tại, kể cả phân loại ngừng bán. "
-                    + "Hãy sửa dòng hiện có.");
+                    "KichThuoc",
+                    "Màu và size này đã tồn tại. "
+                    + "Vui lòng sửa phân loại hiện có.");
             }
 
             if (!ModelState.IsValid)

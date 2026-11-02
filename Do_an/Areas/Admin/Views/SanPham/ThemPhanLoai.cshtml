@@ -23,54 +23,56 @@
             "SanPham",
             new { area = "Admin" },
             FormMethod.Post,
-            new { @class = "row g-3" }))
+            new { @class = "row g-3", novalidate = "novalidate" }))
         {
             @Html.AntiForgeryToken()
             @Html.HiddenFor(m => m.MaSanPham)
 
-            <div class="col-12">
-                @Html.ValidationSummary(
-                    false,
-                    "",
-                    new { @class = "text-danger" })
+        <div class="col-12">
+            @Html.ValidationSummary(
+                true,
+                "",
+                new { @class = "text-danger" })
 
-                <p class="text-secondary small mb-0">
-                    Mỗi tổ hợp màu và size chỉ được tạo một lần.
-                    Nếu sản phẩm không có màu hoặc size, nhập “Mặc định”.
-                </p>
-            </div>
+            <p class="text-secondary small mb-0">
+                Mỗi tổ hợp màu và size chỉ được tạo một lần.
+                Nếu sản phẩm không có màu hoặc size, nhập “Mặc định”.
+            </p>
+        </div>
 
-            <div class="col-md-6">
-                @Html.LabelFor(
-                    m => m.MauSac,
-                    new { @class = "form-label" })
+        <div class="col-md-6">
+            @Html.LabelFor(
+                m => m.MauSac,
+                new { @class = "form-label" })
 
-                @Html.TextBoxFor(
-                    m => m.MauSac,
-                    new
-                    {
-                        @class = "form-control",
-                        maxlength = "50",
-                        placeholder = "Ví dụ: Xanh dương",
-                        required = "required"
-                    })
-            </div>
+            @Html.TextBoxFor(
+                m => m.MauSac,
+                new
+                {
+                    @class = "form-control",
+                    maxlength = "50",
+                    placeholder = "Ví dụ: Xanh dương",
+                    required = "required"
+                })
+            @Html.ValidationMessageFor(m => m.MauSac)
+        </div>
 
-            <div class="col-md-6">
-                @Html.LabelFor(
-                    m => m.KichThuoc,
-                    new { @class = "form-label" })
+        <div class="col-md-6">
+            @Html.LabelFor(
+                m => m.KichThuoc,
+                new { @class = "form-label" })
 
-                @Html.TextBoxFor(
-                    m => m.KichThuoc,
-                    new
-                    {
-                        @class = "form-control",
-                        maxlength = "30",
-                        placeholder = "Ví dụ: M, 42, 750ml",
-                        required = "required"
-                    })
-            </div>
+            @Html.TextBoxFor(
+                m => m.KichThuoc,
+                new
+                {
+                    @class = "form-control",
+                    maxlength = "30",
+                    placeholder = "Ví dụ: M, 42, 750ml",
+                    required = "required"
+                })
+            @Html.ValidationMessageFor(m => m.KichThuoc)
+        </div>
 
             <div class="col-md-6">
                 @Html.LabelFor(
@@ -88,6 +90,7 @@
                             step = "1",
                             required = "required"
                         })
+                    @Html.ValidationMessageFor(m => m.GiaBan)
 
                     <span class="input-group-text">đ</span>
                 </div>
@@ -108,6 +111,7 @@
                         step = "1",
                         required = "required"
                     })
+                @Html.ValidationMessageFor(m => m.SoLuongTon)
             </div>
 
             <div class="col-12">
