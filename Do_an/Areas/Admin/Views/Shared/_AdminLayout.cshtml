@@ -7,6 +7,11 @@
     <title>@ViewBag.Title - SPORTIX Admin</title>
 
     @Styles.Render("~/Content/css")
+
+    <link href="@Url.Content("~/Content/validation.css")"
+          rel="stylesheet" />
+
+    @RenderSection("styles", required: false)
 </head>
 <body>
     <header class="navbar navbar-dark bg-dark">
@@ -28,7 +33,9 @@
     </main>
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
+
     @RenderSection("scripts", required: false)
 </body>
 </html>
