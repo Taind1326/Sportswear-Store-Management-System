@@ -225,6 +225,7 @@
     <Compile Include="Services\ThongBaoService.cs" />
     <Compile Include="Services\ThongKeService.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Validation\ValidationMessages.cs" />
     <Compile Include="ViewModels\DangKyViewModel.cs" />
     <Compile Include="ViewModels\DangNhapViewModel.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
