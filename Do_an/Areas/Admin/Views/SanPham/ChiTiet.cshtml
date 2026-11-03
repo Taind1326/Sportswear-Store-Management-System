@@ -1,55 +1,74 @@
 ﻿@model Do_an.Models.SanPham
+@using System
 @using System.Linq
 @using System.Globalization
+@using Do_an.Services
 
 @{
     ViewBag.Title = "Chi tiết sản phẩm";
 
     var vi = CultureInfo.GetCultureInfo("vi-VN");
-    var homNay = DateTime.Now;
-
-    bool hangMoi = Model.NgayTao <= homNay
-        && Model.NgayTao > homNay.AddDays(-30);
 
     var danhSachAnh = Model.HinhAnhSanPhams
-        .OrderByDescending(a => a.AnhDaiDien)
-        .ThenBy(a => a.ThuTu)
-        .ThenBy(a => a.MaHinhAnh)
+        .OrderByDescending(x => x.AnhDaiDien)
+        .ThenBy(x => x.ThuTu)
+        .ThenBy(x => x.MaHinhAnh)
         .ToList();
 
+    var anhChinh = danhSachAnh.FirstOrDefault();
+
+    bool coAnh = anhChinh != null &&
+        !string.IsNullOrWhiteSpace(anhChinh.DuongDanAnh);
+
     var danhSachPhanLoai = Model.BienTheSanPhams
-        .OrderBy(bt => bt.KichThuoc)
-        .ThenBy(bt => bt.MauSac)
+        .OrderBy(x => x.MauSac)
+        .ThenBy(x => x.KichThuoc)
         .ToList();
 
     long tongTon = danhSachPhanLoai
-        .Sum(bt => (long)bt.SoLuongTon);
+        .Sum(x => (long)x.SoLuongTon);
+
+    var danhSachGia = danhSachPhanLoai
+        .Where(x => x.DangBan)
+        .Select(x => QuyTacSanPham.GiaSauGiam(
+            x.GiaBan,
+            Model.PhanTramGiam))
+        .ToList();
+
+    string giaHienThi = "Chưa có phân loại đang bán";
+
+    if (danhSachGia.Any())
+    {
+        decimal giaThapNhat = danhSachGia.Min();
+        decimal giaCaoNhat = danhSachGia.Max();
+
+        giaHienThi = giaThapNhat == giaCaoNhat
+            ? giaThapNhat.ToString("N0", vi) + " đ"
+            : giaThapNhat.ToString("N0", vi)
+                + " – "
+                + giaCaoNhat.ToString("N0", vi)
+                + " đ";
+    }
 }
 
-<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+<div class="product-page-heading">
     <div>
-        <h1 class="h3 mb-1">Chi tiết sản phẩm</h1>
+        <h1>Chi tiết sản phẩm</h1>
 
-        <p class="text-secondary mb-0">
-            Mã sản phẩm: #@Model.MaSanPham
+        <p>
+            Thông tin và số lượng từng phân loại sản phẩm.
         </p>
     </div>
 
-    <div class="d-flex flex-wrap gap-2">
-        <a href="@Url.Action("Sua", "SanPham", new
-                 {
-                     area = "Admin",
-                     id = Model.MaSanPham
-                 })"
-           class="btn btn-primary">
-            Sửa sản phẩm
-        </a>
-
-        <a href="@Url.Action("Index", "SanPham", new { area = "Admin" })"
-           class="btn btn-outline-secondary">
-            Về danh sách
-        </a>
-    </div>
+    <a href="@Url.Action("BoSungHang", "SanPham", new
+             {
+                 area = "Admin",
+                 id = Model.MaSanPham
+             })"
+       class="btn btn-primary px-3 py-2">
+        <i class="bi bi-plus-lg" aria-hidden="true"></i>
+        Bổ sung hàng
+    </a>
 </div>
 
 @if (TempData["ThanhCong"] != null)
@@ -59,153 +78,156 @@
     </div>
 }
 
-<div class="row g-4 mb-4">
-    <div class="col-12 col-lg-5">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <h2 class="h5 mb-3">Hình ảnh</h2>
+<div class="product-panel mb-4">
+    <div class="d-flex align-items-start flex-wrap gap-3">
+        @if (coAnh)
+        {
+            <img src="@Url.Content(anhChinh.DuongDanAnh)"
+                 alt="@Model.TenSanPham"
+                 width="104"
+                 height="104"
+                 class="product-thumb admin-detail-image" />
 
-                @if (danhSachAnh.Any())
-                {
-                    var anhChinh = danhSachAnh.First();
+            <span class="product-no-image admin-detail-image"
+                  hidden
+                  role="img"
+                  aria-label="Chưa có ảnh sản phẩm">
+                <i class="bi bi-image" aria-hidden="true"></i>
+            </span>
+        }
+        else
+        {
+            <span class="product-no-image admin-detail-image"
+                  role="img"
+                  aria-label="Chưa có ảnh sản phẩm">
+                <i class="bi bi-image" aria-hidden="true"></i>
+            </span>
+        }
 
-                    <div class="ratio ratio-1x1 rounded overflow-hidden bg-light">
-                        <img src="@Url.Content(anhChinh.DuongDanAnh)"
-                             alt="@Model.TenSanPham"
-                             class="w-100 h-100"
-                             style="object-fit: contain;" />
-                    </div>
+        <div class="flex-grow-1 admin-detail-info">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+                <div>
+                    <h2 class="h5 fw-bold mb-2">
+                        @Model.TenSanPham
+                    </h2>
 
-                    if (danhSachAnh.Count > 1)
-                    {
-                        <div class="row g-2 mt-2">
-                            @foreach (var anh in danhSachAnh.Skip(1))
-                            {
-                                <div class="col-4">
-                                    <a href="@Url.Content(anh.DuongDanAnh)"
-                                       target="_blank"
-                                       rel="noopener noreferrer">
-                                        <div class="ratio ratio-1x1">
-                                            <img src="@Url.Content(anh.DuongDanAnh)"
-                                                 alt="@(anh.MoTaAnh ?? Model.TenSanPham)"
-                                                 class="w-100 h-100 rounded border"
-                                                 style="object-fit: contain;" />
-                                        </div>
-                                    </a>
-                                </div>
-                            }
-                        </div>
-                    }
-                }
-                else
-                {
-                    <div class="bg-light rounded text-center text-secondary p-5">
-                        Sản phẩm chưa có hình ảnh.
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
-
-    <div class="col-12 col-lg-7">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body p-4">
-                <div class="d-flex flex-wrap gap-2 mb-3">
-                    @if (Model.DangBan)
-                    {
-                        <span class="badge bg-success">Đang bán</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-secondary">Ngừng bán</span>
-                    }
-
-                    @if (Model.PhanTramGiam > 0)
-                    {
-                        <span class="badge bg-danger">
-                            Giảm @Model.PhanTramGiam%
-                        </span>
-                    }
-                    else if (hangMoi)
-                    {
-                        <span class="badge bg-primary">Hàng mới</span>
-                    }
-
-                    @if (Model.NoiBat)
-                    {
-                        <span class="badge bg-warning text-dark">
-                            Nổi bật
-                        </span>
-                    }
+                    <p class="product-meta mb-2">
+                        @Model.LoaiHang.TenLoaiHang
+                        · @Model.ThuongHieu.TenThuongHieu
+                        · Mã #@Model.MaSanPham
+                    </p>
                 </div>
 
-                <h2 class="h4 mb-4">@Model.TenSanPham</h2>
-
-                <dl class="row mb-0">
-                    <dt class="col-sm-4">Loại hàng</dt>
-                    <dd class="col-sm-8">@Model.LoaiHang.TenLoaiHang</dd>
-
-                    <dt class="col-sm-4">Thương hiệu</dt>
-                    <dd class="col-sm-8">@Model.ThuongHieu.TenThuongHieu</dd>
-
-                    <dt class="col-sm-4">Số phân loại</dt>
-                    <dd class="col-sm-8">@danhSachPhanLoai.Count</dd>
-
-                    <dt class="col-sm-4">Tổng tồn kho</dt>
-                    <dd class="col-sm-8">
-                        @tongTon.ToString("N0", vi)
-                    </dd>
-
-                    <dt class="col-sm-4">Ngày thêm</dt>
-                    <dd class="col-sm-8">
-                        @Model.NgayTao.ToString("dd/MM/yyyy HH:mm")
-                    </dd>
-
-                    <dt class="col-sm-4">Cập nhật gần nhất</dt>
-                    <dd class="col-sm-8">
-                        @(Model.NgayCapNhat.HasValue
-                            ? Model.NgayCapNhat.Value.ToString("dd/MM/yyyy HH:mm")
-                            : "Chưa cập nhật")
-                    </dd>
-                </dl>
-
-                <hr />
-
-                <h3 class="h6">Mô tả sản phẩm</h3>
-
-                <p class="text-secondary mb-0"
-                   style="white-space: pre-line;">@(string.IsNullOrWhiteSpace(Model.MoTa) ? "Chưa có mô tả." : Model.MoTa)</p>
+                <a href="@Url.Action("Sua", "SanPham", new
+                         {
+                             area = "Admin",
+                             id = Model.MaSanPham
+                         })"
+                   class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-pencil-square" aria-hidden="true"></i>
+                    Sửa thông tin
+                </a>
             </div>
+
+            <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
+                <span class="status-pill @(Model.DangBan ? "status-selling" : "status-stopped")">
+                    @(Model.DangBan ? "Đang bán" : "Ngừng bán")
+                </span>
+
+                @if (Model.PhanTramGiam > 0)
+                {
+                    <span class="status-pill status-discount">
+                        Giảm @Model.PhanTramGiam%
+                    </span>
+                }
+
+                @if (Model.NoiBat)
+                {
+                    <span class="status-pill status-low">
+                        Nổi bật
+                    </span>
+                }
+            </div>
+
+            <div class="product-price fs-4 mb-2">
+                @giaHienThi
+            </div>
+
+            @if (danhSachGia.Any() && Model.PhanTramGiam > 0)
+            {
+                <p class="product-meta mb-0">
+                    Giá đã áp dụng giảm @Model.PhanTramGiam%.
+                </p>
+            }
         </div>
     </div>
+
+    <details class="admin-product-description mt-3">
+        <summary>Mô tả sản phẩm</summary>
+
+        <div class="mt-2 text-secondary admin-description-text">@(string.IsNullOrWhiteSpace(Model.MoTa) ? "Chưa có mô tả sản phẩm." : Model.MoTa)</div>
+    </details>
+
+    @if (danhSachAnh.Count > 1)
+    {
+        <details class="mt-3">
+            <summary>Hình ảnh khác (@(danhSachAnh.Count - 1))</summary>
+
+            <div class="d-flex flex-wrap gap-2 mt-3">
+                @foreach (var anh in danhSachAnh.Skip(1))
+                {
+                    if (!string.IsNullOrWhiteSpace(anh.DuongDanAnh))
+                    {
+                        <a href="@Url.Content(anh.DuongDanAnh)"
+                           target="_blank"
+                           rel="noopener noreferrer">
+                            <img src="@Url.Content(anh.DuongDanAnh)"
+                                 alt="@(anh.MoTaAnh ?? Model.TenSanPham)"
+                                 width="66"
+                                 height="66"
+                                 loading="lazy"
+                                 class="product-thumb" />
+                        </a>
+                    }
+                }
+            </div>
+        </details>
+    }
 </div>
 
-<div class="card border-0 shadow-sm">
-    <div class="card-header bg-white py-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
-        <h2 class="h5 mb-0">Size / Màu và tồn kho</h2>
+<div class="product-panel">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+        <div>
+            <h2 class="h5 fw-bold mb-1">
+                Các phân loại sản phẩm
+            </h2>
+
+            <p class="product-meta mb-0">
+                @danhSachPhanLoai.Count phân loại
+            </p>
+        </div>
 
         <a href="@Url.Action("ThemPhanLoai", "SanPham", new
-             {
-                 area = "Admin",
-                 id = Model.MaSanPham
-             })"
-           class="btn btn-primary btn-sm">
-            Thêm màu / size
+                 {
+                     area = "Admin",
+                     id = Model.MaSanPham
+                 })"
+           class="btn btn-outline-primary">
+            <i class="bi bi-plus-lg" aria-hidden="true"></i>
+            Thêm màu / kích cỡ
         </a>
     </div>
 
     <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
+        <table class="table table-hover product-table">
+            <thead>
                 <tr>
-                    <th scope="col">SKU</th>
-                    <th scope="col">Size</th>
                     <th scope="col">Màu</th>
-                    <th scope="col">Giá gốc</th>
-                    <th scope="col">Giá sau giảm</th>
-                    <th scope="col" class="text-center">Tồn kho</th>
-                    <th scope="col">Tình trạng kho</th>
-                    <th scope="col">Kinh doanh</th>
+                    <th scope="col">Kích cỡ / dung tích</th>
+                    <th scope="col" class="text-end">Còn lại</th>
+                    <th scope="col" class="text-end">
+                        <span class="visually-hidden">Thao tác</span>
+                    </th>
                 </tr>
             </thead>
 
@@ -213,72 +235,91 @@
                 @if (!danhSachPhanLoai.Any())
                 {
                     <tr>
-                        <td colspan="8"
+                        <td colspan="4"
                             class="text-center text-secondary py-4">
-                            Chưa có phân loại size / màu.
+                            Chưa có phân loại.
+                            Bấm “Thêm màu / kích cỡ” để tạo phân loại đầu tiên.
                         </td>
                     </tr>
                 }
 
                 @foreach (var item in danhSachPhanLoai)
                 {
-                    decimal giaSauGiam = Math.Round(
-                        item.GiaBan * (100 - Model.PhanTramGiam) / 100m,
-                        0,
-                        MidpointRounding.AwayFromZero
-                    );
-
                     <tr>
-                        <td class="text-nowrap">@item.SKU</td>
-                        <td>@item.KichThuoc</td>
-                        <td>@item.MauSac</td>
+                        <td>
+                            <span class="fw-medium">
+                                @item.MauSac
+                            </span>
 
-                        <td class="text-nowrap">
-                            @item.GiaBan.ToString("N0", vi) đ
-                        </td>
-
-                        <td class="text-nowrap fw-semibold text-primary">
-                            @giaSauGiam.ToString("N0", vi) đ
-                        </td>
-
-                        <td class="text-center">
-                            @item.SoLuongTon
-                        </td>
-
-                        <td class="text-nowrap">
-                            @if (item.SoLuongTon == 0)
+                            @if (!item.DangBan)
                             {
-                                <span class="badge bg-danger">
-                                    Hết hàng
-                                </span>
-                            }
-                            else if (item.SoLuongTon <= 5)
-                            {
-                                <span class="badge bg-warning text-dark">
-                                    Sắp hết hàng
-                                </span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-success">
-                                    Còn hàng
-                                </span>
+                                <div class="product-meta mt-1">
+                                    Ngừng bán
+                                </div>
                             }
                         </td>
 
-                        <td class="text-nowrap">
-                            @if (Model.DangBan && item.DangBan)
-                            {
-                                <span class="text-success">Đang bán</span>
-                            }
-                            else
-                            {
-                                <span class="text-secondary">Ngừng bán</span>
-                            }
+                        <td>
+                            @item.KichThuoc
+                        </td>
+
+                        <td class="text-end">
+                            <div class="d-flex justify-content-end align-items-center flex-wrap gap-2">
+                                @if (item.SoLuongTon == 0)
+                                {
+                                    <span class="status-pill status-empty">
+                                        Hết hàng
+                                    </span>
+                                }
+                                else if (item.SoLuongTon <= 5)
+                                {
+                                    <span class="status-pill status-low">
+                                        Sắp hết
+                                    </span>
+                                }
+
+                                <strong>
+                                    @item.SoLuongTon.ToString("N0", vi)
+                                </strong>
+                            </div>
+                        </td>
+
+                        <td class="text-end">
+                            <a href="@Url.Action("SuaPhanLoai", "SanPham", new
+                                     {
+                                         area = "Admin",
+                                         id = item.MaBienThe
+                                     })"
+                               class="btn btn-outline-primary btn-sm"
+                               aria-label="@("Sửa phân loại " + item.MauSac + " / " + item.KichThuoc)">
+                                Sửa
+                            </a>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+
+    <div class="product-panel-footer">
+        <div>
+            <div class="fw-semibold">Tổng tồn kho</div>
+
+            <small>
+                Tự động cộng từ tất cả phân loại.
+            </small>
+        </div>
+
+        <strong class="product-price fs-3">
+            @tongTon.ToString("N0", vi)
+        </strong>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a href="@Url.Action("Index", "SanPham", new { area = "Admin" })"
+       class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left" aria-hidden="true"></i>
+        Về danh sách sản phẩm
+    </a>
 </div>

@@ -1,0 +1,237 @@
+﻿@model Do_an.ViewModels.BoSungHangViewModel
+
+@{
+    ViewBag.Title = "Bổ sung hàng";
+
+    bool coPhanLoai = Model.DanhSachPhanLoai != null
+        && Model.DanhSachPhanLoai.Count > 0;
+}
+
+<div class="product-page-heading">
+    <div>
+        <h1>Bổ sung hàng</h1>
+
+        <p>@Model.TenSanPham</p>
+    </div>
+
+    <a href="@Url.Action("ChiTiet", "SanPham", new
+             {
+                 area = "Admin",
+                 id = Model.MaSanPham
+             })"
+       class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left" aria-hidden="true"></i>
+        Quay lại
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-12 col-xl-9">
+        @using (Html.BeginForm(
+            "BoSungHang",
+            "SanPham",
+            new { area = "Admin" },
+            FormMethod.Post,
+            new
+            {
+                @class = "product-panel",
+                novalidate = "novalidate"
+            }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.MaSanPham)
+            @Html.HiddenFor(m => m.YeuCauId)
+
+            @Html.ValidationSummary(
+                true,
+                "",
+                new
+                {
+                    @class = "text-danger mb-3",
+                    role = "alert"
+                })
+
+            if (coPhanLoai)
+            {
+                <div class="mb-4">
+                    @Html.LabelFor(
+                        m => m.MaBienThe,
+                        new { @class = "form-label" })
+
+                    @Html.DropDownListFor(
+                        m => m.MaBienThe,
+                        Model.DanhSachPhanLoai,
+                        "-- Chọn loại cần bổ sung --",
+                        new
+                        {
+                            @class = "form-select",
+                            required = "required",
+                            aria_describedby = "loiMaBienThe",
+
+                            data_val = "true",
+                            data_val_required =
+                                "Vui lòng chọn loại cần bổ sung.",
+                            data_val_number =
+                                "Loại cần bổ sung không hợp lệ.",
+                            data_val_range =
+                                "Loại cần bổ sung không hợp lệ.",
+                            data_val_range_min = "1",
+                            data_val_range_max = "2147483647",
+
+                            data_msg_required =
+                                "Vui lòng chọn loại cần bổ sung.",
+                            data_msg_number =
+                                "Loại cần bổ sung không hợp lệ."
+                        })
+
+                    @Html.ValidationMessageFor(
+                        m => m.MaBienThe,
+                        "",
+                        new
+                        {
+                            id = "loiMaBienThe",
+                            @class = "text-danger"
+                        })
+                </div>
+
+                <div class="mb-4">
+                    @Html.LabelFor(
+                        m => m.SoLuongThem,
+                        new { @class = "form-label" })
+
+                    @Html.TextBoxFor(
+                        m => m.SoLuongThem,
+                        new
+                        {
+                            @class = "form-control",
+                            type = "number",
+                            min = "1",
+                            max = "2147483647",
+                            step = "1",
+                            required = "required",
+                            placeholder = "Nhập số lượng cần bổ sung",
+                            aria_describedby =
+                                "loiSoLuongThem huongDanSoLuong",
+
+                            data_val = "true",
+                            data_val_required =
+                                "Vui lòng nhập số lượng cần bổ sung.",
+                            data_val_number =
+                                "Số lượng bổ sung phải là số nguyên hợp lệ.",
+                            data_val_range =
+                                "Số lượng bổ sung phải từ 1 đến 2.147.483.647.",
+                            data_val_range_min = "1",
+                            data_val_range_max = "2147483647",
+
+                            data_msg_required =
+                                "Vui lòng nhập số lượng cần bổ sung.",
+                            data_msg_number =
+                                "Số lượng bổ sung phải là số nguyên hợp lệ.",
+                            data_msg_min =
+                                "Số lượng bổ sung phải lớn hơn 0.",
+                            data_msg_max =
+                                "Số lượng bổ sung không được vượt quá 2.147.483.647.",
+                            data_msg_step =
+                                "Số lượng bổ sung phải là số nguyên."
+                        })
+
+                    @Html.ValidationMessageFor(
+                        m => m.SoLuongThem,
+                        "",
+                        new
+                        {
+                            id = "loiSoLuongThem",
+                            @class = "text-danger"
+                        })
+
+                    <div id="huongDanSoLuong" class="form-text">
+                        Nhập số lượng thêm vào kho.
+                        Ví dụ: đang còn 5, bổ sung 10 thì tồn kho thành 15.
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    @Html.LabelFor(
+                        m => m.LyDo,
+                        new { @class = "form-label" })
+
+                    @Html.TextAreaFor(
+                        m => m.LyDo,
+                        new
+                        {
+                            @class = "form-control",
+                            rows = "3",
+                            maxlength = "500",
+                            placeholder =
+                                "Ví dụ: nhập thêm hàng từ nhà cung cấp",
+                            aria_describedby = "loiLyDo huongDanLyDo",
+
+                            data_val = "true",
+                            data_val_length =
+                                "Ghi chú không được vượt quá 500 ký tự.",
+                            data_val_length_max = "500",
+                            data_msg_maxlength =
+                                "Ghi chú không được vượt quá 500 ký tự."
+                        })
+
+                    @Html.ValidationMessageFor(
+                        m => m.LyDo,
+                        "",
+                        new
+                        {
+                            id = "loiLyDo",
+                            @class = "text-danger"
+                        })
+
+                    <div id="huongDanLyDo" class="form-text">
+                        Không bắt buộc. Tối đa 500 ký tự.
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end flex-wrap gap-2 pt-3 border-top">
+                    <a href="@Url.Action("ChiTiet", "SanPham", new
+                             {
+                                 area = "Admin",
+                                 id = Model.MaSanPham
+                             })"
+                       class="btn btn-outline-secondary">
+                        Hủy
+                    </a>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg" aria-hidden="true"></i>
+                        Xác nhận bổ sung
+                    </button>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info" role="status">
+                    Sản phẩm chưa có phân loại.
+                    Vui lòng thêm màu / kích cỡ trước khi bổ sung hàng.
+                </div>
+
+                <div class="d-flex justify-content-end flex-wrap gap-2">
+                    <a href="@Url.Action("ChiTiet", "SanPham", new
+                             {
+                                 area = "Admin",
+                                 id = Model.MaSanPham
+                             })"
+                       class="btn btn-outline-secondary">
+                        Quay lại sản phẩm
+                    </a>
+
+                    <a href="@Url.Action("ThemPhanLoai", "SanPham", new
+                             {
+                                 area = "Admin",
+                                 id = Model.MaSanPham
+                             })"
+                       class="btn btn-primary">
+                        <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                        Thêm màu / kích cỡ
+                    </a>
+                </div>
+            }
+        }
+    </div>
+</div>

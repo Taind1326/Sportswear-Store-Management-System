@@ -566,3 +566,35 @@ body.sportix-admin {
         padding: 12px;
     }
 }
+
+.sportix-admin .admin-detail-image {
+    width: 104px;
+    height: 104px;
+    flex: 0 0 104px;
+    object-fit: contain;
+}
+
+.sportix-admin .admin-detail-info {
+    min-width: 0;
+    flex-basis: 260px;
+    overflow-wrap: anywhere;
+}
+
+    .sportix-admin .admin-detail-info .product-price {
+        white-space: normal;
+    }
+
+.sportix-admin .admin-product-description {
+    padding-top: 16px;
+    border-top: 1px solid var(--admin-border);
+}
+
+.sportix-admin .admin-content details > summary {
+    cursor: pointer;
+}
+
+.sportix-admin .admin-description-text {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    line-height: 1.7;
+}
