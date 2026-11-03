@@ -598,3 +598,30 @@ body.sportix-admin {
     overflow-wrap: anywhere;
     line-height: 1.7;
 }
+
+.sportix-admin .field-validation-error,
+.sportix-admin label.error,
+.sportix-admin span.error {
+    display: block;
+    margin-top: 7px;
+    color: #c92c3b;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.sportix-admin .form-control.input-validation-error,
+.sportix-admin .form-select.input-validation-error,
+.sportix-admin .form-control.error,
+.sportix-admin .form-select.error {
+    border-color: #dc3545;
+    background-color: #fff8f8;
+}
+
+    .sportix-admin .form-control.input-validation-error:focus,
+    .sportix-admin .form-select.input-validation-error:focus,
+    .sportix-admin .form-control.error:focus,
+    .sportix-admin .form-select.error:focus {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 3px rgba(220, 53, 69, .12);
+    }
