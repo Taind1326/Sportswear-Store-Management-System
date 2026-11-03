@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<Do_an.Models.SanPham>
+@using System
 @using System.Linq
 @using System.Globalization
 
@@ -7,6 +8,7 @@
 
     var vi = CultureInfo.GetCultureInfo("vi-VN");
     var homNay = DateTime.Now;
+    var danhSach = Model.ToList();
 
     string tuKhoa = ViewBag.TuKhoa;
     int trang = ViewBag.Trang;
@@ -17,108 +19,126 @@
     int ketThuc = Math.Min(tongTrang, trang + 2);
 }
 
-<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+<div class="product-page-heading">
     <div>
-        <h1 class="h3 mb-1">Quản lý sản phẩm</h1>
-
-        <p class="text-secondary mb-0">
-            Tìm thấy @tongSanPham sản phẩm
-        </p>
+        <h1>Quản lý sản phẩm</h1>
+        <p>Theo dõi sản phẩm, phân loại và tồn kho</p>
     </div>
 
     <a href="@Url.Action("Them", "SanPham", new { area = "Admin" })"
-       class="btn btn-primary">
+       class="btn btn-primary px-3 py-2">
+        <i class="bi bi-plus-lg" aria-hidden="true"></i>
         Thêm sản phẩm
     </a>
 </div>
 
-@using (Html.BeginForm("Index", "SanPham",
-    new { area = "Admin" }, FormMethod.Get,
-    new { @class = "row g-2 mb-4" }))
+@if (TempData["ThanhCong"] != null)
 {
-    <div class="col-12 col-md-8 col-lg-6">
-        <label for="tuKhoa" class="visually-hidden">
-            Tìm sản phẩm
-        </label>
-
-        <input type="search"
-               id="tuKhoa"
-               name="tuKhoa"
-               value="@tuKhoa"
-               maxlength="200"
-               class="form-control"
-               placeholder="Nhập tên sản phẩm hoặc SKU..." />
-    </div>
-
-    <div class="col-auto">
-        <button type="submit" class="btn btn-primary">
-            Tìm kiếm
-        </button>
-    </div>
-
-    <div class="col-auto">
-        <a href="@Url.Action("Index", new { area = "Admin" })"
-           class="btn btn-outline-secondary">
-            Đặt lại
-        </a>
+    <div class="alert alert-success" role="alert">
+        @TempData["ThanhCong"]
     </div>
 }
 
-<div class="card border-0 shadow-sm">
+<div class="product-panel">
+    @using (Html.BeginForm(
+        "Index",
+        "SanPham",
+        new { area = "Admin" },
+        FormMethod.Get,
+        new { @class = "product-search" }))
+    {
+        <div class="product-search-box">
+            <label for="tuKhoa" class="visually-hidden">
+                Tìm theo tên sản phẩm hoặc SKU
+            </label>
+
+            <i class="bi bi-search" aria-hidden="true"></i>
+
+            <input type="search"
+                   id="tuKhoa"
+                   name="tuKhoa"
+                   value="@tuKhoa"
+                   maxlength="200"
+                   class="form-control"
+                   placeholder="Tìm theo tên sản phẩm hoặc SKU..." />
+        </div>
+
+        <button type="submit" class="btn btn-primary px-3">
+            Tìm kiếm
+        </button>
+
+        <a href="@Url.Action("Index", "SanPham", new { area = "Admin" })"
+           class="btn btn-outline-secondary px-3">
+            <i class="bi bi-arrow-clockwise" aria-hidden="true"></i>
+            Đặt lại
+        </a>
+    }
+
     <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
+        <table class="table table-hover product-table">
+            <thead>
                 <tr>
                     <th scope="col">Mã</th>
                     <th scope="col">Sản phẩm</th>
-                    <th scope="col">Phân loại</th>
-                    <th scope="col">Giá từ</th>
+                    <th scope="col">Giá bán từ</th>
                     <th scope="col" class="text-center">Tồn kho</th>
-                    <th scope="col">Nhãn</th>
-                    <th scope="col">Kinh doanh</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col" class="text-end">Thao tác</th>
                 </tr>
             </thead>
 
             <tbody>
-                @if (!Model.Any())
+                @if (!danhSach.Any())
                 {
                     <tr>
-                        <td colspan="7"
+                        <td colspan="6"
                             class="text-center text-secondary py-5">
                             Không tìm thấy sản phẩm phù hợp.
                         </td>
                     </tr>
                 }
 
-                @foreach (var item in Model)
+                @foreach (var item in danhSach)
                 {
                     var anh = item.HinhAnhSanPhams
-                        .OrderByDescending(a => a.AnhDaiDien)
-                        .ThenBy(a => a.ThuTu)
-                        .ThenBy(a => a.MaHinhAnh)
+                        .OrderByDescending(x => x.AnhDaiDien)
+                        .ThenBy(x => x.ThuTu)
+                        .ThenBy(x => x.MaHinhAnh)
                         .FirstOrDefault();
 
-                    var bienTheDangBan = item.BienTheSanPhams
-                        .Where(bt => bt.DangBan)
+                    bool coAnh = anh != null &&
+                        !string.IsNullOrWhiteSpace(anh.DuongDanAnh);
+
+                    var phanLoaiDangBan = item.BienTheSanPhams
+                        .Where(x => x.DangBan)
                         .ToList();
 
-                    decimal? giaGoc = bienTheDangBan.Any()
-                        ? bienTheDangBan.Min(bt => bt.GiaBan)
+                    decimal? giaGoc = phanLoaiDangBan.Any()
+                        ? phanLoaiDangBan.Min(x => x.GiaBan)
                         : (decimal?)null;
 
                     decimal? giaSauGiam = giaGoc.HasValue
                         ? Math.Round(
-                            giaGoc.Value * (100 - item.PhanTramGiam) / 100m,
+                            giaGoc.Value *
+                            (100 - item.PhanTramGiam) / 100m,
                             0,
-                            MidpointRounding.AwayFromZero
-                        )
+                            MidpointRounding.AwayFromZero)
                         : (decimal?)null;
 
                     long tongTon = item.BienTheSanPhams
-                        .Sum(bt => (long)bt.SoLuongTon);
+                        .Sum(x => (long)x.SoLuongTon);
 
-                    bool hangMoi = item.NgayTao <= homNay
-                        && item.NgayTao > homNay.AddDays(-30);
+                    bool hangMoi = item.NgayTao <= homNay &&
+                        item.NgayTao > homNay.AddDays(-30);
+
+                    string linkChiTiet = Url.Action(
+                        "ChiTiet",
+                        "SanPham",
+                        new
+                        {
+                            area = "Admin",
+                            id = item.MaSanPham
+                        });
 
                     <tr>
                         <td class="text-secondary">
@@ -126,165 +146,193 @@
                         </td>
 
                         <td>
-                            <div class="d-flex align-items-center gap-3">
-                                @if (anh != null
-                                    && !string.IsNullOrWhiteSpace(anh.DuongDanAnh))
+                            <div class="product-cell">
+                                @if (coAnh)
                                 {
                                     <img src="@Url.Content(anh.DuongDanAnh)"
                                          alt="@item.TenSanPham"
-                                         width="56"
-                                         height="56"
-                                         class="rounded border"
-                                         style="object-fit: cover;" />
+                                         width="66"
+                                         height="66"
+                                         loading="lazy"
+                                         class="product-thumb" />
+
+                                    <span class="product-no-image"
+                                          hidden
+                                          role="img"
+                                          aria-label="Chưa có ảnh sản phẩm">
+                                        <i class="bi bi-image"
+                                           aria-hidden="true"></i>
+                                    </span>
                                 }
                                 else
                                 {
-                                    <span class="text-secondary small">
-                                        Chưa có ảnh
+                                    <span class="product-no-image"
+                                          role="img"
+                                          aria-label="Chưa có ảnh sản phẩm">
+                                        <i class="bi bi-image"
+                                           aria-hidden="true"></i>
                                     </span>
                                 }
 
                                 <div>
-                                    <a href="@Url.Action("ChiTiet", "SanPham", new {
-       area = "Admin",
-       id = item.MaSanPham
-   })"
-                                       class="fw-semibold text-decoration-none">
+                                    <a href="@linkChiTiet"
+                                       class="product-name">
                                         @item.TenSanPham
                                     </a>
 
-                                    <small class="text-secondary">
+                                    <div class="product-meta">
                                         @item.BienTheSanPhams.Count phân loại
-                                    </small>
+                                    </div>
                                 </div>
                             </div>
                         </td>
 
                         <td>
-                            <div>@item.LoaiHang.TenLoaiHang</div>
-                            <small class="text-secondary">
-                                @item.ThuongHieu.TenThuongHieu
-                            </small>
-                        </td>
-
-                        <td class="text-nowrap">
                             @if (giaSauGiam.HasValue)
                             {
-                                <div class="fw-semibold text-primary">
+                                <div class="product-price">
                                     @giaSauGiam.Value.ToString("N0", vi) đ
                                 </div>
 
                                 if (item.PhanTramGiam > 0)
                                 {
-                                    <small class="text-secondary text-decoration-line-through">
+                                    <small class="product-old-price">
                                         @giaGoc.Value.ToString("N0", vi) đ
                                     </small>
+
+                                    <span class="status-pill status-discount">
+                                        Giảm @item.PhanTramGiam%
+                                    </span>
+                                }
+                                else if (hangMoi)
+                                {
+                                    <span class="status-pill status-new mt-1">
+                                        Hàng mới
+                                    </span>
                                 }
                             }
                             else
                             {
-                                <span class="text-secondary">
+                                <span class="product-meta">
                                     Chưa có giá đang bán
                                 </span>
                             }
                         </td>
 
-                        <td class="text-center">
-                            @tongTon.ToString("N0", vi)
+                        <td>
+                            <div class="product-stock">
+                                <span>@tongTon.ToString("N0", vi)</span>
+
+                                @if (tongTon == 0)
+                                {
+                                    <span class="status-pill status-empty">
+                                        Hết hàng
+                                    </span>
+                                }
+                                else if (tongTon <= 5)
+                                {
+                                    <span class="status-pill status-low">
+                                        Sắp hết
+                                    </span>
+                                }
+                            </div>
                         </td>
 
-                        <td class="text-nowrap">
-                            @if (item.PhanTramGiam > 0)
-                            {
-                                <span class="badge bg-danger">
-                                    Giảm @item.PhanTramGiam%
-                                </span>
-                            }
-                            else if (hangMoi)
-                            {
-                                <span class="badge bg-primary">
-                                    Hàng mới
-                                </span>
-                            }
-                            else
-                            {
-                                <span class="text-secondary">—</span>
-                            }
-                        </td>
-
-                        <td class="text-nowrap">
+                        <td>
                             @if (item.DangBan)
                             {
-                                <span class="badge bg-success">
+                                <span class="status-pill status-selling">
                                     Đang bán
                                 </span>
                             }
                             else
                             {
-                                <span class="badge bg-secondary">
+                                <span class="status-pill status-stopped">
                                     Ngừng bán
                                 </span>
                             }
+                        </td>
+
+                        <td class="text-end text-nowrap">
+                            <a href="@linkChiTiet"
+                               class="btn btn-outline-primary btn-sm"
+                               aria-label="@("Xem chi tiết " + item.TenSanPham)">
+                                Xem chi tiết
+                                <i class="bi bi-chevron-right"
+                                   aria-hidden="true"></i>
+                            </a>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
-</div>
 
-@if (tongTrang > 1)
-{
-    <nav class="mt-4" aria-label="Phân trang sản phẩm">
-        <ul class="pagination justify-content-center flex-wrap">
-            @if (trang > 1)
-            {
-                <li class="page-item">
-                    <a class="page-link"
-                       href="@Url.Action("Index", new {
-                           area = "Admin",
-                           tuKhoa = tuKhoa,
-                           trang = trang - 1
-                       })">
-                        Trước
-                    </a>
-                </li>
-            }
+    <div class="product-panel-footer">
+        <span>
+            Hiển thị @danhSach.Count / @tongSanPham sản phẩm
+        </span>
 
-            @for (int i = batDau; i <= ketThuc; i++)
-            {
-                <li class="page-item @(i == trang ? "active" : "")">
-                    @if (i == trang)
-                    {
-                        <span class="page-link" aria-current="page">@i</span>
-                    }
-                    else
-                    {
+        <nav aria-label="Phân trang sản phẩm">
+            <ul class="pagination pagination-sm">
+                @if (trang > 1)
+                {
+                    <li class="page-item">
                         <a class="page-link"
-                           href="@Url.Action("Index", new {
-                               area = "Admin",
-                               tuKhoa = tuKhoa,
-                               trang = i
-                           })">
-                            @i
+                           aria-label="Trang trước"
+                           href="@Url.Action("Index", new
+                                {
+                                    area = "Admin",
+                                    tuKhoa = tuKhoa,
+                                    trang = trang - 1
+                                })">
+                            <i class="bi bi-chevron-left"
+                               aria-hidden="true"></i>
                         </a>
-                    }
-                </li>
-            }
+                    </li>
+                }
 
-            @if (trang < tongTrang)
-            {
-                <li class="page-item">
-                    <a class="page-link"
-                       href="@Url.Action("Index", new {
-                           area = "Admin",
-                           tuKhoa = tuKhoa,
-                           trang = trang + 1
-                       })">
-                        Sau
-                    </a>
-                </li>
-            }
-        </ul>
-    </nav>
-}
+                @for (int i = batDau; i <= ketThuc; i++)
+                {
+                    <li class="page-item @(i == trang ? "active" : "")">
+                        @if (i == trang)
+                        {
+                            <span class="page-link" aria-current="page">
+                                @i
+                            </span>
+                        }
+                        else
+                        {
+                            <a class="page-link"
+                               href="@Url.Action("Index", new
+                                    {
+                                        area = "Admin",
+                                        tuKhoa = tuKhoa,
+                                        trang = i
+                                    })">
+                                @i
+                            </a>
+                        }
+                    </li>
+                }
+
+                @if (trang < tongTrang)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           aria-label="Trang sau"
+                           href="@Url.Action("Index", new
+                                {
+                                    area = "Admin",
+                                    tuKhoa = tuKhoa,
+                                    trang = trang + 1
+                                })">
+                            <i class="bi bi-chevron-right"
+                               aria-hidden="true"></i>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+</div>

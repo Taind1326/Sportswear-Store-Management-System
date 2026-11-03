@@ -1,0 +1,568 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+body.sportix-admin {
+    --admin-blue: #006fe6;
+    --admin-cyan: #119dff;
+    --admin-lime: #a8e82e;
+    --admin-text: #0b284e;
+    --admin-muted: #60758e;
+    --admin-border: #d9e8f5;
+    margin: 0;
+    padding: 0;
+    background: #edf7ff;
+    color: var(--admin-text);
+    font-family: "Inter", "Segoe UI", sans-serif;
+    font-size: 14px;
+}
+
+.sportix-admin .admin-shell {
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr);
+    min-height: 100vh;
+}
+
+.sportix-admin .admin-sidebar {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-self: start;
+    height: 100vh;
+    padding: 22px 14px;
+    overflow-y: auto;
+    background: linear-gradient(160deg, #021627, #042d4b);
+    color: #fff;
+}
+
+.sportix-admin .admin-brand {
+    position: relative;
+    display: block;
+    width: 210px;
+    max-width: 100%;
+    height: 125px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+    .sportix-admin .admin-brand img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 440px;
+        max-width: none;
+        height: auto;
+        transform: translate(-50%, -50%);
+        mix-blend-mode: screen;
+    }
+
+.sportix-admin .admin-caption {
+    margin: 8px 0 30px;
+    color: #c1d9ed;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.8px;
+}
+
+.sportix-admin .admin-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sportix-admin .admin-menu-item,
+.sportix-admin .admin-menu-group > summary {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 15px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: #e3edf7;
+    font: inherit;
+    font-weight: 500;
+    text-align: left;
+    text-decoration: none;
+}
+
+    .sportix-admin .admin-menu-item > i,
+    .sportix-admin .admin-menu-group summary span > i {
+        width: 22px;
+        flex-shrink: 0;
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .sportix-admin a.admin-menu-item:hover,
+    .sportix-admin .admin-menu-group > summary:hover {
+        background: rgba(17, 157, 255, .12);
+        color: #fff;
+    }
+
+    .sportix-admin .admin-menu-item.active {
+        border-color: #126494;
+        background: linear-gradient(110deg, #064b76, #073b60);
+        color: #fff;
+        font-weight: 700;
+        box-shadow: inset 4px 0 var(--admin-lime);
+    }
+
+    .sportix-admin .admin-menu-item[aria-disabled="true"] {
+        color: #a5bbcf;
+    }
+
+.sportix-admin .admin-menu-group > summary {
+    justify-content: space-between;
+    cursor: pointer;
+    list-style: none;
+}
+
+.sportix-admin .admin-menu-group summary > span {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.sportix-admin .menu-arrow {
+    font-size: 13px;
+}
+
+.sportix-admin .admin-menu-group[open] .menu-arrow {
+    transform: rotate(90deg);
+}
+
+.sportix-admin .admin-submenu {
+    margin: 5px 0 8px 25px;
+    padding-left: 10px;
+    border-left: 1px solid #31516b;
+}
+
+    .sportix-admin .admin-submenu .admin-menu-item {
+        min-height: 38px;
+        font-size: 13px;
+    }
+
+.sportix-admin .admin-logout:disabled {
+    color: #a5bbcf;
+    cursor: not-allowed;
+}
+
+.sportix-admin .admin-sidebar-note {
+    margin-top: auto;
+    padding: 40px 15px 0;
+}
+
+    .sportix-admin .admin-sidebar-note > span {
+        display: block;
+        width: 60px;
+        height: 3px;
+        margin-bottom: 14px;
+        border-radius: 3px;
+        background: linear-gradient(90deg, #119dff, #a8e82e);
+    }
+
+    .sportix-admin .admin-sidebar-note p {
+        margin: 0;
+        color: #c1d9ed;
+        font-size: 10px;
+        letter-spacing: 1.8px;
+    }
+
+.sportix-admin .admin-main {
+    min-width: 0;
+    background: radial-gradient( circle at top right, rgba(17, 157, 255, .1), transparent 45% ), linear-gradient(135deg, #f1faff, #e6f4ff);
+}
+
+.sportix-admin .admin-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    min-height: 70px;
+    padding: 14px 26px;
+    border-bottom: 1px solid #cbdff1;
+    background: rgba(255, 255, 255, .4);
+}
+
+.sportix-admin .admin-breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 13px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-weight: 500;
+}
+
+    .sportix-admin .admin-breadcrumb li + li::before {
+        content: "/";
+        margin-right: 13px;
+        color: #8ca2b8;
+    }
+
+    .sportix-admin .admin-breadcrumb .current {
+        color: #0055d5;
+        font-weight: 700;
+    }
+
+.sportix-admin .admin-content {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 28px 26px;
+}
+
+.sportix-admin .product-page-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 26px;
+}
+
+    .sportix-admin .product-page-heading h1 {
+        margin: 0 0 7px;
+        color: #082952;
+        font-size: clamp(24px, 2.5vw, 32px);
+        font-weight: 800;
+        letter-spacing: -.7px;
+    }
+
+    .sportix-admin .product-page-heading p {
+        margin: 0;
+        color: var(--admin-muted);
+        font-size: 15px;
+    }
+
+.sportix-admin .product-panel {
+    padding: 18px;
+    border: 1px solid #d9eafa;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, .94);
+    box-shadow: 0 8px 24px rgba(8, 60, 100, .07);
+}
+
+.sportix-admin .product-search {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 0 2px 20px;
+}
+
+.sportix-admin .product-search-box {
+    position: relative;
+    flex: 1 1 280px;
+    max-width: 560px;
+}
+
+    .sportix-admin .product-search-box > i {
+        position: absolute;
+        top: 50%;
+        left: 14px;
+        transform: translateY(-50%);
+        color: #60758e;
+        pointer-events: none;
+    }
+
+    .sportix-admin .product-search-box input {
+        padding-left: 40px;
+    }
+
+.sportix-admin .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border-radius: 7px;
+    font-weight: 600;
+}
+
+.sportix-admin .btn-primary {
+    --bs-btn-bg: #005ce6;
+    --bs-btn-border-color: #005ce6;
+    --bs-btn-hover-bg: #004fc7;
+    --bs-btn-hover-border-color: #004fc7;
+    --bs-btn-active-bg: #0045ae;
+    --bs-btn-active-border-color: #0045ae;
+    --bs-btn-disabled-bg: #005ce6;
+    --bs-btn-disabled-border-color: #005ce6;
+}
+
+.sportix-admin .btn-outline-primary {
+    --bs-btn-color: #0055d5;
+    --bs-btn-border-color: #a9c8f4;
+    --bs-btn-hover-bg: #eaf3ff;
+    --bs-btn-hover-color: #0045ae;
+    --bs-btn-hover-border-color: #76a9ef;
+    --bs-btn-active-bg: #dcecff;
+    --bs-btn-active-color: #0045ae;
+    --bs-btn-active-border-color: #76a9ef;
+}
+
+.sportix-admin .btn-outline-secondary {
+    --bs-btn-color: #294762;
+    --bs-btn-border-color: #bdcfe1;
+    --bs-btn-hover-bg: #edf6ff;
+    --bs-btn-hover-color: #12395a;
+    --bs-btn-hover-border-color: #91b6d8;
+}
+
+.sportix-admin .form-control,
+.sportix-admin .form-select {
+    min-height: 42px;
+    border-color: #bcd1e7;
+    border-radius: 7px;
+    background-color: #fbfdff;
+    color: var(--admin-text);
+}
+
+    .sportix-admin .form-control:focus,
+    .sportix-admin .form-select:focus {
+        border-color: #119dff;
+        box-shadow: 0 0 0 3px rgba(17, 157, 255, .12);
+    }
+
+.sportix-admin .product-table {
+    --bs-table-bg: transparent;
+    --bs-table-color: #173452;
+    --bs-table-border-color: #e0eaf3;
+    --bs-table-hover-bg: #f2f9ff;
+    margin: 0;
+    font-size: 14px;
+}
+
+    .sportix-admin .product-table th {
+        padding: 14px 12px;
+        border-bottom: 0;
+        background: #dcefff;
+        color: #10335c;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+        .sportix-admin .product-table th:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        .sportix-admin .product-table th:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+    .sportix-admin .product-table td {
+        padding: 14px 12px;
+        vertical-align: middle;
+    }
+
+.sportix-admin .product-cell {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 240px;
+}
+
+.sportix-admin .product-thumb,
+.sportix-admin .product-no-image {
+    width: 66px;
+    height: 66px;
+    flex: 0 0 66px;
+    border: 1px solid #e1eaf2;
+    border-radius: 10px;
+    background: #f4f8fc;
+}
+
+.sportix-admin .product-thumb {
+    object-fit: contain;
+}
+
+.sportix-admin .product-no-image {
+    display: grid;
+    place-items: center;
+    color: #7b95ac;
+    font-size: 23px;
+}
+
+.sportix-admin [hidden] {
+    display: none !important;
+}
+
+.sportix-admin .product-name {
+    display: block;
+    margin-bottom: 5px;
+    color: #0055d5;
+    font-weight: 600;
+    line-height: 1.5;
+    text-decoration: none;
+}
+
+    .sportix-admin .product-name:hover {
+        text-decoration: underline;
+    }
+
+.sportix-admin .product-meta {
+    color: var(--admin-muted);
+    font-size: 12px;
+}
+
+.sportix-admin .product-price {
+    color: #10266a;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.sportix-admin .product-old-price {
+    display: block;
+    margin: 3px 0;
+    color: #7b8a9f;
+    font-size: 12px;
+    text-decoration: line-through;
+}
+
+.sportix-admin .status-pill {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.sportix-admin .status-selling {
+    background: #d4f5df;
+    color: #126437;
+}
+
+.sportix-admin .status-stopped {
+    background: #e8edf2;
+    color: #4a5b6e;
+}
+
+.sportix-admin .status-discount,
+.sportix-admin .status-empty {
+    background: #ffe1e5;
+    color: #b51f35;
+}
+
+.sportix-admin .status-low {
+    background: #fff0c9;
+    color: #966000;
+}
+
+.sportix-admin .status-new {
+    background: #e4efff;
+    color: #0055d5;
+}
+
+.sportix-admin .product-stock {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.sportix-admin .product-panel-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 18px 4px 0;
+    color: var(--admin-muted);
+}
+
+.sportix-admin .pagination {
+    gap: 6px;
+    margin: 0;
+}
+
+.sportix-admin .page-link {
+    min-width: 35px;
+    border: 1px solid #c9daec;
+    border-radius: 8px !important;
+    color: #345675;
+    text-align: center;
+}
+
+.sportix-admin .active > .page-link {
+    border-color: #005ce6;
+    background: #005ce6;
+    color: #fff;
+}
+
+.sportix-admin .card {
+    border-color: var(--admin-border);
+    border-radius: 12px;
+}
+
+.sportix-admin .field-validation-error {
+    display: block;
+    margin-top: 6px;
+    color: #c92c3b;
+    font-size: 13px;
+}
+
+.sportix-admin .input-validation-error {
+    border-color: #dc3545;
+}
+
+.sportix-admin .validation-summary-errors {
+    color: #c92c3b;
+}
+
+.sportix-admin .field-validation-valid,
+.sportix-admin .validation-summary-valid {
+    display: none;
+}
+
+.sportix-admin .admin-sidebar a:focus-visible,
+.sportix-admin .admin-sidebar summary:focus-visible {
+    outline: 3px solid #a8e82e;
+    outline-offset: 2px;
+}
+
+@media (max-width: 1100px) {
+    .sportix-admin .admin-shell {
+        grid-template-columns: 220px minmax(0, 1fr);
+    }
+
+    .sportix-admin .admin-content {
+        padding: 22px 18px;
+    }
+}
+
+@media (max-width: 767px) {
+    .sportix-admin .admin-shell {
+        display: block;
+    }
+
+    .sportix-admin .admin-sidebar {
+        position: static;
+        height: auto;
+    }
+
+    .sportix-admin .admin-brand {
+        height: 105px;
+    }
+
+    .sportix-admin .admin-caption {
+        margin-bottom: 18px;
+    }
+
+    .sportix-admin .admin-sidebar-note {
+        display: none;
+    }
+
+    .sportix-admin .admin-topbar {
+        padding: 14px 18px;
+    }
+
+    .sportix-admin .product-panel {
+        padding: 12px;
+    }
+}

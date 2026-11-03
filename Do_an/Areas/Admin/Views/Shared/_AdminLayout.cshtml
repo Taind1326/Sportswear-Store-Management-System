@@ -1,40 +1,176 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string controller = Convert.ToString(
+        ViewContext.RouteData.Values["controller"]);
+
+    bool trangSanPham = controller == "SanPham";
+}
+
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1" />
 
     <title>@ViewBag.Title - SPORTIX Admin</title>
 
-    @Styles.Render("~/Content/css")
+    <link href="@Url.Content("~/Content/bootstrap.min.css")"
+          rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet" />
 
     <link href="@Url.Content("~/Content/validation.css")"
           rel="stylesheet" />
 
+    <link href="@Url.Content("~/Content/admin.css")?v=3"
+          rel="stylesheet" />
+
     @RenderSection("styles", required: false)
 </head>
-<body>
-    <header class="navbar navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand"
-               href="@Url.Action("Index", "Dashboard", new { area = "Admin" })">
-                SPORTIX Admin
+
+<body class="sportix-admin">
+    <div class="admin-shell">
+        <aside class="admin-sidebar">
+            <a href="@Url.Action("Index", "SanPham", new { area = "Admin" })"
+               class="admin-brand"
+               aria-label="SPORTIX - Quản lý sản phẩm">
+                <img src="@Url.Content("~/Content/sportix/img/logo.jpg")"
+                     alt="SPORTIX" />
             </a>
 
-            <a class="btn btn-outline-light"
-               href="@Url.Action("Index", "Home", new { area = "" })">
-                Về trang chủ
-            </a>
+            <p class="admin-caption">QUẢN TRỊ CỬA HÀNG</p>
+
+            <nav class="admin-menu" aria-label="Menu quản trị">
+                <span class="admin-menu-item"
+                      aria-disabled="true"
+                      title="Chưa kết nối chức năng">
+                    <i class="bi bi-grid" aria-hidden="true"></i>
+                    Dashboard
+                </span>
+
+                <a href="@Url.Action("Index", "SanPham", new { area = "Admin" })"
+                   class="admin-menu-item @(trangSanPham ? "active" : "")"
+                   aria-current="@(trangSanPham ? "page" : null)">
+                    <i class="bi bi-box-seam" aria-hidden="true"></i>
+                    Quản lý sản phẩm
+                </a>
+
+                <span class="admin-menu-item"
+                      aria-disabled="true"
+                      title="Chưa kết nối chức năng">
+                    <i class="bi bi-people" aria-hidden="true"></i>
+                    Quản lý tài khoản
+                </span>
+
+                <span class="admin-menu-item"
+                      aria-disabled="true"
+                      title="Chưa kết nối chức năng">
+                    <i class="bi bi-cart3" aria-hidden="true"></i>
+                    Quản lý đơn hàng
+                </span>
+
+                <span class="admin-menu-item"
+                      aria-disabled="true"
+                      title="Chưa kết nối chức năng">
+                    <i class="bi bi-bar-chart" aria-hidden="true"></i>
+                    Thống kê
+                </span>
+
+                <details class="admin-menu-group">
+                    <summary>
+                        <span>
+                            <i class="bi bi-tag" aria-hidden="true"></i>
+                            Khuyến mãi
+                        </span>
+
+                        <i class="bi bi-chevron-right menu-arrow"
+                           aria-hidden="true"></i>
+                    </summary>
+
+                    <div class="admin-submenu">
+                        <span class="admin-menu-item"
+                              aria-disabled="true">
+                            Mã giảm giá
+                        </span>
+
+                        <span class="admin-menu-item"
+                              aria-disabled="true">
+                            Thông báo khuyến mãi
+                        </span>
+                    </div>
+                </details>
+
+                <button type="button"
+                        class="admin-menu-item admin-logout"
+                        disabled
+                        title="Chưa kết nối chức năng đăng xuất">
+                    <i class="bi bi-box-arrow-right"
+                       aria-hidden="true"></i>
+                    Đăng xuất
+                </button>
+            </nav>
+
+            <div class="admin-sidebar-note">
+                <span></span>
+                <p>SPORTIX MANAGEMENT</p>
+            </div>
+        </aside>
+
+        <div class="admin-main">
+            <header class="admin-topbar">
+                <nav aria-label="Đường dẫn">
+                    <ol class="admin-breadcrumb">
+                        <li>
+                            <i class="bi bi-house-door"
+                               aria-hidden="true"></i>
+                            <span class="visually-hidden">Trang quản trị</span>
+                        </li>
+
+                        <li>Quản trị</li>
+
+                        <li class="current">
+                            @(trangSanPham ? "Sản phẩm" : Convert.ToString(ViewBag.Title))
+                        </li>
+                    </ol>
+                </nav>
+
+                <a href="@Url.Action("Index", "Home", new { area = "" })"
+                   class="btn btn-outline-primary">
+                    <i class="bi bi-box-arrow-up-right me-2"
+                       aria-hidden="true"></i>
+                    Về trang cửa hàng
+                </a>
+            </header>
+
+            <main class="admin-content">
+                @RenderBody()
+            </main>
         </div>
-    </header>
-
-    <main class="container py-4">
-        @RenderBody()
-    </main>
+    </div>
 
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        document.addEventListener("error", function (event) {
+            var anh = event.target;
+
+            if (!(anh instanceof HTMLImageElement) ||
+                !anh.classList.contains("product-thumb")) {
+                return;
+            }
+
+            anh.hidden = true;
+
+            var duPhong = anh.nextElementSibling;
+
+            if (duPhong) {
+                duPhong.hidden = false;
+            }
+        }, true);
+    </script>
 
     @RenderSection("scripts", required: false)
 </body>

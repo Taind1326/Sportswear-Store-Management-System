@@ -231,13 +231,16 @@
     <Compile Include="Services\SanPhamService.cs" />
     <Compile Include="Services\ThongBaoService.cs" />
     <Compile Include="Services\ThongKeService.cs" />
+    <Compile Include="Services\TonKhoService.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\BoSungHangViewModel.cs" />
     <Compile Include="ViewModels\DangKyViewModel.cs" />
     <Compile Include="ViewModels\DangNhapViewModel.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\DatHangViewModel.cs" />
     <Compile Include="ViewModels\GioHangViewModel.cs" />
     <Compile Include="ViewModels\SanPhamChiTietViewModel.cs" />
+    <Compile Include="ViewModels\SuaPhanLoaiViewModel.cs" />
     <Compile Include="ViewModels\SuaSanPhamViewModel.cs" />
     <Compile Include="ViewModels\ThemPhanLoaiViewModel.cs" />
     <Compile Include="ViewModels\ThemSanPhamViewModel.cs" />
@@ -249,7 +252,10 @@
     <Content Include="Areas\Admin\Views\SanPham\Them.cshtml" />
     <Content Include="Areas\Admin\Views\SanPham\ThemPhanLoai.cshtml" />
     <Content Include="Areas\Admin\Views\SanPham\Sua.cshtml" />
+    <Content Include="Areas\Admin\Views\SanPham\SuaPhanLoai.cshtml" />
+    <Content Include="Areas\Admin\Views\SanPham\BoSungHang.cshtml" />
     <None Include="Areas\Admin\Views\Web.config" />
+    <Content Include="Content\admin.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
