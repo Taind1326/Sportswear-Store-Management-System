@@ -45,6 +45,7 @@
                             maxlength = "200",
                             required = "required"
                         })
+
                     @Html.ValidationMessageFor(m => m.TenSanPham)
                 </div>
 
@@ -63,6 +64,7 @@
                                 @class = "form-select",
                                 required = "required"
                             })
+
                         @Html.ValidationMessageFor(m => m.MaLoaiHang)
                     </div>
 
@@ -80,6 +82,7 @@
                                 @class = "form-select",
                                 required = "required"
                             })
+
                         @Html.ValidationMessageFor(m => m.MaThuongHieu)
                     </div>
                 </div>
@@ -114,11 +117,11 @@
             <div class="card-body p-4">
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
                     <div>
-                        <h2 class="h5">Màu / Size và tồn kho</h2>
+                        <h2 class="h5">Màu / Kích cỡ và tồn kho</h2>
 
                         <p class="text-muted mb-0">
-                            Mỗi tổ hợp màu và size có giá, tồn kho riêng.
-                            Nếu không có màu hoặc size, nhập “Mặc định”.
+                            Mỗi tổ hợp màu và kích cỡ có giá, tồn kho riêng.
+                            Không có màu hoặc kích cỡ thì để trống ô tương ứng.
                         </p>
                     </div>
 
@@ -134,9 +137,9 @@
                         <thead>
                             <tr>
                                 <th scope="col">Màu</th>
-                                <th scope="col">Size / Kích cỡ</th>
+                                <th scope="col">Kích cỡ / Dung tích</th>
                                 <th scope="col">Giá gốc (đ)</th>
-                                <th scope="col">Tồn kho</th>
+                                <th scope="col">Số lượng ban đầu</th>
                                 <th scope="col">
                                     <span class="visually-hidden">
                                         Thao tác
@@ -158,7 +161,7 @@
                                                 data_field = "MauSac",
                                                 list = "goiYMau",
                                                 maxlength = "50",
-                                                required = "required",
+                                                placeholder = "Ví dụ: Đen",
                                                 aria_label = "Màu"
                                             })
                                     </td>
@@ -172,8 +175,8 @@
                                                 data_field = "KichThuoc",
                                                 list = "goiYSize",
                                                 maxlength = "30",
-                                                required = "required",
-                                                aria_label = "Size hoặc kích cỡ"
+                                                placeholder = "M, 40, 750ml...",
+                                                aria_label = "Kích cỡ hoặc dung tích"
                                             })
                                     </td>
 
@@ -204,7 +207,7 @@
                                                 min = "0",
                                                 step = "1",
                                                 required = "required",
-                                                aria_label = "Số lượng tồn"
+                                                aria_label = "Số lượng ban đầu"
                                             })
                                     </td>
 
@@ -277,8 +280,8 @@
                    data-field="MauSac"
                    list="goiYMau"
                    maxlength="50"
-                   aria-label="Màu"
-                   required />
+                   placeholder="Ví dụ: Đen"
+                   aria-label="Màu" />
         </td>
 
         <td>
@@ -287,8 +290,8 @@
                    data-field="KichThuoc"
                    list="goiYSize"
                    maxlength="30"
-                   aria-label="Size hoặc kích cỡ"
-                   required />
+                   placeholder="M, 40, 750ml..."
+                   aria-label="Kích cỡ hoặc dung tích" />
         </td>
 
         <td>
@@ -308,7 +311,7 @@
                    min="0"
                    step="1"
                    value="0"
-                   aria-label="Số lượng tồn"
+                   aria-label="Số lượng ban đầu"
                    required />
         </td>
 

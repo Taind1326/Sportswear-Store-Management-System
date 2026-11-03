@@ -1,12 +1,12 @@
 ﻿@model Do_an.ViewModels.ThemPhanLoaiViewModel
 
 @{
-    ViewBag.Title = "Thêm màu / size";
+    ViewBag.Title = "Thêm màu / kích cỡ";
 }
 
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
     <div>
-        <h1 class="h3 mb-1">Thêm màu / size</h1>
+        <h1 class="h3 mb-1">Thêm màu / kích cỡ</h1>
         <p class="text-secondary mb-0">@Model.TenSanPham</p>
     </div>
 
@@ -23,11 +23,7 @@
             "SanPham",
             new { area = "Admin" },
             FormMethod.Post,
-            new
-            {
-                @class = "row g-3",
-                novalidate = "novalidate"
-            }))
+            new { @class = "row g-3" }))
         {
             @Html.AntiForgeryToken()
             @Html.HiddenFor(m => m.MaSanPham)
@@ -38,9 +34,10 @@
                     "",
                     new { @class = "text-danger" })
 
-                <p class="text-secondary small mb-0">
-                    Mỗi tổ hợp màu và size chỉ được tạo một lần.
-                    Nếu sản phẩm không có màu hoặc size, nhập “Mặc định”.
+                <p class="text-secondary mb-0">
+                    Mỗi tổ hợp màu và kích cỡ chỉ được tạo một lần.
+                    Nếu sản phẩm không có màu hoặc kích cỡ,
+                    để trống ô tương ứng.
                 </p>
             </div>
 
@@ -55,13 +52,13 @@
                     {
                         @class = "form-control",
                         maxlength = "50",
-                        placeholder = "Ví dụ: Xanh dương",
-                        required = "required",
-                        data_msg_required = "Vui lòng nhập màu sắc.",
-                        data_msg_maxlength = "Màu sắc không được vượt quá 50 ký tự."
+                        placeholder = "Ví dụ: Đen, Xanh dương"
                     })
 
-                @Html.ValidationMessageFor(m => m.MauSac)
+                @Html.ValidationMessageFor(
+                    m => m.MauSac,
+                    "",
+                    new { @class = "text-danger" })
             </div>
 
             <div class="col-md-6">
@@ -75,19 +72,19 @@
                     {
                         @class = "form-control",
                         maxlength = "30",
-                        placeholder = "Ví dụ: M, 42, 750ml",
-                        required = "required",
-                        data_msg_required = "Vui lòng nhập size hoặc kích cỡ.",
-                        data_msg_maxlength = "Size hoặc kích cỡ không được vượt quá 30 ký tự."
+                        placeholder = "Ví dụ: M, 40, 750 ml, 2 m"
                     })
 
-                @Html.ValidationMessageFor(m => m.KichThuoc)
+                @Html.ValidationMessageFor(
+                    m => m.KichThuoc,
+                    "",
+                    new { @class = "text-danger" })
             </div>
 
             <div class="col-md-6">
-                @Html.LabelFor(
-                    m => m.GiaBan,
-                    new { @class = "form-label" })
+                <label for="GiaBan" class="form-label">
+                    Giá gốc
+                </label>
 
                 <div class="input-group">
                     @Html.TextBoxFor(
@@ -98,23 +95,22 @@
                             type = "number",
                             min = "0",
                             step = "0.01",
-                            required = "required",
-                            data_msg_required = "Vui lòng nhập giá gốc.",
-                            data_msg_number = "Vui lòng nhập giá gốc hợp lệ.",
-                            data_msg_min = "Giá gốc không được nhỏ hơn 0.",
-                            data_msg_step = "Giá gốc chỉ được có tối đa hai chữ số thập phân."
+                            required = "required"
                         })
 
                     <span class="input-group-text">đ</span>
                 </div>
 
-                @Html.ValidationMessageFor(m => m.GiaBan)
+                @Html.ValidationMessageFor(
+                    m => m.GiaBan,
+                    "",
+                    new { @class = "text-danger" })
             </div>
 
             <div class="col-md-6">
-                @Html.LabelFor(
-                    m => m.SoLuongTon,
-                    new { @class = "form-label" })
+                <label for="SoLuongTon" class="form-label">
+                    Số lượng ban đầu
+                </label>
 
                 @Html.TextBoxFor(
                     m => m.SoLuongTon,
@@ -123,27 +119,27 @@
                         @class = "form-control",
                         type = "number",
                         min = "0",
+                        max = "2147483647",
                         step = "1",
-                        required = "required",
-                        data_msg_required = "Vui lòng nhập số lượng tồn kho.",
-                        data_msg_number = "Vui lòng nhập số lượng tồn kho hợp lệ.",
-                        data_msg_min = "Số lượng tồn kho không được nhỏ hơn 0.",
-                        data_msg_step = "Số lượng tồn kho phải là số nguyên."
+                        required = "required"
                     })
 
-                @Html.ValidationMessageFor(m => m.SoLuongTon)
+                @Html.ValidationMessageFor(
+                    m => m.SoLuongTon,
+                    "",
+                    new { @class = "text-danger" })
             </div>
 
             <div class="col-12">
                 <p class="text-secondary small mb-0">
-                    Mã phân loại được tạo tự động.
+                    SKU được tạo tự động.
                     Giá sau giảm áp dụng theo mức giảm của sản phẩm.
                 </p>
             </div>
 
             <div class="col-12 d-flex flex-wrap gap-2">
                 <button type="submit" class="btn btn-primary">
-                    Lưu màu / size
+                    Thêm loại này
                 </button>
 
                 <a href="@Url.Action("ChiTiet", new { id = Model.MaSanPham })"

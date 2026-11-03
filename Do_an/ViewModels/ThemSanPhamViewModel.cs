@@ -45,17 +45,17 @@ namespace Do_an.ViewModels
     public class PhanLoaiSanPhamInput
     {
         [Display(Name = "Màu")]
-        [Required(ErrorMessage = "Vui lòng nhập màu sắc.")]
         [StringLength(
-            50,
-            ErrorMessage = "Màu sắc không được vượt quá 50 ký tự.")]
+    50,
+    ErrorMessage = "Màu sắc không được vượt quá 50 ký tự."
+)]
         public string MauSac { get; set; }
 
-        [Display(Name = "Size / Kích cỡ")]
-        [Required(ErrorMessage = "Vui lòng nhập size hoặc kích cỡ.")]
+        [Display(Name = "Kích cỡ / dung tích")]
         [StringLength(
-            30,
-            ErrorMessage = "Size hoặc kích cỡ không được vượt quá 30 ký tự.")]
+    30,
+    ErrorMessage = "Kích cỡ hoặc dung tích không được vượt quá 30 ký tự."
+)]
         public string KichThuoc { get; set; }
 
         [Display(Name = "Giá gốc")]
