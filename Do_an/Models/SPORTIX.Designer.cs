@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'D:\Thiet_Ke_Web\Do_An_Shop\Do_an\Do_an\Models\Model1.edmx'. 
+﻿// T4 code generation is enabled for model 'D:\Thiet_Ke_Web\Do_An_Shop\Do_an\Do_an\Models\SPORTIX.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

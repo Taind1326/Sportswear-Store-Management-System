@@ -26,12 +26,14 @@ namespace Do_an.Models
         }
     
         public DbSet<BienTheSanPham> BienTheSanPhams { get; set; }
+        public DbSet<CanhBaoTonKho> CanhBaoTonKhoes { get; set; }
         public DbSet<ChiTietDonHang> ChiTietDonHangs { get; set; }
         public DbSet<ChiTietGioHang> ChiTietGioHangs { get; set; }
         public DbSet<DiaChi> DiaChis { get; set; }
         public DbSet<DonHang> DonHangs { get; set; }
         public DbSet<GioHang> GioHangs { get; set; }
         public DbSet<HinhAnhSanPham> HinhAnhSanPhams { get; set; }
+        public DbSet<LichSuTonKho> LichSuTonKhoes { get; set; }
         public DbSet<LoaiHang> LoaiHangs { get; set; }
         public DbSet<MaGiamGia> MaGiamGias { get; set; }
         public DbSet<SanPham> SanPhams { get; set; }

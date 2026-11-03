@@ -19,7 +19,7 @@
         "SanPham",
         new { area = "Admin" },
         FormMethod.Post,
-        new { id = "formSanPham" }))
+        new { id = "formSanPham", novalidate = "novalidate" }))
     {
         @Html.AntiForgeryToken()
 
@@ -45,6 +45,7 @@
                             maxlength = "200",
                             required = "required"
                         })
+                    @Html.ValidationMessageFor(m => m.TenSanPham)
                 </div>
 
                 <div class="row">
@@ -62,6 +63,7 @@
                                 @class = "form-select",
                                 required = "required"
                             })
+                        @Html.ValidationMessageFor(m => m.MaLoaiHang)
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -78,6 +80,7 @@
                                 @class = "form-select",
                                 required = "required"
                             })
+                        @Html.ValidationMessageFor(m => m.MaThuongHieu)
                     </div>
                 </div>
 

@@ -19,6 +19,7 @@ namespace Do_an.Models
             this.DiaChis = new HashSet<DiaChi>();
             this.DonHangs = new HashSet<DonHang>();
             this.GioHangs = new HashSet<GioHang>();
+            this.LichSuTonKhoes = new HashSet<LichSuTonKho>();
             this.ThanhToans = new HashSet<ThanhToan>();
             this.ThongBaos = new HashSet<ThongBao>();
             this.ThongBaoWebsites = new HashSet<ThongBaoWebsite>();
@@ -37,6 +38,7 @@ namespace Do_an.Models
         public virtual ICollection<DiaChi> DiaChis { get; set; }
         public virtual ICollection<DonHang> DonHangs { get; set; }
         public virtual ICollection<GioHang> GioHangs { get; set; }
+        public virtual ICollection<LichSuTonKho> LichSuTonKhoes { get; set; }
         public virtual ICollection<ThanhToan> ThanhToans { get; set; }
         public virtual ICollection<ThongBao> ThongBaos { get; set; }
         public virtual ICollection<ThongBaoWebsite> ThongBaoWebsites { get; set; }

@@ -18,6 +18,7 @@ namespace Do_an.Models
         {
             this.ChiTietDonHangs = new HashSet<ChiTietDonHang>();
             this.ChiTietGioHangs = new HashSet<ChiTietGioHang>();
+            this.LichSuTonKhoes = new HashSet<LichSuTonKho>();
         }
     
         public int MaBienThe { get; set; }
@@ -30,7 +31,9 @@ namespace Do_an.Models
         public bool DangBan { get; set; }
     
         public virtual SanPham SanPham { get; set; }
+        public virtual CanhBaoTonKho CanhBaoTonKho { get; set; }
         public virtual ICollection<ChiTietDonHang> ChiTietDonHangs { get; set; }
         public virtual ICollection<ChiTietGioHang> ChiTietGioHangs { get; set; }
+        public virtual ICollection<LichSuTonKho> LichSuTonKhoes { get; set; }
     }
 }

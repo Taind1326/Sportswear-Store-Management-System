@@ -61,18 +61,18 @@ namespace Do_an.ViewModels
         [Display(Name = "Giá gốc")]
         [Required(ErrorMessage = "Vui lòng nhập giá gốc.")]
         [Range(
-            typeof(decimal),
-            "0",
-            "9999999999999999.99",
-            ErrorMessage = "Giá gốc phải từ 0 đến 9999999999999999,99 đồng.")]
+    typeof(decimal),
+    "0",
+    "9999999999999999.99",
+    ErrorMessage = "Giá gốc phải từ 0 đến 9999999999999999,99 đồng.")]
         public decimal? GiaBan { get; set; }
 
         [Display(Name = "Tồn kho")]
         [Required(ErrorMessage = "Vui lòng nhập số lượng tồn kho.")]
         [Range(
-            0,
-            int.MaxValue,
-            ErrorMessage = "Số lượng tồn kho phải từ 0 đến 2147483647.")]
+    0,
+    int.MaxValue,
+    ErrorMessage = "Số lượng tồn kho phải từ 0 đến 2147483647.")]
         public int? SoLuongTon { get; set; }
     }
 }
