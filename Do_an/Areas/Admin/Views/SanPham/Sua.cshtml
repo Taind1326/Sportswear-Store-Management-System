@@ -1,0 +1,247 @@
+﻿@model Do_an.ViewModels.SuaSanPhamViewModel
+
+@{
+    ViewBag.Title = "Sửa thông tin sản phẩm";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div>
+            <h1 class="h3 mb-1">Sửa thông tin sản phẩm</h1>
+
+            <p class="text-secondary mb-0">
+                Mã sản phẩm: #@Model.MaSanPham
+            </p>
+        </div>
+
+        <a href="@Url.Action("ChiTiet", new { id = Model.MaSanPham })"
+           class="btn btn-outline-secondary">
+            Quay lại
+        </a>
+    </div>
+
+    @using (Html.BeginForm(
+        "Sua",
+        "SanPham",
+        new { area = "Admin" },
+        FormMethod.Post,
+        new
+        {
+            @class = "card border-0 shadow-sm",
+            novalidate = "novalidate"
+        }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.MaSanPham)
+
+        <div class="card-body p-4">
+            @Html.ValidationSummary(
+                true,
+                "",
+                new { @class = "text-danger mb-3" })
+
+            <div class="mb-3">
+                @Html.LabelFor(
+                    m => m.TenSanPham,
+                    new { @class = "form-label" })
+
+                @Html.TextBoxFor(
+                    m => m.TenSanPham,
+                    new
+                    {
+                        @class = "form-control",
+                        maxlength = "200",
+                        required = "required",
+
+                        data_val = "true",
+                        data_val_required =
+                            "Vui lòng nhập tên sản phẩm.",
+
+                        data_msg_required =
+                            "Vui lòng nhập tên sản phẩm.",
+
+                        data_msg_maxlength =
+                            "Tên sản phẩm không được vượt quá 200 ký tự."
+                    })
+
+                @Html.ValidationMessageFor(
+                    m => m.TenSanPham,
+                    "",
+                    new { @class = "text-danger" })
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    @Html.LabelFor(
+                        m => m.MaLoaiHang,
+                        new { @class = "form-label" })
+
+                    @Html.DropDownList(
+                        "MaLoaiHang",
+                        null,
+                        "-- Chọn loại hàng --",
+                        new
+                        {
+                            @class = "form-select",
+                            required = "required",
+
+                            data_val = "true",
+                            data_val_required =
+                                "Vui lòng chọn loại hàng.",
+
+                            data_msg_required =
+                                "Vui lòng chọn loại hàng."
+                        })
+
+                    @Html.ValidationMessageFor(
+                        m => m.MaLoaiHang,
+                        "",
+                        new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    @Html.LabelFor(
+                        m => m.MaThuongHieu,
+                        new { @class = "form-label" })
+
+                    @Html.DropDownList(
+                        "MaThuongHieu",
+                        null,
+                        "-- Chọn thương hiệu --",
+                        new
+                        {
+                            @class = "form-select",
+                            required = "required",
+
+                            data_val = "true",
+                            data_val_required =
+                                "Vui lòng chọn thương hiệu.",
+
+                            data_msg_required =
+                                "Vui lòng chọn thương hiệu."
+                        })
+
+                    @Html.ValidationMessageFor(
+                        m => m.MaThuongHieu,
+                        "",
+                        new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="mb-3">
+                @Html.LabelFor(
+                    m => m.MoTa,
+                    new { @class = "form-label" })
+
+                @Html.TextAreaFor(
+                    m => m.MoTa,
+                    new
+                    {
+                        @class = "form-control",
+                        rows = "5"
+                    })
+
+                @Html.ValidationMessageFor(
+                    m => m.MoTa,
+                    "",
+                    new { @class = "text-danger" })
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    @Html.LabelFor(
+                        m => m.PhanTramGiam,
+                        new { @class = "form-label" })
+
+                    <div class="input-group">
+                        @Html.TextBoxFor(
+                            m => m.PhanTramGiam,
+                            new
+                            {
+                                @class = "form-control",
+                                type = "number",
+                                min = "0",
+                                max = "100",
+                                step = "1",
+                                required = "required",
+
+                                data_val = "true",
+
+                                data_val_required =
+                                    "Vui lòng nhập phần trăm giảm.",
+
+                                data_val_number =
+                                    "Vui lòng nhập phần trăm giảm bằng số.",
+
+                                data_val_range =
+                                    "Phần trăm giảm phải từ 0 đến 100.",
+
+                                data_val_range_min = "0",
+                                data_val_range_max = "100",
+
+                                data_msg_required =
+                                    "Vui lòng nhập phần trăm giảm.",
+
+                                data_msg_number =
+                                    "Vui lòng nhập phần trăm giảm bằng số.",
+
+                                data_msg_min =
+                                    "Phần trăm giảm không được nhỏ hơn 0.",
+
+                                data_msg_max =
+                                    "Phần trăm giảm không được lớn hơn 100.",
+
+                                data_msg_step =
+                                    "Phần trăm giảm phải là số nguyên."
+                            })
+
+                        <span class="input-group-text">%</span>
+                    </div>
+
+                    @Html.ValidationMessageFor(
+                        m => m.PhanTramGiam,
+                        "",
+                        new { @class = "text-danger" })
+
+                    <div class="form-text">
+                        Áp dụng cho các màu / kích cỡ của sản phẩm.
+                        Nhập 0 để không giảm giá.
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-4 mb-4">
+                <div class="form-check">
+                    @Html.CheckBoxFor(
+                        m => m.NoiBat,
+                        new { @class = "form-check-input" })
+
+                    @Html.LabelFor(
+                        m => m.NoiBat,
+                        new { @class = "form-check-label" })
+                </div>
+
+                <div class="form-check">
+                    @Html.CheckBoxFor(
+                        m => m.DangBan,
+                        new { @class = "form-check-input" })
+
+                    @Html.LabelFor(
+                        m => m.DangBan,
+                        new { @class = "form-check-label" })
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2">
+                <button type="submit" class="btn btn-primary">
+                    Lưu thay đổi
+                </button>
+
+                <a href="@Url.Action("ChiTiet", new { id = Model.MaSanPham })"
+                   class="btn btn-outline-secondary">
+                    Hủy
+                </a>
+            </div>
+        </div>
+    }
+</div>

@@ -375,14 +375,157 @@ namespace Do_an.Areas.Admin.Controllers
             );
         }
 
-        private void NapDanhMuc(
-            int? maLoaiHang = null,
-            int? maThuongHieu = null)
+        [HttpGet]
+        public ActionResult Sua(int? id)
         {
+            if (!id.HasValue)
+            {
+                return new HttpStatusCodeResult(
+                    System.Net.HttpStatusCode.BadRequest
+                );
+            }
+
+            var sanPham = db.SanPhams
+                .AsNoTracking()
+                .SingleOrDefault(x => x.MaSanPham == id.Value);
+
+            if (sanPham == null)
+            {
+                return HttpNotFound("Không tìm thấy sản phẩm.");
+            }
+
+            var model = new SuaSanPhamViewModel
+            {
+                MaSanPham = sanPham.MaSanPham,
+                TenSanPham = sanPham.TenSanPham,
+                MaLoaiHang = sanPham.MaLoaiHang,
+                MaThuongHieu = sanPham.MaThuongHieu,
+                MoTa = sanPham.MoTa,
+                PhanTramGiam = sanPham.PhanTramGiam,
+                NoiBat = sanPham.NoiBat,
+                DangBan = sanPham.DangBan
+            };
+
+            NapDanhMuc(
+                model.MaLoaiHang,
+                model.MaThuongHieu
+            );
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Sua(SuaSanPhamViewModel model)
+        {
+            var sanPham = db.SanPhams
+                .SingleOrDefault(x =>
+                    x.MaSanPham == model.MaSanPham);
+
+            if (sanPham == null)
+            {
+                return HttpNotFound("Không tìm thấy sản phẩm.");
+            }
+
+            model.TenSanPham = (model.TenSanPham ?? "").Trim();
+            model.MoTa = (model.MoTa ?? "").Trim();
+
+            if (string.IsNullOrWhiteSpace(model.TenSanPham))
+            {
+                ModelState.AddModelError(
+                    "TenSanPham",
+                    "Vui lòng nhập tên sản phẩm."
+                );
+            }
+
+            int loaiHangCu = sanPham.MaLoaiHang;
+            int thuongHieuCu = sanPham.MaThuongHieu;
+
+            bool loaiHangHopLe = db.LoaiHangs.Any(x =>
+                x.MaLoaiHang == model.MaLoaiHang &&
+                (x.HoatDong || x.MaLoaiHang == loaiHangCu));
+
+            if (!loaiHangHopLe)
+            {
+                ModelState.AddModelError(
+                    "MaLoaiHang",
+                    "Vui lòng chọn loại hàng đang hoạt động."
+                );
+            }
+
+            bool thuongHieuHopLe = db.ThuongHieux.Any(x =>
+                x.MaThuongHieu == model.MaThuongHieu &&
+                (x.HoatDong || x.MaThuongHieu == thuongHieuCu));
+
+            if (!thuongHieuHopLe)
+            {
+                ModelState.AddModelError(
+                    "MaThuongHieu",
+                    "Vui lòng chọn thương hiệu đang hoạt động."
+                );
+            }
+
+            if (!ModelState.IsValid)
+            {
+                NapDanhMuc(
+                    model.MaLoaiHang,
+                    model.MaThuongHieu
+                );
+
+                return View(model);
+            }
+
+            sanPham.TenSanPham = model.TenSanPham;
+            sanPham.MaLoaiHang = model.MaLoaiHang;
+            sanPham.MaThuongHieu = model.MaThuongHieu;
+            sanPham.MoTa = model.MoTa;
+            sanPham.PhanTramGiam = model.PhanTramGiam;
+            sanPham.NoiBat = model.NoiBat;
+            sanPham.DangBan = model.DangBan;
+            sanPham.NgayCapNhat = DateTime.Now;
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError(
+                    "",
+                    "Chưa lưu được thay đổi. "
+                    + "Vui lòng kiểm tra dữ liệu rồi thử lại."
+                );
+
+                NapDanhMuc(
+                    model.MaLoaiHang,
+                    model.MaThuongHieu
+                );
+
+                return View(model);
+            }
+
+            TempData["ThanhCong"] =
+                "Cập nhật sản phẩm thành công.";
+
+            return RedirectToAction(
+                "ChiTiet",
+                new { id = sanPham.MaSanPham }
+            );
+        }
+
+        private void NapDanhMuc(
+    int? maLoaiHang = null,
+    int? maThuongHieu = null)
+        {
+            int loaiDangChon = maLoaiHang.GetValueOrDefault();
+            int thuongHieuDangChon = maThuongHieu.GetValueOrDefault();
+
             ViewBag.MaLoaiHang = new SelectList(
                 db.LoaiHangs
                     .AsNoTracking()
-                    .Where(x => x.HoatDong)
+                    .Where(x =>
+                        x.HoatDong ||
+                        x.MaLoaiHang == loaiDangChon)
                     .OrderBy(x => x.TenLoaiHang)
                     .ToList(),
                 "MaLoaiHang",
@@ -393,7 +536,9 @@ namespace Do_an.Areas.Admin.Controllers
             ViewBag.MaThuongHieu = new SelectList(
                 db.ThuongHieux
                     .AsNoTracking()
-                    .Where(x => x.HoatDong)
+                    .Where(x =>
+                        x.HoatDong ||
+                        x.MaThuongHieu == thuongHieuDangChon)
                     .OrderBy(x => x.TenThuongHieu)
                     .ToList(),
                 "MaThuongHieu",
