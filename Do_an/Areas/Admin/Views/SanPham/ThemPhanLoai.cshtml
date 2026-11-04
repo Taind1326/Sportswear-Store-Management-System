@@ -31,7 +31,8 @@
             new
             {
                 @class = "product-panel",
-                novalidate = "novalidate"
+                novalidate = "novalidate",
+                enctype = "multipart/form-data"
             }))
         {
             @Html.AntiForgeryToken()
@@ -246,6 +247,27 @@
                 SKU được tạo tự động khi lưu.
                 Mỗi tổ hợp màu và kích cỡ chỉ được tạo một lần.
             </p>
+
+            <div class="mb-4">
+                @Html.LabelFor(m => m.TepAnhTheoMau, new { @class = "form-label" })
+
+                <input type="file"
+                       id="@Html.IdFor(m => m.TepAnhTheoMau)"
+                       name="@Html.NameFor(m => m.TepAnhTheoMau)"
+                       class="form-control"
+                       accept=".jpg,.jpeg,.png"
+                       aria-describedby="huongDanAnhTheoMau" />
+
+                @Html.ValidationMessageFor(
+                    m => m.TepAnhTheoMau,
+                    "",
+                    new { @class = "text-danger" })
+
+                <div id="huongDanAnhTheoMau" class="form-text">
+                    Tùy chọn. Chọn ảnh JPG hoặc PNG, tối đa 5 MB.
+                    Nếu màu này đã có ảnh, để trống để dùng lại ảnh đó.
+                </div>
+            </div>
 
             <div class="d-flex justify-content-end flex-wrap gap-2 pt-3 border-top">
                 <a href="@Url.Action("ChiTiet", "SanPham", new
