@@ -390,7 +390,11 @@ namespace Do_an.Areas.Admin.Controllers
                 MoTa = sanPham.MoTa,
                 PhanTramGiam = sanPham.PhanTramGiam,
                 NoiBat = sanPham.NoiBat,
-                DangBan = sanPham.DangBan
+                DangBan = sanPham.DangBan,
+                DuongDanAnhDaiDien = db.HinhAnhSanPhams
+                    .Where(x => x.MaSanPham == sanPham.MaSanPham && x.AnhDaiDien)
+                    .Select(x => x.DuongDanAnh)
+                    .SingleOrDefault()
             };
 
             NapDanhMuc(
@@ -413,6 +417,10 @@ namespace Do_an.Areas.Admin.Controllers
                 return HttpNotFound("Không tìm thấy sản phẩm.");
             }
 
+            var anhDaiDien = db.HinhAnhSanPhams.SingleOrDefault(x =>
+                x.MaSanPham == sanPham.MaSanPham && x.AnhDaiDien);
+
+            model.DuongDanAnhDaiDien = anhDaiDien?.DuongDanAnh;
             model.TenSanPham = (model.TenSanPham ?? "").Trim();
             model.MoTa = (model.MoTa ?? "").Trim();
 
@@ -502,21 +510,72 @@ namespace Do_an.Areas.Admin.Controllers
             sanPham.DangBan = model.DangBan;
             sanPham.NgayCapNhat = DateTime.Now;
 
+            const string thuMucAnh = "~/Content/images/san-pham/";
+            string tepMoi = null;
+            string thuMucVatLy = null;
+            bool daLuu = false;
+
             try
             {
+                if (model.TepAnhDaiDien != null)
+                {
+                    thuMucVatLy = Server.MapPath(thuMucAnh);
+                    var dichVuAnh = new HinhAnhSanPhamService();
+                    tepMoi = dichVuAnh.LuuAnh(model.TepAnhDaiDien, thuMucVatLy);
+
+                    if (anhDaiDien == null)
+                    {
+                        anhDaiDien = new HinhAnhSanPham
+                        {
+                            MaSanPham = sanPham.MaSanPham,
+                            AnhDaiDien = true,
+                            ThuTu = 0
+                        };
+
+                        db.HinhAnhSanPhams.Add(anhDaiDien);
+                    }
+
+                    anhDaiDien.DuongDanAnh = thuMucAnh + tepMoi;
+                }
+
                 db.SaveChanges();
+                daLuu = true;
             }
-            catch (DbUpdateException)
+            catch (Exception ex) when (ex is ArgumentException || ex is InvalidDataException)
             {
+                ModelState.AddModelError("TepAnhDaiDien", ex.Message);
+            }
+            catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
+            {
+                Trace.TraceError("Lỗi ghi ảnh đại diện: {0}", ex);
+                ModelState.AddModelError(
+                    "TepAnhDaiDien", "Chưa ghi được ảnh. Vui lòng thử lại.");
+            }
+            catch (DbUpdateException ex)
+            {
+                Trace.TraceError("Lỗi cập nhật sản phẩm: {0}", ex);
                 ModelState.AddModelError(
                     "",
-                    "Chưa lưu được thay đổi. "
-                    + "Vui lòng kiểm tra dữ liệu rồi thử lại.");
+                    "Chưa lưu được thay đổi. Vui lòng kiểm tra dữ liệu rồi thử lại.");
+            }
+            finally
+            {
+                if (!daLuu && tepMoi != null)
+                {
+                    try
+                    {
+                        System.IO.File.Delete(Path.Combine(thuMucVatLy, tepMoi));
+                    }
+                    catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
+                    {
+                        Trace.TraceError("Lỗi dọn ảnh đại diện: {0}", ex);
+                    }
+                }
+            }
 
-                NapDanhMuc(
-                    model.MaLoaiHang,
-                    model.MaThuongHieu);
-
+            if (!daLuu)
+            {
+                NapDanhMuc(model.MaLoaiHang, model.MaThuongHieu);
                 return View(model);
             }
 

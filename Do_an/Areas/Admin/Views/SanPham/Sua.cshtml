@@ -28,7 +28,8 @@
         new
         {
             @class = "card border-0 shadow-sm",
-            novalidate = "novalidate"
+            novalidate = "novalidate",
+            enctype = "multipart/form-data"
         }))
     {
         @Html.AntiForgeryToken()
@@ -145,6 +146,41 @@
                     m => m.MoTa,
                     "",
                     new { @class = "text-danger" })
+            </div>
+
+            <div class="mb-3">
+                @if (!string.IsNullOrWhiteSpace(Model.DuongDanAnhDaiDien))
+                {
+                    <div class="mb-2">
+                        <div class="form-label">Ảnh đại diện hiện tại</div>
+                        <img src="@Url.Content(Model.DuongDanAnhDaiDien)"
+                             alt="Ảnh đại diện hiện tại"
+                             width="96"
+                             height="96"
+                             class="rounded"
+                             style="object-fit: cover;" />
+                    </div>
+                }
+
+                @Html.LabelFor(
+                    m => m.TepAnhDaiDien,
+                    new { @class = "form-label" })
+
+                <input type="file"
+                       id="@Html.IdFor(m => m.TepAnhDaiDien)"
+                       name="@Html.NameFor(m => m.TepAnhDaiDien)"
+                       class="form-control"
+                       accept=".jpg,.jpeg,.png"
+                       aria-describedby="huongDanDoiAnhDaiDien" />
+
+                @Html.ValidationMessageFor(
+                    m => m.TepAnhDaiDien,
+                    "",
+                    new { @class = "text-danger" })
+
+                <div id="huongDanDoiAnhDaiDien" class="form-text">
+                    Chọn ảnh JPG hoặc PNG, tối đa 5 MB. Để trống để giữ ảnh hiện tại.
+                </div>
             </div>
 
             <div class="row">
