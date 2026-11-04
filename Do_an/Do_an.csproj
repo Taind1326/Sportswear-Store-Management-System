@@ -227,6 +227,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DonHangService.cs" />
     <Compile Include="Services\GeminiService.cs" />
+    <Compile Include="Services\HinhAnhSanPhamService.cs" />
     <Compile Include="Services\QuyTacSanPham.cs" />
     <Compile Include="Services\SanPhamService.cs" />
     <Compile Include="Services\ThongBaoService.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="ViewModels\SanPhamChiTietViewModel.cs" />
     <Compile Include="ViewModels\SuaPhanLoaiViewModel.cs" />
     <Compile Include="ViewModels\SuaSanPhamViewModel.cs" />
+    <Compile Include="ViewModels\ThemHinhAnhViewModel.cs" />
     <Compile Include="ViewModels\ThemPhanLoaiViewModel.cs" />
     <Compile Include="ViewModels\ThemSanPhamViewModel.cs" />
   </ItemGroup>
