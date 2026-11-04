@@ -1,7 +1,330 @@
-﻿
+﻿@model Do_an.Models.SanPham
+@using System
+@using System.Linq
+@using System.Globalization
+@using Do_an.Services
+
 @{
-    ViewBag.Title = "ChiTiet";
+    ViewBag.Title = Model.TenSanPham;
+    var vi = CultureInfo.GetCultureInfo("vi-VN");
+
+    var anh = Model.HinhAnhSanPhams
+        .Where(x => !string.IsNullOrWhiteSpace(x.DuongDanAnh))
+        .OrderByDescending(x => x.AnhDaiDien)
+        .ThenBy(x => x.ThuTu)
+        .ThenBy(x => x.MaHinhAnh)
+        .ToList();
+
+    var anhDaiDien = anh.FirstOrDefault();
+    var anhMacDinh = anhDaiDien == null ? "" : Url.Content(anhDaiDien.DuongDanAnh);
+
+    var phanLoai = Model.BienTheSanPhams
+        .Where(x => x.DangBan)
+        .OrderBy(x => x.MauSac)
+        .ThenBy(x => x.KichThuoc)
+        .ToList();
+
+    var nhomMau = phanLoai
+        .GroupBy(x => QuyTacSanPham.ChuanHoa(x.MauSac), StringComparer.OrdinalIgnoreCase)
+        .ToList();
+
+    var gia = phanLoai
+        .Select(x => QuyTacSanPham.GiaSauGiam(x.GiaBan, Model.PhanTramGiam))
+        .ToList();
+
+    string giaBanDau = "Chưa có phân loại đang bán";
+    if (gia.Count > 0)
+    {
+        decimal thapNhat = gia.Min();
+        decimal caoNhat = gia.Max();
+        giaBanDau = thapNhat.ToString("N0", vi) + " đ";
+        if (thapNhat != caoNhat)
+        {
+            giaBanDau += " – " + caoNhat.ToString("N0", vi) + " đ";
+        }
+    }
 }
 
-<h2>ChiTiet</h2>
+@section Styles {
+    <style>
+        .sportix-detail {
+            background: linear-gradient(180deg, #f7fbff, #eaf6ff);
+        }
 
+            .sportix-detail .detail-card {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+                gap: 2rem;
+                padding: clamp(1rem, 3vw, 2rem);
+                border: 1px solid #d9eaf8;
+                border-radius: 1rem;
+                background: #fff;
+            }
+
+            .sportix-detail .detail-gallery,
+            .sportix-detail .detail-info {
+                min-width: 0;
+            }
+
+            .sportix-detail .detail-main-image {
+                display: grid;
+                place-items: center;
+                aspect-ratio: 1;
+                overflow: hidden;
+                border-radius: .75rem;
+                background: #f5faff;
+            }
+
+                .sportix-detail .detail-main-image img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                }
+
+            .sportix-detail .detail-thumbs {
+                display: flex;
+                gap: .5rem;
+                overflow-x: auto;
+                padding: .25rem;
+            }
+
+            .sportix-detail .detail-thumb {
+                flex: 0 0 auto;
+                padding: .2rem;
+            }
+
+                .sportix-detail .detail-thumb img {
+                    width: 60px;
+                    height: 60px;
+                    object-fit: cover;
+                }
+
+            .sportix-detail .detail-price {
+                color: #006fe6;
+            }
+
+            .sportix-detail .detail-option {
+                display: inline-flex;
+                align-items: center;
+                gap: .5rem;
+                max-width: 100%;
+                padding: .45rem .7rem;
+                border: 1px solid #c8d9e9;
+                border-radius: .4rem;
+                background: #fff;
+                color: #0f172a;
+                text-align: left;
+            }
+
+                .sportix-detail .detail-option[aria-pressed="true"] {
+                    border-color: #006fe6;
+                    background: #eaf6ff;
+                    box-shadow: inset 0 0 0 1px #006fe6;
+                }
+
+                .sportix-detail .detail-option:disabled {
+                    opacity: .5;
+                    cursor: not-allowed;
+                }
+
+            .sportix-detail .detail-color img {
+                width: 34px;
+                height: 34px;
+                object-fit: cover;
+            }
+
+            .sportix-detail .detail-description {
+                white-space: pre-line;
+                overflow-wrap: anywhere;
+            }
+
+            .sportix-detail [hidden] {
+                display: none !important;
+            }
+
+        @@media (max-width: 767px) {
+            .sportix-detail .detail-card {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+    </style>
+}
+
+<div id="chiTietSanPham" class="sportix-detail py-4 py-md-5"
+     data-anh-mac-dinh="@anhMacDinh" data-gia-ban-dau="@giaBanDau">
+    <div class="container">
+        <div class="detail-card">
+            <div class="detail-gallery">
+                <div class="detail-main-image">
+                    @if (!string.IsNullOrEmpty(anhMacDinh))
+                    {
+                        <img id="anhSanPham" src="@anhMacDinh" alt="@Model.TenSanPham" />
+                    }
+                    else
+                    {
+                        <span class="text-secondary">Chưa có ảnh sản phẩm</span>
+                    }
+                </div>
+
+                @if (anh.Count > 1)
+                {
+                    <div class="detail-thumbs mt-2" aria-label="Ảnh sản phẩm">
+                        @foreach (var hinh in anh)
+                        {
+                            var duongDan = Url.Content(hinh.DuongDanAnh);
+                            var nhan = string.IsNullOrWhiteSpace(hinh.MauSac)
+                                ? "Xem ảnh sản phẩm " + hinh.MaHinhAnh
+                                : "Xem ảnh màu " + hinh.MauSac;
+                            <button type="button" class="detail-option detail-thumb"
+                                    data-anh-nho="@duongDan" aria-label="@nhan"
+                                    aria-pressed="@(duongDan == anhMacDinh ? "true" : "false")">
+                                <img src="@duongDan" alt="" loading="lazy" />
+                            </button>
+                        }
+                    </div>
+                }
+            </div>
+
+            <div class="detail-info">
+                <h1 class="h2 fw-bold mb-3">@Model.TenSanPham</h1>
+                <div class="h3 fw-bold detail-price mb-4" id="giaSanPham"
+                     aria-live="polite">@giaBanDau</div>
+
+                    @if (nhomMau.Count > 0)
+                    {
+                        <div class="mb-3">
+                            <div class="fw-semibold mb-2">Màu</div>
+                            <div class="d-flex flex-wrap gap-2" role="group" aria-label="Chọn màu">
+                                @for (int i = 0; i < nhomMau.Count; i++)
+                                {
+                                    var mau = nhomMau[i].Key;
+                                    var anhMau = anh.FirstOrDefault(x => !x.AnhDaiDien
+                                        && !string.IsNullOrWhiteSpace(x.MauSac)
+                                        && string.Equals(QuyTacSanPham.ChuanHoa(x.MauSac),
+                                            mau, StringComparison.OrdinalIgnoreCase));
+                                    var duongDan = anhMau == null ? "" : Url.Content(anhMau.DuongDanAnh);
+                                    var nhanMau = mau == "Mặc định" ? Model.TenSanPham : Model.TenSanPham + " - " + mau;
+
+                                    <button type="button" class="detail-option detail-color"
+                                            data-mau="@i" data-anh-mau="@duongDan" aria-pressed="false">
+                                        @if (anhMau != null)
+                                        {
+                                            <img src="@duongDan" alt="" loading="lazy" />
+                                        }
+                                        <span>@nhanMau</span>
+                                    </button>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="fw-semibold mb-2">Kích cỡ / dung tích</div>
+                            <div id="huongDanChonMau" class="text-secondary">Chọn màu để xem kích cỡ.</div>
+                            @for (int i = 0; i < nhomMau.Count; i++)
+                            {
+                                <div class="d-flex flex-wrap gap-2" data-nhom-size="@i"
+                                     role="group" aria-label="Chọn kích cỡ" hidden>
+                                    @foreach (var bienThe in nhomMau[i])
+                                    {
+                                        var giaBan = QuyTacSanPham.GiaSauGiam(
+                                            bienThe.GiaBan, Model.PhanTramGiam).ToString("N0", vi) + " đ";
+                                        var kichThuoc = QuyTacSanPham.ChuanHoa(bienThe.KichThuoc);
+                                        var hetHang = bienThe.SoLuongTon <= 0;
+
+                                        <button type="button" class="detail-option"
+                                                data-gia="@giaBan"
+                                                data-ton="@bienThe.SoLuongTon.ToString("N0", vi)"
+                                                aria-pressed="false"
+                                                disabled="@hetHang">
+                                            @kichThuoc@if (hetHang)
+                                            {
+                                                <span>(Hết hàng)</span>
+                                            }
+                                        </button>
+                                    }
+                                </div>
+                            }
+                        </div>
+                        <p id="tonSanPham" class="text-secondary mb-0" aria-live="polite"></p>
+                    }
+                </div>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.MoTa))
+            {
+                <div class="border rounded bg-white mt-4 p-4">
+                    <h2 class="h5 fw-bold">Mô tả sản phẩm</h2>
+                    <p class="detail-description mb-0">@Model.MoTa</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    @section Scripts {
+        <script>(function () {
+            "use strict";
+
+            const trang = document.getElementById("chiTietSanPham");
+            const anhLon = document.getElementById("anhSanPham");
+            const gia = document.getElementById("giaSanPham");
+            const ton = document.getElementById("tonSanPham");
+            const huongDan = document.getElementById("huongDanChonMau");
+            const anhNho = trang.querySelectorAll("[data-anh-nho]");
+            const cacMau = trang.querySelectorAll("[data-mau]");
+            const cacNhomSize = trang.querySelectorAll("[data-nhom-size]");
+            const cacSize = trang.querySelectorAll("[data-gia]");
+            let mauDangChon = null;
+
+            function doiAnh(duongDan) {
+                if (!anhLon || !duongDan) {
+                    return;
+                }
+
+                anhLon.src = duongDan;
+                anhNho.forEach(function (nut) {
+                    nut.setAttribute("aria-pressed", String(nut.dataset.anhNho === duongDan));
+                });
+            }
+
+            anhNho.forEach(function (nut) {
+                nut.addEventListener("click", function () {
+                    doiAnh(nut.dataset.anhNho);
+                });
+            });
+
+            cacMau.forEach(function (nut) {
+                nut.addEventListener("click", function () {
+                    mauDangChon = mauDangChon === nut ? null : nut;
+
+                    cacMau.forEach(function (mau) {
+                        mau.setAttribute("aria-pressed", String(mau === mauDangChon));
+                    });
+
+                    cacNhomSize.forEach(function (nhom) {
+                        nhom.hidden = !mauDangChon
+                            || nhom.dataset.nhomSize !== mauDangChon.dataset.mau;
+                    });
+
+                    cacSize.forEach(function (size) {
+                        size.setAttribute("aria-pressed", "false");
+                    });
+
+                    huongDan.hidden = !!mauDangChon;
+                    gia.textContent = trang.dataset.giaBanDau;
+                    ton.textContent = mauDangChon ? "Chọn kích cỡ để xem giá và tồn kho." : "";
+                    doiAnh((mauDangChon && mauDangChon.dataset.anhMau) || trang.dataset.anhMacDinh);
+                });
+            });
+
+            cacSize.forEach(function (nut) {
+                nut.addEventListener("click", function () {
+                    cacSize.forEach(function (size) {
+                        size.setAttribute("aria-pressed", String(size === nut));
+                    });
+
+                    gia.textContent = nut.dataset.gia;
+                    ton.textContent = "Còn " + nut.dataset.ton + " sản phẩm";
+                });
+            });
+        })();</script>
+    }

@@ -1,7 +1,53 @@
-﻿
+﻿@model IList<Do_an.Models.SanPham>
+@using System.Collections.Generic
+@using System.Linq
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Sản phẩm";
 }
 
-<h2>Index</h2>
+<div class="container py-4">
+    <h1 class="h2 mb-4">Sản phẩm</h1>
 
+    @if (Model.Count == 0)
+    {
+        <p>Hiện chưa có sản phẩm đang bán.</p>
+    }
+    else
+    {
+        <div class="row g-3">
+            @foreach (var sanPham in Model)
+            {
+                var anh = sanPham.HinhAnhSanPhams
+                    .Where(x => !string.IsNullOrWhiteSpace(x.DuongDanAnh))
+                    .OrderByDescending(x => x.AnhDaiDien)
+                    .ThenBy(x => x.ThuTu)
+                    .ThenBy(x => x.MaHinhAnh)
+                    .FirstOrDefault();
+
+                <div class="col-6 col-md-4 col-lg-3">
+                    <a href="@Url.Action("ChiTiet", "SanPham", new
+                             {
+                                 area = "",
+                                 id = sanPham.MaSanPham
+                             })"
+                       class="card h-100 text-decoration-none text-dark">
+                        @if (anh != null)
+                        {
+                            <img src="@Url.Content(anh.DuongDanAnh)"
+                                 class="card-img-top"
+                                 alt=""
+                                 loading="lazy"
+                                 style="height: 180px; object-fit: contain;" />
+                        }
+
+                        <div class="card-body">
+                            <h2 class="h6 mb-0">@sanPham.TenSanPham</h2>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    }
+    }
+</div>
