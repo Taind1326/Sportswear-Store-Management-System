@@ -17,6 +17,12 @@
 
     var anhChinh = danhSachAnh.FirstOrDefault();
 
+    var anhMacDinh = danhSachAnh.FirstOrDefault(x =>
+        x.AnhDaiDien && !string.IsNullOrWhiteSpace(x.DuongDanAnh))
+        ?? danhSachAnh.FirstOrDefault(x =>
+            string.IsNullOrWhiteSpace(x.MauSac)
+            && !string.IsNullOrWhiteSpace(x.DuongDanAnh));
+
     bool coAnh = anhChinh != null &&
         !string.IsNullOrWhiteSpace(anhChinh.DuongDanAnh);
 
@@ -245,11 +251,29 @@
 
                 @foreach (var item in danhSachPhanLoai)
                 {
+                    var anhPhanLoai = danhSachAnh.FirstOrDefault(x =>
+                        !string.IsNullOrWhiteSpace(x.MauSac)
+                        && !string.IsNullOrWhiteSpace(x.DuongDanAnh)
+                        && string.Equals(
+                            x.MauSac, item.MauSac, StringComparison.OrdinalIgnoreCase))
+                        ?? anhMacDinh;
+
                     <tr>
                         <td>
-                            <span class="fw-medium">
-                                @item.MauSac
-                            </span>
+                            <div class="d-flex align-items-center gap-2">
+                                @if (anhPhanLoai != null)
+                                {
+                                    <img src="@Url.Content(anhPhanLoai.DuongDanAnh)"
+                                         alt=""
+                                         width="40"
+                                         height="40"
+                                         class="rounded"
+                                         style="object-fit: cover;"
+                                         loading="lazy" />
+                                }
+
+                                <span class="fw-medium">@item.MauSac</span>
+                            </div>
 
                             @if (!item.DangBan)
                             {
