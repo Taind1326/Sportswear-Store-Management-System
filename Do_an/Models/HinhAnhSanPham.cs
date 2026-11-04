@@ -20,6 +20,7 @@ namespace Do_an.Models
         public string MoTaAnh { get; set; }
         public bool AnhDaiDien { get; set; }
         public int ThuTu { get; set; }
+        public string MauSac { get; set; }
     
         public virtual SanPham SanPham { get; set; }
     }

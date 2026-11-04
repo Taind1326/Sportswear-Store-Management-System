@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace Do_an.ViewModels
 {
@@ -8,6 +9,7 @@ namespace Do_an.ViewModels
         public ThemSanPhamViewModel()
         {
             PhanLoai = new List<PhanLoaiSanPhamInput>();
+            AnhTheoMau = new List<AnhTheoMauInput>();
         }
 
         [Display(Name = "Tên sản phẩm")]
@@ -39,40 +41,54 @@ namespace Do_an.ViewModels
         [Display(Name = "Sản phẩm nổi bật")]
         public bool NoiBat { get; set; }
 
+        [Display(Name = "Ảnh đại diện")]
+        [Required(ErrorMessage = "Vui lòng chọn ảnh đại diện cho sản phẩm.")]
+        public HttpPostedFileBase TepAnhDaiDien { get; set; }
+
         public List<PhanLoaiSanPhamInput> PhanLoai { get; set; }
+
+        public List<AnhTheoMauInput> AnhTheoMau { get; set; }
     }
 
     public class PhanLoaiSanPhamInput
     {
         [Display(Name = "Màu")]
         [StringLength(
-    50,
-    ErrorMessage = "Màu sắc không được vượt quá 50 ký tự."
-)]
+            50,
+            ErrorMessage = "Màu sắc không được vượt quá 50 ký tự.")]
         public string MauSac { get; set; }
 
         [Display(Name = "Kích cỡ / dung tích")]
         [StringLength(
-    30,
-    ErrorMessage = "Kích cỡ hoặc dung tích không được vượt quá 30 ký tự."
-)]
+            30,
+            ErrorMessage = "Kích cỡ hoặc dung tích không được vượt quá 30 ký tự.")]
         public string KichThuoc { get; set; }
 
         [Display(Name = "Giá gốc")]
         [Required(ErrorMessage = "Vui lòng nhập giá gốc.")]
         [Range(
-    typeof(decimal),
-    "0",
-    "9999999999999999.99",
-    ErrorMessage = "Giá gốc phải từ 0 đến 9999999999999999,99 đồng.")]
+            typeof(decimal),
+            "0",
+            "9999999999999999.99",
+            ErrorMessage = "Giá gốc phải từ 0 đến 9999999999999999,99 đồng.")]
         public decimal? GiaBan { get; set; }
 
         [Display(Name = "Tồn kho")]
         [Required(ErrorMessage = "Vui lòng nhập số lượng tồn kho.")]
         [Range(
-    0,
-    int.MaxValue,
-    ErrorMessage = "Số lượng tồn kho phải từ 0 đến 2147483647.")]
+            0,
+            int.MaxValue,
+            ErrorMessage = "Số lượng tồn kho phải từ 0 đến 2147483647.")]
         public int? SoLuongTon { get; set; }
+    }
+
+    public class AnhTheoMauInput
+    {
+        [StringLength(
+            50,
+            ErrorMessage = "Màu sắc không được vượt quá 50 ký tự.")]
+        public string MauSac { get; set; }
+
+        public HttpPostedFileBase TepAnh { get; set; }
     }
 }

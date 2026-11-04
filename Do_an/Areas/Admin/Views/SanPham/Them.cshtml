@@ -4,244 +4,328 @@
     ViewBag.Title = "Thêm sản phẩm";
 }
 
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
-        <h1 class="h3 mb-0">Thêm sản phẩm</h1>
-
-        <a href="@Url.Action("Index")"
-           class="btn btn-outline-secondary">
-            Quay lại
-        </a>
+<div class="product-page-heading">
+    <div>
+        <h1>Thêm sản phẩm</h1>
+        <p>Nhập thông tin và các phân loại của sản phẩm.</p>
     </div>
 
-    @using (Html.BeginForm(
-        "Them",
-        "SanPham",
-        new { area = "Admin" },
-        FormMethod.Post,
-        new { id = "formSanPham", novalidate = "novalidate" }))
+    <a href="@Url.Action("Index", "SanPham", new { area = "Admin" })"
+       class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left" aria-hidden="true"></i>
+        Quay lại
+    </a>
+</div>
+
+@using (Html.BeginForm(
+    "Them",
+    "SanPham",
+    new { area = "Admin" },
+    FormMethod.Post,
+    new
     {
-        @Html.AntiForgeryToken()
+        id = "formSanPham",
+        novalidate = "novalidate",
+        enctype = "multipart/form-data"
+    }))
+{
+    @Html.AntiForgeryToken()
 
-        @Html.ValidationSummary(
-            false,
-            "",
-            new { @class = "text-danger mb-3" })
+    @Html.ValidationSummary(
+        true,
+        "",
+        new { @class = "text-danger mb-3", role = "alert" })
 
-        <div class="card shadow-sm mb-4">
-            <div class="card-body p-4">
-                <h2 class="h5 mb-4">Thông tin sản phẩm</h2>
+    <div class="product-panel mb-4">
+        <h2 class="h5 fw-bold mb-4">Thông tin sản phẩm</h2>
 
-                <div class="mb-3">
-                    @Html.LabelFor(
-                        m => m.TenSanPham,
-                        new { @class = "form-label" })
+        <div class="mb-3">
+            @Html.LabelFor(m => m.TenSanPham, new { @class = "form-label" })
 
-                    @Html.TextBoxFor(
-                        m => m.TenSanPham,
-                        new
-                        {
-                            @class = "form-control",
-                            maxlength = "200",
-                            required = "required"
-                        })
+            @Html.TextBoxFor(
+                m => m.TenSanPham,
+                new
+                {
+                    @class = "form-control",
+                    maxlength = "200",
+                    required = "required",
+                    placeholder = "Nhập tên sản phẩm",
+                    data_val = "true",
+                    data_val_required = "Vui lòng nhập tên sản phẩm.",
+                    data_msg_required = "Vui lòng nhập tên sản phẩm.",
+                    data_msg_maxlength =
+                        "Tên sản phẩm không được vượt quá 200 ký tự."
+                })
 
-                    @Html.ValidationMessageFor(m => m.TenSanPham)
-                </div>
+            @Html.ValidationMessageFor(m => m.TenSanPham)
+        </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        @Html.LabelFor(
-                            m => m.MaLoaiHang,
-                            new { @class = "form-label" })
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                @Html.LabelFor(m => m.MaLoaiHang, new { @class = "form-label" })
 
-                        @Html.DropDownList(
-                            "MaLoaiHang",
-                            null,
-                            "-- Chọn loại hàng --",
-                            new
-                            {
-                                @class = "form-select",
-                                required = "required"
-                            })
+                @Html.DropDownList(
+                    "MaLoaiHang",
+                    null,
+                    "-- Chọn loại hàng --",
+                    new
+                    {
+                        @class = "form-select",
+                        required = "required",
+                        data_val = "true",
+                        data_val_required = "Vui lòng chọn loại hàng.",
+                        data_val_number = "Loại hàng không hợp lệ.",
+                        data_msg_required = "Vui lòng chọn loại hàng."
+                    })
 
-                        @Html.ValidationMessageFor(m => m.MaLoaiHang)
-                    </div>
+                @Html.ValidationMessageFor(m => m.MaLoaiHang)
+            </div>
 
-                    <div class="col-md-6 mb-3">
-                        @Html.LabelFor(
-                            m => m.MaThuongHieu,
-                            new { @class = "form-label" })
+            <div class="col-md-6 mb-3">
+                @Html.LabelFor(m => m.MaThuongHieu, new { @class = "form-label" })
 
-                        @Html.DropDownList(
-                            "MaThuongHieu",
-                            null,
-                            "-- Chọn thương hiệu --",
-                            new
-                            {
-                                @class = "form-select",
-                                required = "required"
-                            })
+                @Html.DropDownList(
+                    "MaThuongHieu",
+                    null,
+                    "-- Chọn thương hiệu --",
+                    new
+                    {
+                        @class = "form-select",
+                        required = "required",
+                        data_val = "true",
+                        data_val_required = "Vui lòng chọn thương hiệu.",
+                        data_val_number = "Thương hiệu không hợp lệ.",
+                        data_msg_required = "Vui lòng chọn thương hiệu."
+                    })
 
-                        @Html.ValidationMessageFor(m => m.MaThuongHieu)
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    @Html.LabelFor(
-                        m => m.MoTa,
-                        new { @class = "form-label" })
-
-                    @Html.TextAreaFor(
-                        m => m.MoTa,
-                        new
-                        {
-                            @class = "form-control",
-                            rows = "4"
-                        })
-                </div>
-
-                <div class="form-check">
-                    @Html.CheckBoxFor(
-                        m => m.NoiBat,
-                        new { @class = "form-check-input" })
-
-                    @Html.LabelFor(
-                        m => m.NoiBat,
-                        new { @class = "form-check-label" })
-                </div>
+                @Html.ValidationMessageFor(m => m.MaThuongHieu)
             </div>
         </div>
 
-        <div class="card shadow-sm mb-4">
-            <div class="card-body p-4">
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
-                    <div>
-                        <h2 class="h5">Màu / Kích cỡ và tồn kho</h2>
+        <div class="mb-3">
+            @Html.LabelFor(m => m.MoTa, new { @class = "form-label" })
 
-                        <p class="text-muted mb-0">
-                            Mỗi tổ hợp màu và kích cỡ có giá, tồn kho riêng.
-                            Không có màu hoặc kích cỡ thì để trống ô tương ứng.
-                        </p>
-                    </div>
+            @Html.TextAreaFor(
+                m => m.MoTa,
+                new
+                {
+                    @class = "form-control",
+                    rows = "4",
+                    placeholder = "Mô tả đặc điểm và công dụng sản phẩm"
+                })
 
-                    <button type="button"
-                            id="themDong"
-                            class="btn btn-outline-primary">
-                        Thêm phân loại
-                    </button>
-                </div>
+            @Html.ValidationMessageFor(m => m.MoTa)
+        </div>
 
-                <div class="table-responsive">
-                    <table class="table align-middle">
-                        <thead>
-                            <tr>
-                                <th scope="col">Màu</th>
-                                <th scope="col">Kích cỡ / Dung tích</th>
-                                <th scope="col">Giá gốc (đ)</th>
-                                <th scope="col">Số lượng ban đầu</th>
-                                <th scope="col">
-                                    <span class="visually-hidden">
-                                        Thao tác
-                                    </span>
-                                </th>
-                            </tr>
-                        </thead>
+        <div class="mb-3">
+            @Html.LabelFor(m => m.TepAnhDaiDien, new { @class = "form-label" })
 
-                        <tbody id="danhSachPhanLoai">
-                            @for (int i = 0; i < Model.PhanLoai.Count; i++)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.TextBoxFor(
-                                            m => m.PhanLoai[i].MauSac,
-                                            new
-                                            {
-                                                @class = "form-control",
-                                                data_field = "MauSac",
-                                                list = "goiYMau",
-                                                maxlength = "50",
-                                                placeholder = "Ví dụ: Đen",
-                                                aria_label = "Màu"
-                                            })
-                                    </td>
+            <input type="file"
+                   id="@Html.IdFor(m => m.TepAnhDaiDien)"
+                   name="@Html.NameFor(m => m.TepAnhDaiDien)"
+                   class="form-control"
+                   accept=".jpg,.jpeg,.png"
+                   required
+                   aria-describedby="huongDanAnhDaiDien"
+                   data-val="true"
+                   data-val-required="Vui lòng chọn ảnh đại diện cho sản phẩm." />
 
-                                    <td>
-                                        @Html.TextBoxFor(
-                                            m => m.PhanLoai[i].KichThuoc,
-                                            new
-                                            {
-                                                @class = "form-control",
-                                                data_field = "KichThuoc",
-                                                list = "goiYSize",
-                                                maxlength = "30",
-                                                placeholder = "M, 40, 750ml...",
-                                                aria_label = "Kích cỡ hoặc dung tích"
-                                            })
-                                    </td>
+            @Html.ValidationMessageFor(
+                m => m.TepAnhDaiDien,
+                "",
+                new { @class = "text-danger" })
 
-                                    <td>
-                                        @Html.TextBoxFor(
-                                            m => m.PhanLoai[i].GiaBan,
-                                            "{0:0.##}",
-                                            new
-                                            {
-                                                @class = "form-control",
-                                                data_field = "GiaBan",
-                                                type = "number",
-                                                min = "0",
-                                                step = "0.01",
-                                                required = "required",
-                                                aria_label = "Giá gốc"
-                                            })
-                                    </td>
+            <div id="huongDanAnhDaiDien" class="form-text">
+                Bắt buộc. Chọn ảnh JPG hoặc PNG, tối đa 5 MB.
+            </div>
+        </div>
 
-                                    <td>
-                                        @Html.TextBoxFor(
-                                            m => m.PhanLoai[i].SoLuongTon,
-                                            new
-                                            {
-                                                @class = "form-control",
-                                                data_field = "SoLuongTon",
-                                                type = "number",
-                                                min = "0",
-                                                step = "1",
-                                                required = "required",
-                                                aria_label = "Số lượng ban đầu"
-                                            })
-                                    </td>
+        <div class="form-check">
+            @Html.CheckBoxFor(m => m.NoiBat, new { @class = "form-check-input" })
+            @Html.LabelFor(m => m.NoiBat, new { @class = "form-check-label" })
+        </div>
+    </div>
 
-                                    <td>
-                                        <button type="button"
-                                                class="btn btn-outline-danger xoa-dong">
-                                            Xóa
-                                        </button>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+    <div class="product-panel mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+            <div>
+                <h2 class="h5 fw-bold mb-2">Phân loại và tồn kho</h2>
 
-                <p class="small text-muted mb-0">
-                    Có thể chọn gợi ý hoặc nhập màu, kích cỡ khác.
-                    Mã phân loại được tạo tự động khi lưu.
+                <p class="product-meta mb-0">
+                    Mỗi tổ hợp màu và kích cỡ có giá, tồn kho riêng.
+                    Không có màu hoặc kích cỡ thì để trống.
                 </p>
             </div>
-        </div>
 
-        <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-primary">
-                Lưu sản phẩm
+            <button type="button" id="themDong" class="btn btn-outline-primary">
+                <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                Thêm phân loại
             </button>
-
-            <a href="@Url.Action("Index")"
-               class="btn btn-outline-secondary">
-                Hủy
-            </a>
         </div>
-    }
-</div>
+
+        <div class="table-responsive">
+            <table class="table product-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Màu</th>
+                        <th scope="col">Kích cỡ / dung tích</th>
+                        <th scope="col">Giá gốc (đ)</th>
+                        <th scope="col">Số lượng ban đầu</th>
+                        <th scope="col">
+                            <span class="visually-hidden">Thao tác</span>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody id="danhSachPhanLoai">
+                    @for (int i = 0; i < Model.PhanLoai.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.TextBoxFor(
+                                    m => m.PhanLoai[i].MauSac,
+                                    new
+                                    {
+                                        @class = "form-control",
+                                        data_field = "MauSac",
+                                        list = "goiYMau",
+                                        maxlength = "50",
+                                        placeholder = "Ví dụ: Đen",
+                                        aria_label = "Màu"
+                                    })
+
+                                @Html.ValidationMessageFor(
+                                    m => m.PhanLoai[i].MauSac,
+                                    "",
+                                    new { data_error_field = "MauSac" })
+                            </td>
+
+                            <td>
+                                @Html.TextBoxFor(
+                                    m => m.PhanLoai[i].KichThuoc,
+                                    new
+                                    {
+                                        @class = "form-control",
+                                        data_field = "KichThuoc",
+                                        list = "goiYSize",
+                                        maxlength = "30",
+                                        placeholder = "M, 40, 750 ml...",
+                                        aria_label = "Kích cỡ hoặc dung tích"
+                                    })
+
+                                @Html.ValidationMessageFor(
+                                    m => m.PhanLoai[i].KichThuoc,
+                                    "",
+                                    new { data_error_field = "KichThuoc" })
+                            </td>
+
+                            <td>
+                                @Html.TextBoxFor(
+                                    m => m.PhanLoai[i].GiaBan,
+                                    "{0:0.##}",
+                                    new
+                                    {
+                                        @class = "form-control",
+                                        data_field = "GiaBan",
+                                        type = "number",
+                                        min = "0",
+                                        step = "0.01",
+                                        required = "required",
+                                        aria_label = "Giá gốc",
+                                        data_val_number =
+                                            "Vui lòng nhập giá gốc bằng số hợp lệ."
+                                    })
+
+                                @Html.ValidationMessageFor(
+                                    m => m.PhanLoai[i].GiaBan,
+                                    "",
+                                    new { data_error_field = "GiaBan" })
+                            </td>
+
+                            <td>
+                                @Html.TextBoxFor(
+                                    m => m.PhanLoai[i].SoLuongTon,
+                                    new
+                                    {
+                                        @class = "form-control",
+                                        data_field = "SoLuongTon",
+                                        type = "number",
+                                        min = "0",
+                                        max = "2147483647",
+                                        step = "1",
+                                        required = "required",
+                                        aria_label = "Số lượng ban đầu",
+                                        data_val_number =
+                                            "Số lượng tồn phải là số nguyên hợp lệ."
+                                    })
+
+                                @Html.ValidationMessageFor(
+                                    m => m.PhanLoai[i].SoLuongTon,
+                                    "",
+                                    new { data_error_field = "SoLuongTon" })
+                            </td>
+
+                            <td>
+                                <button type="button"
+                                        class="btn btn-outline-danger btn-sm xoa-dong">
+                                    Xóa
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <p class="product-meta mt-3 mb-0">
+            Có thể chọn gợi ý hoặc tự nhập màu, kích cỡ.
+            SKU được tạo tự động khi lưu. Tối đa 100 phân loại.
+        </p>
+
+        <p id="thongBaoPhanLoai"
+           class="text-danger mt-2 mb-0"
+           role="status"></p>
+    </div>
+
+    <section class="product-panel mb-4" aria-labelledby="tieuDeAnhTheoMau">
+        <h2 id="tieuDeAnhTheoMau" class="h5 fw-bold mb-2">Ảnh theo màu</h2>
+
+        <p id="huongDanAnhTheoMau" class="product-meta mb-3">
+            Tùy chọn. Mỗi màu dùng chung một ảnh cho mọi kích cỡ.
+            Màu chưa có ảnh riêng sẽ dùng ảnh đại diện.
+            Chọn ảnh JPG hoặc PNG, tối đa 5 MB mỗi ảnh.
+        </p>
+
+        <div id="danhSachAnhTheoMau"></div>
+
+        <template id="mauDongAnhTheoMau">
+            <div class="mb-3" data-dong-anh-theo-mau>
+                <label class="form-label" data-nhan-anh-theo-mau></label>
+                <input type="hidden" data-mau-anh />
+                <input type="file"
+                       class="form-control"
+                       accept=".jpg,.jpeg,.png"
+                       aria-describedby="huongDanAnhTheoMau"
+                       data-tep-anh-theo-mau />
+                <span class="text-danger field-validation-valid"
+                      data-valmsg-replace="true"
+                      data-loi-anh-theo-mau></span>
+            </div>
+        </template>
+    </section>
+
+    <div class="d-flex justify-content-end flex-wrap gap-2">
+        <a href="@Url.Action("Index", "SanPham", new { area = "Admin" })"
+           class="btn btn-outline-secondary">
+            Hủy
+        </a>
+
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-check-lg" aria-hidden="true"></i>
+            Lưu sản phẩm
+        </button>
+    </div>
+}
 
 <datalist id="goiYMau">
     <option value="Đen"></option>
@@ -250,7 +334,6 @@
     <option value="Đỏ"></option>
     <option value="Vàng"></option>
     <option value="Xám"></option>
-    <option value="Mặc định"></option>
 </datalist>
 
 <datalist id="goiYSize">
@@ -266,10 +349,10 @@
         <option value="@size"></option>
     }
 
-    <option value="500ml"></option>
-    <option value="750ml"></option>
-    <option value="1L"></option>
-    <option value="Mặc định"></option>
+    <option value="500 ml"></option>
+    <option value="750 ml"></option>
+    <option value="1 L"></option>
+    <option value="2 m"></option>
 </datalist>
 
 <template id="mauDong">
@@ -282,6 +365,10 @@
                    maxlength="50"
                    placeholder="Ví dụ: Đen"
                    aria-label="Màu" />
+
+            <span class="field-validation-valid"
+                  data-error-field="MauSac"
+                  data-valmsg-replace="true"></span>
         </td>
 
         <td>
@@ -290,8 +377,12 @@
                    data-field="KichThuoc"
                    list="goiYSize"
                    maxlength="30"
-                   placeholder="M, 40, 750ml..."
+                   placeholder="M, 40, 750 ml..."
                    aria-label="Kích cỡ hoặc dung tích" />
+
+            <span class="field-validation-valid"
+                  data-error-field="KichThuoc"
+                  data-valmsg-replace="true"></span>
         </td>
 
         <td>
@@ -300,8 +391,12 @@
                    data-field="GiaBan"
                    min="0"
                    step="0.01"
-                   aria-label="Giá gốc"
-                   required />
+                   required
+                   aria-label="Giá gốc" />
+
+            <span class="field-validation-valid"
+                  data-error-field="GiaBan"
+                  data-valmsg-replace="true"></span>
         </td>
 
         <td>
@@ -309,15 +404,19 @@
                    class="form-control"
                    data-field="SoLuongTon"
                    min="0"
+                   max="2147483647"
                    step="1"
                    value="0"
-                   aria-label="Số lượng ban đầu"
-                   required />
+                   required
+                   aria-label="Số lượng ban đầu" />
+
+            <span class="field-validation-valid"
+                  data-error-field="SoLuongTon"
+                  data-valmsg-replace="true"></span>
         </td>
 
         <td>
-            <button type="button"
-                    class="btn btn-outline-danger xoa-dong">
+            <button type="button" class="btn btn-outline-danger btn-sm xoa-dong">
                 Xóa
             </button>
         </td>
@@ -325,5 +424,5 @@
 </template>
 
 @section scripts {
-    <script src="@Url.Content("~/Scripts/admin/sanpham-them.js")"></script>
+    <script src="@Url.Content("~/Scripts/admin/sanpham-them.js")?v=2"></script>
 }
