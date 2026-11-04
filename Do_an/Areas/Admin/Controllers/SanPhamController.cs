@@ -798,7 +798,13 @@ namespace Do_an.Areas.Admin.Controllers
                     ? ""
                     : phanLoai.KichThuoc,
                 GiaBan = phanLoai.GiaBan,
-                DangBan = phanLoai.DangBan
+                DangBan = phanLoai.DangBan,
+                DuongDanAnhTheoMau = db.HinhAnhSanPhams
+                    .Where(x => x.MaSanPham == phanLoai.MaSanPham
+                        && !x.AnhDaiDien && x.MauSac == phanLoai.MauSac
+                        && x.MauSac != null)
+                    .Select(x => x.DuongDanAnh)
+                    .SingleOrDefault()
             };
 
             return View(model);
@@ -824,7 +830,22 @@ namespace Do_an.Areas.Admin.Controllers
             model.TenSanPham = phanLoai.SanPham.TenSanPham;
             model.SKU = phanLoai.SKU;
 
+            bool coMauSac = !string.IsNullOrWhiteSpace(model.MauSac);
             model.MauSac = QuyTacSanPham.ChuanHoa(model.MauSac);
+
+            var anhTheoMau = coMauSac
+                ? db.HinhAnhSanPhams.SingleOrDefault(x =>
+                    x.MaSanPham == phanLoai.MaSanPham
+                    && !x.AnhDaiDien && x.MauSac == model.MauSac)
+                : null;
+
+            model.DuongDanAnhTheoMau = anhTheoMau?.DuongDanAnh;
+
+            if (model.TepAnhTheoMau != null && !coMauSac)
+            {
+                ModelState.AddModelError("MauSac", "Vui lòng nhập màu cho ảnh đã chọn.");
+            }
+
             model.KichThuoc = QuyTacSanPham.ChuanHoa(model.KichThuoc);
 
             KiemTraGia(model.GiaBan, "GiaBan");
@@ -884,17 +905,72 @@ namespace Do_an.Areas.Admin.Controllers
 
             phanLoai.SanPham.NgayCapNhat = DateTime.Now;
 
+            const string thuMucAnh = "~/Content/images/san-pham/";
+            string tepMoi = null;
+            string thuMucVatLy = null;
+            bool daLuu = false;
+
             try
             {
+                if (model.TepAnhTheoMau != null)
+                {
+                    thuMucVatLy = Server.MapPath(thuMucAnh);
+                    var dichVuAnh = new HinhAnhSanPhamService();
+                    tepMoi = dichVuAnh.LuuAnh(model.TepAnhTheoMau, thuMucVatLy);
+
+                    if (anhTheoMau == null)
+                    {
+                        anhTheoMau = new HinhAnhSanPham
+                        {
+                            MaSanPham = phanLoai.MaSanPham,
+                            MauSac = model.MauSac,
+                            AnhDaiDien = false,
+                            ThuTu = 1
+                        };
+
+                        db.HinhAnhSanPhams.Add(anhTheoMau);
+                    }
+
+                    anhTheoMau.DuongDanAnh = thuMucAnh + tepMoi;
+                }
+
                 db.SaveChanges();
+                daLuu = true;
             }
-            catch (DbUpdateException)
+            catch (Exception ex) when (ex is ArgumentException || ex is InvalidDataException)
             {
+                ModelState.AddModelError("TepAnhTheoMau", ex.Message);
+            }
+            catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
+            {
+                Trace.TraceError("Lỗi ghi ảnh theo màu: {0}", ex);
+                ModelState.AddModelError(
+                    "TepAnhTheoMau", "Chưa ghi được ảnh. Vui lòng thử lại.");
+            }
+            catch (DbUpdateException ex)
+            {
+                Trace.TraceError("Lỗi cập nhật phân loại: {0}", ex);
                 ModelState.AddModelError(
                     "",
-                    "Chưa lưu được phân loại. Vui lòng kiểm tra "
-                    + "màu và kích cỡ hoặc tải lại trang rồi thử lại.");
+                    "Chưa lưu được thay đổi. Vui lòng kiểm tra dữ liệu rồi thử lại.");
+            }
+            finally
+            {
+                if (!daLuu && tepMoi != null)
+                {
+                    try
+                    {
+                        System.IO.File.Delete(Path.Combine(thuMucVatLy, tepMoi));
+                    }
+                    catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
+                    {
+                        Trace.TraceError("Lỗi dọn ảnh theo màu: {0}", ex);
+                    }
+                }
+            }
 
+            if (!daLuu)
+            {
                 return View(model);
             }
 

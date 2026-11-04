@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace Do_an.ViewModels
 {
@@ -43,5 +44,10 @@ namespace Do_an.ViewModels
 
         [Display(Name = "Đang bán")]
         public bool DangBan { get; set; }
+
+        public string DuongDanAnhTheoMau { get; set; }
+
+        [Display(Name = "Ảnh mới cho màu này")]
+        public HttpPostedFileBase TepAnhTheoMau { get; set; }
     }
 }
