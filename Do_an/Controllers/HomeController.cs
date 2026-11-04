@@ -18,6 +18,12 @@ namespace Do_an.Controllers
             return View(sanPham);
         }
 
+        [HttpGet]
+        public ActionResult GioiThieu()
+        {
+            return View();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

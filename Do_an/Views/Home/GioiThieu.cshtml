@@ -1,7 +1,127 @@
-﻿
-@{
-    ViewBag.Title = "GioiThieu";
+﻿@{
+    ViewBag.Title = "Giới thiệu";
 }
 
-<h2>GioiThieu</h2>
+@section Styles {
+    <link href="@Url.Content("~/Content/gioi-thieu.css")?v=2" rel="stylesheet" />
+}
 
+<div class="about-main">
+    <div class="container">
+
+        <section class="about-hero">
+            <div class="about-hero-content">
+                <span class="about-tag">
+                    <i class="bi bi-lightning-charge-fill" aria-hidden="true"></i>
+                    GIỚI THIỆU SPORTIX
+                </span>
+
+                <h1>Move Faster<br />Train Better</h1>
+
+                <p>Trang phục và dụng cụ thể thao cho nhịp vận động mỗi ngày.</p>
+
+                <div class="about-actions">
+                    <a class="about-btn-primary" href="@Url.Action("Index", "SanPham", new { area = "" })">
+                        Khám phá sản phẩm
+                        <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="about-hero-visual">
+                <div class="about-visual-card">
+                    <img src="@Url.Content("~/Content/images/about-sport.jpg")" alt="Vận động viên đang tập luyện" />
+                </div>
+
+                <div class="about-floating-card">
+                    <i class="bi bi-lightning-charge-fill" aria-hidden="true"></i>
+                    <span>Sẵn sàng vận động</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-story" data-reveal="">
+            <div class="story-image">
+                <img src="@Url.Content("~/Content/images/about-team.jpg")" alt="Câu chuyện SPORTIX" loading="lazy" />
+            </div>
+
+            <div class="story-content">
+                <h2>Câu chuyện SPORTIX</h2>
+                <p>Bắt đầu từ niềm yêu thích vận động.</p>
+            </div>
+        </section>
+
+        <div class="about-timeline">
+            <div class="section-heading" data-reveal="">
+                <h2>Hành trình SPORTIX</h2>
+            </div>
+
+            <div class="timeline">
+                <section class="timeline-item" data-reveal="">
+                    <div class="timeline-content">
+                        <span class="timeline-year">2010</span>
+                        <h3>Thành lập SPORTIX</h3>
+                        <p>Bắt đầu với cửa hàng thể thao đầu tiên tại TP. Hồ Chí Minh.</p>
+                    </div>
+                </section>
+
+                <section class="timeline-item" data-reveal="">
+                    <div class="timeline-content">
+                        <span class="timeline-year">2015</span>
+                        <h3>Mở rộng danh mục</h3>
+                        <p>Bổ sung trang phục, giày và dụng cụ cho nhiều môn thể thao.</p>
+                    </div>
+                </section>
+
+                <section class="timeline-item" data-reveal="">
+                    <div class="timeline-content">
+                        <span class="timeline-year">2018</span>
+                        <h3>Ra mắt website</h3>
+                        <p>Khách hàng có thể xem sản phẩm, giá và các phân loại trực tuyến.</p>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+        <section class="about-values" data-reveal="">
+            <div class="section-heading">
+                <h2>Điều làm nên SPORTIX</h2>
+            </div>
+
+            <div class="values-grid">
+                <div class="value-card">
+                    <i class="bi bi-patch-check-fill" aria-hidden="true"></i>
+                    <h3>Chính hãng</h3>
+                    <p>Sản phẩm được lựa chọn kỹ từ các thương hiệu uy tín.</p>
+                </div>
+
+                <div class="value-card">
+                    <i class="bi bi-truck" aria-hidden="true"></i>
+                    <h3>Giao nhanh</h3>
+                    <p>Giao hàng linh hoạt, hỗ trợ toàn quốc nhanh chóng.</p>
+                </div>
+
+                <div class="value-card">
+                    <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
+                    <h3>Đổi trả dễ dàng</h3>
+                    <p>Chính sách đổi trả rõ ràng, giúp khách hàng yên tâm mua sắm.</p>
+                </div>
+
+                <div class="value-card">
+                    <i class="bi bi-headset" aria-hidden="true"></i>
+                    <h3>Hỗ trợ tận tâm</h3>
+                    <p>Đội ngũ tư vấn luôn sẵn sàng đồng hành cùng bạn.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-mission" data-reveal="">
+            <h2>Đồng hành cùng mỗi buổi tập</h2>
+            <a class="about-btn-primary" href="@Url.Action("Index", "SanPham", new { area = "" })">
+                Xem sản phẩm
+                <i class="bi bi-arrow-right" aria-hidden="true"></i>
+            </a>
+        </section>
+    </div>
+</div>

@@ -280,10 +280,39 @@ body.sportix-public {
 
 /* Giảm chuyển động theo cài đặt thiết bị */
 @media (prefers-reduced-motion: reduce) {
-    .sz-navbar *,
-    .sz-navbar *::before,
-    .sz-navbar *::after,
-    .sz-footer a {
-        transition: none !important;
+    .sz-logo,
+    .sz-navbar .sz-nav-link,
+    .sz-navbar .sz-nav-btn,
+    .sz-footer-links a {
+        transition: none;
+    }
+
+    .sz-brand:hover .sz-logo {
+        transform: scale(1.32);
+    }
+}
+
+@media (max-width: 767.98px) and (prefers-reduced-motion: reduce) {
+    .sz-brand:hover .sz-logo {
+        transform: scale(1.22);
+    }
+}
+
+html.sportix-public-page {
+    scroll-padding-top: 96px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    html.sportix-public-page {
+        scroll-behavior: smooth;
+    }
+
+    .sportix-public #mainContent [data-reveal].reveal-pending:not(:focus-within) {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    .sportix-public #mainContent [data-reveal] {
+        transition: opacity 400ms ease, transform 400ms ease;
     }
 }
