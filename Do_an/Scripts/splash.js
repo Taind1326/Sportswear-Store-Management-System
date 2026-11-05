@@ -1,32 +1,57 @@
 ﻿(function () {
     "use strict";
 
-    function initSplash() {
-        var splash = document.getElementById("sportixSplash");
+    function khoiTao() {
+        const splash = document.getElementById("sportixSplash");
 
-        if (!splash) {
+        if (!splash ||
+            !document.body.classList.contains("sportix-public")) {
             return;
         }
 
-        // Người dùng chọn giảm chuyển động thì bỏ qua splash.
-        var reduceMotion = window.matchMedia &&
-            window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const duongDan = window.location.pathname
+            .replace(/\/+$/, "")
+            .toLowerCase() || "/";
 
-        if (reduceMotion) {
+        let canHienSplash;
+
+        try {
+            const trangTruoc = sessionStorage.getItem(
+                "sportixTrangHienTai"
+            );
+
+            canHienSplash = trangTruoc !== duongDan;
+
+            sessionStorage.setItem(
+                "sportixTrangHienTai",
+                duongDan
+            );
+        } catch (error) {
+            return;
+        }
+
+        const giamChuyenDong = window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+        if (!canHienSplash || giamChuyenDong) {
             return;
         }
 
         splash.hidden = false;
 
-        // Tự ẩn sau khi hiệu ứng hoàn tất.
         window.setTimeout(function () {
             splash.hidden = true;
         }, 1450);
+
+        window.addEventListener("pagehide", function () {
+            splash.hidden = true;
+        });
     }
 
     if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initSplash);
+        document.addEventListener("DOMContentLoaded", khoiTao);
     } else {
-        initSplash();
+        khoiTao();
     }
 })();

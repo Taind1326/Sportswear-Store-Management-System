@@ -274,7 +274,9 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\chi-tiet-san-pham.css" />
     <Content Include="Content\gioi-thieu.css" />
+    <Content Include="Content\san-pham.css" />
     <Content Include="Content\splash.css" />
     <Content Include="Content\validation.css" />
     <Content Include="favicon.ico" />

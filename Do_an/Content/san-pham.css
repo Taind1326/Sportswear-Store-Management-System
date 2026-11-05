@@ -1,0 +1,272 @@
+﻿.sportix-catalog .catalog-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    overflow: hidden;
+    margin-bottom: 28px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: linear-gradient(120deg, var(--blue-soft), #fff);
+}
+
+.sportix-catalog .catalog-hero-copy {
+    align-self: center;
+    padding: clamp(20px, 4vw, 40px);
+}
+
+.sportix-catalog .catalog-eyebrow {
+    color: var(--blue-dark);
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+}
+
+.sportix-catalog .catalog-hero h1 {
+    margin: 10px 0;
+    color: var(--text);
+    font-size: clamp(1.65rem, 3.5vw, 2.65rem);
+    font-weight: 800;
+    line-height: 1.15;
+}
+
+.sportix-catalog .catalog-hero p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.sportix-catalog .catalog-hero-image {
+    display: block;
+    width: 100%;
+    height: clamp(180px, 22vw, 260px);
+    object-fit: cover;
+}
+
+.sportix-catalog .catalog-filter,
+.sportix-catalog .catalog-toolbar {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, .04);
+}
+
+    .sportix-catalog .catalog-filter .card-body {
+        padding: 20px;
+    }
+
+    .sportix-catalog .catalog-filter h2,
+    .sportix-catalog .catalog-toolbar h2 {
+        color: var(--text);
+        font-weight: 800;
+    }
+
+    .sportix-catalog .catalog-filter .form-label {
+        color: var(--text);
+        font-size: .875rem;
+    }
+
+.sportix-catalog .form-control,
+.sportix-catalog .form-select {
+    min-height: 42px;
+    border-color: var(--border);
+    border-radius: 9px;
+    font: inherit;
+    font-size: .875rem;
+}
+
+    .sportix-catalog .form-control:focus,
+    .sportix-catalog .form-select:focus {
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px rgba(17, 157, 255, .12);
+    }
+
+.sportix-catalog .form-range {
+    accent-color: var(--blue-dark);
+}
+
+.sportix-catalog .catalog-toolbar {
+    padding: 14px 16px;
+}
+
+    .sportix-catalog .catalog-toolbar > div {
+        min-width: 0;
+    }
+
+    .sportix-catalog .catalog-toolbar .form-control {
+        width: 240px;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+.sportix-catalog .btn-primary {
+    --bs-btn-bg: var(--blue-dark);
+    --bs-btn-border-color: var(--blue-dark);
+    --bs-btn-hover-bg: var(--blue-dark);
+    --bs-btn-hover-border-color: var(--blue-dark);
+    --bs-btn-active-bg: var(--blue-dark);
+    --bs-btn-active-border-color: var(--blue-dark);
+    --bs-btn-focus-shadow-rgb: 0, 111, 230;
+}
+
+.sportix-catalog .btn-outline-primary {
+    --bs-btn-color: var(--blue-dark);
+    --bs-btn-border-color: var(--blue-dark);
+    --bs-btn-hover-bg: var(--blue-dark);
+    --bs-btn-hover-border-color: var(--blue-dark);
+    --bs-btn-active-bg: var(--blue-dark);
+    --bs-btn-active-border-color: var(--blue-dark);
+    --bs-btn-focus-shadow-rgb: 0, 111, 230;
+}
+
+.sportix-catalog .catalog-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, .05);
+    color: var(--text);
+    text-decoration: none;
+}
+
+    .sportix-catalog .catalog-card:focus-visible {
+        outline: 2px solid var(--blue-dark);
+        outline-offset: 3px;
+    }
+
+        .sportix-catalog .catalog-card:focus-visible h3 {
+            color: var(--blue-dark);
+        }
+
+.sportix-catalog .catalog-card-media {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+    background: #fff;
+}
+
+    .sportix-catalog .catalog-card-media img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        padding: 12px;
+        object-fit: contain;
+        object-position: center;
+    }
+
+.sportix-catalog .catalog-card-placeholder {
+    color: var(--muted);
+    font-size: 1.5rem;
+}
+
+.sportix-catalog .catalog-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    max-width: calc(100% - 20px);
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--blue-dark);
+    font-size: .72rem;
+    font-weight: 700;
+}
+
+.sportix-catalog .catalog-card-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+}
+
+    .sportix-catalog .catalog-card-body h3 {
+        margin: 0;
+        color: var(--text);
+        font-size: .95rem;
+        font-weight: 700;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+.sportix-catalog .catalog-card-prices {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 9px;
+    margin-top: auto;
+}
+
+    .sportix-catalog .catalog-card-prices strong {
+        color: var(--blue-dark);
+        font-size: .95rem;
+    }
+
+    .sportix-catalog .catalog-card-prices del {
+        color: var(--muted);
+        font-size: .78rem;
+    }
+
+@media (hover: hover) and (pointer: fine) {
+    .sportix-catalog .catalog-card:hover {
+        border-color: var(--blue);
+        box-shadow: 0 12px 28px rgba(0, 111, 230, .14);
+        color: var(--text);
+    }
+
+        .sportix-catalog .catalog-card:hover h3 {
+            color: var(--blue-dark);
+        }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .sportix-catalog .catalog-card {
+        transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .sportix-catalog .catalog-card-media img {
+        transition: transform .25s ease;
+    }
+
+    .sportix-catalog .catalog-card-body h3 {
+        transition: color .2s ease;
+    }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .sportix-catalog .catalog-card:hover {
+        transform: translateY(-5px);
+    }
+
+        .sportix-catalog .catalog-card:hover .catalog-card-media img {
+            transform: scale(1.04);
+        }
+}
+
+@media (max-width: 767.98px) {
+    .sportix-catalog .catalog-hero {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .sportix-catalog .catalog-hero-image {
+        height: 180px;
+    }
+
+    .sportix-catalog .catalog-toolbar .form-control {
+        width: 100%;
+    }
+
+    .sportix-catalog .catalog-toolbar > .d-flex {
+        width: 100%;
+    }
+
+    .sportix-catalog .catalog-card-body {
+        padding: 12px;
+    }
+}

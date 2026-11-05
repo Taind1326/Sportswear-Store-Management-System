@@ -29,7 +29,7 @@
 }
 
 @section Styles {
-    <link href="@Url.Content("~/Content/san-pham.css")"
+    <link href="@Url.Content("~/Content/san-pham.css")?v=3"
           rel="stylesheet" />
 }
 
@@ -214,7 +214,7 @@
             }
             else
             {
-                <div class="row g-3" data-reveal="">
+                <div class="row g-3">
                     @foreach (var sanPham in Model)
                     {
                         var anh = sanPham.HinhAnhSanPhams
@@ -234,7 +234,7 @@
                             sanPham.NgayTao,
                             thoiDiem);
 
-                        <div class="col-6 col-md-4">
+                        <div class="col-6 col-md-4" data-reveal="">
                             <a class="catalog-card"
                                href="@Url.Action("ChiTiet", "SanPham", new
                                {

@@ -316,3 +316,14 @@ html.sportix-public-page {
         transition: opacity 400ms ease, transform 400ms ease;
     }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+    .sportix-public #mainContent [data-reveal] {
+        transition: opacity 400ms ease, transform 400ms ease;
+    }
+
+        .sportix-public #mainContent [data-reveal].reveal-pending:not(:focus-within) {
+            opacity: 0;
+            transform: translateY(16px);
+        }
+}
