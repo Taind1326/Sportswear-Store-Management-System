@@ -6,8 +6,33 @@
             ".sportix-public #mainContent"
         );
 
-        if (!noiDung ||
-            !("IntersectionObserver" in window) ||
+        if (!noiDung) {
+            return;
+        }
+
+        const duongDan = window.location.pathname
+            .replace(/\/+$/, "")
+            .replace(/\/index$/i, "")
+            .toLowerCase() || "/";
+
+        try {
+            const trangTruoc = sessionStorage.getItem(
+                "sportixTrangReveal"
+            );
+
+            sessionStorage.setItem(
+                "sportixTrangReveal",
+                duongDan
+            );
+
+            if (trangTruoc === duongDan) {
+                return;
+            }
+        } catch (error) {
+            return;
+        }
+
+        if (!("IntersectionObserver" in window) ||
             window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
             return;
         }
