@@ -29,7 +29,7 @@
 }
 
 @section Styles {
-    <link href="@Url.Content("~/Content/san-pham.css")?v=3"
+    <link href="@Url.Content("~/Content/san-pham.css")"
           rel="stylesheet" />
 }
 
@@ -59,7 +59,11 @@
         "SanPham",
         new { area = "" },
         FormMethod.Get,
-        new { @class = "row g-4 align-items-start" }))
+        new
+        {
+            @class = "row g-4 align-items-start",
+            data_skip_splash = "true"
+        }))
     {
         <aside class="col-lg-3" aria-labelledby="tieuDeBoLoc">
             <div class="card catalog-filter">
@@ -72,15 +76,14 @@
                         </h2>
 
                         <a class="small text-decoration-none"
-                           href="@urlDanhSach">
+                           href="@urlDanhSach"
+                           data-skip-splash="true">
                             Xóa
                         </a>
                     </div>
 
                     <div class="mb-4">
-                        @Html.Label(
-                            "loaiHang",
-                            "Danh mục",
+                        @Html.Label("loaiHang", "Danh mục",
                             new { @class = "form-label fw-semibold" })
 
                         @Html.DropDownList(
@@ -91,9 +94,7 @@
                     </div>
 
                     <div class="mb-4">
-                        @Html.Label(
-                            "thuongHieu",
-                            "Thương hiệu",
+                        @Html.Label("thuongHieu", "Thương hiệu",
                             new { @class = "form-label fw-semibold" })
 
                         @Html.DropDownList(
@@ -133,9 +134,7 @@
                     </div>
 
                     <div class="mb-4">
-                        @Html.Label(
-                            "sapXep",
-                            "Sắp xếp",
+                        @Html.Label("sapXep", "Sắp xếp",
                             new { @class = "form-label fw-semibold" })
 
                         @Html.DropDownList(
@@ -164,9 +163,7 @@
                 </div>
 
                 <div class="d-flex gap-2">
-                    @Html.Label(
-                        "tuKhoa",
-                        "Tìm sản phẩm",
+                    @Html.Label("tuKhoa", "Tìm sản phẩm",
                         new { @class = "visually-hidden" })
 
                     @Html.TextBox(
@@ -206,7 +203,8 @@
                         </p>
 
                         <a class="btn btn-outline-primary"
-                           href="@urlDanhSach">
+                           href="@urlDanhSach"
+                           data-skip-splash="true">
                             Xóa bộ lọc
                         </a>
                     </div>
@@ -302,6 +300,7 @@
                         if (trangDich >= 1 && trangDich <= tongTrang)
                         {
                             <a class="btn btn-outline-primary"
+                               data-skip-splash="true"
                                href="@Url.Action("Index", "SanPham", new
                                {
                                    area = "",
