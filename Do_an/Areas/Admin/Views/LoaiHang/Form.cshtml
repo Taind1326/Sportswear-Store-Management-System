@@ -1,0 +1,108 @@
+﻿@model Do_an.ViewModels.LoaiHangViewModel
+
+@{
+    bool laSua = Model.MaLoaiHang > 0;
+    string tieuDe = laSua ? "Sửa loại hàng" : "Thêm loại hàng";
+    string action = laSua ? "Sua" : "Them";
+
+    ViewBag.Title = tieuDe;
+}
+
+<div class="product-page-heading">
+    <div>
+        <h1>@tieuDe</h1>
+        <p>Thông tin phân nhóm sản phẩm thể thao.</p>
+    </div>
+
+    <a href="@Url.Action("Index", "LoaiHang", new { area = "Admin" })"
+       class="btn btn-outline-secondary">
+        Quay lại
+    </a>
+</div>
+
+@using (Html.BeginForm(
+    action,
+    "LoaiHang",
+    new { area = "Admin" },
+    FormMethod.Post,
+    new
+    {
+        @class = "product-panel",
+        novalidate = "novalidate"
+    }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.MaLoaiHang)
+
+    @Html.ValidationSummary(
+        true,
+        "",
+        new { @class = "text-danger mb-3" })
+
+    <div class="mb-3">
+        @Html.LabelFor(
+            m => m.TenLoaiHang,
+            new { @class = "form-label" })
+
+        @Html.TextBoxFor(
+            m => m.TenLoaiHang,
+            new
+            {
+                @class = "form-control",
+                maxlength = "100",
+                placeholder = "Ví dụ: Giày thể thao, Quần áo thể thao"
+            })
+
+        @Html.ValidationMessageFor(
+            m => m.TenLoaiHang,
+            "",
+            new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(
+            m => m.MoTa,
+            new { @class = "form-label" })
+
+        @Html.TextAreaFor(
+            m => m.MoTa,
+            new
+            {
+                @class = "form-control",
+                rows = "4",
+                maxlength = "500",
+                placeholder = "Mô tả ngắn về nhóm sản phẩm"
+            })
+
+        @Html.ValidationMessageFor(
+            m => m.MoTa,
+            "",
+            new { @class = "text-danger" })
+    </div>
+
+    <div class="form-check mb-2">
+        @Html.CheckBoxFor(
+            m => m.HoatDong,
+            new { @class = "form-check-input" })
+
+        @Html.LabelFor(
+            m => m.HoatDong,
+            new { @class = "form-check-label" })
+    </div>
+
+    <p class="text-secondary small mb-4">
+        Ngừng sử dụng để loại hàng không xuất hiện trong lựa chọn
+        khi tạo sản phẩm mới. Sản phẩm đã gắn loại hàng này được giữ nguyên.
+    </p>
+
+    <div class="d-flex flex-wrap gap-2">
+        <button type="submit" class="btn btn-primary">
+            @(laSua ? "Lưu thay đổi" : "Thêm loại hàng")
+        </button>
+
+        <a href="@Url.Action("Index", "LoaiHang", new { area = "Admin" })"
+           class="btn btn-outline-secondary">
+            Hủy
+        </a>
+    </div>
+}

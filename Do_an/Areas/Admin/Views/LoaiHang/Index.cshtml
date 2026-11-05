@@ -1,0 +1,213 @@
+﻿@model System.Collections.Generic.List<Do_an.Models.LoaiHang>
+
+@{
+    ViewBag.Title = "Quản lý loại hàng";
+
+    string tuKhoa = ViewBag.TuKhoa;
+    int trang = ViewBag.Trang;
+    int tongTrang = ViewBag.TongTrang;
+    int tongSo = ViewBag.TongSo;
+}
+
+<div class="product-page-heading">
+    <div>
+        <h1>Quản lý loại hàng</h1>
+        <p>Phân nhóm các sản phẩm thể thao.</p>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2">
+        <a href="@Url.Action("Index", "SanPham", new { area = "Admin" })"
+           class="btn btn-outline-secondary">
+            Về sản phẩm
+        </a>
+
+        <a href="@Url.Action("Them", "LoaiHang", new { area = "Admin" })"
+           class="btn btn-primary">
+            <i class="bi bi-plus-lg" aria-hidden="true"></i>
+            Thêm loại hàng
+        </a>
+    </div>
+</div>
+
+@if (TempData["ThanhCong"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["ThanhCong"]
+    </div>
+}
+
+@if (TempData["Loi"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["Loi"]
+    </div>
+}
+
+<div class="product-panel">
+    @using (Html.BeginForm(
+        "Index",
+        "LoaiHang",
+        new { area = "Admin" },
+        FormMethod.Get,
+        new { @class = "row g-2 align-items-end mb-4" }))
+    {
+        <div class="col-12 col-md-7">
+            <label for="tuKhoa" class="form-label">
+                Tên loại hàng
+            </label>
+
+            <input id="tuKhoa"
+                   name="tuKhoa"
+                   type="search"
+                   value="@tuKhoa"
+                   maxlength="100"
+                   class="form-control"
+                   placeholder="Nhập tên loại hàng..." />
+        </div>
+
+        <div class="col-12 col-md-5 d-flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-primary">
+                Tìm kiếm
+            </button>
+
+            <a href="@Url.Action("Index", "LoaiHang", new { area = "Admin" })"
+               class="btn btn-outline-secondary">
+                Đặt lại
+            </a>
+        </div>
+    }
+
+    <div class="table-responsive">
+        <table class="table table-hover product-table align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">Mã</th>
+                    <th scope="col">Loại hàng</th>
+                    <th scope="col">Mô tả</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col" class="text-end">Thao tác</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.Count == 0)
+                {
+                    <tr>
+                        <td colspan="5"
+                            class="text-center text-secondary py-4">
+                            Không tìm thấy loại hàng phù hợp.
+                        </td>
+                    </tr>
+                }
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>#@item.MaLoaiHang</td>
+
+                        <td class="fw-semibold">
+                            @item.TenLoaiHang
+                        </td>
+
+                        <td class="text-break">
+                            @(string.IsNullOrWhiteSpace(item.MoTa)
+                                ? "—"
+                                : item.MoTa)
+                        </td>
+
+                        <td>
+                            <span class="status-pill @(item.HoatDong
+                                ? "status-selling"
+                                : "status-stopped")">
+                                @(item.HoatDong
+                                    ? "Đang sử dụng"
+                                    : "Ngừng sử dụng")
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="d-flex justify-content-end flex-wrap gap-2">
+                                <a href="@Url.Action("Sua", "LoaiHang", new
+                                         {
+                                             area = "Admin",
+                                             id = item.MaLoaiHang
+                                         })"
+                                   class="btn btn-outline-primary btn-sm">
+                                    Sửa
+                                </a>
+
+                                @using (Html.BeginForm(
+                                    "DoiTrangThai",
+                                    "LoaiHang",
+                                    new { area = "Admin" },
+                                    FormMethod.Post,
+                                    new { @class = "m-0" }))
+                                {
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="@item.MaLoaiHang" />
+
+                                    <input type="hidden"
+                                           name="hoatDong"
+                                           value="@(item.HoatDong ? "false" : "true")" />
+
+                                    <button type="submit"
+                                            class="btn btn-outline-secondary btn-sm">
+                                        @(item.HoatDong
+                                            ? "Ngừng sử dụng"
+                                            : "Mở sử dụng")
+                                    </button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-3">
+        <span class="text-secondary">
+            @tongSo loại hàng · Trang @trang / @tongTrang
+        </span>
+
+        @if (tongTrang > 1)
+        {
+            <nav aria-label="Phân trang loại hàng">
+                <ul class="pagination pagination-sm mb-0">
+                    @if (trang > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="@Url.Action("Index", "LoaiHang", new
+                                    {
+                                        area = "Admin",
+                                        tuKhoa = tuKhoa,
+                                        trang = trang - 1
+                                    })">
+                                Trang trước
+                            </a>
+                        </li>
+                    }
+
+                    @if (trang < tongTrang)
+                    {
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="@Url.Action("Index", "LoaiHang", new
+                                    {
+                                        area = "Admin",
+                                        tuKhoa = tuKhoa,
+                                        trang = trang + 1
+                                    })">
+                                Trang sau
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    </div>
+</div> 

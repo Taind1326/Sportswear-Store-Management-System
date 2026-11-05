@@ -240,6 +240,7 @@
     <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\DatHangViewModel.cs" />
     <Compile Include="ViewModels\GioHangViewModel.cs" />
+    <Compile Include="ViewModels\LoaiHangViewModel.cs" />
     <Compile Include="ViewModels\SanPhamChiTietViewModel.cs" />
     <Compile Include="ViewModels\SuaPhanLoaiViewModel.cs" />
     <Compile Include="ViewModels\SuaSanPhamViewModel.cs" />
@@ -256,6 +257,8 @@
     <Content Include="Areas\Admin\Views\SanPham\Sua.cshtml" />
     <Content Include="Areas\Admin\Views\SanPham\SuaPhanLoai.cshtml" />
     <Content Include="Areas\Admin\Views\SanPham\BoSungHang.cshtml" />
+    <Content Include="Areas\Admin\Views\LoaiHang\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\LoaiHang\Form.cshtml" />
     <None Include="Areas\Admin\Views\Web.config" />
     <Content Include="Content\admin.css" />
     <Content Include="Content\bootstrap-grid.css" />
@@ -354,7 +357,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Views\DonHang\" />
-    <Folder Include="Areas\Admin\Views\LoaiHang\" />
     <Folder Include="Areas\Admin\Views\TaiKhoan\" />
     <Folder Include="Areas\Admin\Views\ThongKe\" />
     <Folder Include="Areas\Admin\Views\ThuongHieu\" />
