@@ -8,15 +8,17 @@
     ViewBag.Title = Model.TenSanPham;
     var vi = CultureInfo.GetCultureInfo("vi-VN");
 
-    var anh = Model.HinhAnhSanPhams
+    var danhSachAnh = Model.HinhAnhSanPhams
         .Where(x => !string.IsNullOrWhiteSpace(x.DuongDanAnh))
         .OrderByDescending(x => x.AnhDaiDien)
         .ThenBy(x => x.ThuTu)
         .ThenBy(x => x.MaHinhAnh)
         .ToList();
 
-    var anhDaiDien = anh.FirstOrDefault();
-    var anhMacDinh = anhDaiDien == null ? "" : Url.Content(anhDaiDien.DuongDanAnh);
+    var anhDaiDien = danhSachAnh.FirstOrDefault();
+    string anhMacDinh = anhDaiDien == null
+        ? ""
+        : Url.Content(anhDaiDien.DuongDanAnh);
 
     var phanLoai = Model.BienTheSanPhams
         .Where(x => x.DangBan)
@@ -25,19 +27,25 @@
         .ToList();
 
     var nhomMau = phanLoai
-        .GroupBy(x => QuyTacSanPham.ChuanHoa(x.MauSac), StringComparer.OrdinalIgnoreCase)
+        .GroupBy(
+            x => QuyTacSanPham.ChuanHoa(x.MauSac),
+            StringComparer.OrdinalIgnoreCase)
         .ToList();
 
-    var gia = phanLoai
-        .Select(x => QuyTacSanPham.GiaSauGiam(x.GiaBan, Model.PhanTramGiam))
+    var danhSachGia = phanLoai
+        .Select(x => QuyTacSanPham.GiaSauGiam(
+            x.GiaBan, Model.PhanTramGiam))
         .ToList();
 
     string giaBanDau = "Chưa có phân loại đang bán";
-    if (gia.Count > 0)
+
+    if (danhSachGia.Count > 0)
     {
-        decimal thapNhat = gia.Min();
-        decimal caoNhat = gia.Max();
+        decimal thapNhat = danhSachGia.Min();
+        decimal caoNhat = danhSachGia.Max();
+
         giaBanDau = thapNhat.ToString("N0", vi) + " đ";
+
         if (thapNhat != caoNhat)
         {
             giaBanDau += " – " + caoNhat.ToString("N0", vi) + " đ";
@@ -46,222 +54,202 @@
 }
 
 @section Styles {
-    <style>
-        .sportix-detail {
-            background: linear-gradient(180deg, #f7fbff, #eaf6ff);
-        }
-
-            .sportix-detail .detail-card {
-                display: grid;
-                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-                gap: 2rem;
-                padding: clamp(1rem, 3vw, 2rem);
-                border: 1px solid #d9eaf8;
-                border-radius: 1rem;
-                background: #fff;
-            }
-
-            .sportix-detail .detail-gallery,
-            .sportix-detail .detail-info {
-                min-width: 0;
-            }
-
-            .sportix-detail .detail-main-image {
-                display: grid;
-                place-items: center;
-                aspect-ratio: 1;
-                overflow: hidden;
-                border-radius: .75rem;
-                background: #f5faff;
-            }
-
-                .sportix-detail .detail-main-image img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: contain;
-                }
-
-            .sportix-detail .detail-thumbs {
-                display: flex;
-                gap: .5rem;
-                overflow-x: auto;
-                padding: .25rem;
-            }
-
-            .sportix-detail .detail-thumb {
-                flex: 0 0 auto;
-                padding: .2rem;
-            }
-
-                .sportix-detail .detail-thumb img {
-                    width: 60px;
-                    height: 60px;
-                    object-fit: cover;
-                }
-
-            .sportix-detail .detail-price {
-                color: #006fe6;
-            }
-
-            .sportix-detail .detail-option {
-                display: inline-flex;
-                align-items: center;
-                gap: .5rem;
-                max-width: 100%;
-                padding: .45rem .7rem;
-                border: 1px solid #c8d9e9;
-                border-radius: .4rem;
-                background: #fff;
-                color: #0f172a;
-                text-align: left;
-            }
-
-                .sportix-detail .detail-option[aria-pressed="true"] {
-                    border-color: #006fe6;
-                    background: #eaf6ff;
-                    box-shadow: inset 0 0 0 1px #006fe6;
-                }
-
-                .sportix-detail .detail-option:disabled {
-                    opacity: .5;
-                    cursor: not-allowed;
-                }
-
-            .sportix-detail .detail-color img {
-                width: 34px;
-                height: 34px;
-                object-fit: cover;
-            }
-
-            .sportix-detail .detail-description {
-                white-space: pre-line;
-                overflow-wrap: anywhere;
-            }
-
-            .sportix-detail [hidden] {
-                display: none !important;
-            }
-
-        @@media (max-width: 767px) {
-            .sportix-detail .detail-card {
-                grid-template-columns: minmax(0, 1fr);
-            }
-        }
-    </style>
+    <link href="@Url.Content("~/Content/chi-tiet-san-pham.css")"
+          rel="stylesheet" />
 }
 
-<div id="chiTietSanPham" class="sportix-detail py-4 py-md-5"
-     data-anh-mac-dinh="@anhMacDinh" data-gia-ban-dau="@giaBanDau">
-    <div class="container">
-        <div class="detail-card">
-            <div class="detail-gallery">
-                <div class="detail-main-image">
-                    @if (!string.IsNullOrEmpty(anhMacDinh))
+<div id="chiTietSanPham"
+     class="sportix-detail container py-4 py-lg-5"
+     data-api="@Url.Action("BienThe", "SanPham", new { area = "", id = Model.MaSanPham })"
+     data-anh-mac-dinh="@anhMacDinh"
+     data-gia-ban-dau="@giaBanDau">
+
+    <nav class="mb-3" aria-label="Đường dẫn">
+        <a href="@Url.Action("Index", "SanPham", new { area = "" })"
+           class="text-decoration-none">
+            <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>
+            Danh sách sản phẩm
+        </a>
+    </nav>
+
+    <div class="detail-card">
+        <div>
+            <div class="detail-main-image">
+                @if (!string.IsNullOrEmpty(anhMacDinh))
+                {
+                    <img id="anhSanPham"
+                         src="@anhMacDinh"
+                         alt="@Model.TenSanPham" />
+                }
+                else
+                {
+                    <span class="text-secondary">Chưa có ảnh sản phẩm</span>
+                }
+            </div>
+
+            @if (danhSachAnh.Count > 1)
+            {
+                <div class="detail-thumbs mt-3"
+                     role="group"
+                     aria-label="Chọn ảnh sản phẩm">
+                    @foreach (var anh in danhSachAnh)
                     {
-                        <img id="anhSanPham" src="@anhMacDinh" alt="@Model.TenSanPham" />
-                    }
-                    else
-                    {
-                        <span class="text-secondary">Chưa có ảnh sản phẩm</span>
+                        string duongDan = Url.Content(anh.DuongDanAnh);
+
+                        <button type="button"
+                                class="detail-option detail-thumb"
+                                data-anh="@duongDan"
+                                aria-label="Xem ảnh sản phẩm @anh.MaHinhAnh"
+                                aria-pressed="@(duongDan == anhMacDinh ? "true" : "false")">
+                            <img src="@duongDan" alt="" loading="lazy" />
+                        </button>
                     }
                 </div>
+            }
+        </div>
 
-                @if (anh.Count > 1)
-                {
-                    <div class="detail-thumbs mt-2" aria-label="Ảnh sản phẩm">
-                        @foreach (var hinh in anh)
+        <div class="detail-info">
+            <h1>@Model.TenSanPham</h1>
+
+            @if (Model.ThuongHieu != null)
+            {
+                <p class="text-secondary mb-3">
+                    @Model.ThuongHieu.TenThuongHieu
+                </p>
+            }
+
+            <div id="giaSanPham" class="detail-price" aria-live="polite">
+                @giaBanDau
+            </div>
+
+            @if (Model.PhanTramGiam > 0)
+            {
+                <span class="badge bg-primary mt-2">
+                    Giảm @Model.PhanTramGiam%
+                </span>
+            }
+
+            @if (nhomMau.Count > 0)
+            {
+                <div class="mt-4">
+                    <h2 class="h6 fw-semibold">Màu</h2>
+
+                    <div class="detail-options"
+                         role="group"
+                         aria-label="Chọn màu">
+                        @for (int i = 0; i < nhomMau.Count; i++)
                         {
-                            var duongDan = Url.Content(hinh.DuongDanAnh);
-                            var nhan = string.IsNullOrWhiteSpace(hinh.MauSac)
-                                ? "Xem ảnh sản phẩm " + hinh.MaHinhAnh
-                                : "Xem ảnh màu " + hinh.MauSac;
-                            <button type="button" class="detail-option detail-thumb"
-                                    data-anh-nho="@duongDan" aria-label="@nhan"
-                                    aria-pressed="@(duongDan == anhMacDinh ? "true" : "false")">
-                                <img src="@duongDan" alt="" loading="lazy" />
+                            string mau = nhomMau[i].Key;
+
+                            var anhMau = danhSachAnh.FirstOrDefault(x =>
+                                !string.IsNullOrWhiteSpace(x.MauSac) &&
+                                string.Equals(
+                                    QuyTacSanPham.ChuanHoa(x.MauSac),
+                                    mau,
+                                    StringComparison.OrdinalIgnoreCase));
+
+                            string duongDan = anhMau == null
+                                ? anhMacDinh
+                                : Url.Content(anhMau.DuongDanAnh);
+
+                            string nhan = mau == "Mặc định"
+                                ? Model.TenSanPham
+                                : Model.TenSanPham + " - " + mau;
+
+                            <button type="button"
+                                    class="detail-option detail-color"
+                                    data-mau="@i"
+                                    data-anh-mau="@duongDan"
+                                    aria-pressed="false">
+                                @if (!string.IsNullOrEmpty(duongDan))
+                                {
+                                    <img src="@duongDan" alt="" loading="lazy" />
+                                }
+
+                                <span>@nhan</span>
                             </button>
                         }
                     </div>
-                }
-            </div>
+                </div>
 
-            <div class="detail-info">
-                <h1 class="h2 fw-bold mb-3">@Model.TenSanPham</h1>
-                <div class="h3 fw-bold detail-price mb-4" id="giaSanPham"
-                     aria-live="polite">@giaBanDau</div>
+                <div class="mt-4">
+                    <h2 class="h6 fw-semibold">Kích cỡ / dung tích</h2>
+                    <p id="huongDanChonMau" class="text-secondary">
+                        Chọn màu để xem kích cỡ.
+                    </p>
 
-                    @if (nhomMau.Count > 0)
+                    @for (int i = 0; i < nhomMau.Count; i++)
                     {
-                        <div class="mb-3">
-                            <div class="fw-semibold mb-2">Màu</div>
-                            <div class="d-flex flex-wrap gap-2" role="group" aria-label="Chọn màu">
-                                @for (int i = 0; i < nhomMau.Count; i++)
-                                {
-                                    var mau = nhomMau[i].Key;
-                                    var anhMau = anh.FirstOrDefault(x => !x.AnhDaiDien
-                                        && !string.IsNullOrWhiteSpace(x.MauSac)
-                                        && string.Equals(QuyTacSanPham.ChuanHoa(x.MauSac),
-                                            mau, StringComparison.OrdinalIgnoreCase));
-                                    var duongDan = anhMau == null ? "" : Url.Content(anhMau.DuongDanAnh);
-                                    var nhanMau = mau == "Mặc định" ? Model.TenSanPham : Model.TenSanPham + " - " + mau;
-
-                                    <button type="button" class="detail-option detail-color"
-                                            data-mau="@i" data-anh-mau="@duongDan" aria-pressed="false">
-                                        @if (anhMau != null)
-                                        {
-                                            <img src="@duongDan" alt="" loading="lazy" />
-                                        }
-                                        <span>@nhanMau</span>
-                                    </button>
-                                }
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="fw-semibold mb-2">Kích cỡ / dung tích</div>
-                            <div id="huongDanChonMau" class="text-secondary">Chọn màu để xem kích cỡ.</div>
-                            @for (int i = 0; i < nhomMau.Count; i++)
+                        <div class="detail-sizes"
+                             data-nhom-size="@i"
+                             role="group"
+                             aria-label="Chọn kích cỡ"
+                             hidden>
+                            @foreach (var bienThe in nhomMau[i])
                             {
-                                <div class="d-flex flex-wrap gap-2" data-nhom-size="@i"
-                                     role="group" aria-label="Chọn kích cỡ" hidden>
-                                    @foreach (var bienThe in nhomMau[i])
-                                    {
-                                        var giaBan = QuyTacSanPham.GiaSauGiam(
-                                            bienThe.GiaBan, Model.PhanTramGiam).ToString("N0", vi) + " đ";
-                                        var kichThuoc = QuyTacSanPham.ChuanHoa(bienThe.KichThuoc);
-                                        var hetHang = bienThe.SoLuongTon <= 0;
+                                bool hetHang = bienThe.SoLuongTon <= 0;
 
-                                        <button type="button" class="detail-option"
-                                                data-gia="@giaBan"
-                                                data-ton="@bienThe.SoLuongTon.ToString("N0", vi)"
-                                                aria-pressed="false"
-                                                disabled="@hetHang">
-                                            @kichThuoc@if (hetHang)
-                                            {
-                                                <span>(Hết hàng)</span>
-                                            }
-                                        </button>
+                                <button type="button"
+                                        class="detail-option"
+                                        data-bien-the="@bienThe.MaBienThe"
+                                        aria-pressed="false"
+                                        disabled="@hetHang">
+                                    <span>
+                                        @QuyTacSanPham.ChuanHoa(bienThe.KichThuoc)
+                                    </span>
+
+                                    @if (hetHang)
+                                    {
+                                        <span class="small">(Hết hàng)</span>
                                     }
-                                </div>
+                                </button>
                             }
                         </div>
-                        <p id="tonSanPham" class="text-secondary mb-0" aria-live="polite"></p>
                     }
                 </div>
-            </div>
 
-            @if (!string.IsNullOrWhiteSpace(Model.MoTa))
-            {
-                <div class="border rounded bg-white mt-4 p-4">
-                    <h2 class="h5 fw-bold">Mô tả sản phẩm</h2>
-                    <p class="detail-description mb-0">@Model.MoTa</p>
+                <p id="tonSanPham"
+                   class="text-secondary mt-3 mb-2"
+                   aria-live="polite"></p>
+
+                <div id="vungSoLuong" hidden>
+                    <label for="soLuongSanPham" class="form-label">
+                        Số lượng
+                    </label>
+
+                    <input id="soLuongSanPham"
+                           name="soLuong"
+                           type="number"
+                           class="form-control"
+                           min="1"
+                           step="1"
+                           value="1"
+                           disabled />
+
+                    <input id="maBienTheDangChon"
+                           name="maBienThe"
+                           type="hidden" />
                 </div>
             }
         </div>
     </div>
 
-    @section Scripts {
-        <script>(function () {
+    @if (!string.IsNullOrWhiteSpace(Model.MoTa))
+    {
+        <section class="detail-description mt-4"
+                 aria-labelledby="tieuDeMoTa"
+                 data-reveal="">
+            <h2 id="tieuDeMoTa" class="h5 fw-bold mb-3">
+                Thông tin sản phẩm
+            </h2>
+            <p>@Model.MoTa</p>
+        </section>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
             "use strict";
 
             const trang = document.getElementById("chiTietSanPham");
@@ -269,40 +257,62 @@
             const gia = document.getElementById("giaSanPham");
             const ton = document.getElementById("tonSanPham");
             const huongDan = document.getElementById("huongDanChonMau");
-            const anhNho = trang.querySelectorAll("[data-anh-nho]");
+            const vungSoLuong = document.getElementById("vungSoLuong");
+            const soLuong = document.getElementById("soLuongSanPham");
+            const maBienThe = document.getElementById("maBienTheDangChon");
+
+            const anhNho = trang.querySelectorAll("[data-anh]");
             const cacMau = trang.querySelectorAll("[data-mau]");
             const cacNhomSize = trang.querySelectorAll("[data-nhom-size]");
-            const cacSize = trang.querySelectorAll("[data-gia]");
+            const cacSize = trang.querySelectorAll("[data-bien-the]");
+            const dinhDang = new Intl.NumberFormat("vi-VN");
+
             let mauDangChon = null;
+            let lanChon = 0;
 
             function doiAnh(duongDan) {
-                if (!anhLon || !duongDan) {
-                    return;
-                }
+                if (!anhLon || !duongDan) return;
 
                 anhLon.src = duongDan;
+
                 anhNho.forEach(function (nut) {
-                    nut.setAttribute("aria-pressed", String(nut.dataset.anhNho === duongDan));
+                    nut.setAttribute(
+                        "aria-pressed",
+                        String(nut.dataset.anh === duongDan)
+                    );
                 });
+            }
+
+            function xoaLuaChonSoLuong() {
+                vungSoLuong.hidden = true;
+                soLuong.disabled = true;
+                soLuong.value = 1;
+                maBienThe.value = "";
             }
 
             anhNho.forEach(function (nut) {
                 nut.addEventListener("click", function () {
-                    doiAnh(nut.dataset.anhNho);
+                    doiAnh(nut.dataset.anh);
                 });
             });
 
             cacMau.forEach(function (nut) {
                 nut.addEventListener("click", function () {
+                    lanChon++;
+                    xoaLuaChonSoLuong();
+
                     mauDangChon = mauDangChon === nut ? null : nut;
 
                     cacMau.forEach(function (mau) {
-                        mau.setAttribute("aria-pressed", String(mau === mauDangChon));
+                        mau.setAttribute(
+                            "aria-pressed",
+                            String(mau === mauDangChon)
+                        );
                     });
 
                     cacNhomSize.forEach(function (nhom) {
-                        nhom.hidden = !mauDangChon
-                            || nhom.dataset.nhomSize !== mauDangChon.dataset.mau;
+                        nhom.hidden = !mauDangChon ||
+                            nhom.dataset.nhomSize !== mauDangChon.dataset.mau;
                     });
 
                     cacSize.forEach(function (size) {
@@ -311,20 +321,87 @@
 
                     huongDan.hidden = !!mauDangChon;
                     gia.textContent = trang.dataset.giaBanDau;
-                    ton.textContent = mauDangChon ? "Chọn kích cỡ để xem giá và tồn kho." : "";
-                    doiAnh((mauDangChon && mauDangChon.dataset.anhMau) || trang.dataset.anhMacDinh);
+                    ton.textContent = mauDangChon
+                        ? "Chọn kích cỡ để xem giá và tồn kho."
+                        : "";
+
+                    doiAnh(
+                        mauDangChon
+                            ? mauDangChon.dataset.anhMau
+                            : trang.dataset.anhMacDinh
+                    );
                 });
             });
 
             cacSize.forEach(function (nut) {
-                nut.addEventListener("click", function () {
+                nut.addEventListener("click", async function () {
+                    const yeuCau = ++lanChon;
+                    xoaLuaChonSoLuong();
+
                     cacSize.forEach(function (size) {
-                        size.setAttribute("aria-pressed", String(size === nut));
+                        size.setAttribute(
+                            "aria-pressed",
+                            String(size === nut)
+                        );
                     });
 
-                    gia.textContent = nut.dataset.gia;
-                    ton.textContent = "Còn " + nut.dataset.ton + " sản phẩm";
+                    gia.textContent = trang.dataset.giaBanDau;
+                    ton.textContent = "Đang kiểm tra tồn kho…";
+
+                    try {
+                        const url = new URL(
+                            trang.dataset.api,
+                            window.location.href
+                        );
+
+                        url.searchParams.set(
+                            "maBienThe",
+                            nut.dataset.bienThe
+                        );
+
+                        const response = await fetch(url, {
+                            cache: "no-store"
+                        });
+
+                        if (yeuCau !== lanChon) return;
+
+                        if (response.status === 404) {
+                            ton.textContent = "Phân loại này không còn bán.";
+                            nut.disabled = true;
+                            return;
+                        }
+
+                        if (!response.ok) {
+                            throw new Error("Không tải được phân loại.");
+                        }
+
+                        const bienThe = await response.json();
+
+                        if (yeuCau !== lanChon) return;
+
+                        gia.textContent =
+                            dinhDang.format(bienThe.GiaSauGiam) + " đ";
+
+                        ton.textContent = bienThe.ConHang
+                            ? "Còn " + dinhDang.format(bienThe.SoLuongTon) + " sản phẩm"
+                            : "Hết hàng";
+
+                        if (bienThe.ConHang) {
+                            soLuong.max = bienThe.SoLuongTon;
+                            soLuong.disabled = false;
+                            maBienThe.value = bienThe.MaBienThe;
+                            vungSoLuong.hidden = false;
+                        } else {
+                            nut.disabled = true;
+                        }
+                    } catch (error) {
+                        if (yeuCau === lanChon) {
+                            ton.textContent =
+                                "Chưa tải được giá và tồn kho. Mời bạn chọn lại kích cỡ.";
+                        }
+                    }
                 });
             });
-        })();</script>
-    }
+        })();
+    </script>
+}
