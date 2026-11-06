@@ -1,8 +1,111 @@
 ﻿@model System.Collections.Generic.IList<Do_an.Models.SanPham>
+@using Do_an.Models
 @using Do_an.Services
 @using System
+@using System.Collections.Generic
 @using System.Globalization
 @using System.Linq
+
+@helper TheSanPham(
+    SanPham sanPham,
+    bool laSanPhamMoi,
+    DateTime thoiDiem)
+{
+    var vi = CultureInfo.GetCultureInfo("vi-VN");
+
+    var anh = sanPham.HinhAnhSanPhams
+        .Where(x => !string.IsNullOrWhiteSpace(x.DuongDanAnh))
+        .OrderByDescending(x => x.AnhDaiDien)
+        .ThenBy(x => x.ThuTu)
+        .ThenBy(x => x.MaHinhAnh)
+        .FirstOrDefault();
+
+    var giaGoc = sanPham.BienTheSanPhams
+        .Where(x => x.DangBan)
+        .Select(x => (decimal?)x.GiaBan)
+        .Min();
+
+    var nhan = laSanPhamMoi
+        ? "Hàng mới"
+        : QuyTacSanPham.Nhan(
+            sanPham.PhanTramGiam,
+            sanPham.NgayTao,
+            thoiDiem);
+
+    string lopNhan = "";
+
+    if (nhan == "Hàng mới")
+    {
+        lopNhan = "catalog-badge-new";
+    }
+    else if (nhan == "Giảm giá")
+    {
+        lopNhan = "catalog-badge-sale";
+    }
+
+    <a class="catalog-card"
+       href="@Url.Action("ChiTiet", "SanPham", new
+       {
+           area = "",
+           id = sanPham.MaSanPham
+       })">
+        <div class="catalog-card-media">
+            @if (anh != null)
+            {
+                <img src="@Url.Content(anh.DuongDanAnh)"
+                     alt=""
+                     loading="lazy" />
+            }
+            else
+            {
+                <span class="catalog-card-placeholder">
+                    Chưa có ảnh
+                </span>
+            }
+
+            @if (!string.IsNullOrEmpty(nhan))
+            {
+                <span class="catalog-badge @lopNhan">
+                    @nhan
+                </span>
+            }
+        </div>
+
+        <div class="catalog-card-body">
+            <p class="catalog-card-category">
+                @(sanPham.LoaiHang == null
+                    ? "Sản phẩm thể thao"
+                    : sanPham.LoaiHang.TenLoaiHang)
+            </p>
+
+            <h3>@sanPham.TenSanPham</h3>
+
+            <div class="catalog-card-prices">
+                @if (giaGoc.HasValue)
+                {
+                    var giaSale = QuyTacSanPham.GiaSauGiam(
+                        giaGoc.Value,
+                        sanPham.PhanTramGiam);
+
+                    <strong>
+                        Từ @giaSale.ToString("N0", vi) đ
+                    </strong>
+
+                    if (sanPham.PhanTramGiam > 0)
+                    {
+                        <del>
+                            @giaGoc.Value.ToString("N0", vi) đ
+                        </del>
+                    }
+                }
+                else
+                {
+                    <strong>Xem chi tiết</strong>
+                }
+            </div>
+        </div>
+    </a>
+}
 
 @{
     ViewBag.Title = "Sản phẩm";
@@ -10,8 +113,15 @@
     var vi = CultureInfo.GetCultureInfo("vi-VN");
     var thoiDiem = DateTime.Now;
 
+    var sanPhamMoi = ViewBag.SanPhamMoi as IList<SanPham>
+        ?? new List<SanPham>();
+
     int trang = ViewBag.Trang;
     int tongTrang = ViewBag.TongTrang;
+
+    int tongSanPham = ViewBag.TongSanPham == null
+        ? Model.Count
+        : Convert.ToInt32(ViewBag.TongSanPham);
 
     long giaToiDa = ViewBag.GiaToiDa == null
         ? 5000000L
@@ -33,11 +143,14 @@
           rel="stylesheet" />
 }
 
-<div class="container py-4 py-lg-5 sportix-catalog">
-    <section class="catalog-hero" aria-labelledby="tieuDeSanPham">
+<div class="container py-4 sportix-catalog sportix-catalog-page">
+    <section class="catalog-hero"
+             aria-labelledby="tieuDeSanPham"
+             data-reveal>
         <div class="catalog-hero-copy">
             <span class="catalog-eyebrow">
-                <i class="bi bi-lightning-charge-fill" aria-hidden="true"></i>
+                <i class="bi bi-lightning-charge-fill"
+                   aria-hidden="true"></i>
                 SPORTIX STORE
             </span>
 
@@ -51,8 +164,54 @@
 
         <img class="catalog-hero-image"
              src="@Url.Content("~/Content/images/product-hero.jpg")"
-             alt="" />
+             alt="Trang phục và dụng cụ thể thao SPORTIX" />
     </section>
+
+    @if (sanPhamMoi.Count > 0)
+    {
+        <section class="catalog-arrivals"
+                 aria-labelledby="tieuDeSanPhamMoi"
+                 data-reveal>
+            <div class="catalog-arrivals-heading">
+                <div>
+                    <span class="catalog-new-tag">HÀNG MỚI</span>
+                    <h2 id="tieuDeSanPhamMoi">Vừa cập bến</h2>
+                </div>
+
+                <div class="catalog-arrivals-controls">
+                    <button id="sanPhamMoiTruoc"
+                            type="button"
+                            class="catalog-scroll-button"
+                            aria-label="Xem sản phẩm trước"
+                            aria-controls="sanPhamMoi"
+                            disabled>
+                        <i class="bi bi-chevron-left"
+                           aria-hidden="true"></i>
+                    </button>
+
+                    <button id="sanPhamMoiSau"
+                            type="button"
+                            class="catalog-scroll-button"
+                            aria-label="Xem sản phẩm tiếp theo"
+                            aria-controls="sanPhamMoi">
+                        <i class="bi bi-chevron-right"
+                           aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+
+            <ul id="sanPhamMoi"
+                class="catalog-arrivals-track"
+                aria-label="Sản phẩm mới trong 30 ngày">
+                @foreach (var sanPham in sanPhamMoi)
+                {
+                    <li class="catalog-arrival-item">
+                        @TheSanPham(sanPham, true, thoiDiem)
+                    </li>
+                }
+            </ul>
+        </section>
+    }
 
     @using (Html.BeginForm(
         "Index",
@@ -65,6 +224,8 @@
             data_skip_splash = "true"
         }))
     {
+        @Html.Hidden("giaTu", (object)ViewBag.GiaTu)
+
         <aside class="col-lg-3" aria-labelledby="tieuDeBoLoc">
             <div class="card catalog-filter">
                 <div class="card-body">
@@ -83,7 +244,9 @@
                     </div>
 
                     <div class="mb-4">
-                        @Html.Label("loaiHang", "Danh mục",
+                        @Html.Label(
+                            "loaiHang",
+                            "Danh mục",
                             new { @class = "form-label fw-semibold" })
 
                         @Html.DropDownList(
@@ -94,7 +257,9 @@
                     </div>
 
                     <div class="mb-4">
-                        @Html.Label("thuongHieu", "Thương hiệu",
+                        @Html.Label(
+                            "thuongHieu",
+                            "Thương hiệu",
                             new { @class = "form-label fw-semibold" })
 
                         @Html.DropDownList(
@@ -134,7 +299,9 @@
                     </div>
 
                     <div class="mb-4">
-                        @Html.Label("sapXep", "Sắp xếp",
+                        @Html.Label(
+                            "sapXep",
+                            "Sắp xếp",
                             new { @class = "form-label fw-semibold" })
 
                         @Html.DropDownList(
@@ -143,27 +310,32 @@
                             new { @class = "form-select" })
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100">
+                    <button type="submit"
+                            class="btn btn-primary w-100">
                         Áp dụng bộ lọc
                     </button>
                 </div>
             </div>
         </aside>
 
-        <section class="col-lg-9" aria-labelledby="tieuDeDanhSach">
+        <section class="col-lg-9"
+                 aria-labelledby="tieuDeDanhSach">
             <div class="catalog-toolbar d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
                 <div>
-                    <h2 id="tieuDeDanhSach" class="h5 fw-bold mb-1">
+                    <h2 id="tieuDeDanhSach"
+                        class="h5 fw-bold mb-1">
                         Danh sách sản phẩm
                     </h2>
 
                     <p class="small text-secondary mb-0">
-                        Đang hiển thị @Model.Count sản phẩm
+                        Hiển thị @Model.Count / @tongSanPham sản phẩm
                     </p>
                 </div>
 
                 <div class="d-flex gap-2">
-                    @Html.Label("tuKhoa", "Tìm sản phẩm",
+                    @Html.Label(
+                        "tuKhoa",
+                        "Tìm sản phẩm",
                         new { @class = "visually-hidden" })
 
                     @Html.TextBox(
@@ -179,7 +351,8 @@
                     <button type="submit"
                             class="btn btn-outline-primary"
                             aria-label="Tìm kiếm">
-                        <i class="bi bi-search" aria-hidden="true"></i>
+                        <i class="bi bi-search"
+                           aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
@@ -196,10 +369,13 @@
                         <i class="bi bi-search fs-2 text-primary"
                            aria-hidden="true"></i>
 
-                        <h3 class="h5 mt-3">Không tìm thấy sản phẩm</h3>
+                        <h3 class="h5 mt-3">
+                            Không tìm thấy sản phẩm
+                        </h3>
 
                         <p class="text-secondary">
-                            Thử đổi từ khóa hoặc xóa bộ lọc để xem thêm sản phẩm.
+                            Thử đổi từ khóa hoặc xóa bộ lọc
+                            để xem thêm sản phẩm.
                         </p>
 
                         <a class="btn btn-outline-primary"
@@ -212,76 +388,11 @@
             }
             else
             {
-                <div class="row g-3">
+                <div class="catalog-product-grid">
                     @foreach (var sanPham in Model)
                     {
-                        var anh = sanPham.HinhAnhSanPhams
-                            .Where(x => !string.IsNullOrWhiteSpace(x.DuongDanAnh))
-                            .OrderByDescending(x => x.AnhDaiDien)
-                            .ThenBy(x => x.ThuTu)
-                            .ThenBy(x => x.MaHinhAnh)
-                            .FirstOrDefault();
-
-                        var giaGoc = sanPham.BienTheSanPhams
-                            .Where(x => x.DangBan)
-                            .Select(x => (decimal?)x.GiaBan)
-                            .Min();
-
-                        var nhan = QuyTacSanPham.Nhan(
-                            sanPham.PhanTramGiam,
-                            sanPham.NgayTao,
-                            thoiDiem);
-
-                        <div class="col-6 col-md-4" data-reveal="">
-                            <a class="catalog-card"
-                               href="@Url.Action("ChiTiet", "SanPham", new
-                               {
-                                   area = "",
-                                   id = sanPham.MaSanPham
-                               })">
-                                <div class="catalog-card-media">
-                                    @if (anh != null)
-                                    {
-                                        <img src="@Url.Content(anh.DuongDanAnh)"
-                                             alt=""
-                                             loading="lazy" />
-                                    }
-                                    else
-                                    {
-                                        <i class="bi bi-image catalog-card-placeholder"
-                                           aria-hidden="true"></i>
-                                    }
-
-                                    @if (!string.IsNullOrEmpty(nhan))
-                                    {
-                                        <span class="catalog-badge">@nhan</span>
-                                    }
-                                </div>
-
-                                <div class="catalog-card-body">
-                                    <h3>@sanPham.TenSanPham</h3>
-
-                                    @if (giaGoc.HasValue)
-                                    {
-                                        var giaHienTai = QuyTacSanPham.GiaSauGiam(
-                                            giaGoc.Value,
-                                            sanPham.PhanTramGiam);
-
-                                        <div class="catalog-card-prices">
-                                            <strong>
-                                                Từ @giaHienTai.ToString("N0", vi) đ
-                                            </strong>
-
-                                            @if (sanPham.PhanTramGiam > 0)
-                                            {
-                                                <del>
-                                                    @giaGoc.Value.ToString("N0", vi) đ
-                                                </del>
-                                            }
-                                        </div>
-                                    }
-                                </div>
-                            </a>
+                        <div class="catalog-product-item" data-reveal>
+                            @TheSanPham(sanPham, false, thoiDiem)
                         </div>
                     }
                 </div>
@@ -308,6 +419,7 @@
                                    tuKhoa = Request.QueryString["tuKhoa"],
                                    loaiHang = Request.QueryString["loaiHang"],
                                    thuongHieu = Request.QueryString["thuongHieu"],
+                                   giaTu = Request.QueryString["giaTu"],
                                    giaDen = Request.QueryString["giaDen"],
                                    sapXep = Request.QueryString["sapXep"]
                                })">
@@ -322,21 +434,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        (function () {
-            "use strict";
-
-            const thanhGia = document.getElementById("giaDen");
-            const nhanGia = document.getElementById("nhanGiaToiDa");
-
-            thanhGia.addEventListener("input", function () {
-                const giaHienTai = thanhGia.value.replace(
-                    /\B(?=(\d{3})+(?!\d))/g,
-                    "."
-                );
-
-                nhanGia.textContent = giaHienTai + " đ";
-            });
-        })();
-    </script>
+    <script src="@Url.Content("~/Scripts/san-pham.js")"></script>
 }

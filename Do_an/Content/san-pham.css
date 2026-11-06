@@ -1,4 +1,12 @@
-﻿.sportix-catalog .catalog-hero {
+﻿/* Kích thước thẻ chung */
+
+.sportix-catalog-page {
+    --catalog-product-width: 260px;
+}
+
+/* Banner giới thiệu */
+
+.sportix-catalog .catalog-hero {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     overflow: hidden;
@@ -17,7 +25,7 @@
     color: var(--blue-dark);
     font-size: .75rem;
     font-weight: 800;
-    letter-spacing: .08em;
+    letter-spacing: .06em;
 }
 
 .sportix-catalog .catalog-hero h1 {
@@ -31,7 +39,8 @@
 .sportix-catalog .catalog-hero p {
     margin: 0;
     color: var(--muted);
-    line-height: 1.6;
+    font-size: .9rem;
+    line-height: 1.7;
 }
 
 .sportix-catalog .catalog-hero-image {
@@ -39,7 +48,134 @@
     width: 100%;
     height: clamp(180px, 22vw, 260px);
     object-fit: cover;
+    object-position: center;
 }
+
+/* Sản phẩm mới */
+
+.sportix-catalog .catalog-arrivals {
+    min-width: 0;
+    margin-bottom: 30px;
+}
+
+.sportix-catalog .catalog-arrivals-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.sportix-catalog .catalog-new-tag {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #c5e995;
+    border-radius: 999px;
+    background: #e8f8d5;
+    color: #326414;
+    font-size: .7rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+}
+
+.sportix-catalog .catalog-arrivals-heading h2 {
+    margin: 8px 0 0;
+    color: var(--text);
+    font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+    font-weight: 800;
+}
+
+.sportix-catalog .catalog-arrivals-controls {
+    display: flex;
+    flex-shrink: 0;
+    gap: 8px;
+}
+
+.sportix-catalog .catalog-scroll-button {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: #fff;
+    color: var(--blue-dark);
+    font: inherit;
+    cursor: pointer;
+}
+
+    .sportix-catalog .catalog-scroll-button:hover:not(:disabled) {
+        border-color: var(--blue);
+        background: var(--blue-soft);
+    }
+
+    .sportix-catalog .catalog-scroll-button:disabled {
+        opacity: .4;
+        cursor: default;
+    }
+
+    .sportix-catalog .catalog-scroll-button:focus-visible {
+        outline: 2px solid var(--blue-dark);
+        outline-offset: 3px;
+    }
+
+/* Thanh cuộn ngang */
+
+.sportix-catalog .catalog-arrivals-track {
+    display: flex;
+    align-items: stretch;
+    gap: 16px;
+    overflow-x: auto;
+    margin: 0;
+    padding: 6px 6px 18px;
+    list-style: none;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: 6px;
+    scrollbar-width: auto;
+    scrollbar-color: var(--blue) #dbeeff;
+}
+
+    .sportix-catalog .catalog-arrivals-track::-webkit-scrollbar {
+        height: 12px;
+    }
+
+    .sportix-catalog .catalog-arrivals-track::-webkit-scrollbar-track {
+        border-radius: 999px;
+        background: #dbeeff;
+    }
+
+    .sportix-catalog .catalog-arrivals-track::-webkit-scrollbar-thumb {
+        min-width: 40px;
+        border: 2px solid #dbeeff;
+        border-radius: 999px;
+        background: var(--blue);
+    }
+
+        .sportix-catalog .catalog-arrivals-track::-webkit-scrollbar-thumb:hover {
+            background: var(--blue-dark);
+        }
+
+.sportix-catalog .catalog-arrival-item {
+    flex: 0 0 var(--catalog-product-width);
+    min-width: 0;
+    scroll-snap-align: start;
+}
+
+/* Danh sách bên dưới */
+
+.sportix-catalog .catalog-product-grid {
+    display: grid;
+    grid-template-columns: repeat( auto-fill, minmax(0, min(100%, var(--catalog-product-width))) );
+    align-items: stretch;
+    gap: 16px;
+}
+
+.sportix-catalog .catalog-product-item {
+    min-width: 0;
+}
+
+/* Bộ lọc và tìm kiếm */
 
 .sportix-catalog .catalog-filter,
 .sportix-catalog .catalog-toolbar {
@@ -117,6 +253,8 @@
     --bs-btn-focus-shadow-rgb: 0, 111, 230;
 }
 
+/* Thẻ sản phẩm dùng chung */
+
 .sportix-catalog .catalog-card {
     display: flex;
     flex-direction: column;
@@ -134,10 +272,6 @@
         outline: 2px solid var(--blue-dark);
         outline-offset: 3px;
     }
-
-        .sportix-catalog .catalog-card:focus-visible h3 {
-            color: var(--blue-dark);
-        }
 
 .sportix-catalog .catalog-card-media {
     position: relative;
@@ -161,8 +295,10 @@
 
 .sportix-catalog .catalog-card-placeholder {
     color: var(--muted);
-    font-size: 1.5rem;
+    font-size: .8rem;
 }
+
+/* Nhãn sản phẩm */
 
 .sportix-catalog .catalog-badge {
     position: absolute;
@@ -178,6 +314,20 @@
     font-weight: 700;
 }
 
+.sportix-catalog .catalog-badge-new {
+    border-color: #c5e995;
+    background: #e8f8d5;
+    color: #326414;
+}
+
+.sportix-catalog .catalog-badge-sale {
+    border-color: #ffcaca;
+    background: #fff0f0;
+    color: #c62828;
+}
+
+/* Nội dung thẻ */
+
 .sportix-catalog .catalog-card-body {
     display: flex;
     flex: 1;
@@ -186,14 +336,21 @@
     padding: 14px;
 }
 
-    .sportix-catalog .catalog-card-body h3 {
-        margin: 0;
-        color: var(--text);
-        font-size: .95rem;
-        font-weight: 700;
-        line-height: 1.4;
-        overflow-wrap: anywhere;
-    }
+.sportix-catalog .catalog-card-category {
+    margin: 0;
+    color: var(--muted);
+    font-size: .75rem;
+    line-height: 1.4;
+}
+
+.sportix-catalog .catalog-card-body h3 {
+    margin: 0;
+    color: var(--text);
+    font-size: .95rem;
+    font-weight: 700;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
 
 .sportix-catalog .catalog-card-prices {
     display: flex;
@@ -213,6 +370,34 @@
         font-size: .78rem;
     }
 
+/* Đồng bộ kích thước thẻ trên và dưới */
+
+.sportix-catalog-page .catalog-card-media {
+    aspect-ratio: 1;
+}
+
+.sportix-catalog-page .catalog-card-body {
+    flex: 0 0 154px;
+    min-width: 0;
+    padding: 14px;
+}
+
+.sportix-catalog-page .catalog-card-category {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.sportix-catalog-page .catalog-card-body h3 {
+    display: -webkit-box;
+    height: 2.8em;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+/* Hover */
+
 @media (hover: hover) and (pointer: fine) {
     .sportix-catalog .catalog-card:hover {
         border-color: var(--blue);
@@ -224,6 +409,8 @@
             color: var(--blue-dark);
         }
 }
+
+/* Chuyển động theo cài đặt thiết bị */
 
 @media (prefers-reduced-motion: no-preference) {
     .sportix-catalog .catalog-card {
@@ -241,7 +428,7 @@
 
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
     .sportix-catalog .catalog-card:hover {
-        transform: translateY(-5px);
+        transform: translateY(-4px);
     }
 
         .sportix-catalog .catalog-card:hover .catalog-card-media img {
@@ -249,7 +436,25 @@
         }
 }
 
+/* Responsive */
+
+@media (max-width: 1199.98px) {
+    .sportix-catalog-page {
+        --catalog-product-width: 220px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .sportix-catalog-page {
+        --catalog-product-width: 216px;
+    }
+}
+
 @media (max-width: 767.98px) {
+    .sportix-catalog-page {
+        --catalog-product-width: 250px;
+    }
+
     .sportix-catalog .catalog-hero {
         grid-template-columns: minmax(0, 1fr);
     }
@@ -265,8 +470,14 @@
     .sportix-catalog .catalog-toolbar > .d-flex {
         width: 100%;
     }
+}
 
-    .sportix-catalog .catalog-card-body {
-        padding: 12px;
+@media (max-width: 575.98px) {
+    .sportix-catalog-page {
+        --catalog-product-width: calc((100vw - 40px) / 2);
     }
+
+        .sportix-catalog-page .catalog-card-body {
+            padding: 12px;
+        }
 }
