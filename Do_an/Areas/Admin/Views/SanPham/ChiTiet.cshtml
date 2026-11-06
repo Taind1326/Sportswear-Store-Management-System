@@ -18,10 +18,11 @@
     var anhChinh = danhSachAnh.FirstOrDefault();
 
     var anhMacDinh = danhSachAnh.FirstOrDefault(x =>
-        x.AnhDaiDien && !string.IsNullOrWhiteSpace(x.DuongDanAnh))
+        x.AnhDaiDien &&
+        !string.IsNullOrWhiteSpace(x.DuongDanAnh))
         ?? danhSachAnh.FirstOrDefault(x =>
-            string.IsNullOrWhiteSpace(x.MauSac)
-            && !string.IsNullOrWhiteSpace(x.DuongDanAnh));
+            string.IsNullOrWhiteSpace(x.MauSac) &&
+            !string.IsNullOrWhiteSpace(x.DuongDanAnh));
 
     bool coAnh = anhChinh != null &&
         !string.IsNullOrWhiteSpace(anhChinh.DuongDanAnh);
@@ -60,21 +61,30 @@
 <div class="product-page-heading">
     <div>
         <h1>Chi tiết sản phẩm</h1>
-
-        <p>
-            Thông tin và số lượng từng phân loại sản phẩm.
-        </p>
+        <p>Thông tin và số lượng từng phân loại sản phẩm.</p>
     </div>
 
-    <a href="@Url.Action("BoSungHang", "SanPham", new
-             {
-                 area = "Admin",
-                 id = Model.MaSanPham
-             })"
-       class="btn btn-primary px-3 py-2">
-        <i class="bi bi-plus-lg" aria-hidden="true"></i>
-        Bổ sung hàng
-    </a>
+    <div class="d-flex flex-wrap gap-2">
+        <a href="@Url.Action("BoSungHang", "SanPham", new
+                 {
+                     area = "Admin",
+                     id = Model.MaSanPham
+                 })"
+           class="btn btn-primary px-3 py-2">
+            <i class="bi bi-plus-lg" aria-hidden="true"></i>
+            Bổ sung hàng
+        </a>
+
+        <a href="@Url.Action("Index", "XoaSanPham", new
+                 {
+                     area = "Admin",
+                     id = Model.MaSanPham
+                 })"
+           class="btn btn-outline-danger px-3 py-2">
+            <i class="bi bi-trash" aria-hidden="true"></i>
+            Xóa / Ngừng bán
+        </a>
+    </div>
 </div>
 
 @if (TempData["ThanhCong"] != null)
@@ -136,7 +146,9 @@
             </div>
 
             <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
-                <span class="status-pill @(Model.DangBan ? "status-selling" : "status-stopped")">
+                <span class="status-pill @(Model.DangBan
+                    ? "status-selling"
+                    : "status-stopped")">
                     @(Model.DangBan ? "Đang bán" : "Ngừng bán")
                 </span>
 
@@ -252,10 +264,12 @@
                 @foreach (var item in danhSachPhanLoai)
                 {
                     var anhPhanLoai = danhSachAnh.FirstOrDefault(x =>
-                        !string.IsNullOrWhiteSpace(x.MauSac)
-                        && !string.IsNullOrWhiteSpace(x.DuongDanAnh)
-                        && string.Equals(
-                            x.MauSac, item.MauSac, StringComparison.OrdinalIgnoreCase))
+                        !string.IsNullOrWhiteSpace(x.MauSac) &&
+                        !string.IsNullOrWhiteSpace(x.DuongDanAnh) &&
+                        string.Equals(
+                            x.MauSac,
+                            item.MauSac,
+                            StringComparison.OrdinalIgnoreCase))
                         ?? anhMacDinh;
 
                     <tr>
@@ -272,7 +286,9 @@
                                          loading="lazy" />
                                 }
 
-                                <span class="fw-medium">@item.MauSac</span>
+                                <span class="fw-medium">
+                                    @item.MauSac
+                                </span>
                             </div>
 
                             @if (!item.DangBan)
@@ -283,9 +299,7 @@
                             }
                         </td>
 
-                        <td>
-                            @item.KichThuoc
-                        </td>
+                        <td>@item.KichThuoc</td>
 
                         <td class="text-end">
                             <div class="d-flex justify-content-end align-items-center flex-wrap gap-2">
@@ -328,10 +342,7 @@
     <div class="product-panel-footer">
         <div>
             <div class="fw-semibold">Tổng tồn kho</div>
-
-            <small>
-                Tự động cộng từ tất cả phân loại.
-            </small>
+            <small>Tự động cộng từ tất cả phân loại.</small>
         </div>
 
         <strong class="product-price fs-3">

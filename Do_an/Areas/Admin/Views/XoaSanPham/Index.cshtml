@@ -1,0 +1,103 @@
+﻿@model Do_an.Models.SanPham
+
+@{
+    bool coDuLieuLienQuan = ViewBag.CoDuLieuLienQuan;
+    bool xoaVinhVien = !coDuLieuLienQuan;
+
+    string tieuDe = xoaVinhVien
+        ? "Xác nhận xóa sản phẩm"
+        : "Xác nhận ngừng bán";
+
+    ViewBag.Title = tieuDe;
+}
+
+<div class="product-page-heading">
+    <div>
+        <h1>@tieuDe</h1>
+        <p>Kiểm tra thông tin trước khi thực hiện.</p>
+    </div>
+
+    <a href="@Url.Action("ChiTiet", "SanPham", new
+             {
+                 area = "Admin",
+                 id = Model.MaSanPham
+             })"
+       class="btn btn-outline-secondary">
+        Quay lại
+    </a>
+</div>
+
+@if (TempData["Loi"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["Loi"]
+    </div>
+}
+
+<div class="product-panel">
+    <h2 class="h5 fw-bold mb-2">
+        @Model.TenSanPham
+    </h2>
+
+    <p class="text-secondary">
+        Mã sản phẩm: #@Model.MaSanPham
+    </p>
+
+    @if (xoaVinhVien)
+    {
+        <div class="alert alert-warning" role="alert">
+            Sản phẩm chưa có đơn hàng, giỏ hàng hoặc lịch sử nhập kho.
+            Thao tác này xóa vĩnh viễn sản phẩm và các phân loại của nó.
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            Sản phẩm đã có dữ liệu liên quan nên không được xóa.
+            Ngừng bán sẽ ẩn sản phẩm khỏi danh sách phía khách hàng,
+            đồng thời giữ nguyên đơn hàng, phân loại và tồn kho.
+        </div>
+    }
+
+    @if (!xoaVinhVien && !Model.DangBan)
+    {
+        <p class="text-secondary mb-0">
+            Sản phẩm hiện đã ngừng bán.
+        </p>
+    }
+    else
+    {
+        using (Html.BeginForm(
+            "XacNhan",
+            "XoaSanPham",
+            new { area = "Admin" },
+            FormMethod.Post,
+            new { @class = "d-flex flex-wrap gap-2" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <input type="hidden"
+                   name="id"
+                   value="@Model.MaSanPham" />
+
+            <input type="hidden"
+                   name="xoaVinhVien"
+                   value="@(xoaVinhVien ? "true" : "false")" />
+
+            <button type="submit" class="btn btn-danger">
+                @(xoaVinhVien
+                    ? "Xác nhận xóa vĩnh viễn"
+                    : "Xác nhận ngừng bán")
+            </button>
+
+            <a href="@Url.Action("ChiTiet", "SanPham", new
+                     {
+                         area = "Admin",
+                         id = Model.MaSanPham
+                     })"
+               class="btn btn-outline-secondary">
+                Hủy
+            </a>
+        }
+    }
+</div>
