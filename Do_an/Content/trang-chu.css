@@ -1,0 +1,542 @@
+﻿.sportix-home {
+    padding: 24px 0 44px;
+    background: linear-gradient(180deg, #f5faff, #eef7ff);
+}
+
+    .sportix-home .container {
+        max-width: 1160px;
+    }
+
+    .sportix-home :is(h1, h2, h3) {
+        font-family: inherit;
+    }
+
+    .sportix-home .home-hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        align-items: center;
+        gap: 28px;
+        padding: 26px;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        background: radial-gradient( circle at top left, rgba(168, 232, 46, .1), transparent 45% ), #fff;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, .05);
+    }
+
+    .sportix-home .home-tag {
+        display: inline-block;
+        padding: 6px 11px;
+        border: 1px solid #dcecc4;
+        border-radius: 999px;
+        background: #f5fce9;
+        color: var(--blue-dark);
+        font-size: .7rem;
+        font-weight: 700;
+        letter-spacing: .05em;
+    }
+
+    .sportix-home .home-hero h1 {
+        margin: 16px 0;
+        color: var(--text);
+        font-size: clamp(2rem, 4.3vw, 3.3rem);
+        font-weight: 800;
+        line-height: 1.08;
+        letter-spacing: -.045em;
+    }
+
+    .sportix-home .home-hero-copy > p {
+        max-width: 440px;
+        margin: 0;
+        color: var(--muted);
+        font-size: .95rem;
+        line-height: 1.75;
+    }
+
+    .sportix-home .home-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 22px;
+    }
+
+    .sportix-home .home-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        min-height: 44px;
+        padding: 10px 17px;
+        border: 1px solid transparent;
+        border-radius: 10px;
+        font-size: .85rem;
+        font-weight: 700;
+        line-height: 1.5;
+        text-decoration: none;
+    }
+
+    .sportix-home .home-button-primary {
+        background: var(--blue-dark);
+        color: #fff;
+    }
+
+        .sportix-home .home-button-primary:hover {
+            background: #005bc1;
+            color: #fff;
+        }
+
+    .sportix-home .home-button-soft {
+        border-color: var(--border);
+        background: var(--blue-soft);
+        color: var(--blue-dark);
+    }
+
+    .sportix-home .home-button-white {
+        background: #fff;
+        color: var(--blue-dark);
+    }
+
+    /* Banner đổi ảnh */
+    .sportix-home .home-carousel {
+        min-width: 0;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        background: var(--blue-soft);
+    }
+
+        .sportix-home .home-carousel .carousel-item img {
+            display: block;
+            width: 100%;
+            height: clamp(250px, 30vw, 350px);
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .sportix-home .home-carousel .carousel-control-prev,
+        .sportix-home .home-carousel .carousel-control-next {
+            width: 48px;
+            opacity: 1;
+        }
+
+    .sportix-home .home-carousel-arrow {
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .94);
+        color: var(--blue-dark);
+        box-shadow: 0 3px 12px rgba(15, 23, 42, .12);
+    }
+
+    .sportix-home .home-carousel .carousel-indicators {
+        margin-bottom: 16px;
+    }
+
+        .sportix-home .home-carousel .carousel-indicators button {
+            width: 8px;
+            height: 8px;
+            border: 0;
+            border-radius: 999px;
+            background: #fff;
+            opacity: .65;
+        }
+
+        .sportix-home .home-carousel .carousel-indicators .active {
+            width: 22px;
+            background: var(--lime);
+            opacity: 1;
+        }
+
+    .sportix-home .home-carousel-toggle {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        z-index: 3;
+        padding: 5px 8px;
+        border: 1px solid rgba(255, 255, 255, .4);
+        border-radius: 6px;
+        background: rgba(15, 23, 42, .8);
+        color: #fff;
+        font: inherit;
+        font-size: .65rem;
+        cursor: pointer;
+    }
+
+    /* Lợi ích */
+    .sportix-home .home-benefits {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 18px;
+        padding: 18px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: #fff;
+    }
+
+    .sportix-home .home-benefit {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+    }
+
+        .sportix-home .home-benefit > i {
+            display: grid;
+            flex-shrink: 0;
+            place-items: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--blue-soft);
+            color: var(--blue-dark);
+            font-size: 1.1rem;
+        }
+
+        .sportix-home .home-benefit strong,
+        .sportix-home .home-benefit span {
+            display: block;
+        }
+
+        .sportix-home .home-benefit strong {
+            color: var(--text);
+            font-size: .82rem;
+            font-weight: 700;
+        }
+
+        .sportix-home .home-benefit span {
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: .72rem;
+            line-height: 1.5;
+        }
+
+    /* Các khu vực nội dung */
+    .sportix-home .home-section {
+        padding-top: 32px;
+    }
+
+    .sportix-home .home-section-heading {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .sportix-home .home-eyebrow {
+        color: var(--blue-dark);
+        font-size: .7rem;
+        font-weight: 700;
+        letter-spacing: .06em;
+    }
+
+    .sportix-home .home-section-heading h2,
+    .sportix-home .home-training h2,
+    .sportix-home .home-promo h2,
+    .sportix-home .home-about h2 {
+        margin: 7px 0 0;
+        color: var(--text);
+        font-size: clamp(1.2rem, 2.6vw, 1.65rem);
+        font-weight: 800;
+        line-height: 1.3;
+    }
+
+    .sportix-home .home-text-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: var(--blue-dark);
+        font-size: .85rem;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .sportix-home .home-text-link:hover {
+            text-decoration: underline;
+        }
+
+    /* Banner tập luyện */
+    .sportix-home .home-training {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 18px;
+        padding: 24px;
+        border-left: 4px solid var(--lime);
+        border-radius: 16px;
+        background: linear-gradient(110deg, #0c213a, #0759b2);
+    }
+
+        .sportix-home .home-training .home-eyebrow {
+            color: #bce8ff;
+        }
+
+        .sportix-home .home-training h2 {
+            color: #fff;
+        }
+
+        .sportix-home .home-training p {
+            margin: 8px 0 0;
+            color: #d3e5f7;
+            font-size: .85rem;
+            line-height: 1.65;
+        }
+
+    /* Danh mục */
+    .sportix-home .home-category {
+        position: relative;
+        display: block;
+        height: 205px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: #0c213a;
+        text-decoration: none;
+    }
+
+        .sportix-home .home-category > img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sportix-home .home-category::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient( 180deg, transparent 20%, rgba(6, 21, 39, .9) );
+        }
+
+    .sportix-home .home-category-copy {
+        position: absolute;
+        right: 16px;
+        bottom: 16px;
+        left: 16px;
+        z-index: 1;
+    }
+
+        .sportix-home .home-category-copy h3 {
+            margin: 0 0 7px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .sportix-home .home-category-copy span {
+            color: #d5eaff;
+            font-size: .78rem;
+        }
+
+    /* Thẻ sản phẩm kế thừa san-pham.css */
+    .sportix-home .home-product-category {
+        margin: 0;
+        color: var(--muted);
+        font-size: .75rem;
+    }
+
+    .sportix-home .home-product-detail {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding-top: 10px;
+        border-top: 1px solid var(--border);
+        color: var(--blue-dark);
+        font-size: .78rem;
+        font-weight: 600;
+    }
+
+    .sportix-home .home-image-placeholder {
+        color: var(--muted);
+        font-size: .8rem;
+    }
+
+    .sportix-home .home-empty {
+        padding: 28px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: #fff;
+        color: var(--muted);
+        text-align: center;
+        line-height: 1.7;
+    }
+
+    /* Ưu đãi */
+    .sportix-home .home-promo {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 18px;
+        padding: 26px;
+        border: 1px solid #cfe7df;
+        border-radius: 16px;
+        background: linear-gradient(110deg, #dff2ff, #effadb);
+    }
+
+        .sportix-home .home-promo p {
+            max-width: 560px;
+            margin: 10px 0 0;
+            color: #476178;
+            font-size: .875rem;
+            line-height: 1.7;
+        }
+
+    /* Giới thiệu ngắn */
+    .sportix-home .home-about {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, .9fr);
+        align-items: center;
+        gap: 28px;
+        padding: 26px;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        background: #fff;
+    }
+
+        .sportix-home .home-about p {
+            margin: 12px 0 16px;
+            color: var(--muted);
+            font-size: .875rem;
+            line-height: 1.75;
+        }
+
+    .sportix-home .home-stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        text-align: center;
+    }
+
+        .sportix-home .home-stats strong {
+            display: block;
+            color: var(--blue-dark);
+            font-size: 1.7rem;
+            font-weight: 800;
+        }
+
+        .sportix-home .home-stats span {
+            display: block;
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: .75rem;
+            line-height: 1.5;
+        }
+
+    /* Về đầu trang */
+    .sportix-home .home-back-top {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 1000;
+        width: 42px;
+        height: 42px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: #fff;
+        color: var(--blue-dark);
+        box-shadow: 0 5px 18px rgba(15, 23, 42, .12);
+        text-decoration: none;
+    }
+
+        .sportix-home .home-back-top:not([hidden]) {
+            display: grid;
+            place-items: center;
+        }
+
+    .sportix-home a:focus-visible,
+    .sportix-home button:focus-visible {
+        outline: 2px solid var(--blue-dark);
+        outline-offset: 4px;
+    }
+
+@media (prefers-reduced-motion: no-preference) {
+    .sportix-home .home-category > img {
+        transition: transform .25s ease;
+    }
+
+    .sportix-home .home-category:hover > img {
+        transform: scale(1.04);
+    }
+}
+
+@media (max-width: 991.98px) {
+    .sportix-home .home-hero,
+    .sportix-home .home-about {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .sportix-home .home-benefits {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .sportix-home .home-carousel .carousel-item img {
+        height: 320px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .sportix-home {
+        padding: 16px 0 32px;
+    }
+
+        .sportix-home .home-hero {
+            gap: 20px;
+            padding: 18px;
+            border-radius: 16px;
+        }
+
+        .sportix-home .home-carousel .carousel-item img {
+            height: 245px;
+        }
+
+        .sportix-home .home-benefits {
+            gap: 16px 10px;
+            padding: 14px;
+        }
+
+        .sportix-home .home-benefit {
+            align-items: start;
+            gap: 7px;
+        }
+
+            .sportix-home .home-benefit > i {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+            }
+
+        .sportix-home .home-section {
+            padding-top: 26px;
+        }
+
+        .sportix-home .home-category {
+            height: 180px;
+        }
+
+        .sportix-home .home-category-copy {
+            right: 12px;
+            bottom: 12px;
+            left: 12px;
+        }
+
+            .sportix-home .home-category-copy h3 {
+                font-size: .9rem;
+            }
+
+        .sportix-home .home-training,
+        .sportix-home .home-promo,
+        .sportix-home .home-about {
+            padding: 20px;
+        }
+
+        .sportix-home .home-back-top {
+            right: 14px;
+            bottom: 14px;
+        }
+}

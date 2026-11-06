@@ -1,28 +1,439 @@
-﻿@model IEnumerable<Do_an.Models.SanPham>
+﻿@model Do_an.ViewModels.TrangChuViewModel
+@using System
+@using System.Linq
+@using System.Globalization
+@using Do_an.Services
 
 @{
     ViewBag.Title = "Trang chủ";
+
+    var vi = CultureInfo.GetCultureInfo("vi-VN");
+    var thoiDiem = DateTime.Now;
+
+    string urlSanPham = Url.Action(
+        "Index", "SanPham", new { area = "" });
+
+    string urlGioiThieu = Url.Action(
+        "GioiThieu", "Home", new { area = "" });
+
+    var banners = new[]
+    {
+        "banner-1.jpg",
+        "banner-2.jpg",
+        "banner-3.jpg",
+        "banner-4.jpg",
+        "banner-5.jpg",
+        "banner-6.jpg"
+    };
 }
 
-<section class="container py-5">
-    <h1 class="mb-4">Sản phẩm SPORTIX</h1>
+@section Styles {
+    <link href="@Url.Content("~/Content/san-pham.css")"
+          rel="stylesheet" />
 
-    <div class="row g-4">
-        @foreach (var item in Model)
+    <link href="@Url.Content("~/Content/trang-chu.css")"
+          rel="stylesheet" />
+}
+
+<div class="sportix-home sportix-catalog">
+    <div class="container">
+        <section class="home-hero"
+                 aria-labelledby="homeTitle"
+                 data-reveal>
+            <div class="home-hero-copy">
+                <span class="home-tag">
+                    SPORTIX COLLECTION @DateTime.Now.Year
+                </span>
+
+                <h1 id="homeTitle">
+                    Move Faster<br />
+                    Train Better
+                </h1>
+
+                <p>
+                    Khám phá giày, quần áo và phụ kiện thể thao,
+                    giúp bạn tự tin hơn trong từng buổi tập.
+                </p>
+
+                <div class="home-actions">
+                    <a href="#homeProducts"
+                       class="home-button home-button-primary">
+                        Khám phá ngay
+                        <i class="bi bi-arrow-right"
+                           aria-hidden="true"></i>
+                    </a>
+
+                    <a href="@urlSanPham"
+                       class="home-button home-button-soft">
+                        Xem sản phẩm
+                    </a>
+                </div>
+            </div>
+
+            <div id="homeCarousel"
+                 class="carousel slide home-carousel"
+                 role="region"
+                 aria-label="Bộ sưu tập thể thao SPORTIX">
+                <div class="carousel-inner">
+                    @for (int i = 0; i < banners.Length; i++)
+                    {
+                        <div class="carousel-item @(i == 0 ? "active" : "")">
+                            <img src="@Url.Content("~/Content/images/trang-chu/" + banners[i])"
+                                 alt="@("Bộ sưu tập SPORTIX – ảnh " + (i + 1))"
+                                 loading="@(i == 0 ? "eager" : "lazy")" />
+                        </div>
+                    }
+                </div>
+
+                <button type="button"
+                        class="carousel-control-prev"
+                        data-bs-target="#homeCarousel"
+                        data-bs-slide="prev"
+                        aria-label="Ảnh trước">
+                    <span class="home-carousel-arrow">
+                        <i class="bi bi-chevron-left"
+                           aria-hidden="true"></i>
+                    </span>
+                </button>
+
+                <button type="button"
+                        class="carousel-control-next"
+                        data-bs-target="#homeCarousel"
+                        data-bs-slide="next"
+                        aria-label="Ảnh tiếp theo">
+                    <span class="home-carousel-arrow">
+                        <i class="bi bi-chevron-right"
+                           aria-hidden="true"></i>
+                    </span>
+                </button>
+
+                <div class="carousel-indicators">
+                    @for (int i = 0; i < banners.Length; i++)
+                    {
+                        <button type="button"
+                                data-bs-target="#homeCarousel"
+                                data-bs-slide-to="@i"
+                                class="@(i == 0 ? "active" : "")"
+                                aria-current="@(i == 0 ? "true" : "false")"
+                                aria-label="@("Xem ảnh " + (i + 1))">
+                        </button>
+                    }
+                </div>
+
+                <button id="homeCarouselToggle"
+                        type="button"
+                        class="home-carousel-toggle">
+                    Tạm dừng
+                </button>
+            </div>
+        </section>
+
+        <section class="home-benefits"
+                 aria-label="Dịch vụ SPORTIX"
+                 data-reveal>
+            <div class="home-benefit">
+                <i class="bi bi-patch-check" aria-hidden="true"></i>
+                <div>
+                    <strong>Chất lượng</strong>
+                    <span>Lựa chọn cho buổi tập</span>
+                </div>
+            </div>
+
+            <div class="home-benefit">
+                <i class="bi bi-truck" aria-hidden="true"></i>
+                <div>
+                    <strong>Giao nhận</strong>
+                    <span>Hỗ trợ thông tin vận chuyển</span>
+                </div>
+            </div>
+
+            <div class="home-benefit">
+                <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
+                <div>
+                    <strong>Đổi trả</strong>
+                    <span>Hướng dẫn khi cần hỗ trợ</span>
+                </div>
+            </div>
+
+            <div class="home-benefit">
+                <i class="bi bi-headset" aria-hidden="true"></i>
+                <div>
+                    <strong>Tư vấn tận tâm</strong>
+                    <span>Hỗ trợ từ 08:00 – 22:00</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="home-section" data-reveal>
+            <div class="home-training">
+                <div>
+                    <span class="home-eyebrow">SPORTIX TRAINING</span>
+                    <h2>Sẵn sàng cho buổi tập hôm nay?</h2>
+                    <p>
+                        Chọn trang phục và phụ kiện phù hợp
+                        với cách bạn vận động.
+                    </p>
+                </div>
+
+                <a href="@urlSanPham"
+                   class="home-button home-button-white">
+                    Khám phá sản phẩm
+                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                </a>
+            </div>
+        </section>
+
+        @if (Model.DanhMuc.Count > 0)
         {
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h2 class="h5 card-title">
-                            @item.TenSanPham
+            <section class="home-section"
+                     aria-labelledby="homeCategoryTitle">
+                <div class="home-section-heading" data-reveal>
+                    <div>
+                        <span class="home-eyebrow">DANH MỤC</span>
+                        <h2 id="homeCategoryTitle">
+                            Chọn đồ cho buổi tập của bạn
+                        </h2>
+                    </div>
+
+                    <a href="@urlSanPham" class="home-text-link">
+                        Xem tất cả
+                        <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                    </a>
+                </div>
+
+                <div class="row g-3">
+                    @foreach (var loai in Model.DanhMuc)
+                    {
+                        string ten = loai.TenLoaiHang.ToLowerInvariant();
+
+                        string anh = ten.Contains("giày")
+                            ? "chay_bo.jpg"
+                            : ten.Contains("áo") || ten.Contains("quần")
+                                ? "gym.jpg"
+                                : ten.Contains("bóng")
+                                    ? "bong_da.jpg"
+                                    : "phu_kien.jpg";
+
+                        <div class="col-6 col-lg-3" data-reveal>
+                            <a class="home-category"
+                               href="@Url.Action("Index", "SanPham", new
+                                    {
+                                        area = "",
+                                        loaiHang = loai.MaLoaiHang
+                                    })">
+                                <img src="@Url.Content("~/Content/images/trang-chu/" + anh)"
+                                     alt=""
+                                     loading="lazy" />
+
+                                <div class="home-category-copy">
+                                    <h3>@loai.TenLoaiHang</h3>
+
+                                    <span>
+                                        Khám phá
+                                        <i class="bi bi-arrow-right"
+                                           aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </section>
+        }
+
+        <section id="homeProducts"
+                 class="home-section"
+                 aria-labelledby="homeProductTitle">
+            <div class="home-section-heading" data-reveal>
+                <div>
+                    <span class="home-eyebrow">SẢN PHẨM SPORTIX</span>
+                    <h2 id="homeProductTitle">Lựa chọn nổi bật</h2>
+                </div>
+
+                <a href="@urlSanPham" class="home-text-link">
+                    Xem tất cả
+                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                </a>
+            </div>
+
+            @if (Model.SanPhamNoiBat.Count == 0)
+            {
+                <div class="home-empty" data-reveal>
+                    Sản phẩm đang được cập nhật.
+                    Bạn có thể liên hệ SPORTIX để được tư vấn.
+                </div>
+            }
+            else
+            {
+                <div class="row g-3">
+                    @foreach (var sanPham in Model.SanPhamNoiBat)
+                    {
+                        var anh = sanPham.HinhAnhSanPhams
+                            .Where(x =>
+                                !string.IsNullOrWhiteSpace(x.DuongDanAnh))
+                            .OrderByDescending(x => x.AnhDaiDien)
+                            .ThenBy(x => x.ThuTu)
+                            .ThenBy(x => x.MaHinhAnh)
+                            .FirstOrDefault();
+
+                        var giaGoc = sanPham.BienTheSanPhams
+                            .Where(x => x.DangBan)
+                            .Select(x => (decimal?)x.GiaBan)
+                            .Min();
+
+                        var nhan = QuyTacSanPham.Nhan(
+                            sanPham.PhanTramGiam,
+                            sanPham.NgayTao,
+                            thoiDiem);
+
+                        <div class="col-6 col-lg-3" data-reveal>
+                            <a class="catalog-card"
+                               href="@Url.Action("ChiTiet", "SanPham", new
+                                    {
+                                        area = "",
+                                        id = sanPham.MaSanPham
+                                    })">
+                                <div class="catalog-card-media">
+                                    @if (anh != null)
+                                    {
+                                        <img src="@Url.Content(anh.DuongDanAnh)"
+                                             alt="@sanPham.TenSanPham"
+                                             loading="lazy" />
+                                    }
+                                    else
+                                    {
+                                        <span class="home-image-placeholder">
+                                            Chưa có ảnh
+                                        </span>
+                                    }
+
+                                    @if (!string.IsNullOrEmpty(nhan))
+                                    {
+                                        <span class="catalog-badge">
+                                            @nhan
+                                        </span>
+                                    }
+                                </div>
+
+                                <div class="catalog-card-body">
+                                    <h3>@sanPham.TenSanPham</h3>
+
+                                    <p class="home-product-category">
+                                        @sanPham.LoaiHang.TenLoaiHang
+                                    </p>
+
+                                    <div class="catalog-card-prices">
+                                        @if (giaGoc.HasValue)
+                                        {
+                                            var giaSale =
+                                                QuyTacSanPham.GiaSauGiam(
+                                                    giaGoc.Value,
+                                                    sanPham.PhanTramGiam);
+
+                                            <strong>
+                                                Từ @giaSale.ToString("N0", vi) đ
+                                            </strong>
+
+                                            if (sanPham.PhanTramGiam > 0)
+                                            {
+                                                <del>
+                                                    @giaGoc.Value.ToString("N0", vi) đ
+                                                </del>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <strong>Xem chi tiết</strong>
+                                        }
+                                    </div>
+
+                                    <span class="home-product-detail">
+                                        Xem sản phẩm
+                                        <i class="bi bi-arrow-right"
+                                           aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+            }
+        </section>
+
+        @if (Model.MucGiamCaoNhat > 0)
+        {
+            <section class="home-section" data-reveal>
+                <div class="home-promo">
+                    <div>
+                        <span class="home-eyebrow">ƯU ĐÃI SPORTIX</span>
+
+                        <h2>
+                            Giảm đến @Model.MucGiamCaoNhat%
                         </h2>
 
-                        <p class="card-text text-secondary">
-                            @item.MoTa
+                        <p>
+                            Khám phá các sản phẩm đang có giá ưu đãi.
+                            Mức giảm được hiển thị trên từng sản phẩm.
                         </p>
+                    </div>
+
+                    <a href="@urlSanPham"
+                       class="home-button home-button-primary">
+                        Khám phá sản phẩm
+                        <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </section>
+        }
+
+        <section class="home-section" data-reveal>
+            <div class="home-about">
+                <div>
+                    <span class="home-eyebrow">VỀ SPORTIX</span>
+
+                    <h2>Đồng hành cùng mỗi buổi tập</h2>
+
+                    <p>
+                        Từ giày chạy, trang phục đến phụ kiện,
+                        SPORTIX giúp bạn tìm đồ thể thao phù hợp
+                        với nhu cầu và phong cách của mình.
+                    </p>
+
+                    <a href="@urlGioiThieu" class="home-text-link">
+                        Tìm hiểu thêm
+                        <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                    </a>
+                </div>
+
+                <div class="home-stats">
+                    <div>
+                        <strong>@Model.TongSanPham</strong>
+                        <span>Sản phẩm đang bán</span>
+                    </div>
+
+                    <div>
+                        <strong>@Model.TongLoaiHang</strong>
+                        <span>Loại hàng</span>
+                    </div>
+
+                    <div>
+                        <strong>@Model.TongThuongHieu</strong>
+                        <span>Thương hiệu</span>
                     </div>
                 </div>
             </div>
-        }
+        </section>
     </div>
-</section>
+
+    <a href="#mainContent"
+       id="homeBackTop"
+       class="home-back-top"
+       aria-label="Về đầu trang"
+       hidden>
+        <i class="bi bi-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/trang-chu.js")"></script>
+}

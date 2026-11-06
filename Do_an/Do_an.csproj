@@ -264,6 +264,7 @@
     <Compile Include="ViewModels\ThemHinhAnhViewModel.cs" />
     <Compile Include="ViewModels\ThemPhanLoaiViewModel.cs" />
     <Compile Include="ViewModels\ThemSanPhamViewModel.cs" />
+    <Compile Include="ViewModels\TrangChuViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
@@ -299,6 +300,7 @@
     <Content Include="Content\lien-he.css" />
     <Content Include="Content\san-pham.css" />
     <Content Include="Content\splash.css" />
+    <Content Include="Content\trang-chu.css" />
     <Content Include="Content\validation.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -345,6 +347,7 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\reveal.js" />
     <Content Include="Scripts\splash.js" />
+    <Content Include="Scripts\trang-chu.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
