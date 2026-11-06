@@ -315,6 +315,7 @@
       <DependentUpon>SPORTIX.edmx</DependentUpon>
       <LastGenOutput>SPORTIX.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\san-pham.js" />
     <Content Include="Scripts\admin\sanpham-them.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
