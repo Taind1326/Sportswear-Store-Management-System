@@ -16,6 +16,18 @@
     string urlGioiThieu = Url.Action(
         "GioiThieu", "Home", new { area = "" });
 
+    string urlBongDa = Url.Action(
+        "Index",
+        "SanPham",
+        new
+        {
+            area = "",
+            loaiHang = Model.MaLoaiHangBongDa,
+            tuKhoa = Model.MaLoaiHangBongDa.HasValue
+                ? null
+                : "bóng"
+        });
+
     var banners = new[]
     {
         "banner-1.jpg",
@@ -183,63 +195,78 @@
             </div>
         </section>
 
-        @if (Model.DanhMuc.Count > 0)
-        {
-            <section class="home-section"
-                     aria-labelledby="homeCategoryTitle">
-                <div class="home-section-heading" data-reveal>
-                    <div>
-                        <span class="home-eyebrow">DANH MỤC</span>
-                        <h2 id="homeCategoryTitle">
-                            Chọn đồ cho buổi tập của bạn
-                        </h2>
-                    </div>
+        <section class="home-section"
+                 aria-labelledby="homeCategoryTitle">
+            <div class="home-section-heading" data-reveal>
+                <div>
+                    <span class="home-eyebrow">DANH MỤC</span>
+                    <h2 id="homeCategoryTitle">
+                        Chọn đồ cho buổi tập của bạn
+                    </h2>
+                </div>
 
-                    <a href="@urlSanPham" class="home-text-link">
-                        Xem tất cả
-                        <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                <a href="@urlSanPham" class="home-text-link">
+                    Xem tất cả
+                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                </a>
+            </div>
+
+            <div class="row g-3">
+                @foreach (var loai in Model.DanhMuc)
+                {
+                    string ten = loai.TenLoaiHang.ToLowerInvariant();
+
+                    string anh = ten.Contains("giày")
+                        ? "chay_bo.jpg"
+                        : ten.Contains("áo") || ten.Contains("quần")
+                            ? "gym.jpg"
+                            : ten.Contains("bóng")
+                                ? "bong_da.jpg"
+                                : "phu_kien.jpg";
+
+                    <div class="col-6 col-lg-3" data-reveal>
+                        <a class="home-category"
+                           href="@Url.Action("Index", "SanPham", new
+                                {
+                                    area = "",
+                                    loaiHang = loai.MaLoaiHang
+                                })">
+                            <img src="@Url.Content("~/Content/images/trang-chu/" + anh)"
+                                 alt=""
+                                 loading="lazy" />
+
+                            <div class="home-category-copy">
+                                <h3>@loai.TenLoaiHang</h3>
+
+                                <span>
+                                    Khám phá
+                                    <i class="bi bi-arrow-right"
+                                       aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </a>
+                    </div>
+                }
+
+                <div class="col-6 col-lg-3" data-reveal>
+                    <a class="home-category" href="@urlBongDa">
+                        <img src="@Url.Content("~/Content/images/trang-chu/bong_da.jpg")"
+                             alt=""
+                             loading="lazy" />
+
+                        <div class="home-category-copy">
+                            <h3>Bóng đá</h3>
+
+                            <span>
+                                Khám phá
+                                <i class="bi bi-arrow-right"
+                                   aria-hidden="true"></i>
+                            </span>
+                        </div>
                     </a>
                 </div>
-
-                <div class="row g-3">
-                    @foreach (var loai in Model.DanhMuc)
-                    {
-                        string ten = loai.TenLoaiHang.ToLowerInvariant();
-
-                        string anh = ten.Contains("giày")
-                            ? "chay_bo.jpg"
-                            : ten.Contains("áo") || ten.Contains("quần")
-                                ? "gym.jpg"
-                                : ten.Contains("bóng")
-                                    ? "bong_da.jpg"
-                                    : "phu_kien.jpg";
-
-                        <div class="col-6 col-lg-3" data-reveal>
-                            <a class="home-category"
-                               href="@Url.Action("Index", "SanPham", new
-                                    {
-                                        area = "",
-                                        loaiHang = loai.MaLoaiHang
-                                    })">
-                                <img src="@Url.Content("~/Content/images/trang-chu/" + anh)"
-                                     alt=""
-                                     loading="lazy" />
-
-                                <div class="home-category-copy">
-                                    <h3>@loai.TenLoaiHang</h3>
-
-                                    <span>
-                                        Khám phá
-                                        <i class="bi bi-arrow-right"
-                                           aria-hidden="true"></i>
-                                    </span>
-                                </div>
-                            </a>
-                        </div>
-                    }
-                </div>
-            </section>
-        }
+            </div>
+        </section>
 
         <section id="homeProducts"
                  class="home-section"
@@ -372,13 +399,13 @@
                         </h2>
 
                         <p>
-                            Khám phá các sản phẩm đang có giá ưu đãi.
-                            Mức giảm được hiển thị trên từng sản phẩm.
+                            Chọn sản phẩm yêu thích với mức giá ưu đãi.
+                            Giá sau giảm được hiển thị trên từng sản phẩm.
                         </p>
                     </div>
 
                     <a href="@urlSanPham"
-                       class="home-button home-button-primary">
+                       class="home-button home-button-white">
                         Khám phá sản phẩm
                         <i class="bi bi-arrow-right" aria-hidden="true"></i>
                     </a>
@@ -407,16 +434,19 @@
 
                 <div class="home-stats">
                     <div>
+                        <i class="bi bi-people" aria-hidden="true"></i>
+                        <strong>@Model.TongKhachHang</strong>
+                        <span>Khách hàng đăng ký</span>
+                    </div>
+
+                    <div>
+                        <i class="bi bi-box-seam" aria-hidden="true"></i>
                         <strong>@Model.TongSanPham</strong>
                         <span>Sản phẩm đang bán</span>
                     </div>
 
                     <div>
-                        <strong>@Model.TongLoaiHang</strong>
-                        <span>Loại hàng</span>
-                    </div>
-
-                    <div>
+                        <i class="bi bi-patch-check" aria-hidden="true"></i>
                         <strong>@Model.TongThuongHieu</strong>
                         <span>Thương hiệu</span>
                     </div>

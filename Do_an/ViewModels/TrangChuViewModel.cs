@@ -15,11 +15,15 @@ namespace Do_an.ViewModels
 
         public List<SanPham> SanPhamNoiBat { get; set; }
 
+        public int? MaLoaiHangBongDa { get; set; }
+
         public int TongSanPham { get; set; }
 
         public int TongLoaiHang { get; set; }
 
         public int TongThuongHieu { get; set; }
+
+        public int TongKhachHang { get; set; }
 
         public int MucGiamCaoNhat { get; set; }
     }

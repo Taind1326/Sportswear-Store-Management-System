@@ -27,6 +27,15 @@ namespace Do_an.Controllers
                         sp.DangBan &&
                         sp.BienTheSanPhams.Any(bt => bt.DangBan)));
 
+            var maLoaiHangBongDa = db.LoaiHangs
+                .AsNoTracking()
+                .Where(x =>
+                    x.HoatDong &&
+                    x.TenLoaiHang.ToLower().Contains("bóng đá"))
+                .OrderBy(x => x.MaLoaiHang)
+                .Select(x => (int?)x.MaLoaiHang)
+                .FirstOrDefault();
+
             var model = new TrangChuViewModel
             {
                 TongSanPham = query.Count(),
@@ -38,13 +47,21 @@ namespace Do_an.Controllers
                     .Distinct()
                     .Count(),
 
+                TongKhachHang = db.TaiKhoans
+                    .AsNoTracking()
+                    .Count(x => x.VaiTro == "User"),
+
                 MucGiamCaoNhat = query
                     .Select(x => (int?)x.PhanTramGiam)
                     .Max() ?? 0,
 
+                MaLoaiHangBongDa = maLoaiHangBongDa,
+
                 DanhMuc = danhMuc
+                    .Where(x =>
+                        !x.TenLoaiHang.ToLower().Contains("bóng đá"))
                     .OrderBy(x => x.TenLoaiHang)
-                    .Take(4)
+                    .Take(3)
                     .ToList(),
 
                 SanPhamNoiBat = query

@@ -11,6 +11,7 @@
         font-family: inherit;
     }
 
+    /* Banner đầu trang */
     .sportix-home .home-hero {
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -59,6 +60,7 @@
         margin-top: 22px;
     }
 
+    /* Nút */
     .sportix-home .home-button {
         display: inline-flex;
         align-items: center;
@@ -93,7 +95,14 @@
     .sportix-home .home-button-white {
         background: #fff;
         color: var(--blue-dark);
+        box-shadow: 0 4px 14px rgba(15, 23, 42, .07);
     }
+
+        .sportix-home .home-button-white:hover {
+            border-color: #bddcff;
+            background: #f5faff;
+            color: var(--blue-dark);
+        }
 
     /* Banner đổi ảnh */
     .sportix-home .home-carousel {
@@ -212,7 +221,7 @@
             line-height: 1.5;
         }
 
-    /* Các khu vực nội dung */
+    /* Tiêu đề khu vực */
     .sportix-home .home-section {
         padding-top: 32px;
     }
@@ -332,7 +341,7 @@
             font-size: .78rem;
         }
 
-    /* Thẻ sản phẩm kế thừa san-pham.css */
+    /* Sản phẩm */
     .sportix-home .home-product-category {
         margin: 0;
         color: var(--muted);
@@ -366,36 +375,45 @@
         line-height: 1.7;
     }
 
-    /* Ưu đãi */
+    /* Thẻ ưu đãi: màu giống nút Đăng nhập */
     .sportix-home .home-promo {
         display: flex;
         align-items: center;
         justify-content: space-between;
         flex-wrap: wrap;
-        gap: 18px;
+        gap: 20px;
         padding: 26px;
-        border: 1px solid #cfe7df;
-        border-radius: 16px;
-        background: linear-gradient(110deg, #dff2ff, #effadb);
+        border: 1px solid rgba(17, 157, 255, .18);
+        border-radius: 20px;
+        background: linear-gradient(90deg, var(--blue), var(--lime));
+        box-shadow: 0 8px 24px rgba(17, 157, 255, .1);
     }
 
+        .sportix-home .home-promo .home-eyebrow {
+            color: #12364d;
+        }
+
+        .sportix-home .home-promo h2 {
+            color: #09243b;
+        }
+
         .sportix-home .home-promo p {
-            max-width: 560px;
+            max-width: 540px;
             margin: 10px 0 0;
-            color: #476178;
+            color: #143b52;
             font-size: .875rem;
             line-height: 1.7;
         }
 
-    /* Giới thiệu ngắn */
+    /* Thẻ giới thiệu: nền trắng */
     .sportix-home .home-about {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, .9fr);
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         align-items: center;
-        gap: 28px;
+        gap: 26px;
         padding: 26px;
         border: 1px solid var(--border);
-        border-radius: 16px;
+        border-radius: 20px;
         background: #fff;
     }
 
@@ -406,26 +424,50 @@
             line-height: 1.75;
         }
 
+    /* Các ô số liệu */
     .sportix-home .home-stats {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 12px;
-        text-align: center;
     }
+
+        .sportix-home .home-stats > div {
+            min-width: 0;
+            padding: 18px 10px;
+            border: 1px solid #cfe4f6;
+            border-radius: 16px;
+            background: #f5faff;
+            text-align: center;
+        }
+
+        .sportix-home .home-stats i {
+            display: grid;
+            place-items: center;
+            width: 34px;
+            height: 34px;
+            margin: 0 auto 10px;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            background: #fff;
+            color: var(--blue-dark);
+            font-size: 1rem;
+        }
 
         .sportix-home .home-stats strong {
             display: block;
             color: var(--blue-dark);
-            font-size: 1.7rem;
+            font-size: 1.65rem;
             font-weight: 800;
+            line-height: 1.2;
         }
 
         .sportix-home .home-stats span {
             display: block;
-            margin-top: 6px;
+            margin-top: 8px;
             color: var(--muted);
-            font-size: .75rem;
+            font-size: .73rem;
             line-height: 1.5;
+            overflow-wrap: anywhere;
         }
 
     /* Về đầu trang */
@@ -455,6 +497,7 @@
         outline-offset: 4px;
     }
 
+/* Chuyển động */
 @media (prefers-reduced-motion: no-preference) {
     .sportix-home .home-category > img {
         transition: transform .25s ease;
@@ -465,6 +508,7 @@
     }
 }
 
+/* Máy tính bảng */
 @media (max-width: 991.98px) {
     .sportix-home .home-hero,
     .sportix-home .home-about {
@@ -480,6 +524,7 @@
     }
 }
 
+/* Điện thoại */
 @media (max-width: 575.98px) {
     .sportix-home {
         padding: 16px 0 32px;
@@ -534,6 +579,23 @@
         .sportix-home .home-about {
             padding: 20px;
         }
+
+        .sportix-home .home-stats {
+            gap: 8px;
+        }
+
+            .sportix-home .home-stats > div {
+                padding: 14px 6px;
+                border-radius: 12px;
+            }
+
+            .sportix-home .home-stats strong {
+                font-size: 1.4rem;
+            }
+
+            .sportix-home .home-stats span {
+                font-size: .68rem;
+            }
 
         .sportix-home .home-back-top {
             right: 14px;
