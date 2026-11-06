@@ -1,7 +1,430 @@
-﻿
-@{
-    ViewBag.Title = "LienHe";
+﻿@{
+    ViewBag.Title = "Liên hệ";
+
+    var chuDes = new[]
+    {
+        "Đơn hàng",
+        "Sản phẩm",
+        "Đổi / Trả",
+        "Vận chuyển",
+        "Khác"
+    };
+
+    var cauHois = new[]
+    {
+        "Làm sao chọn đúng màu và kích cỡ?",
+        "Sản phẩm hết hàng có được bổ sung không?",
+        "Tôi muốn đổi hoặc trả sản phẩm thì làm gì?",
+        "Tôi cần hỗ trợ về đơn hàng thì cung cấp gì?",
+        "Tôi có thể liên hệ SPORTIX bằng cách nào?"
+    };
+
+    var traLois = new[]
+    {
+        "Mở trang chi tiết sản phẩm, chọn màu và kích cỡ để xem giá và số lượng còn lại. Nếu cần tư vấn, hãy gửi kèm tên sản phẩm và kích cỡ bạn đang quan tâm.",
+        "Bạn có thể liên hệ cửa hàng để hỏi thời gian nhập thêm. Hãy gửi tên sản phẩm, màu và kích cỡ cần mua để được hỗ trợ cụ thể.",
+        "Hãy liên hệ cửa hàng và cung cấp mã đơn hàng, hình ảnh sản phẩm cùng lý do đổi hoặc trả. Cửa hàng sẽ kiểm tra và hướng dẫn theo điều kiện áp dụng.",
+        "Bạn nên cung cấp mã đơn hàng, tên người nhận và nội dung cần hỗ trợ. Không gửi mật khẩu hoặc thông tin thẻ thanh toán trong tin nhắn.",
+        "Bạn có thể gọi hotline trong giờ hỗ trợ hoặc soạn email bằng biểu mẫu trên trang này."
+    };
 }
 
-<h2>LienHe</h2>
+@section Styles {
+    <link href="@Url.Content("~/Content/lien-he.css")"
+          rel="stylesheet" />
+}
 
+<div class="contact-page">
+    <section class="contact-hero" aria-labelledby="tieuDeLienHe">
+        <div class="container text-center" data-reveal>
+            <span class="contact-tag">
+                <i class="bi bi-headset" aria-hidden="true"></i>
+                HỖ TRỢ KHÁCH HÀNG
+            </span>
+
+            <h1 id="tieuDeLienHe">
+                Liên hệ <span>SPORTIX</span>
+            </h1>
+
+            <p>
+                Kết nối với chúng tôi để được tư vấn sản phẩm
+                và hỗ trợ trong quá trình mua sắm.
+            </p>
+        </div>
+    </section>
+
+    <section class="contact-content">
+        <div class="container">
+            <div class="row g-4 align-items-start">
+                <aside class="col-12 col-lg-4"
+                       aria-label="Thông tin liên hệ">
+                    <div class="d-flex flex-column gap-3">
+                        <section class="contact-panel contact-info"
+                                 data-reveal>
+                            <div class="contact-icon">
+                                <i class="bi bi-geo-alt"
+                                   aria-hidden="true"></i>
+                            </div>
+
+                            <h2>Địa chỉ cửa hàng</h2>
+
+                            <p>
+                                140 Lê Trọng Tấn, Tây Thạnh,<br />
+                                Thành phố Hồ Chí Minh
+                            </p>
+
+                            <a href="https://www.google.com/maps/search/?api=1&amp;query=140+L%C3%AA+Tr%E1%BB%8Dng+T%E1%BA%A5n+TP+H%E1%BB%93+Ch%C3%AD+Minh"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="contact-link">
+                                Xem đường đi
+                                <i class="bi bi-arrow-up-right"
+                                   aria-hidden="true"></i>
+                            </a>
+                        </section>
+
+                        <section class="contact-panel contact-info"
+                                 data-reveal>
+                            <div class="contact-icon">
+                                <i class="bi bi-telephone"
+                                   aria-hidden="true"></i>
+                            </div>
+
+                            <h2>Điện thoại & Email</h2>
+
+                            <p>
+                                Hotline:
+                                <a href="tel:19001234">1900 1234</a>
+                            </p>
+
+                            <p>
+                                Email:
+                                <a href="mailto:hotro@sportix.vn">
+                                    hotro@sportix.vn
+                                </a>
+                            </p>
+
+                            <p class="mt-2">
+                                Giờ hỗ trợ: 08:00 – 22:00
+                            </p>
+                        </section>
+
+                        <section class="contact-panel contact-info"
+                                 data-reveal>
+                            <div class="contact-icon">
+                                <i class="bi bi-clock"
+                                   aria-hidden="true"></i>
+                            </div>
+
+                            <h2>Giờ mở cửa</h2>
+
+                            <dl class="contact-hours">
+                                <div>
+                                    <dt>Thứ 2 – Thứ 6</dt>
+                                    <dd>08:00 – 21:00</dd>
+                                </div>
+
+                                <div>
+                                    <dt>Thứ 7</dt>
+                                    <dd>09:00 – 22:00</dd>
+                                </div>
+
+                                <div>
+                                    <dt>Chủ nhật</dt>
+                                    <dd>09:00 – 20:00</dd>
+                                </div>
+                            </dl>
+                        </section>
+
+                        <div class="contact-panel contact-map" data-reveal>
+                            <iframe title="Bản đồ địa chỉ SPORTIX"
+                                    src="https://www.google.com/maps?q=140+L%C3%AA+Tr%E1%BB%8Dng+T%E1%BA%A5n+TP+H%E1%BB%93+Ch%C3%AD+Minh&amp;output=embed"
+                                    loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade"
+                                    allowfullscreen>
+                            </iframe>
+                        </div>
+
+                        <section class="contact-panel contact-info"
+                                 data-reveal>
+                            <h2>Liên hệ nhanh</h2>
+
+                            <div class="d-flex flex-wrap gap-2 mt-3">
+                                <a href="tel:19001234"
+                                   class="contact-quick-link">
+                                    <i class="bi bi-telephone"
+                                       aria-hidden="true"></i>
+                                    Gọi cửa hàng
+                                </a>
+
+                                <a href="mailto:hotro@sportix.vn"
+                                   class="contact-quick-link">
+                                    <i class="bi bi-envelope"
+                                       aria-hidden="true"></i>
+                                    Email
+                                </a>
+                            </div>
+                        </section>
+                    </div>
+                </aside>
+
+                <div class="col-12 col-lg-8">
+                    <section class="contact-panel contact-form-panel"
+                             aria-labelledby="tieuDeBieuMau"
+                             data-reveal>
+                        <header class="mb-4">
+                            <span class="contact-eyebrow">
+                                CHÚNG TÔI CÓ THỂ GIÚP GÌ CHO BẠN?
+                            </span>
+
+                            <h2 id="tieuDeBieuMau" class="contact-title">
+                                Gửi lời nhắn
+                            </h2>
+
+                            <p class="contact-muted mb-0">
+                                Để lại thông tin và nội dung cần hỗ trợ.
+                            </p>
+                        </header>
+
+                        <form id="formLienHe"
+                              action="mailto:hotro@sportix.vn"
+                              method="post"
+                              enctype="text/plain">
+                            <fieldset class="mb-4">
+                                <legend class="contact-label">
+                                    Chủ đề
+                                </legend>
+
+                                <div class="d-flex flex-wrap gap-2">
+                                    @for (int i = 0; i < chuDes.Length; i++)
+                                    {
+                                        <label class="contact-topic">
+                                            @if (i == 0)
+                                            {
+                                                <input type="radio"
+                                                       name="ChuDe"
+                                                       value="@chuDes[i]"
+                                                       class="visually-hidden"
+                                                       checked />
+                                            }
+                                            else
+                                            {
+                                                <input type="radio"
+                                                       name="ChuDe"
+                                                       value="@chuDes[i]"
+                                                       class="visually-hidden" />
+                                            }
+
+                                            <span>@chuDes[i]</span>
+                                        </label>
+                                    }
+                                </div>
+                            </fieldset>
+
+                            <div class="row g-3">
+                                <div class="col-12 col-md-6">
+                                    <label for="HoTen" class="contact-label">
+                                        Họ và tên
+                                    </label>
+
+                                    <input id="HoTen"
+                                           name="HoTen"
+                                           type="text"
+                                           class="form-control"
+                                           autocomplete="name"
+                                           maxlength="100"
+                                           placeholder="Nhập họ và tên"
+                                           required
+                                           data-contact-field
+                                           data-required-message="Vui lòng nhập họ và tên."
+                                           aria-describedby="HoTenLoi" />
+
+                                    <div id="HoTenLoi"
+                                         class="invalid-feedback"></div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label for="SoDienThoai"
+                                           class="contact-label">
+                                        Số điện thoại
+                                    </label>
+
+                                    <input id="SoDienThoai"
+                                           name="SoDienThoai"
+                                           type="tel"
+                                           class="form-control"
+                                           autocomplete="tel"
+                                           maxlength="20"
+                                           placeholder="Ví dụ: 0987654321"
+                                           required
+                                           data-contact-field
+                                           data-required-message="Vui lòng nhập số điện thoại."
+                                           aria-describedby="SoDienThoaiLoi" />
+
+                                    <div id="SoDienThoaiLoi"
+                                         class="invalid-feedback"></div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="Email" class="contact-label">
+                                        Địa chỉ email
+                                    </label>
+
+                                    <input id="Email"
+                                           name="Email"
+                                           type="email"
+                                           class="form-control"
+                                           autocomplete="email"
+                                           maxlength="254"
+                                           placeholder="ten@example.com"
+                                           required
+                                           data-contact-field
+                                           data-required-message="Vui lòng nhập email."
+                                           aria-describedby="EmailLoi" />
+
+                                    <div id="EmailLoi"
+                                         class="invalid-feedback"></div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="TieuDe" class="contact-label">
+                                        Tiêu đề
+                                    </label>
+
+                                    <input id="TieuDe"
+                                           name="TieuDe"
+                                           type="text"
+                                           class="form-control"
+                                           maxlength="120"
+                                           placeholder="Tóm tắt vấn đề cần hỗ trợ"
+                                           required
+                                           data-contact-field
+                                           data-required-message="Vui lòng nhập tiêu đề."
+                                           aria-describedby="TieuDeLoi" />
+
+                                    <div id="TieuDeLoi"
+                                         class="invalid-feedback"></div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="NoiDung" class="contact-label">
+                                        Nội dung
+                                    </label>
+
+                                    <textarea id="NoiDung"
+                                              name="NoiDung"
+                                              class="form-control"
+                                              rows="5"
+                                              minlength="20"
+                                              maxlength="500"
+                                              placeholder="Mô tả nội dung cần hỗ trợ..."
+                                              required
+                                              data-contact-field
+                                              data-required-message="Vui lòng nhập nội dung."
+                                              aria-describedby="NoiDungLoi demKyTuLienHe"></textarea>
+
+                                    <div id="NoiDungLoi"
+                                         class="invalid-feedback"></div>
+
+                                    <div id="demKyTuLienHe"
+                                         class="contact-count">
+                                        0 / 500 ký tự
+                                    </div>
+                                </div>
+                            </div>
+
+                            <fieldset class="mt-3 mb-4">
+                                <legend class="contact-label">
+                                    Đánh giá dịch vụ
+                                    <span class="contact-muted fw-normal">
+                                        (không bắt buộc)
+                                    </span>
+                                </legend>
+
+                                <div class="contact-stars">
+                                    @for (int diem = 1; diem <= 5; diem++)
+                                    {
+                                        <label class="contact-star">
+                                            <input type="radio"
+                                                   name="DanhGia"
+                                                   value="@diem"
+                                                   class="visually-hidden"
+                                                   aria-label="@(diem + " sao")" />
+
+                                            <span aria-hidden="true">★</span>
+                                        </label>
+                                    }
+                                </div>
+                            </fieldset>
+
+                            <button type="submit" class="contact-submit">
+                                <i class="bi bi-send" aria-hidden="true"></i>
+                                Soạn email
+                            </button>
+
+                            <p class="contact-help mt-3 mb-0">
+                                Nút này mở ứng dụng email với nội dung đã điền.
+                                Bạn kiểm tra và bấm Gửi trong ứng dụng email
+                                để hoàn tất.
+                            </p>
+
+                            <div id="thongBaoLienHe"
+                                 class="contact-notice mt-3"
+                                 role="status"
+                                 hidden>
+                                Hoàn tất gửi thư trong ứng dụng email của bạn.
+                                Nếu ứng dụng không mở, hãy gửi trực tiếp đến
+                                <a href="mailto:hotro@sportix.vn">
+                                    hotro@sportix.vn
+                                </a>.
+                            </div>
+                        </form>
+                    </section>
+
+                    <section class="contact-panel contact-faq mt-4"
+                             aria-labelledby="tieuDeCauHoi"
+                             data-reveal>
+                        <h2 id="tieuDeCauHoi" class="contact-title">
+                            Câu hỏi <span>thường gặp</span>
+                        </h2>
+
+                        <div id="cauHoiLienHe">
+                            @for (int i = 0; i < cauHois.Length; i++)
+                            {
+                                string ma = "lienHeFaq" + i;
+                                string nut = "lienHeFaqNut" + i;
+
+                                <div class="contact-faq-item">
+                                    <h3 class="mb-0">
+                                        <button id="@nut"
+                                                type="button"
+                                                class="contact-faq-button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="@("#" + ma)"
+                                                aria-expanded="false"
+                                                aria-controls="@ma">
+                                            @cauHois[i]
+                                        </button>
+                                    </h3>
+
+                                    <div id="@ma"
+                                         class="collapse"
+                                         aria-labelledby="@nut"
+                                         data-bs-parent="#cauHoiLienHe">
+                                        <p class="contact-faq-answer">
+                                            @traLois[i]
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/lien-he.js")"></script>
+}

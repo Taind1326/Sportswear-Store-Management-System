@@ -1,6 +1,6 @@
 ﻿using Do_an.Models;
-using System.Web.Mvc;
 using System.Linq;
+using System.Web.Mvc;
 
 namespace Do_an.Controllers
 {
@@ -20,6 +20,12 @@ namespace Do_an.Controllers
 
         [HttpGet]
         public ActionResult GioiThieu()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult LienHe()
         {
             return View();
         }
