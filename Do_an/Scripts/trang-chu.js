@@ -2,130 +2,141 @@
     "use strict";
 
     function khoiTao() {
-        const trang = document.querySelector(".sportix-home");
+        const trangChu = document.querySelector(".sportix-home");
 
-        if (!trang) {
+        if (!trangChu) {
             return;
         }
 
-        trang.querySelectorAll(".catalog-card-media img")
+        // Hiển thị nội dung thay thế khi ảnh sản phẩm bị lỗi.
+        trangChu.querySelectorAll(".catalog-card-media img")
             .forEach(function (anh) {
-                function hienThayThe() {
-                    const thayThe = document.createElement("span");
-                    thayThe.className = "home-image-placeholder";
-                    thayThe.textContent = "Chưa có ảnh";
-                    anh.replaceWith(thayThe);
+                function thayAnhLoi() {
+                    const thongBao = document.createElement("span");
+
+                    thongBao.className = "home-image-placeholder";
+                    thongBao.textContent = "Chưa có ảnh";
+
+                    anh.replaceWith(thongBao);
                 }
 
-                anh.addEventListener(
-                    "error",
-                    hienThayThe,
-                    { once: true }
-                );
+                anh.addEventListener("error", thayAnhLoi, { once: true });
 
                 if (anh.complete && anh.naturalWidth === 0) {
-                    hienThayThe();
+                    thayAnhLoi();
                 }
             });
 
+        // Nút trở về đầu trang.
         const nutLenDau = document.getElementById("homeBackTop");
 
         if (nutLenDau) {
-            function capNhatNut() {
+            function capNhatNutLenDau() {
                 nutLenDau.hidden = window.scrollY < 500;
             }
 
-            window.addEventListener(
-                "scroll",
-                capNhatNut,
-                { passive: true }
-            );
+            window.addEventListener("scroll", capNhatNutLenDau, {
+                passive: true
+            });
 
-            capNhatNut();
+            capNhatNutLenDau();
         }
 
+        // Banner tự chuyển ảnh.
         const banner = document.getElementById("homeCarousel");
-        const nutDung = document.getElementById(
-            "homeCarouselToggle"
-        );
+        const nutTamDung = document.getElementById("homeCarouselToggle");
 
         if (!banner ||
-            !nutDung ||
             !window.bootstrap ||
             !window.bootstrap.Carousel) {
             return;
         }
 
-        const chuyenDong = window.matchMedia(
+        const carouselCu = window.bootstrap.Carousel.getInstance(banner);
+
+        if (carouselCu) {
+            carouselCu.dispose();
+        }
+
+        const carousel = new window.bootstrap.Carousel(banner, {
+            interval: 4000,
+            ride: false,
+            pause: false,
+            keyboard: true,
+            touch: true,
+            wrap: true
+        });
+
+        const giamChuyenDong = window.matchMedia(
             "(prefers-reduced-motion: reduce)"
         );
 
-        const carousel = new window.bootstrap.Carousel(
-            banner,
-            {
-                interval: 5000,
-                ride: false,
-                pause: false,
-                keyboard: true,
-                touch: true
-            }
-        );
-
         let tamDung = false;
-        let coChuot = false;
-        let coTieuDiem = false;
+        let dangReChuot = banner.matches(":hover");
+        let dangCoTieuDiem = banner.contains(document.activeElement);
 
-        function capNhatBanner() {
+        function capNhatTrangThai() {
             carousel.pause();
 
-            nutDung.hidden = chuyenDong.matches;
-            nutDung.textContent = tamDung
-                ? "Tiếp tục"
-                : "Tạm dừng";
+            if (nutTamDung) {
+                nutTamDung.hidden = giamChuyenDong.matches;
+                nutTamDung.textContent = tamDung
+                    ? "Tiếp tục"
+                    : "Tạm dừng";
+
+                nutTamDung.setAttribute(
+                    "aria-label",
+                    tamDung
+                        ? "Tiếp tục tự chuyển ảnh"
+                        : "Tạm dừng tự chuyển ảnh"
+                );
+            }
 
             if (!tamDung &&
-                !coChuot &&
-                !coTieuDiem &&
+                !dangReChuot &&
+                !dangCoTieuDiem &&
                 !document.hidden &&
-                !chuyenDong.matches) {
+                !giamChuyenDong.matches) {
                 carousel.cycle();
             }
         }
 
-        nutDung.addEventListener("click", function () {
-            tamDung = !tamDung;
-            capNhatBanner();
-        });
+        if (nutTamDung) {
+            nutTamDung.addEventListener("click", function () {
+                tamDung = !tamDung;
+                capNhatTrangThai();
+            });
+        }
 
         banner.addEventListener("mouseenter", function () {
-            coChuot = true;
-            capNhatBanner();
+            dangReChuot = true;
+            capNhatTrangThai();
         });
 
         banner.addEventListener("mouseleave", function () {
-            coChuot = false;
-            capNhatBanner();
+            dangReChuot = false;
+            capNhatTrangThai();
         });
 
         banner.addEventListener("focusin", function () {
-            coTieuDiem = true;
-            capNhatBanner();
+            dangCoTieuDiem = true;
+            capNhatTrangThai();
         });
 
         banner.addEventListener("focusout", function (event) {
-            coTieuDiem = banner.contains(event.relatedTarget);
-            capNhatBanner();
+            dangCoTieuDiem = banner.contains(event.relatedTarget);
+            capNhatTrangThai();
         });
 
         document.addEventListener(
             "visibilitychange",
-            capNhatBanner
+            capNhatTrangThai
         );
 
-        if (chuyenDong.addEventListener) {
-            chuyenDong.addEventListener(
+        if (giamChuyenDong.addEventListener) {
+            giamChuyenDong.addEventListener(
                 "change",
-                capNhatBanner
+                capNhatTrangThai
             );
         }
 
@@ -133,9 +144,9 @@
             carousel.pause();
         });
 
-        window.addEventListener("pageshow", capNhatBanner);
+        window.addEventListener("pageshow", capNhatTrangThai);
 
-        capNhatBanner();
+        capNhatTrangThai();
     }
 
     if (document.readyState === "loading") {
