@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row g-4 align-items-start">
             <div class="col-12 col-lg-4">
-                <h3 class="sz-footer-brand">SPORTIX</h3>
+                <h2 class="sz-footer-brand">SPORTIX</h2>
 
                 <p class="sz-footer-slogan">
                     Move faster. Train better.
@@ -12,9 +12,23 @@
             </div>
 
             <div class="col-6 col-lg-2">
-                <h5 class="sz-footer-title">Khám phá</h5>
+                <h3 class="sz-footer-title">Mua sắm</h3>
+
+                @Html.Action(
+                    "DanhMucFooter",
+                    "Home",
+                    new { area = "" })
+            </div>
+
+            <div class="col-6 col-lg-2">
+                <h3 class="sz-footer-title">Khám phá</h3>
 
                 <ul class="sz-footer-links">
+                    <li>
+                        <a href="@Url.Action("Index", "Home", new { area = "" })">
+                            Trang chủ
+                        </a>
+                    </li>
                     <li>
                         <a href="@Url.Action("Index", "SanPham", new { area = "" })">
                             Sản phẩm
@@ -33,44 +47,34 @@
                 </ul>
             </div>
 
-            <div class="col-6 col-lg-2">
-                <h5 class="sz-footer-title">Tài khoản</h5>
-
-                <ul class="sz-footer-links">
-                    <li>
-                        <a href="@Url.Action("DangNhap", "TaiKhoan", new { area = "" })">
-                            Đăng nhập
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("DangKy", "TaiKhoan", new { area = "" })">
-                            Đăng ký
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
             <div class="col-12 col-lg-4">
-                <h5 class="sz-footer-title">Liên hệ</h5>
+                <h3 class="sz-footer-title">Liên hệ</h3>
 
                 <ul class="sz-footer-contact">
                     <li>
                         <i class="bi bi-geo-alt-fill"
                            aria-hidden="true"></i>
-                        <span>
+
+                        <a href="https://www.google.com/maps/search/?api=1&query=140+Le+Trong+Tan+Tay+Thanh+Ho+Chi+Minh"
+                           target="_blank"
+                           rel="noopener noreferrer">
                             140 Lê Trọng Tấn, Tây Thạnh,
                             Thành phố Hồ Chí Minh
-                        </span>
+                        </a>
                     </li>
                     <li>
                         <i class="bi bi-telephone-fill"
                            aria-hidden="true"></i>
-                        <span>1900 1234</span>
+
+                        <a href="tel:19001234">1900 1234</a>
                     </li>
                     <li>
                         <i class="bi bi-send-fill"
                            aria-hidden="true"></i>
-                        <span>hotro@sportix.vn</span>
+
+                        <a href="mailto:hotro@sportix.vn">
+                            hotro@sportix.vn
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -79,9 +83,26 @@
 
     <div class="sz-footer-bottom">
         <div class="container">
-            <p class="mb-0">
-                &copy; @DateTime.Now.Year SPORTIX.
-                Đồ án Lập trình web — Nhóm 27.
+            <p class="sz-footer-copyright">
+                <span>
+                    Copyright &copy; @DateTime.Now.Year SPORTIX.
+                </span>
+
+                <span class="sz-footer-divider" aria-hidden="true">
+                    |
+                </span>
+
+                <span class="sz-footer-policies">
+                    <a href="@Url.Action("ChinhSachBaoMat", "Home", new { area = "" })">
+                        Chính sách bảo mật
+                    </a>
+
+                    <span aria-hidden="true">·</span>
+
+                    <a href="@Url.Action("DieuKhoanDichVu", "Home", new { area = "" })">
+                        Điều khoản dịch vụ
+                    </a>
+                </span>
             </p>
         </div>
     </div>

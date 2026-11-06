@@ -1,0 +1,90 @@
+﻿@{
+    ViewBag.Title = "Chính sách bảo mật";
+}
+
+@section Styles {
+    <link href="@Url.Content("~/Content/chinh-sach.css")"
+          rel="stylesheet" />
+}
+
+<div class="sportix-policy">
+    <div class="container">
+        <header class="policy-heading" data-reveal>
+            <span class="policy-eyebrow">THÔNG TIN SPORTIX</span>
+            <h1>Chính sách bảo mật</h1>
+
+            <p>
+                Tìm hiểu về thông tin cá nhân và cách bảo vệ
+                tài khoản khi sử dụng SPORTIX.
+            </p>
+        </header>
+
+        <article class="policy-content" data-reveal>
+            <section>
+                <h2>1. Thông tin bạn cung cấp</h2>
+                <p>
+                    Tùy chức năng sử dụng, bạn có thể cung cấp
+                    họ tên, địa chỉ email, số điện thoại và thông tin
+                    liên quan đến yêu cầu hỗ trợ.
+                    Chỉ nhập thông tin cần thiết cho thao tác đang thực hiện.
+                </p>
+            </section>
+
+            <section>
+                <h2>2. Liên hệ qua email</h2>
+                <p>
+                    Khi chọn soạn email trên trang Liên hệ,
+                    nội dung được chuyển sang ứng dụng email của bạn.
+                    Bạn có thể kiểm tra người nhận và nội dung
+                    trước khi quyết định gửi.
+                </p>
+            </section>
+
+            <section>
+                <h2>3. Bảo vệ tài khoản</h2>
+                <ul>
+                    <li>Sử dụng mật khẩu riêng cho tài khoản.</li>
+                    <li>Không chia sẻ mật khẩu hoặc mã xác nhận.</li>
+                    <li>Đăng xuất sau khi sử dụng thiết bị dùng chung.</li>
+                    <li>
+                        Không gửi mật khẩu hoặc thông tin thanh toán
+                        trong nội dung liên hệ.
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>4. Dịch vụ bên ngoài</h2>
+                <p>
+                    Website có sử dụng tài nguyên từ bên ngoài,
+                    như phông chữ và bản đồ Google.
+                    Khi tải hoặc mở các dịch vụ này,
+                    việc xử lý dữ liệu của dịch vụ bên ngoài
+                    phụ thuộc vào chính sách của nhà cung cấp đó.
+                </p>
+            </section>
+
+            <section>
+                <h2>5. Yêu cầu hỗ trợ về thông tin cá nhân</h2>
+                <p>
+                    Nếu cần hỏi về thông tin đã cung cấp hoặc đề nghị
+                    kiểm tra, cập nhật hay xóa thông tin,
+                    hãy gửi yêu cầu qua trang Liên hệ.
+                    Không đính kèm mật khẩu trong yêu cầu.
+                </p>
+            </section>
+
+            <div class="policy-actions">
+                <a class="btn btn-primary"
+                   href="@Url.Action("LienHe", "Home", new { area = "" })">
+                    Liên hệ hỗ trợ
+                </a>
+
+                <a class="btn btn-outline-primary"
+                   href="@Url.Action("DieuKhoanDichVu", "Home", new { area = "" })">
+                    Điều khoản dịch vụ
+                </a>
+            </div>
+        </article>
+    </div>
+</div>

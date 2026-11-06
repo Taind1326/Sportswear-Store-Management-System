@@ -1,0 +1,34 @@
+﻿@model Do_an.ViewModels.TrangChuViewModel
+
+@{
+    string urlBongDa = Url.Action(
+        "Index",
+        "SanPham",
+        new
+        {
+            area = "",
+            loaiHang = Model.MaLoaiHangBongDa,
+            tuKhoa = Model.MaLoaiHangBongDa.HasValue
+                ? null
+                : "bóng"
+        });
+}
+
+<ul class="sz-footer-links">
+    @foreach (var loai in Model.DanhMuc)
+    {
+        <li>
+            <a href="@Url.Action("Index", "SanPham", new
+            {
+                area = "",
+                loaiHang = loai.MaLoaiHang
+            })">
+                @loai.TenLoaiHang
+            </a>
+        </li>
+    }
+
+    <li>
+        <a href="@urlBongDa">Bóng đá</a>
+    </li>
+</ul>

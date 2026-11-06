@@ -1,0 +1,82 @@
+﻿.sportix-policy {
+    padding: 28px 0 44px;
+}
+
+    .sportix-policy > .container {
+        max-width: 940px;
+    }
+
+    .sportix-policy .policy-heading {
+        margin-bottom: 22px;
+    }
+
+    .sportix-policy .policy-eyebrow {
+        color: var(--blue-dark);
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: .06em;
+    }
+
+    .sportix-policy .policy-heading h1 {
+        margin: 8px 0 10px;
+        color: var(--text);
+        font-size: clamp(1.6rem, 3vw, 2.1rem);
+        font-weight: 800;
+    }
+
+    .sportix-policy .policy-heading p,
+    .sportix-policy .policy-content p,
+    .sportix-policy .policy-content li {
+        color: var(--muted);
+        font-size: .9rem;
+        line-height: 1.8;
+    }
+
+    .sportix-policy .policy-heading p {
+        margin: 0;
+    }
+
+    .sportix-policy .policy-content {
+        padding: clamp(18px, 3vw, 30px);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        background: #fff;
+    }
+
+        .sportix-policy .policy-content section + section {
+            margin-top: 24px;
+        }
+
+        .sportix-policy .policy-content h2 {
+            margin: 0 0 8px;
+            color: var(--text);
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .sportix-policy .policy-content p {
+            margin: 0;
+        }
+
+        .sportix-policy .policy-content ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .sportix-policy .policy-content li + li {
+            margin-top: 5px;
+        }
+
+    .sportix-policy .policy-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 26px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
+    }
+
+        .sportix-policy .policy-actions a:focus-visible {
+            outline: 2px solid var(--blue-dark);
+            outline-offset: 3px;
+        }

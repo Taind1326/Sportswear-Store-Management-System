@@ -1,0 +1,90 @@
+﻿@{
+    ViewBag.Title = "Điều khoản dịch vụ";
+}
+
+@section Styles {
+    <link href="@Url.Content("~/Content/chinh-sach.css")"
+          rel="stylesheet" />
+}
+
+<div class="sportix-policy">
+    <div class="container">
+        <header class="policy-heading" data-reveal>
+            <span class="policy-eyebrow">THÔNG TIN SPORTIX</span>
+            <h1>Điều khoản dịch vụ</h1>
+
+            <p>
+                Những thông tin cần biết khi xem sản phẩm
+                và sử dụng các chức năng trên SPORTIX.
+            </p>
+        </header>
+
+        <article class="policy-content" data-reveal>
+            <section>
+                <h2>1. Sử dụng website</h2>
+                <p>
+                    Bạn có thể xem, tìm kiếm và lọc sản phẩm,
+                    tìm hiểu về SPORTIX và gửi yêu cầu hỗ trợ.
+                    Hãy sử dụng các chức năng đúng mục đích,
+                    không gây gián đoạn hoặc truy cập trái phép
+                    vào tài khoản của người khác.
+                </p>
+            </section>
+
+            <section>
+                <h2>2. Thông tin sản phẩm</h2>
+                <p>
+                    Sản phẩm có thể có nhiều màu sắc, kích cỡ và mức giá.
+                    Giá có chữ “Từ” là mức giá thấp nhất trong
+                    các phân loại đang bán.
+                    Hãy mở chi tiết và chọn phân loại
+                    để xem giá và tình trạng tồn tương ứng.
+                </p>
+            </section>
+
+            <section>
+                <h2>3. Giá và chương trình giảm giá</h2>
+                <p>
+                    Giá được hiển thị bằng đồng Việt Nam.
+                    Khi có giảm giá, giá trước giảm được gạch ngang
+                    và giá sau giảm được hiển thị trên sản phẩm.
+                    Giá và số lượng tồn có thể thay đổi khi dữ liệu
+                    sản phẩm được cập nhật.
+                </p>
+            </section>
+
+            <section>
+                <h2>4. Thông tin tài khoản</h2>
+                <p>
+                    Khi sử dụng các chức năng tài khoản,
+                    hãy cung cấp thông tin chính xác và bảo vệ
+                    thông tin đăng nhập.
+                    Nếu phát hiện hoạt động bất thường,
+                    hãy liên hệ để được kiểm tra.
+                </p>
+            </section>
+
+            <section>
+                <h2>5. Hỗ trợ và yêu cầu liên quan</h2>
+                <p>
+                    Nếu cần xác nhận thông tin sản phẩm,
+                    vận chuyển hoặc đổi trả, hãy liên hệ SPORTIX
+                    để trao đổi về trường hợp cụ thể.
+                    Kiểm tra lại nội dung trước khi gửi yêu cầu.
+                </p>
+            </section>
+
+            <div class="policy-actions">
+                <a class="btn btn-primary"
+                   href="@Url.Action("LienHe", "Home", new { area = "" })">
+                    Liên hệ hỗ trợ
+                </a>
+
+                <a class="btn btn-outline-primary"
+                   href="@Url.Action("ChinhSachBaoMat", "Home", new { area = "" })">
+                    Chính sách bảo mật
+                </a>
+            </div>
+        </article>
+    </div>
+</div>

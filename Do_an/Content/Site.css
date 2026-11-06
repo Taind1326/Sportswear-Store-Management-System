@@ -1,6 +1,7 @@
 ﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap');
 
 /* Màu thương hiệu */
+
 :root {
     --blue: #119dff;
     --blue-dark: #006fe6;
@@ -12,6 +13,7 @@
 }
 
 /* Bố cục trang khách */
+
 body.sportix-public {
     display: flex;
     flex-direction: column;
@@ -28,13 +30,14 @@ body.sportix-public {
 }
 
 /* Header */
+
 .sz-navbar {
     min-height: 82px;
     padding: 0;
     border-bottom: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, .9);
     backdrop-filter: blur(18px);
-    box-shadow: 0 12px 35px rgba(17, 157, 255, 0.1);
+    box-shadow: 0 12px 35px rgba(17, 157, 255, .1);
 }
 
     .sz-navbar .container {
@@ -62,7 +65,7 @@ body.sportix-public {
     height: 148px;
     object-fit: contain;
     transform: scale(1.32);
-    transition: transform 0.25s ease;
+    transition: transform .25s ease;
 }
 
 .sz-brand:hover .sz-logo {
@@ -70,15 +73,16 @@ body.sportix-public {
 }
 
 /* Menu điều hướng */
+
 .sz-navbar .sz-nav-link {
     position: relative;
     padding: 12px 17px;
     border-radius: 0;
     color: #506176;
     background: transparent;
-    font-size: 0.92rem;
+    font-size: .92rem;
     font-weight: 600;
-    transition: color 0.2s ease;
+    transition: color .2s ease;
 }
 
     .sz-navbar .sz-nav-link:hover,
@@ -87,7 +91,6 @@ body.sportix-public {
         background: transparent;
     }
 
-/* Thanh chuyển màu dưới trang hiện tại */
 .sz-nav-link::after {
     content: "";
     position: absolute;
@@ -104,7 +107,8 @@ body.sportix-public {
     opacity: 1;
 }
 
-/* Nút đăng nhập Bootstrap: chữ nhật bo nhẹ */
+/* Nút đăng nhập */
+
 .sz-navbar .sz-nav-btn {
     --bs-btn-color: #fff;
     --bs-btn-bg: transparent;
@@ -122,25 +126,26 @@ body.sportix-public {
     padding: 8px 20px;
     border-radius: 6px;
     background: linear-gradient(90deg, var(--blue), var(--lime));
-    font-size: 0.9rem;
+    font-size: .9rem;
     font-weight: 600;
     line-height: 1.5;
-    transition: filter 0.2s ease, box-shadow 0.2s ease;
+    transition: filter .2s ease, box-shadow .2s ease;
 }
 
     .sz-navbar .sz-nav-btn:hover {
-        filter: brightness(0.95);
+        filter: brightness(.95);
     }
 
     .sz-navbar .sz-nav-btn:active {
-        filter: brightness(0.9);
+        filter: brightness(.9);
     }
 
 /* Footer */
+
 .sz-footer {
     padding-top: 58px;
     color: #fff;
-    background: radial-gradient( circle at top left, rgba(168, 232, 46, 0.16), transparent 28% ), linear-gradient(135deg, #07111f, #0b1b32 55%, #082b48);
+    background: radial-gradient( circle at top left, rgba(168, 232, 46, .16), transparent 28% ), linear-gradient(135deg, #07111f, #0b1b32 55%, #082b48);
 }
 
 .sz-footer-brand {
@@ -160,17 +165,16 @@ body.sportix-public {
     max-width: 330px;
     margin: 0;
     color: #b8c7d9;
-    font-size: 0.92rem;
+    font-size: .92rem;
     line-height: 1.75;
 }
 
 .sz-footer-title {
     margin-bottom: 18px;
     color: #fff;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.9rem;
+    font-size: .9rem;
     font-weight: 800;
-    letter-spacing: 0.8px;
+    letter-spacing: .8px;
     text-transform: uppercase;
 }
 
@@ -189,9 +193,9 @@ body.sportix-public {
 
     .sz-footer-links a {
         color: #b8c7d9;
-        font-size: 0.9rem;
+        font-size: .9rem;
         text-decoration: none;
-        transition: color 0.2s ease;
+        transition: color .2s ease;
     }
 
         .sz-footer-links a:hover {
@@ -206,7 +210,7 @@ body.sportix-public {
         display: flex;
         gap: 12px;
         color: #b8c7d9;
-        font-size: 0.9rem;
+        font-size: .9rem;
         line-height: 1.65;
     }
 
@@ -216,21 +220,62 @@ body.sportix-public {
         color: var(--lime);
     }
 
+    .sz-footer-contact a {
+        min-width: 0;
+        color: inherit;
+        text-decoration: none;
+        overflow-wrap: anywhere;
+        transition: color .2s ease;
+    }
+
+        .sz-footer-contact a:hover {
+            color: var(--lime);
+        }
+
+/* Bản quyền và link chính sách */
+
 .sz-footer-bottom {
     margin-top: 48px;
     padding: 18px 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(0, 0, 0, 0.22);
+    border-top: 1px solid rgba(255, 255, 255, .08);
+    background: rgba(0, 0, 0, .22);
     text-align: center;
 }
 
-    .sz-footer-bottom p {
-        margin: 0;
-        color: #aab8c8;
-        font-size: 0.82rem;
+.sz-footer-copyright {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: center;
+    gap: 6px 10px;
+    margin: 0;
+    color: #aab8c8;
+    font-size: .82rem;
+    line-height: 1.7;
+}
+
+.sz-footer-policies {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: center;
+    gap: 6px;
+    color: var(--lime);
+}
+
+    .sz-footer-policies a {
+        color: var(--lime);
+        font-weight: 700;
+        text-decoration: none;
+        text-underline-offset: 3px;
     }
 
+        .sz-footer-policies a:hover {
+            text-decoration: underline;
+        }
+
 /* Điều hướng bằng bàn phím */
+
 .sz-navbar a:focus-visible,
 .sz-navbar button:focus-visible,
 .sz-footer a:focus-visible {
@@ -239,6 +284,7 @@ body.sportix-public {
 }
 
 /* Điện thoại */
+
 @media (max-width: 767.98px) {
     .sz-navbar,
     .sz-navbar .container {
@@ -262,7 +308,7 @@ body.sportix-public {
         border: 1px solid var(--border);
         border-radius: 8px;
         background: #fff;
-        box-shadow: 0 15px 35px rgba(17, 157, 255, 0.12);
+        box-shadow: 0 15px 35px rgba(17, 157, 255, .12);
     }
 
     .sz-navbar .sz-nav-link {
@@ -276,14 +322,24 @@ body.sportix-public {
         width: 100%;
         margin-top: 8px;
     }
+
+    .sz-footer-divider {
+        display: none;
+    }
+
+    .sz-footer-policies {
+        flex-basis: 100%;
+    }
 }
 
-/* Giảm chuyển động theo cài đặt thiết bị */
+/* Giảm chuyển động */
+
 @media (prefers-reduced-motion: reduce) {
     .sz-logo,
     .sz-navbar .sz-nav-link,
     .sz-navbar .sz-nav-btn,
-    .sz-footer-links a {
+    .sz-footer-links a,
+    .sz-footer-contact a {
         transition: none;
     }
 
@@ -298,6 +354,8 @@ body.sportix-public {
     }
 }
 
+/* Cuộn và reveal dùng chung cho trang khách */
+
 html.sportix-public-page {
     scroll-padding-top: 96px;
 }
@@ -307,17 +365,6 @@ html.sportix-public-page {
         scroll-behavior: smooth;
     }
 
-    .sportix-public #mainContent [data-reveal].reveal-pending:not(:focus-within) {
-        opacity: 0;
-        transform: translateY(16px);
-    }
-
-    .sportix-public #mainContent [data-reveal] {
-        transition: opacity 400ms ease, transform 400ms ease;
-    }
-}
-
-@media (prefers-reduced-motion: no-preference) {
     .sportix-public #mainContent [data-reveal] {
         transition: opacity 400ms ease, transform 400ms ease;
     }
