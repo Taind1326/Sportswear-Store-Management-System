@@ -116,8 +116,15 @@
     var sanPhamMoi = ViewBag.SanPhamMoi as IList<SanPham>
         ?? new List<SanPham>();
 
-    int trang = ViewBag.Trang;
-    int tongTrang = ViewBag.TongTrang;
+    int tongTrang = Math.Max(
+        1,
+        Convert.ToInt32(ViewBag.TongTrang));
+
+    int trang = Math.Max(
+        1,
+        Math.Min(
+            Convert.ToInt32(ViewBag.Trang),
+            tongTrang));
 
     int tongSanPham = ViewBag.TongSanPham == null
         ? Model.Count
@@ -135,7 +142,32 @@
     long giaDangChon = Math.Max(0L, giaDaLoc ?? giaToiDa);
 
     string urlDanhSach = Url.Action(
-        "Index", "SanPham", new { area = "" });
+        "Index",
+        "SanPham",
+        new { area = "" });
+
+    int trangBatDau = Math.Max(
+        1,
+        Math.Min(trang - 2, tongTrang - 4));
+
+    int trangKetThuc = Math.Min(
+        tongTrang,
+        trangBatDau + 4);
+
+    Func<int, string> urlTrang = soTrang => Url.Action(
+        "Index",
+        "SanPham",
+        new
+        {
+            area = "",
+            trang = soTrang,
+            tuKhoa = Request.QueryString["tuKhoa"],
+            loaiHang = Request.QueryString["loaiHang"],
+            thuongHieu = Request.QueryString["thuongHieu"],
+            giaTu = Request.QueryString["giaTu"],
+            giaDen = Request.QueryString["giaDen"],
+            sapXep = Request.QueryString["sapXep"]
+        });
 }
 
 @section Styles {
@@ -397,39 +429,137 @@
                     }
                 </div>
             }
-
-            @if (tongTrang > 1)
-            {
-                <nav class="d-flex flex-wrap justify-content-center align-items-center gap-3 mt-4"
-                     aria-label="Phân trang sản phẩm">
-                    <span class="small text-secondary">
-                        Trang @trang / @tongTrang
-                    </span>
-
-                    @foreach (var trangDich in new[] { trang - 1, trang + 1 })
-                    {
-                        if (trangDich >= 1 && trangDich <= tongTrang)
-                        {
-                            <a class="btn btn-outline-primary"
-                               data-skip-splash="true"
-                               href="@Url.Action("Index", "SanPham", new
-                               {
-                                   area = "",
-                                   trang = trangDich,
-                                   tuKhoa = Request.QueryString["tuKhoa"],
-                                   loaiHang = Request.QueryString["loaiHang"],
-                                   thuongHieu = Request.QueryString["thuongHieu"],
-                                   giaTu = Request.QueryString["giaTu"],
-                                   giaDen = Request.QueryString["giaDen"],
-                                   sapXep = Request.QueryString["sapXep"]
-                               })">
-                                @(trangDich < trang ? "Trang trước" : "Trang sau")
-                            </a>
-                        }
-                    }
-                </nav>
-            }
         </section>
+
+        <nav class="col-12 mt-4"
+             aria-label="Phân trang sản phẩm">
+            <ul class="pagination justify-content-center flex-wrap gap-1 mb-2">
+                @if (trang > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="@urlTrang(1)"
+                           data-skip-splash="true"
+                           aria-label="Trang đầu">
+                            &laquo;
+                        </a>
+                    </li>
+
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="@urlTrang(trang - 1)"
+                           data-skip-splash="true"
+                           aria-label="Trang trước"
+                           rel="prev">
+                            &lsaquo;
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link"
+                              aria-label="Trang đầu"
+                              aria-disabled="true">
+                            &laquo;
+                        </span>
+                    </li>
+
+                    <li class="page-item disabled">
+                        <span class="page-link"
+                              aria-label="Trang trước"
+                              aria-disabled="true">
+                            &lsaquo;
+                        </span>
+                    </li>
+                }
+
+                @if (trangBatDau > 1)
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link">…</span>
+                    </li>
+                }
+
+                @for (int soTrang = trangBatDau;
+                    soTrang <= trangKetThuc;
+                    soTrang++)
+                {
+                    if (soTrang == trang)
+                    {
+                        <li class="page-item active">
+                            <span class="page-link"
+                                  aria-current="page"
+                                  aria-label="@("Trang " + soTrang)">
+                                @soTrang
+                            </span>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="@urlTrang(soTrang)"
+                               data-skip-splash="true"
+                               aria-label="@("Trang " + soTrang)">
+                                @soTrang
+                            </a>
+                        </li>
+                    }
+                }
+
+                @if (trangKetThuc < tongTrang)
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link">…</span>
+                    </li>
+                }
+
+                @if (trang < tongTrang)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="@urlTrang(trang + 1)"
+                           data-skip-splash="true"
+                           aria-label="Trang sau"
+                           rel="next">
+                            &rsaquo;
+                        </a>
+                    </li>
+
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="@urlTrang(tongTrang)"
+                           data-skip-splash="true"
+                           aria-label="Trang cuối">
+                            &raquo;
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link"
+                              aria-label="Trang sau"
+                              aria-disabled="true">
+                            &rsaquo;
+                        </span>
+                    </li>
+
+                    <li class="page-item disabled">
+                        <span class="page-link"
+                              aria-label="Trang cuối"
+                              aria-disabled="true">
+                            &raquo;
+                        </span>
+                    </li>
+                }
+            </ul>
+
+            <p class="small text-secondary text-center mb-0">
+                Trang @trang / @tongTrang
+            </p>
+        </nav>
     }
 </div>
 
