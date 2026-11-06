@@ -1,6 +1,123 @@
-﻿@{
+﻿@model System.Collections.Generic.List<Do_an.Models.CanhBaoTonKho>
+@using System.Globalization
+
+@{
     ViewBag.Title = "Tổng quan";
+
+    var vi = CultureInfo.GetCultureInfo("vi-VN");
 }
 
-<h1>Quản trị SPORTIX</h1>
-<p>Khu vực quản trị đã được cấu hình thành công.</p>
+<div class="product-page-heading">
+    <div>
+        <h1>Tổng quan</h1>
+        <p>Theo dõi các phân loại cần bổ sung hàng.</p>
+    </div>
+
+    <a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })"
+       class="btn btn-outline-primary">
+        <i class="bi bi-arrow-clockwise" aria-hidden="true"></i>
+        Tải lại
+    </a>
+</div>
+
+<section class="product-panel" aria-labelledby="tieuDeCanhBao">
+    <div class="mb-3">
+        <h2 id="tieuDeCanhBao" class="h5 fw-bold mb-2">
+            <i class="bi bi-exclamation-triangle"
+               aria-hidden="true"></i>
+            Sản phẩm cần nhập thêm
+        </h2>
+
+        <p class="product-meta mb-0">
+            @Model.Count phân loại cần bổ sung.
+            Hệ thống kiểm tra mỗi phút.
+            Bấm “Tải lại” để xem dữ liệu mới.
+        </p>
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-info mb-0" role="status">
+            Chưa có cảnh báo nhập hàng đang hoạt động.
+            Nếu vừa thay đổi tồn kho, hãy chờ lần kiểm tra tiếp theo.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover product-table align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">Sản phẩm</th>
+                        <th scope="col">Màu / Kích cỡ</th>
+                        <th scope="col" class="text-end">Còn lại</th>
+                        <th scope="col">Cảnh báo</th>
+                        <th scope="col" class="text-end">Thao tác</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var canhBao in Model)
+                    {
+                        var phanLoai = canhBao.BienTheSanPham;
+                        var sanPham = phanLoai.SanPham;
+                        bool hetHang = phanLoai.SoLuongTon == 0;
+
+                        <tr>
+                            <td>
+                                <a href="@Url.Action("ChiTiet", "SanPham", new
+                                         {
+                                             area = "Admin",
+                                             id = sanPham.MaSanPham
+                                         })"
+                                   class="product-name">
+                                    @sanPham.TenSanPham
+                                </a>
+
+                                <div class="product-meta mt-1">
+                                    SKU: @phanLoai.SKU
+                                </div>
+                            </td>
+
+                            <td>
+                                @phanLoai.MauSac / @phanLoai.KichThuoc
+                            </td>
+
+                            <td class="text-end fw-semibold">
+                                @phanLoai.SoLuongTon.ToString("N0", vi)
+                            </td>
+
+                            <td>
+                                <span class="status-pill @(hetHang
+                                    ? "status-empty"
+                                    : "status-low")">
+                                    @(hetHang ? "Hết hàng" : "Sắp hết hàng")
+                                </span>
+
+                                <div class="product-meta mt-1">
+                                    @(hetHang
+                                        ? "Cần bổ sung hàng."
+                                        : "Cần nhập thêm.")
+                                </div>
+                            </td>
+
+                            <td class="text-end">
+                                <a href="@Url.Action("MoBoSungHang", "Dashboard", new
+                                         {
+                                             area = "Admin",
+                                             id = sanPham.MaSanPham,
+                                             maBienThe = phanLoai.MaBienThe
+                                         })"
+                                   class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-plus-lg"
+                                       aria-hidden="true"></i>
+                                    Bổ sung hàng
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>
