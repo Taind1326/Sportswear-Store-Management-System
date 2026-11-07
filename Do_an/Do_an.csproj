@@ -265,6 +265,7 @@
     <Compile Include="ViewModels\SanPhamChiTietViewModel.cs" />
     <Compile Include="ViewModels\SuaPhanLoaiViewModel.cs" />
     <Compile Include="ViewModels\SuaSanPhamViewModel.cs" />
+    <Compile Include="ViewModels\TaiKhoanViewModel.cs" />
     <Compile Include="ViewModels\ThemHinhAnhViewModel.cs" />
     <Compile Include="ViewModels\ThemPhanLoaiViewModel.cs" />
     <Compile Include="ViewModels\ThemSanPhamViewModel.cs" />
