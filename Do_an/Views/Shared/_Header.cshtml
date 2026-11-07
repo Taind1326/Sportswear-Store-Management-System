@@ -1,6 +1,17 @@
 ﻿@{
     var controller = Convert.ToString(ViewContext.RouteData.Values["controller"]);
     var action = Convert.ToString(ViewContext.RouteData.Values["action"]);
+
+    bool daDangNhap = Session["MaTaiKhoan"] != null;
+    string hoTen = Convert.ToString(Session["HoTen"]);
+    bool laAdmin = Convert.ToString(Session["VaiTro"]) == "Admin";
+
+    string chuCai = "?";
+    if (!string.IsNullOrWhiteSpace(hoTen))
+    {
+        string[] tu = hoTen.Trim().Split(' ');
+        chuCai = tu[tu.Length - 1].Substring(0, 1).ToUpper();
+    }
 }
 
 <nav class="sz-navbar navbar navbar-expand-md sticky-top"
@@ -56,12 +67,60 @@
                     </a>
                 </li>
 
-                <li class="nav-item ms-md-2">
-                    <a href="@Url.Action("DangNhap", "TaiKhoan", new { area = "" })"
-                       class="btn sz-nav-btn">
-                        Đăng nhập
-                    </a>
-                </li>
+                @if (!daDangNhap)
+                {
+                    <li class="nav-item ms-md-2">
+                        <a href="@Url.Action("DangNhap", "TaiKhoan", new { area = "" })"
+                           class="btn sz-nav-btn">
+                            Đăng nhập
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    @* TV3: chèn icon giỏ hàng <li> ở ngay trước mục avatar này *@
+                    <li class="nav-item dropdown ms-md-2">
+                        <a class="nav-link sz-nav-link dropdown-toggle sz-user-toggle"
+                           href="#"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            <span class="sz-avatar" aria-hidden="true">@chuCai</span>
+                            <span class="sz-user-name">@hoTen</span>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            @if (laAdmin)
+                            {
+                                <li>
+                                    <a class="dropdown-item"
+                                       href="@Url.Action("Index", "Dashboard", new { area = "Admin" })">Trang quản trị</a>
+                                </li>
+                            }
+                            <li>
+                                <a class="dropdown-item"
+                                   href="@Url.Action("HoSo", "TaiKhoan", new { area = "" })">Hồ sơ</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item"
+                                   href="@Url.Action("DiaChi", "TaiKhoan", new { area = "" })">Địa chỉ</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item"
+                                   href="@Url.Action("Index", "DonHang", new { area = "" })">Đơn hàng của tôi</a>
+                            </li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li>
+                                @using (Html.BeginForm("DangXuat", "TaiKhoan", new { area = "" },
+                                    FormMethod.Post, new { @class = "m-0" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="dropdown-item">Đăng xuất</button>
+                                }
+                            </li>
+                        </ul>
+                    </li>
+                }
             </ul>
         </div>
     </div>

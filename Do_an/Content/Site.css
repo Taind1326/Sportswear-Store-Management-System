@@ -374,3 +374,29 @@ html.sportix-public-page {
             transform: translateY(16px);
         }
 }
+
+.sz-user-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sz-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--lime));
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.9rem;
+}
+
+.sz-user-name {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

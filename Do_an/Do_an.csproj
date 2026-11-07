@@ -245,11 +245,15 @@
     <Compile Include="Services\DonHangService.cs" />
     <Compile Include="Services\GeminiService.cs" />
     <Compile Include="Services\HinhAnhSanPhamService.cs" />
+    <Compile Include="Services\MatKhauHelper.cs" />
     <Compile Include="Services\QuyTacSanPham.cs" />
     <Compile Include="Services\SanPhamService.cs" />
     <Compile Include="Services\ThongBaoService.cs" />
     <Compile Include="Services\ThongKeService.cs" />
     <Compile Include="Services\TonKhoService.cs" />
+    <Compile Include="Services\TroLyAIService.cs" />
+    <Compile Include="Services\XacThucAttributes.cs" />
+    <Compile Include="Services\XacThucService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\BoSungHangViewModel.cs" />
     <Compile Include="ViewModels\DangKyViewModel.cs" />
@@ -301,6 +305,7 @@
     <Content Include="Content\lien-he.css" />
     <Content Include="Content\san-pham.css" />
     <Content Include="Content\splash.css" />
+    <Content Include="Content\tai-khoan.css" />
     <Content Include="Content\trang-chu.css" />
     <Content Include="Content\validation.css" />
     <Content Include="favicon.ico" />

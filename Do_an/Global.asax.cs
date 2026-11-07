@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Do_an.Services;
 
 namespace Do_an
 {
@@ -18,6 +19,8 @@ namespace Do_an
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            XacThucService.TaoAdminMacDinh();
         }
     }
 }
