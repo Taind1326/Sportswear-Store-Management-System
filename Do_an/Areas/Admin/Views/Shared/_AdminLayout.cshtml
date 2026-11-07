@@ -56,12 +56,11 @@
                     Quản lý sản phẩm
                 </a>
 
-                <span class="admin-menu-item"
-                      aria-disabled="true"
-                      title="Chưa kết nối chức năng">
+                <a href="@Url.Action("Index", "TaiKhoan", new { area = "Admin" })"
+                   class="admin-menu-item">
                     <i class="bi bi-people" aria-hidden="true"></i>
                     Quản lý tài khoản
-                </span>
+                </a>
 
                 <span class="admin-menu-item"
                       aria-disabled="true"
@@ -101,14 +100,16 @@
                     </div>
                 </details>
 
-                <button type="button"
-                        class="admin-menu-item admin-logout"
-                        disabled
-                        title="Chưa kết nối chức năng đăng xuất">
-                    <i class="bi bi-box-arrow-right"
-                       aria-hidden="true"></i>
-                    Đăng xuất
-                </button>
+                @using (Html.BeginForm("DangXuat", "TaiKhoan", new { area = "" },
+                        FormMethod.Post, new { style = "display: contents;" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit" class="admin-menu-item admin-logout">
+                        <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                        Đăng xuất
+                    </button>
+                }
             </nav>
 
             <div class="admin-sidebar-note">

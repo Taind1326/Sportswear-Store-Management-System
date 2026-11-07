@@ -1,0 +1,64 @@
+﻿@model Do_an.ViewModels.DoiMatKhauViewModel
+
+@{
+    ViewBag.Title = "Đổi mật khẩu";
+}
+
+@section Styles {
+    <link href="@Url.Content("~/Content/tai-khoan.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/validation.css")" rel="stylesheet" />
+}
+
+<section class="tk-page">
+    <div class="container">
+        @Html.Partial("_TaiKhoanMenu", "hoso")
+
+        <div class="tk-card">
+            <h1 class="tk-title">Đổi mật khẩu</h1>
+            <p class="tk-sub">Mật khẩu mới từ 6 ký tự, gồm cả chữ và số.</p>
+
+            @using (Html.BeginForm("DoiMatKhau", "TaiKhoan", new { area = "" },
+                FormMethod.Post, new { novalidate = "novalidate" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.MatKhauCu, new { @class = "form-label" })
+                    @Html.PasswordFor(m => m.MatKhauCu, new
+                    {
+                        @class = "form-control",
+                        autocomplete = "current-password"
+                    })
+                    @Html.ValidationMessageFor(m => m.MatKhauCu, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.MatKhauMoi, new { @class = "form-label" })
+                    @Html.PasswordFor(m => m.MatKhauMoi, new
+                    {
+                        @class = "form-control",
+                        autocomplete = "new-password"
+                    })
+                    @Html.ValidationMessageFor(m => m.MatKhauMoi, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-4">
+                    @Html.LabelFor(m => m.XacNhanMatKhauMoi, new { @class = "form-label" })
+                    @Html.PasswordFor(m => m.XacNhanMatKhauMoi, new
+                    {
+                        @class = "form-control",
+                        autocomplete = "new-password"
+                    })
+                    @Html.ValidationMessageFor(m => m.XacNhanMatKhauMoi, "", new { @class = "text-danger" })
+                </div>
+
+                <button type="submit" class="tk-btn">Đổi mật khẩu</button>
+            }
+
+            <p class="text-center mt-4 mb-0">
+                <a class="tk-link" href="@Url.Action("HoSo", "TaiKhoan", new { area = "" })">Quay lại hồ sơ</a>
+            </p>
+        </div>
+    </div>
+</section>

@@ -1,7 +1,65 @@
-﻿
+﻿@model Do_an.ViewModels.HoSoViewModel
+
 @{
-    ViewBag.Title = "HoSo";
+    ViewBag.Title = "Hồ sơ của tôi";
 }
 
-<h2>HoSo</h2>
+@section Styles {
+    <link href="@Url.Content("~/Content/tai-khoan.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/validation.css")" rel="stylesheet" />
+}
 
+<section class="tk-page">
+    <div class="container">
+        @Html.Partial("_TaiKhoanMenu", "hoso")
+
+        <div class="tk-card tk-wide">
+            <h1 class="tk-title">Hồ sơ của tôi</h1>
+            <p class="tk-sub">Cập nhật thông tin liên hệ của bạn.</p>
+
+            @using (Html.BeginForm("HoSo", "TaiKhoan", new { area = "" },
+                FormMethod.Post, new { novalidate = "novalidate" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label">Tên đăng nhập</label>
+                        <input type="text" class="form-control" value="@Model.TenDangNhap" disabled />
+                    </div>
+
+                    <div class="col-12">
+                        @Html.LabelFor(m => m.HoTen, new { @class = "form-label" })
+                        @Html.TextBoxFor(m => m.HoTen, new { @class = "form-control", maxlength = "100" })
+                        @Html.ValidationMessageFor(m => m.HoTen, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        @Html.LabelFor(m => m.Email, new { @class = "form-label" })
+                        @Html.TextBoxFor(m => m.Email, new
+                        {
+                            @class = "form-control",
+                            type = "email",
+                            maxlength = "254"
+                        })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        @Html.LabelFor(m => m.SoDienThoai, new { @class = "form-label" })
+                        @Html.TextBoxFor(m => m.SoDienThoai, new { @class = "form-control", maxlength = "20" })
+                        @Html.ValidationMessageFor(m => m.SoDienThoai, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap align-items-center gap-3 mt-4">
+                    <button type="submit" class="tk-btn tk-btn-auto">Lưu thay đổi</button>
+                    <a class="tk-link" href="@Url.Action("DoiMatKhau", "TaiKhoan", new { area = "" })">
+                        Đổi mật khẩu
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</section>

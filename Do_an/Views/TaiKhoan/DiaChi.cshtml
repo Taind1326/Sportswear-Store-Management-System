@@ -1,0 +1,146 @@
+﻿@model Do_an.ViewModels.DiaChiViewModel
+
+@{
+    ViewBag.Title = "Địa chỉ của tôi";
+
+    var danhSach = ViewBag.DanhSach as System.Collections.Generic.List<Do_an.Models.DiaChi>
+        ?? new System.Collections.Generic.List<Do_an.Models.DiaChi>();
+
+    bool laSua = Model.MaDiaChi > 0;
+}
+
+@section Styles {
+    <link href="@Url.Content("~/Content/tai-khoan.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/validation.css")" rel="stylesheet" />
+}
+
+<section class="tk-page">
+    <div class="container">
+        @Html.Partial("_TaiKhoanMenu", "diachi")
+
+        <div class="row g-4" style="max-width: 960px; margin: 0 auto;">
+            <div class="col-12 col-lg-7">
+                <h2 class="h5 fw-bold mb-3">Địa chỉ đã lưu (@danhSach.Count/10)</h2>
+
+                @if (danhSach.Count == 0)
+                {
+                    <div class="tk-addr text-secondary">Bạn chưa có địa chỉ nào. Hãy thêm địa chỉ nhận hàng.</div>
+                }
+
+                @foreach (var dc in danhSach)
+                {
+                    <div class="tk-addr @(dc.MacDinh ? "tk-addr-default" : "")">
+                        <div class="d-flex justify-content-between align-items-start gap-2">
+                            <div>
+                                <div class="fw-bold">
+                                    @dc.HoTenNguoiNhan
+                                    <span class="text-secondary fw-normal">· @dc.SoDienThoai</span>
+                                </div>
+                                <div>@dc.DiaChiCuThe, @dc.PhuongXa, @dc.TinhThanh</div>
+                            </div>
+
+                            @if (dc.MacDinh)
+                            {
+                                <span class="tk-badge">Mặc định</span>
+                            }
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-2 mt-3">
+                            <a class="btn btn-outline-primary btn-sm"
+                               href="@Url.Action("DiaChi", "TaiKhoan", new { area = "", sua = dc.MaDiaChi })">Sửa</a>
+
+                            @if (!dc.MacDinh)
+                            {
+                                using (Html.BeginForm("DatMacDinh", "TaiKhoan", new { area = "" },
+                                    FormMethod.Post, new { @class = "m-0" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@dc.MaDiaChi" />
+                                    <button type="submit" class="btn btn-outline-secondary btn-sm">Đặt mặc định</button>
+                                }
+                            }
+
+                            @using (Html.BeginForm("XoaDiaChi", "TaiKhoan", new { area = "" },
+                                FormMethod.Post, new
+                                {
+                                    @class = "m-0",
+                                    onsubmit = "return confirm('Xóa địa chỉ này?');"
+                                }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@dc.MaDiaChi" />
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Xóa</button>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="col-12 col-lg-5">
+                <div class="tk-card" style="max-width: none; padding: 24px;">
+                    <h2 class="h5 fw-bold mb-3">@(laSua ? "Sửa địa chỉ" : "Thêm địa chỉ mới")</h2>
+
+                    @using (Html.BeginForm("LuuDiaChi", "TaiKhoan", new { area = "" },
+                        FormMethod.Post, new { novalidate = "novalidate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.MaDiaChi)
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.HoTenNguoiNhan, new { @class = "form-label" })
+                            @Html.TextBoxFor(m => m.HoTenNguoiNhan, new { @class = "form-control", maxlength = "100" })
+                            @Html.ValidationMessageFor(m => m.HoTenNguoiNhan, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.SoDienThoai, new { @class = "form-label" })
+                            @Html.TextBoxFor(m => m.SoDienThoai, new { @class = "form-control", maxlength = "20" })
+                            @Html.ValidationMessageFor(m => m.SoDienThoai, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.TinhThanh, new { @class = "form-label" })
+                            @Html.TextBoxFor(m => m.TinhThanh, new { @class = "form-control", maxlength = "100" })
+                            @Html.ValidationMessageFor(m => m.TinhThanh, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.PhuongXa, new { @class = "form-label" })
+                            @Html.TextBoxFor(m => m.PhuongXa, new { @class = "form-control", maxlength = "100" })
+                            @Html.ValidationMessageFor(m => m.PhuongXa, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="mb-3">
+                            @Html.LabelFor(m => m.DiaChiCuThe, new { @class = "form-label" })
+                            @Html.TextBoxFor(m => m.DiaChiCuThe, new
+                            {
+                                @class = "form-control",
+                                maxlength = "255",
+                                placeholder = "Số nhà, tên đường..."
+                            })
+                            @Html.ValidationMessageFor(m => m.DiaChiCuThe, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-check mb-4">
+                            @Html.CheckBoxFor(m => m.MacDinh, new { @class = "form-check-input" })
+                            @Html.LabelFor(m => m.MacDinh, new { @class = "form-check-label" })
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-2">
+                            <button type="submit" class="tk-btn tk-btn-auto">
+                                @(laSua ? "Lưu thay đổi" : "Thêm địa chỉ")
+                            </button>
+
+                            @if (laSua)
+                            {
+                                <a class="btn btn-outline-secondary"
+                                   href="@Url.Action("DiaChi", "TaiKhoan", new { area = "" })">Hủy sửa</a>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
