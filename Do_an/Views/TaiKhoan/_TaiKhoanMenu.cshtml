@@ -1,0 +1,26 @@
+﻿@model string
+
+<ul class="tk-tabs">
+    <li>
+        <a class="@(Model == "hoso" ? "active" : "")"
+           href="@Url.Action("HoSo", "TaiKhoan", new { area = "" })">Hồ sơ</a>
+    </li>
+    <li>
+        <a class="@(Model == "diachi" ? "active" : "")"
+           href="@Url.Action("DiaChi", "TaiKhoan", new { area = "" })">Địa chỉ</a>
+    </li>
+    <li>
+        @* Route của TV4: xác nhận lại tên controller/action "Đơn hàng của tôi" *@
+        <a href="@Url.Action("Index", "DonHang", new { area = "" })">Đơn hàng của tôi</a>
+    </li>
+</ul>
+
+@if (TempData["ThanhCong"] != null)
+{
+    <div class="alert alert-success tk-alert" role="alert">@TempData["ThanhCong"]</div>
+}
+
+@if (TempData["Loi"] != null)
+{
+    <div class="alert alert-danger tk-alert" role="alert">@TempData["Loi"]</div>
+}

@@ -1,0 +1,163 @@
+﻿@model System.Collections.Generic.List<Do_an.ViewModels.KhachHangItemViewModel>
+
+@{
+    ViewBag.Title = "Quản lý tài khoản";
+
+    string tuKhoa = ViewBag.TuKhoa;
+    string trangThai = ViewBag.TrangThai;
+    int trang = ViewBag.Trang;
+    int tongTrang = ViewBag.TongTrang;
+    int tongSo = ViewBag.TongSo;
+}
+
+<div class="product-page-heading">
+    <div>
+        <h1>Quản lý tài khoản</h1>
+        <p>Danh sách khách hàng. Khóa tài khoản sẽ chặn khách đăng nhập và thao tác.</p>
+    </div>
+</div>
+
+@if (TempData["ThanhCong"] != null)
+{
+    <div class="alert alert-success" role="alert">@TempData["ThanhCong"]</div>
+}
+
+@if (TempData["Loi"] != null)
+{
+    <div class="alert alert-danger" role="alert">@TempData["Loi"]</div>
+}
+
+<div class="product-panel">
+    @using (Html.BeginForm("Index", "TaiKhoan", new { area = "Admin" },
+        FormMethod.Get, new { @class = "row g-2 align-items-end mb-4" }))
+    {
+        <div class="col-12 col-md-5">
+            <label for="tuKhoa" class="form-label">Tìm khách hàng</label>
+            <input id="tuKhoa" name="tuKhoa" type="search" value="@tuKhoa" maxlength="100"
+                   class="form-control" placeholder="Họ tên, tên đăng nhập, email, số điện thoại..." />
+        </div>
+
+        <div class="col-12 col-md-3">
+            <label for="trangThai" class="form-label">Trạng thái</label>
+            <select id="trangThai" name="trangThai" class="form-select">
+                <option value="" selected="@(trangThai == "")">Tất cả</option>
+                <option value="hoatdong" selected="@(trangThai == "hoatdong")">Đang hoạt động</option>
+                <option value="khoa" selected="@(trangThai == "khoa")">Đã khóa</option>
+            </select>
+        </div>
+
+        <div class="col-12 col-md-4 d-flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            <a href="@Url.Action("Index", "TaiKhoan", new { area = "Admin" })"
+               class="btn btn-outline-secondary">Đặt lại</a>
+        </div>
+    }
+
+    <div class="table-responsive">
+        <table class="table table-hover product-table align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">Mã</th>
+                    <th scope="col">Khách hàng</th>
+                    <th scope="col">Liên hệ</th>
+                    <th scope="col">Ngày tạo</th>
+                    <th scope="col">Số đơn</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col" class="text-end">Thao tác</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.Count == 0)
+                {
+                    <tr>
+                        <td colspan="7" class="text-center text-secondary py-4">
+                            Không tìm thấy khách hàng phù hợp.
+                        </td>
+                    </tr>
+                }
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>#@item.MaTaiKhoan</td>
+
+                        <td>
+                            <div class="fw-semibold">@item.HoTen</div>
+                            <div class="text-secondary small">@item.TenDangNhap</div>
+                        </td>
+
+                        <td>
+                            <div>@item.Email</div>
+                            <div class="text-secondary small">
+                                @(string.IsNullOrWhiteSpace(item.SoDienThoai) ? "—" : item.SoDienThoai)
+                            </div>
+                        </td>
+
+                        <td>@item.NgayTao.ToString("dd/MM/yyyy")</td>
+                        <td>@item.SoDonHang</td>
+
+                        <td>
+                            <span class="status-pill @(item.HoatDong ? "status-selling" : "status-stopped")">
+                                @(item.HoatDong ? "Hoạt động" : "Đã khóa")
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="d-flex justify-content-end">
+                                @using (Html.BeginForm("DoiTrangThai", "TaiKhoan", new { area = "Admin" },
+                                    FormMethod.Post, new
+                                    {
+                                        @class = "m-0",
+                                        onsubmit = "return confirm('" + (item.HoatDong ? "Khóa" : "Mở khóa") + " tài khoản này?');"
+                                    }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@item.MaTaiKhoan" />
+                                    <input type="hidden" name="tuKhoa" value="@tuKhoa" />
+                                    <input type="hidden" name="trangThai" value="@trangThai" />
+                                    <input type="hidden" name="trang" value="@trang" />
+
+                                    <button type="submit" class="btn btn-outline-secondary btn-sm">
+                                        @(item.HoatDong ? "Khóa" : "Mở khóa")
+                                    </button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-3">
+        <span class="text-secondary">@tongSo khách hàng · Trang @trang / @tongTrang</span>
+
+        @if (tongTrang > 1)
+        {
+            <nav aria-label="Phân trang khách hàng">
+                <ul class="pagination pagination-sm mb-0">
+                    @if (trang > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="@Url.Action("Index", "TaiKhoan", new { area = "Admin", tuKhoa = tuKhoa, trangThai = trangThai, trang = trang - 1 })">
+                                Trang trước
+                            </a>
+                        </li>
+                    }
+
+                    @if (trang < tongTrang)
+                    {
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="@Url.Action("Index", "TaiKhoan", new { area = "Admin", tuKhoa = tuKhoa, trangThai = trangThai, trang = trang + 1 })">
+                                Trang sau
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    </div>
+</div>

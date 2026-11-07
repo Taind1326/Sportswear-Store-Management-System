@@ -1,7 +1,70 @@
-﻿
+﻿@model Do_an.ViewModels.DangNhapViewModel
+
 @{
-    ViewBag.Title = "DangNhap";
+    ViewBag.Title = "Đăng nhập";
 }
 
-<h2>DangNhap</h2>
+@section Styles {
+    <link href="@Url.Content("~/Content/tai-khoan.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/validation.css")" rel="stylesheet" />
+}
 
+<section class="tk-page">
+    <div class="container">
+        <div class="tk-card">
+            <h1 class="tk-title">Đăng nhập</h1>
+            <p class="tk-sub">Chào mừng bạn quay lại SPORTIX.</p>
+
+            @if (TempData["ThanhCong"] != null)
+            {
+                <div class="alert alert-success" role="alert">@TempData["ThanhCong"]</div>
+            }
+
+            @if (TempData["Loi"] != null)
+            {
+                <div class="alert alert-danger" role="alert">@TempData["Loi"]</div>
+            }
+
+            @using (Html.BeginForm("DangNhap", "TaiKhoan", new { area = "" },
+                FormMethod.Post, new { novalidate = "novalidate" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.ReturnUrl)
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.TenDangNhap, new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.TenDangNhap, new
+                    {
+                        @class = "form-control",
+                        maxlength = "254",
+                        autocomplete = "username",
+                        autofocus = "autofocus"
+                    })
+                    @Html.ValidationMessageFor(m => m.TenDangNhap, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-4">
+                    @Html.LabelFor(m => m.MatKhau, new { @class = "form-label" })
+                    @Html.PasswordFor(m => m.MatKhau, new
+                    {
+                        @class = "form-control",
+                        autocomplete = "current-password"
+                    })
+                    @Html.ValidationMessageFor(m => m.MatKhau, "", new { @class = "text-danger" })
+                </div>
+
+                <button type="submit" class="tk-btn">Đăng nhập</button>
+            }
+
+            <p class="text-center mt-4 mb-0">
+                Chưa có tài khoản?
+                <a class="tk-link"
+                   href="@Url.Action("DangKy", "TaiKhoan", new { area = "", returnUrl = Model.ReturnUrl })">
+                    Đăng ký ngay
+                </a>
+            </p>
+        </div>
+    </div>
+</section>
