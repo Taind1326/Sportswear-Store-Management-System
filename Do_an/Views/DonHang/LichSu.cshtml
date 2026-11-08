@@ -1,70 +1,7 @@
-@model Do_an.ViewModels.DanhSachDonHangViewModel
-@using System.Linq
-@using Do_an.Services
-
+﻿
 @{
-    ViewBag.Title = "Đơn hàng của tôi";
-    var cacTab = new[] { new { Ma = "", Ten = "Tất cả" } }
-        .Concat(TrangThaiDonHang.TatCa.Select(x => new { Ma = x, Ten = TrangThaiDonHang.Ten(x) }));
+    ViewBag.Title = "LichSu";
 }
 
-<div class="container py-4">
-    <h1 class="h3 mb-3">Đơn hàng của tôi</h1>
+<h2>LichSu</h2>
 
-    @if (TempData["ThanhCong"] != null)
-    {
-        <div class="alert alert-success" role="alert">@TempData["ThanhCong"]</div>
-    }
-    @if (TempData["Loi"] != null)
-    {
-        <div class="alert alert-danger" role="alert">@TempData["Loi"]</div>
-    }
-
-    <ul class="nav nav-pills mb-3 flex-wrap gap-1">
-        @foreach (var tab in cacTab)
-        {
-            bool dangChon = (Model.TrangThai ?? "") == tab.Ma;
-            <li class="nav-item">
-                <a class="nav-link @(dangChon ? "active" : "")"
-                   href="@Url.Action("Index", "DonHang", new { area = "", trangThai = tab.Ma })">@tab.Ten</a>
-            </li>
-        }
-    </ul>
-
-    @if (Model.DonHangs.Count == 0)
-    {
-        <p class="text-secondary">Bạn chưa có đơn hàng nào ở mục này.</p>
-    }
-
-    @foreach (var d in Model.DonHangs)
-    {
-        <div class="card mb-3">
-            <div class="card-body d-flex flex-wrap justify-content-between align-items-center gap-2">
-                <div>
-                    <div class="fw-semibold">Đơn #@d.MaDonHang</div>
-                    <div class="text-secondary small">@d.NgayDat.ToString("dd/MM/yyyy HH:mm")</div>
-                </div>
-                <div class="text-end">
-                    <div class="fw-semibold">@((d.TongTien ?? 0).ToString("N0"))đ</div>
-                    <span class="badge @TrangThaiDonHang.LopBadge(d.TrangThai)">@TrangThaiDonHang.Ten(d.TrangThai)</span>
-                </div>
-                <a class="btn btn-outline-primary btn-sm"
-                   href="@Url.Action("ChiTiet", "DonHang", new { area = "", id = d.MaDonHang })">Xem chi tiết</a>
-            </div>
-        </div>
-    }
-
-    @if (Model.TongTrang > 1)
-    {
-        <ul class="pagination">
-            @if (Model.Trang > 1)
-            {
-                <li class="page-item"><a class="page-link" href="@Url.Action("Index", "DonHang", new { area = "", trangThai = Model.TrangThai, trang = Model.Trang - 1 })">Trang trước</a></li>
-            }
-            @if (Model.Trang < Model.TongTrang)
-            {
-                <li class="page-item"><a class="page-link" href="@Url.Action("Index", "DonHang", new { area = "", trangThai = Model.TrangThai, trang = Model.Trang + 1 })">Trang sau</a></li>
-            }
-        </ul>
-    }
-</div>
