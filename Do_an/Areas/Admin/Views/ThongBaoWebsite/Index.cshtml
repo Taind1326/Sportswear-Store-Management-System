@@ -1,0 +1,65 @@
+@model System.Collections.Generic.List<Do_an.Models.ThongBaoWebsite>
+
+@{
+    ViewBag.Title = "Thông báo khuyến mãi";
+}
+
+<div class="product-page-heading">
+    <div>
+        <h1>Thông báo khuyến mãi</h1>
+        <p>Nội dung hiển thị cho khách hàng trên website.</p>
+    </div>
+    <a href="@Url.Action("Them", "ThongBaoWebsite", new { area = "Admin" })" class="btn btn-primary">
+        <i class="bi bi-plus-lg" aria-hidden="true"></i> Tạo thông báo
+    </a>
+</div>
+
+@if (TempData["ThanhCong"] != null)
+{
+    <div class="alert alert-success" role="alert">@TempData["ThanhCong"]</div>
+}
+
+<div class="product-panel">
+    <div class="table-responsive">
+        <table class="table table-hover product-table align-middle">
+            <thead>
+                <tr><th>Tiêu đề</th><th>Ngày tạo</th><th>Trạng thái</th><th class="text-end">Thao tác</th></tr>
+            </thead>
+            <tbody>
+                @if (Model.Count == 0)
+                {
+                    <tr><td colspan="4" class="text-center text-secondary py-4">Chưa có thông báo nào.</td></tr>
+                }
+                @foreach (var t in Model)
+                {
+                    <tr>
+                        <td class="fw-semibold">@t.TieuDe</td>
+                        <td>@t.NgayTao.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            <span class="badge @(t.HienThi ? "bg-success" : "bg-secondary")">@(t.HienThi ? "Đang hiển thị" : "Đang ẩn")</span>
+                        </td>
+                        <td>
+                            <div class="d-flex justify-content-end flex-wrap gap-2">
+                                <a class="btn btn-outline-primary btn-sm"
+                                   href="@Url.Action("Sua", "ThongBaoWebsite", new { area = "Admin", id = t.MaThongBaoWebsite })">Sửa</a>
+                                @using (Html.BeginForm("BatTat", "ThongBaoWebsite", new { area = "Admin" }, FormMethod.Post, new { @class = "m-0" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@t.MaThongBaoWebsite" />
+                                    <button type="submit" class="btn btn-outline-secondary btn-sm">@(t.HienThi ? "Ẩn" : "Hiện")</button>
+                                }
+                                @using (Html.BeginForm("Xoa", "ThongBaoWebsite", new { area = "Admin" }, FormMethod.Post,
+                                    new { @class = "m-0", onsubmit = "return confirm('Xóa thông báo này?');" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@t.MaThongBaoWebsite" />
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">Xóa</button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

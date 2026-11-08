@@ -47,6 +47,9 @@ namespace Do_an
                     TimeZone = TimeZoneInfo.Utc
                 });
 
+            // SignalR: đường dẫn /signalr. Quyền truy cập kiểm tra trong ThongBaoHub (AdminHub).
+            app.MapSignalR();
+
             app.UseHangfireServer(
                 new BackgroundJobServerOptions
                 {

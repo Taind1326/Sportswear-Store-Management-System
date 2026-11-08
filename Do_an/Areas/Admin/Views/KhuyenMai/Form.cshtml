@@ -1,0 +1,106 @@
+@model Do_an.ViewModels.KhuyenMaiFormViewModel
+@using Do_an.Services
+
+@{
+    bool laSua = Model.MaGiamGia > 0;
+    string tieuDe = laSua ? "Sửa mã giảm giá" : "Tạo mã giảm giá";
+    ViewBag.Title = tieuDe;
+}
+
+<div class="product-page-heading">
+    <div>
+        <h1>@tieuDe</h1>
+        @if (laSua)
+        {
+            <p>Đã dùng @Model.SoLuotDaDung lượt. Mã code không đổi được vì đơn hàng cũ đang tham chiếu.</p>
+        }
+    </div>
+    <a href="@Url.Action("Index", "KhuyenMai", new { area = "Admin" })" class="btn btn-outline-secondary">Quay lại</a>
+</div>
+
+@using (Html.BeginForm(laSua ? "Sua" : "Them", "KhuyenMai",
+    new { area = "Admin", id = laSua ? (int?)Model.MaGiamGia : null },
+    FormMethod.Post, new { @class = "product-panel", novalidate = "novalidate" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.MaCode, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.MaCode, new { @class = "form-control text-uppercase", maxlength = "30", @readonly = laSua ? "readonly" : null })
+            @Html.ValidationMessageFor(m => m.MaCode, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-8">
+            @Html.LabelFor(m => m.TenKhuyenMai, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.TenKhuyenMai, new { @class = "form-control", maxlength = "150" })
+            @Html.ValidationMessageFor(m => m.TenKhuyenMai, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.LoaiGiam, new { @class = "form-label" })
+            <select id="LoaiGiam" name="LoaiGiam" class="form-select">
+                <option value="@LoaiGiamGia.PhanTram" selected="@(Model.LoaiGiam == LoaiGiamGia.PhanTram)">Giảm theo %</option>
+                <option value="@LoaiGiamGia.SoTien" selected="@(Model.LoaiGiam == LoaiGiamGia.SoTien)">Giảm tiền cố định (đ)</option>
+            </select>
+            @Html.ValidationMessageFor(m => m.LoaiGiam, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.GiaTriGiam, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.GiaTriGiam, new { @class = "form-control", type = "number", step = "any", min = "0" })
+            @Html.ValidationMessageFor(m => m.GiaTriGiam, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-4" id="khungGiamToiDa">
+            @Html.LabelFor(m => m.GiamToiDa, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.GiamToiDa, new { @class = "form-control", type = "number", step = "any", min = "0", placeholder = "Để trống nếu không giới hạn" })
+            @Html.ValidationMessageFor(m => m.GiamToiDa, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.DonToiThieu, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.DonToiThieu, new { @class = "form-control", type = "number", step = "any", min = "0" })
+            @Html.ValidationMessageFor(m => m.DonToiThieu, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.NgayBatDau, new { @class = "form-label" })
+            <input type="date" id="NgayBatDau" name="NgayBatDau" class="form-control"
+                   value="@(Model.NgayBatDau.HasValue ? Model.NgayBatDau.Value.ToString("yyyy-MM-dd") : "")" />
+            @Html.ValidationMessageFor(m => m.NgayBatDau, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.NgayKetThuc, new { @class = "form-label" })
+            <input type="date" id="NgayKetThuc" name="NgayKetThuc" class="form-control"
+                   value="@(Model.NgayKetThuc.HasValue ? Model.NgayKetThuc.Value.ToString("yyyy-MM-dd") : "")" />
+            @Html.ValidationMessageFor(m => m.NgayKetThuc, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.SoLuotToiDa, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.SoLuotToiDa, new { @class = "form-control", type = "number", min = "1" })
+            @Html.ValidationMessageFor(m => m.SoLuotToiDa, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-8 d-flex align-items-end">
+            <div class="form-check">
+                @Html.CheckBoxFor(m => m.HoatDong, new { @class = "form-check-input" })
+                <label class="form-check-label" for="HoatDong">Bật mã này cho khách sử dụng</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 d-flex gap-2">
+        <button type="submit" class="btn btn-primary">@(laSua ? "Lưu thay đổi" : "Tạo mã")</button>
+        <a href="@Url.Action("Index", "KhuyenMai", new { area = "Admin" })" class="btn btn-outline-secondary">Hủy</a>
+    </div>
+}
+
+@section scripts {
+    <script>
+        (function () {
+            var loai = document.getElementById("LoaiGiam");
+            var khung = document.getElementById("khungGiamToiDa");
+            function capNhat() { khung.hidden = loai.value !== "@LoaiGiamGia.PhanTram"; }
+            loai.addEventListener("change", capNhat);
+            capNhat();
+        })();
+    </script>
+}

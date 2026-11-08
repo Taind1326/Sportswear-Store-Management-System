@@ -1,0 +1,143 @@
+@model Do_an.ViewModels.ChiTietDonHangViewModel
+@using System.Linq
+@using Do_an.Services
+
+@{
+    var d = Model.Don;
+    ViewBag.Title = "Đơn hàng #" + d.MaDonHang;
+    string tiepTheo = TrangThaiDonHang.TiepTheo(d.TrangThai);
+    string nhanNut = d.TrangThai == TrangThaiDonHang.ChoXacNhan ? "Xác nhận đơn"
+                   : d.TrangThai == TrangThaiDonHang.DaXacNhan ? "Chuyển sang đang giao"
+                   : d.TrangThai == TrangThaiDonHang.DangGiao ? "Xác nhận đã giao" : "";
+    var codCho = Model.ThanhToans.FirstOrDefault(x =>
+        x.PhuongThuc == TrangThaiThanhToan.PhuongThucCod &&
+        x.TrangThai == TrangThaiThanhToan.ChuaThanhToan);
+}
+
+<div class="product-page-heading">
+    <div>
+        <h1>Đơn hàng #@d.MaDonHang</h1>
+        <p>Đặt lúc @d.NgayDat.ToString("dd/MM/yyyy HH:mm")</p>
+    </div>
+    <a href="@Url.Action("Index", "DonHang", new { area = "Admin" })" class="btn btn-outline-secondary">Quay lại</a>
+</div>
+
+@if (TempData["ThanhCong"] != null)
+{
+    <div class="alert alert-success" role="alert">@TempData["ThanhCong"]</div>
+}
+@if (TempData["Loi"] != null)
+{
+    <div class="alert alert-danger" role="alert">@TempData["Loi"]</div>
+}
+
+<div class="row g-3">
+    <div class="col-12 col-lg-8">
+        <div class="product-panel mb-3">
+            <h2 class="h5 mb-3">Sản phẩm</h2>
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr><th>Sản phẩm</th><th>Size / Màu</th><th class="text-end">SL</th><th class="text-end">Đơn giá</th><th class="text-end">Thành tiền</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var x in Model.Dong)
+                        {
+                            <tr>
+                                <td>@x.TenSanPham<br /><small class="text-secondary">@x.SKU</small></td>
+                                <td>@x.KichThuoc / @x.MauSac</td>
+                                <td class="text-end">@x.SoLuong</td>
+                                <td class="text-end">@x.DonGia.ToString("N0")đ</td>
+                                <td class="text-end">@((x.ThanhTien ?? x.DonGia * x.SoLuong).ToString("N0"))đ</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <dl class="row mb-0">
+                <dt class="col-6">Tiền hàng</dt><dd class="col-6 text-end">@d.TienHang.ToString("N0")đ</dd>
+                <dt class="col-6">Giảm giá @(string.IsNullOrEmpty(d.MaCodeDaDung) ? "" : "(" + d.MaCodeDaDung + ")")</dt><dd class="col-6 text-end">-@d.TienGiam.ToString("N0")đ</dd>
+                <dt class="col-6">Phí vận chuyển</dt><dd class="col-6 text-end">@d.PhiVanChuyen.ToString("N0")đ</dd>
+                <dt class="col-6">Tổng thanh toán</dt><dd class="col-6 text-end fw-bold">@((d.TongTien ?? 0).ToString("N0"))đ</dd>
+            </dl>
+        </div>
+
+        <div class="product-panel">
+            <h2 class="h5 mb-3">Thanh toán</h2>
+            @if (Model.ThanhToans.Count == 0)
+            {
+                <p class="text-secondary mb-0">Chưa có bản ghi thanh toán.</p>
+            }
+            @foreach (var t in Model.ThanhToans)
+            {
+                <p class="mb-1">
+                    @t.PhuongThuc · @t.SoTien.ToString("N0")đ ·
+                    <span class="badge bg-light text-dark">@TrangThaiThanhToan.Ten(t.TrangThai)</span>
+                    @if (t.NgayHoanTien.HasValue)
+                    {
+                        <small class="text-secondary">hoàn lúc @t.NgayHoanTien.Value.ToString("dd/MM/yyyy HH:mm")</small>
+                    }
+                </p>
+            }
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+        <div class="product-panel mb-3">
+            <h2 class="h5 mb-3">Trạng thái</h2>
+            <p>
+                <span class="badge @TrangThaiDonHang.LopBadge(d.TrangThai) fs-6">@TrangThaiDonHang.Ten(d.TrangThai)</span>
+            </p>
+
+            @if (d.TrangThai == TrangThaiDonHang.DaHuy)
+            {
+                <p class="mb-0"><strong>Lý do hủy:</strong> @d.LyDoHuy</p>
+            }
+
+            @if (tiepTheo != null)
+            {
+                using (Html.BeginForm("CapNhatTrangThai", "DonHang", new { area = "Admin" }, FormMethod.Post, new { @class = "mb-2" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@d.MaDonHang" />
+                    <input type="hidden" name="trangThaiHienTai" value="@d.TrangThai" />
+                    <button type="submit" class="btn btn-primary w-100">@nhanNut</button>
+                }
+            }
+
+            @if (codCho != null && d.TrangThai == TrangThaiDonHang.DaGiao)
+            {
+                using (Html.BeginForm("XacNhanThuTien", "DonHang", new { area = "Admin" }, FormMethod.Post, new { @class = "mb-2" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@d.MaDonHang" />
+                    <button type="submit" class="btn btn-success w-100">Xác nhận đã thu tiền COD</button>
+                }
+            }
+
+            @if (TrangThaiDonHang.ChoPhepHuy(d.TrangThai))
+            {
+                using (Html.BeginForm("Huy", "DonHang", new { area = "Admin" }, FormMethod.Post,
+                    new { onsubmit = "return confirm('Hủy đơn này? Tồn kho và lượt dùng mã sẽ được hoàn lại.');" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@d.MaDonHang" />
+                    <label for="lyDo" class="form-label mt-2">Lý do hủy</label>
+                    <textarea id="lyDo" name="lyDo" class="form-control mb-2" rows="3" maxlength="500" required></textarea>
+                    <button type="submit" class="btn btn-outline-danger w-100">Hủy đơn</button>
+                }
+            }
+        </div>
+
+        <div class="product-panel">
+            <h2 class="h5 mb-3">Giao hàng</h2>
+            <p class="mb-1 fw-semibold">@d.HoTenNguoiNhan</p>
+            <p class="mb-1">@d.SoDienThoai</p>
+            <p class="mb-1">@d.DiaChiCuThe, @d.PhuongXa, @d.TinhThanh</p>
+            @if (!string.IsNullOrWhiteSpace(d.GhiChu))
+            {
+                <p class="mb-0 text-secondary">Ghi chú: @d.GhiChu</p>
+            }
+        </div>
+    </div>
+</div>

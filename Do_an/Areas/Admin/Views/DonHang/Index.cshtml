@@ -1,0 +1,119 @@
+@model Do_an.ViewModels.DanhSachDonHangViewModel
+@using Do_an.Services
+
+@{
+    ViewBag.Title = "Quản lý đơn hàng";
+}
+
+<div class="product-page-heading">
+    <div>
+        <h1>Quản lý đơn hàng</h1>
+        <p>Theo dõi, xác nhận và cập nhật trạng thái giao hàng.</p>
+    </div>
+</div>
+
+@if (TempData["ThanhCong"] != null)
+{
+    <div class="alert alert-success" role="alert">@TempData["ThanhCong"]</div>
+}
+@if (TempData["Loi"] != null)
+{
+    <div class="alert alert-danger" role="alert">@TempData["Loi"]</div>
+}
+
+<div class="product-panel">
+    @using (Html.BeginForm("Index", "DonHang", new { area = "Admin" }, FormMethod.Get,
+        new { @class = "row g-2 align-items-end mb-4" }))
+    {
+        <div class="col-12 col-md-4">
+            <label for="tuKhoa" class="form-label">Mã đơn</label>
+            <input id="tuKhoa" name="tuKhoa" type="search" value="@Model.TuKhoa"
+                   maxlength="15" class="form-control" placeholder="Ví dụ: 1024" />
+        </div>
+
+        <div class="col-12 col-md-4">
+            <label for="trangThai" class="form-label">Trạng thái</label>
+            <select id="trangThai" name="trangThai" class="form-select">
+                <option value="">Tất cả</option>
+                @foreach (var tt in TrangThaiDonHang.TatCa)
+                {
+                    <option value="@tt" selected="@(Model.TrangThai == tt)">@TrangThaiDonHang.Ten(tt)</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-12 col-md-4 d-flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            <a href="@Url.Action("Index", "DonHang", new { area = "Admin" })"
+               class="btn btn-outline-secondary">Đặt lại</a>
+        </div>
+    }
+
+    <div class="table-responsive">
+        <table class="table table-hover product-table align-middle">
+            <thead>
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Ngày đặt</th>
+                    <th>Người nhận</th>
+                    <th class="text-end">Tổng tiền</th>
+                    <th>Trạng thái</th>
+                    <th class="text-end">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.DonHangs.Count == 0)
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-secondary py-4">
+                            Không có đơn hàng phù hợp.
+                        </td>
+                    </tr>
+                }
+
+                @foreach (var d in Model.DonHangs)
+                {
+                    <tr>
+                        <td class="fw-semibold">#@d.MaDonHang</td>
+                        <td>@d.NgayDat.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@d.HoTenNguoiNhan<br /><small class="text-secondary">@d.SoDienThoai</small></td>
+                        <td class="text-end">@((d.TongTien ?? 0).ToString("N0"))đ</td>
+                        <td>
+                            <span class="badge @TrangThaiDonHang.LopBadge(d.TrangThai)">
+                                @TrangThaiDonHang.Ten(d.TrangThai)
+                            </span>
+                        </td>
+                        <td class="text-end">
+                            <a class="btn btn-outline-primary btn-sm"
+                               href="@Url.Action("ChiTiet", "DonHang", new { area = "Admin", id = d.MaDonHang })">
+                                Chi tiết
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-3">
+        <span class="text-secondary">@Model.TongSo đơn · Trang @Model.Trang / @Model.TongTrang</span>
+
+        @if (Model.TongTrang > 1)
+        {
+            <ul class="pagination pagination-sm mb-0">
+                @if (Model.Trang > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", "DonHang", new { area = "Admin", tuKhoa = Model.TuKhoa, trangThai = Model.TrangThai, trang = Model.Trang - 1 })">Trang trước</a>
+                    </li>
+                }
+                @if (Model.Trang < Model.TongTrang)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index", "DonHang", new { area = "Admin", tuKhoa = Model.TuKhoa, trangThai = Model.TrangThai, trang = Model.Trang + 1 })">Trang sau</a>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>

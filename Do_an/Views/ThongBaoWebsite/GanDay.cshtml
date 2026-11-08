@@ -1,0 +1,14 @@
+@model System.Collections.Generic.List<Do_an.Models.ThongBaoWebsite>
+
+@if (Model.Count > 0)
+{
+    <section class="container my-3" aria-label="Thông báo khuyến mãi">
+        @foreach (var t in Model)
+        {
+            <div class="alert alert-info mb-2" role="status">
+                <strong>@t.TieuDe</strong> — @t.NoiDung
+            </div>
+        }
+        <a href="@Url.Action("Index", "ThongBaoWebsite", new { area = "" })">Xem tất cả thông báo</a>
+    </section>
+}
