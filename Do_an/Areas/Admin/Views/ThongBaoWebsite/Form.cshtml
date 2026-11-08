@@ -1,0 +1,35 @@
+@model Do_an.ViewModels.ThongBaoWebsiteFormViewModel
+
+@{
+    bool laSua = Model.MaThongBaoWebsite > 0;
+    ViewBag.Title = laSua ? "Sửa thông báo" : "Tạo thông báo";
+}
+
+<div class="product-page-heading">
+    <div><h1>@ViewBag.Title</h1></div>
+    <a href="@Url.Action("Index", "ThongBaoWebsite", new { area = "Admin" })" class="btn btn-outline-secondary">Quay lại</a>
+</div>
+
+@using (Html.BeginForm(laSua ? "Sua" : "Them", "ThongBaoWebsite",
+    new { area = "Admin", id = laSua ? (int?)Model.MaThongBaoWebsite : null },
+    FormMethod.Post, new { @class = "product-panel", novalidate = "novalidate" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.TieuDe, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.TieuDe, new { @class = "form-control", maxlength = "200" })
+        @Html.ValidationMessageFor(m => m.TieuDe, "", new { @class = "text-danger" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.NoiDung, new { @class = "form-label" })
+        @Html.TextAreaFor(m => m.NoiDung, 6, 60, new { @class = "form-control", maxlength = "2000" })
+        @Html.ValidationMessageFor(m => m.NoiDung, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-check mb-3">
+        @Html.CheckBoxFor(m => m.HienThi, new { @class = "form-check-input" })
+        <label class="form-check-label" for="HienThi">Hiển thị cho khách hàng</label>
+    </div>
+    <button type="submit" class="btn btn-primary">@(laSua ? "Lưu thay đổi" : "Tạo thông báo")</button>
+}

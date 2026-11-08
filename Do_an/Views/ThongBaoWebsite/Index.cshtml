@@ -1,0 +1,25 @@
+@model System.Collections.Generic.List<Do_an.Models.ThongBaoWebsite>
+
+@{
+    ViewBag.Title = "Thông báo";
+}
+
+<div class="container py-4">
+    <h1 class="h3 mb-4">Thông báo từ SPORTIX</h1>
+
+    @if (Model.Count == 0)
+    {
+        <p class="text-secondary">Hiện chưa có thông báo nào.</p>
+    }
+
+    @foreach (var t in Model)
+    {
+        <div class="card mb-3">
+            <div class="card-body">
+                <h2 class="h5">@t.TieuDe</h2>
+                <p class="text-secondary small mb-2">@t.NgayTao.ToString("dd/MM/yyyy")</p>
+                <p class="mb-0" style="white-space: pre-line;">@t.NoiDung</p>
+            </div>
+        </div>
+    }
+</div>
