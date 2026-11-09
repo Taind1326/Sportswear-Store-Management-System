@@ -1,14 +1,56 @@
 @model System.Collections.Generic.List<Do_an.Models.ThongBaoWebsite>
+@using System.Linq
 
-@if (Model.Count > 0)
+@{
+    var thongBao = Model.FirstOrDefault();
+}
+
+@if (thongBao != null)
 {
-    <section class="container my-3" aria-label="Thông báo khuyến mãi">
-        @foreach (var t in Model)
-        {
-            <div class="alert alert-info mb-2" role="status">
-                <strong>@t.TieuDe</strong> — @t.NoiDung
+    string khoaThongBao =
+        thongBao.MaThongBaoWebsite.ToString()
+        + "-"
+        + (thongBao.NgayCapNhat ?? thongBao.NgayTao)
+            .Ticks.ToString();
+
+    <div class="modal fade sportix-promotion"
+         id="sportixPromotion"
+         tabindex="-1"
+         aria-labelledby="promotionTitle"
+         aria-describedby="promotionContent"
+         aria-hidden="true"
+         data-notice-key="@khoaThongBao">
+
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content promotion-card">
+                <button type="button"
+                        class="promotion-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Đóng thông báo">
+                    <i class="bi bi-x-lg" aria-hidden="true"></i>
+                </button>
+
+                <div class="modal-body promotion-body">
+                    <span class="promotion-tag">
+                        ƯU ĐÃI SPORTIX
+                    </span>
+
+                    <h2 id="promotionTitle"
+                        class="promotion-title">
+                        @thongBao.TieuDe
+                    </h2>
+
+                    <p id="promotionContent"
+                       class="promotion-content">@thongBao.NoiDung</p>
+
+                    <a href="@Url.Action("Index", "ThongBaoWebsite", new { area = "" })"
+                       class="promotion-button">
+                        Xem ưu đãi ngay
+                        <i class="bi bi-arrow-right"
+                           aria-hidden="true"></i>
+                    </a>
+                </div>
             </div>
-        }
-        <a href="@Url.Action("Index", "ThongBaoWebsite", new { area = "" })">Xem tất cả thông báo</a>
-    </section>
+        </div>
+    </div>
 }

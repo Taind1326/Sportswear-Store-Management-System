@@ -1,8 +1,30 @@
-﻿<!DOCTYPE html>
+﻿@using System
+
+@{
+    string controller = Convert.ToString(
+        ViewContext.RouteData.Values["controller"]);
+
+    string action = Convert.ToString(
+        ViewContext.RouteData.Values["action"]);
+
+    bool trangChu =
+        string.Equals(
+            controller,
+            "Home",
+            StringComparison.OrdinalIgnoreCase)
+        &&
+        string.Equals(
+            action,
+            "Index",
+            StringComparison.OrdinalIgnoreCase);
+}
+
+<!DOCTYPE html>
 <html lang="vi" class="sportix-public-page">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1" />
 
     <title>@ViewBag.Title - SPORTIX</title>
 
@@ -21,8 +43,15 @@
     <link href="@Url.Content("~/Content/splash.css")"
           rel="stylesheet" />
 
+    @if (trangChu)
+    {
+        <link href="@Url.Content("~/Content/khuyen-mai-popup.css")"
+              rel="stylesheet" />
+    }
+
     @RenderSection("Styles", required: false)
 </head>
+
 <body class="sportix-public">
     @Html.Partial("_Splash")
     @Html.Partial("_Header")
@@ -34,12 +63,25 @@
     @Html.Partial("_Footer")
     @Html.Partial("_ChatAI")
 
+    @if (trangChu)
+    {
+        @Html.Action(
+            "GanDay",
+            "ThongBaoWebsite",
+            new { area = "" })
+    }
+
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/jqueryval")
 
     <script src="@Url.Content("~/Scripts/splash.js")"></script>
     <script src="@Url.Content("~/Scripts/reveal.js")"></script>
+
+    @if (trangChu)
+    {
+        <script src="@Url.Content("~/Scripts/khuyen-mai-popup.js")"></script>
+    }
 
     @RenderSection("Scripts", required: false)
 </body>
