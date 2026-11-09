@@ -1,106 +1,350 @@
 @model Do_an.ViewModels.KhuyenMaiFormViewModel
+@using System
+@using System.Web.Mvc
 @using Do_an.Services
 
 @{
     bool laSua = Model.MaGiamGia > 0;
-    string tieuDe = laSua ? "Sửa mã giảm giá" : "Tạo mã giảm giá";
+
+    string tieuDe = laSua
+        ? "Sửa mã giảm giá"
+        : "Thêm mã giảm giá";
+
     ViewBag.Title = tieuDe;
+
+    var danhSachLoaiGiam = new[]
+    {
+        new SelectListItem
+        {
+            Value = LoaiGiamGia.PhanTram,
+            Text = "Giảm theo phần trăm"
+        },
+        new SelectListItem
+        {
+            Value = LoaiGiamGia.SoTien,
+            Text = "Giảm số tiền cố định"
+        }
+    };
 }
 
 <div class="product-page-heading">
     <div>
         <h1>@tieuDe</h1>
+
         @if (laSua)
         {
-            <p>Đã dùng @Model.SoLuotDaDung lượt. Mã code không đổi được vì đơn hàng cũ đang tham chiếu.</p>
+            <p>
+                Mã đã được sử dụng @Model.SoLuotDaDung lượt.
+                Mã giảm giá đã tạo không thể thay đổi.
+            </p>
+        }
+        else
+        {
+            <p>Thiết lập mức giảm, thời gian và giới hạn sử dụng.</p>
         }
     </div>
-    <a href="@Url.Action("Index", "KhuyenMai", new { area = "Admin" })" class="btn btn-outline-secondary">Quay lại</a>
+
+    <a href="@Url.Action("Index", "KhuyenMai", new { area = "Admin" })"
+       class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left" aria-hidden="true"></i>
+        Quay lại
+    </a>
 </div>
 
-@using (Html.BeginForm(laSua ? "Sua" : "Them", "KhuyenMai",
-    new { area = "Admin", id = laSua ? (int?)Model.MaGiamGia : null },
-    FormMethod.Post, new { @class = "product-panel", novalidate = "novalidate" }))
+@using (Html.BeginForm(
+    laSua ? "Sua" : "Them",
+    "KhuyenMai",
+    new
+    {
+        area = "Admin",
+        id = laSua ? (int?)Model.MaGiamGia : null
+    },
+    FormMethod.Post,
+    new
+    {
+        @class = "product-panel",
+        novalidate = "novalidate"
+    }))
 {
     @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+
+    @Html.ValidationSummary(
+        true,
+        "",
+        new { @class = "text-danger mb-3", role = "alert" })
+
+    <h2 class="h6 fw-bold mb-3">Thông tin mã giảm giá</h2>
 
     <div class="row g-3">
-        <div class="col-md-4">
-            @Html.LabelFor(m => m.MaCode, new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.MaCode, new { @class = "form-control text-uppercase", maxlength = "30", @readonly = laSua ? "readonly" : null })
-            @Html.ValidationMessageFor(m => m.MaCode, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-8">
-            @Html.LabelFor(m => m.TenKhuyenMai, new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.TenKhuyenMai, new { @class = "form-control", maxlength = "150" })
-            @Html.ValidationMessageFor(m => m.TenKhuyenMai, "", new { @class = "text-danger" })
+        <div class="col-12 col-md-4">
+            @Html.LabelFor(
+                m => m.MaCode,
+                new { @class = "form-label" })
+
+            @if (laSua)
+            {
+                @Html.TextBoxFor(
+                    m => m.MaCode,
+                    new
+                    {
+                        @class = "form-control",
+                        @readonly = "readonly",
+                        maxlength = "30"
+                    })
+            }
+            else
+            {
+                @Html.TextBoxFor(
+                    m => m.MaCode,
+                    new
+                    {
+                        @class = "form-control text-uppercase",
+                        maxlength = "30",
+                        autocomplete = "off",
+                        placeholder = "Ví dụ: SPORTIX20"
+                    })
+            }
+
+            @Html.ValidationMessageFor(
+                m => m.MaCode,
+                "",
+                new { @class = "text-danger" })
         </div>
 
-        <div class="col-md-4">
-            @Html.LabelFor(m => m.LoaiGiam, new { @class = "form-label" })
-            <select id="LoaiGiam" name="LoaiGiam" class="form-select">
-                <option value="@LoaiGiamGia.PhanTram" selected="@(Model.LoaiGiam == LoaiGiamGia.PhanTram)">Giảm theo %</option>
-                <option value="@LoaiGiamGia.SoTien" selected="@(Model.LoaiGiam == LoaiGiamGia.SoTien)">Giảm tiền cố định (đ)</option>
-            </select>
-            @Html.ValidationMessageFor(m => m.LoaiGiam, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-4">
-            @Html.LabelFor(m => m.GiaTriGiam, new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.GiaTriGiam, new { @class = "form-control", type = "number", step = "any", min = "0" })
-            @Html.ValidationMessageFor(m => m.GiaTriGiam, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-4" id="khungGiamToiDa">
-            @Html.LabelFor(m => m.GiamToiDa, new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.GiamToiDa, new { @class = "form-control", type = "number", step = "any", min = "0", placeholder = "Để trống nếu không giới hạn" })
-            @Html.ValidationMessageFor(m => m.GiamToiDa, "", new { @class = "text-danger" })
-        </div>
+        <div class="col-12 col-md-8">
+            @Html.LabelFor(
+                m => m.TenKhuyenMai,
+                new { @class = "form-label" })
 
-        <div class="col-md-4">
-            @Html.LabelFor(m => m.DonToiThieu, new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.DonToiThieu, new { @class = "form-control", type = "number", step = "any", min = "0" })
-            @Html.ValidationMessageFor(m => m.DonToiThieu, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-4">
-            @Html.LabelFor(m => m.NgayBatDau, new { @class = "form-label" })
-            <input type="date" id="NgayBatDau" name="NgayBatDau" class="form-control"
-                   value="@(Model.NgayBatDau.HasValue ? Model.NgayBatDau.Value.ToString("yyyy-MM-dd") : "")" />
-            @Html.ValidationMessageFor(m => m.NgayBatDau, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-4">
-            @Html.LabelFor(m => m.NgayKetThuc, new { @class = "form-label" })
-            <input type="date" id="NgayKetThuc" name="NgayKetThuc" class="form-control"
-                   value="@(Model.NgayKetThuc.HasValue ? Model.NgayKetThuc.Value.ToString("yyyy-MM-dd") : "")" />
-            @Html.ValidationMessageFor(m => m.NgayKetThuc, "", new { @class = "text-danger" })
-        </div>
+            @Html.TextBoxFor(
+                m => m.TenKhuyenMai,
+                new
+                {
+                    @class = "form-control",
+                    maxlength = "150",
+                    placeholder = "Nhập tên chương trình khuyến mãi"
+                })
 
-        <div class="col-md-4">
-            @Html.LabelFor(m => m.SoLuotToiDa, new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.SoLuotToiDa, new { @class = "form-control", type = "number", min = "1" })
-            @Html.ValidationMessageFor(m => m.SoLuotToiDa, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-8 d-flex align-items-end">
-            <div class="form-check">
-                @Html.CheckBoxFor(m => m.HoatDong, new { @class = "form-check-input" })
-                <label class="form-check-label" for="HoatDong">Bật mã này cho khách sử dụng</label>
-            </div>
+            @Html.ValidationMessageFor(
+                m => m.TenKhuyenMai,
+                "",
+                new { @class = "text-danger" })
         </div>
     </div>
 
-    <div class="mt-4 d-flex gap-2">
-        <button type="submit" class="btn btn-primary">@(laSua ? "Lưu thay đổi" : "Tạo mã")</button>
-        <a href="@Url.Action("Index", "KhuyenMai", new { area = "Admin" })" class="btn btn-outline-secondary">Hủy</a>
+    <h2 class="h6 fw-bold mt-4 mb-3">Mức giảm và điều kiện</h2>
+
+    <div class="row g-3">
+        <div class="col-12 col-md-4">
+            @Html.LabelFor(
+                m => m.LoaiGiam,
+                new { @class = "form-label" })
+
+            @Html.DropDownListFor(
+                m => m.LoaiGiam,
+                danhSachLoaiGiam,
+                new { @class = "form-select" })
+
+            @Html.ValidationMessageFor(
+                m => m.LoaiGiam,
+                "",
+                new { @class = "text-danger" })
+        </div>
+
+        <div class="col-12 col-md-4">
+            <label for="GiaTriGiam" class="form-label">
+                Giá trị giảm
+                <span id="donViGiam"></span>
+            </label>
+
+            @Html.TextBoxFor(
+                m => m.GiaTriGiam,
+                new
+                {
+                    @class = "form-control",
+                    type = "number",
+                    step = "0.01",
+                    min = "0.01"
+                })
+
+            @Html.ValidationMessageFor(
+                m => m.GiaTriGiam,
+                "",
+                new { @class = "text-danger" })
+        </div>
+
+        <div class="col-12 col-md-4" id="khungGiamToiDa">
+            <label for="GiamToiDa" class="form-label">
+                Giảm tối đa (đ)
+            </label>
+
+            @Html.TextBoxFor(
+                m => m.GiamToiDa,
+                new
+                {
+                    @class = "form-control",
+                    type = "number",
+                    step = "0.01",
+                    min = "0.01",
+                    placeholder = "Để trống nếu không giới hạn"
+                })
+
+            @Html.ValidationMessageFor(
+                m => m.GiamToiDa,
+                "",
+                new { @class = "text-danger" })
+        </div>
+
+        <div class="col-12 col-md-4">
+            <label for="DonToiThieu" class="form-label">
+                Giá trị đơn tối thiểu (đ)
+            </label>
+
+            @Html.TextBoxFor(
+                m => m.DonToiThieu,
+                new
+                {
+                    @class = "form-control",
+                    type = "number",
+                    step = "0.01",
+                    min = "0"
+                })
+
+            @Html.ValidationMessageFor(
+                m => m.DonToiThieu,
+                "",
+                new { @class = "text-danger" })
+        </div>
+
+        <div class="col-12 col-md-4">
+            @Html.LabelFor(
+                m => m.SoLuotToiDa,
+                new { @class = "form-label" })
+
+            @Html.TextBoxFor(
+                m => m.SoLuotToiDa,
+                new
+                {
+                    @class = "form-control",
+                    type = "number",
+                    step = "1",
+                    min = "1",
+                    max = "1000000"
+                })
+
+            @Html.ValidationMessageFor(
+                m => m.SoLuotToiDa,
+                "",
+                new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <h2 class="h6 fw-bold mt-4 mb-3">Thời gian áp dụng</h2>
+
+    <div class="row g-3">
+        <div class="col-12 col-md-6">
+            @Html.LabelFor(
+                m => m.NgayBatDau,
+                new { @class = "form-label" })
+
+            @Html.TextBoxFor(
+                m => m.NgayBatDau,
+                "{0:yyyy-MM-dd}",
+                new
+                {
+                    @class = "form-control",
+                    type = "date"
+                })
+
+            @Html.ValidationMessageFor(
+                m => m.NgayBatDau,
+                "",
+                new { @class = "text-danger" })
+        </div>
+
+        <div class="col-12 col-md-6">
+            @Html.LabelFor(
+                m => m.NgayKetThuc,
+                new { @class = "form-label" })
+
+            @Html.TextBoxFor(
+                m => m.NgayKetThuc,
+                "{0:yyyy-MM-dd}",
+                new
+                {
+                    @class = "form-control",
+                    type = "date"
+                })
+
+            @Html.ValidationMessageFor(
+                m => m.NgayKetThuc,
+                "",
+                new { @class = "text-danger" })
+        </div>
+
+        <div class="col-12">
+            <div class="form-check mt-2">
+                @Html.CheckBoxFor(
+                    m => m.HoatDong,
+                    new { @class = "form-check-input" })
+
+                <label class="form-check-label" for="HoatDong">
+                    Bật mã giảm giá
+                </label>
+            </div>
+
+            <p class="small text-secondary mt-2 mb-0">
+                Mã được áp dụng khi đang bật, trong thời hạn
+                và còn lượt sử dụng.
+            </p>
+        </div>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mt-4 pt-3 border-top">
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-check-lg" aria-hidden="true"></i>
+            @(laSua ? "Lưu thay đổi" : "Thêm mã giảm giá")
+        </button>
+
+        <a href="@Url.Action("Index", "KhuyenMai", new { area = "Admin" })"
+           class="btn btn-outline-secondary">
+            Hủy
+        </a>
     </div>
 }
 
 @section scripts {
     <script>
         (function () {
+            "use strict";
+
             var loai = document.getElementById("LoaiGiam");
+            var giaTri = document.getElementById("GiaTriGiam");
             var khung = document.getElementById("khungGiamToiDa");
-            function capNhat() { khung.hidden = loai.value !== "@LoaiGiamGia.PhanTram"; }
-            loai.addEventListener("change", capNhat);
-            capNhat();
+            var giamToiDa = document.getElementById("GiamToiDa");
+            var donVi = document.getElementById("donViGiam");
+
+            if (!loai || !giaTri || !khung ||
+                !giamToiDa || !donVi) {
+                return;
+            }
+
+            function capNhatLoaiGiam() {
+                var theoPhanTram =
+                    loai.value === "@LoaiGiamGia.PhanTram";
+
+                khung.hidden = !theoPhanTram;
+                giamToiDa.disabled = !theoPhanTram;
+
+                donVi.textContent = theoPhanTram ? "(%)" : "(đ)";
+
+                giaTri.max = theoPhanTram
+                    ? "100"
+                    : "1000000000";
+            }
+
+            loai.addEventListener("change", capNhatLoaiGiam);
+            capNhatLoaiGiam();
         })();
     </script>
 }

@@ -1,113 +1,269 @@
 @model System.Collections.Generic.List<Do_an.Models.MaGiamGia>
+@using System
+@using System.Globalization
 @using Do_an.Services
 
 @{
     ViewBag.Title = "Mã giảm giá";
-    string tuKhoa = ViewBag.TuKhoa;
+
+    var vi = CultureInfo.GetCultureInfo("vi-VN");
+
+    string tuKhoa = Convert.ToString(ViewBag.TuKhoa);
     int trang = ViewBag.Trang;
     int tongTrang = ViewBag.TongTrang;
     int tongSo = ViewBag.TongSo;
+
+    int batDau = Math.Max(
+        1,
+        Math.Min(trang - 2, tongTrang - 4));
+
+    int ketThuc = Math.Min(tongTrang, batDau + 4);
+
     DateTime bayGio = DateTime.Now;
+}
+
+@helper NutTrang(
+    int dich,
+    string nhan,
+    string moTa,
+    bool voHieuHoa,
+    string tuKhoa)
+{
+    <li class="page-item @(voHieuHoa ? "disabled" : "")">
+        @if (voHieuHoa)
+        {
+            <span class="page-link"
+                  aria-disabled="true"
+                  aria-label="@moTa">
+                @nhan
+            </span>
+        }
+        else
+        {
+            <a class="page-link"
+               aria-label="@moTa"
+               href="@Url.Action("Index", "KhuyenMai", new
+                    {
+                        area = "Admin",
+                        tuKhoa = tuKhoa,
+                        trang = dich
+                    })">
+                @nhan
+            </a>
+        }
+    </li>
 }
 
 <div class="product-page-heading">
     <div>
         <h1>Mã giảm giá</h1>
-        <p>Tạo và quản lý các chương trình khuyến mãi.</p>
+        <p>Theo dõi mức giảm, thời gian áp dụng và lượt sử dụng.</p>
     </div>
-    <a href="@Url.Action("Them", "KhuyenMai", new { area = "Admin" })" class="btn btn-primary">
-        <i class="bi bi-plus-lg" aria-hidden="true"></i> Tạo mã mới
+
+    <a href="@Url.Action("Them", "KhuyenMai", new { area = "Admin" })"
+       class="btn btn-primary px-3 py-2">
+        <i class="bi bi-plus-lg" aria-hidden="true"></i>
+        Thêm mã giảm giá
     </a>
 </div>
 
 @if (TempData["ThanhCong"] != null)
 {
-    <div class="alert alert-success" role="alert">@TempData["ThanhCong"]</div>
+    <div class="alert alert-success" role="alert">
+        @TempData["ThanhCong"]
+    </div>
 }
+
 @if (TempData["Loi"] != null)
 {
-    <div class="alert alert-danger" role="alert">@TempData["Loi"]</div>
+    <div class="alert alert-danger" role="alert">
+        @TempData["Loi"]
+    </div>
 }
 
 <div class="product-panel">
-    @using (Html.BeginForm("Index", "KhuyenMai", new { area = "Admin" }, FormMethod.Get,
-        new { @class = "row g-2 align-items-end mb-4" }))
+    @using (Html.BeginForm(
+        "Index",
+        "KhuyenMai",
+        new { area = "Admin" },
+        FormMethod.Get,
+        new { @class = "product-search" }))
     {
-        <div class="col-12 col-md-7">
-            <label for="tuKhoa" class="form-label">Mã hoặc tên khuyến mãi</label>
-            <input id="tuKhoa" name="tuKhoa" type="search" value="@tuKhoa" maxlength="50"
-                   class="form-control" placeholder="Ví dụ: SPORTIX20" />
+        <div class="product-search-box">
+            <label for="tuKhoa" class="visually-hidden">
+                Tìm theo mã hoặc tên khuyến mãi
+            </label>
+
+            <i class="bi bi-search" aria-hidden="true"></i>
+
+            <input type="search"
+                   id="tuKhoa"
+                   name="tuKhoa"
+                   value="@tuKhoa"
+                   maxlength="200"
+                   class="form-control"
+                   placeholder="Tìm theo mã hoặc tên khuyến mãi..." />
         </div>
-        <div class="col-12 col-md-5 d-flex flex-wrap gap-2">
-            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-            <a href="@Url.Action("Index", "KhuyenMai", new { area = "Admin" })" class="btn btn-outline-secondary">Đặt lại</a>
-        </div>
+
+        <button type="submit" class="btn btn-primary px-3">
+            Tìm kiếm
+        </button>
+
+        <a href="@Url.Action("Index", "KhuyenMai", new { area = "Admin" })"
+           class="btn btn-outline-secondary px-3">
+            <i class="bi bi-arrow-clockwise" aria-hidden="true"></i>
+            Đặt lại
+        </a>
     }
 
     <div class="table-responsive">
         <table class="table table-hover product-table align-middle">
             <thead>
                 <tr>
-                    <th>Mã</th>
-                    <th>Mức giảm</th>
-                    <th>Đơn tối thiểu</th>
-                    <th>Thời hạn</th>
-                    <th>Lượt dùng</th>
-                    <th>Trạng thái</th>
-                    <th class="text-end">Thao tác</th>
+                    <th scope="col">Mã giảm giá</th>
+                    <th scope="col">Mức giảm</th>
+                    <th scope="col">Đơn tối thiểu</th>
+                    <th scope="col">Thời gian áp dụng</th>
+                    <th scope="col">Lượt sử dụng</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col" class="text-end">Thao tác</th>
                 </tr>
             </thead>
+
             <tbody>
                 @if (Model.Count == 0)
                 {
-                    <tr><td colspan="7" class="text-center text-secondary py-4">Chưa có mã giảm giá phù hợp.</td></tr>
+                    <tr>
+                        <td colspan="7"
+                            class="text-center text-secondary py-5">
+                            Không tìm thấy mã giảm giá phù hợp.
+                        </td>
+                    </tr>
                 }
 
-                @foreach (var m in Model)
+                @foreach (var ma in Model)
                 {
-                    bool hetHan = bayGio > m.NgayKetThuc;
+                    string trangThai;
+                    string lopTrangThai;
+
+                    if (!ma.HoatDong)
+                    {
+                        trangThai = "Đang tắt";
+                        lopTrangThai = "status-stopped";
+                    }
+                    else if (bayGio > ma.NgayKetThuc)
+                    {
+                        trangThai = "Hết hạn";
+                        lopTrangThai = "status-stopped";
+                    }
+                    else if (bayGio < ma.NgayBatDau)
+                    {
+                        trangThai = "Chưa đến lịch";
+                        lopTrangThai = "status-low";
+                    }
+                    else if (ma.SoLuotDaDung >= ma.SoLuotToiDa)
+                    {
+                        trangThai = "Hết lượt";
+                        lopTrangThai = "status-empty";
+                    }
+                    else
+                    {
+                        trangThai = "Đang áp dụng";
+                        lopTrangThai = "status-selling";
+                    }
+
                     <tr>
-                        <td class="fw-semibold">@m.MaCode<br /><small class="text-secondary">@m.TenKhuyenMai</small></td>
                         <td>
-                            @if (m.LoaiGiam == LoaiGiamGia.PhanTram)
+                            <strong class="d-block">
+                                @ma.MaCode
+                            </strong>
+
+                            <span class="product-meta">
+                                @ma.TenKhuyenMai
+                            </span>
+                        </td>
+
+                        <td>
+                            @if (ma.LoaiGiam == LoaiGiamGia.PhanTram)
                             {
-                                @:@m.GiaTriGiam.ToString("0.##")%
-                                if (m.GiamToiDa.HasValue)
+                                <span class="product-price">
+                                    @ma.GiaTriGiam.ToString("0.##", vi)%
+                                </span>
+
+                                if (ma.GiamToiDa.HasValue)
                                 {
-                                    <br /><small class="text-secondary">tối đa @m.GiamToiDa.Value.ToString("N0")đ</small>
+                                    <span class="product-meta d-block mt-1">
+                                        Tối đa
+                                        @ma.GiamToiDa.Value.ToString("N0", vi) đ
+                                    </span>
                                 }
                             }
                             else
                             {
-                                @:@m.GiaTriGiam.ToString("N0")đ
+                                <span class="product-price">
+                                    @ma.GiaTriGiam.ToString("N0", vi) đ
+                                </span>
                             }
                         </td>
-                        <td>@m.DonToiThieu.ToString("N0")đ</td>
-                        <td>@m.NgayBatDau.ToString("dd/MM/yyyy") – @m.NgayKetThuc.ToString("dd/MM/yyyy")</td>
-                        <td>@m.SoLuotDaDung / @m.SoLuotToiDa</td>
+
+                        <td class="text-nowrap">
+                            @ma.DonToiThieu.ToString("N0", vi) đ
+                        </td>
+
+                        <td class="text-nowrap">
+                            <span class="d-block">
+                                Từ @ma.NgayBatDau.ToString("dd/MM/yyyy")
+                            </span>
+
+                            <span class="product-meta">
+                                Đến @ma.NgayKetThuc.ToString("dd/MM/yyyy")
+                            </span>
+                        </td>
+
+                        <td class="text-nowrap">
+                            @ma.SoLuotDaDung.ToString("N0", vi)
+                            /
+                            @ma.SoLuotToiDa.ToString("N0", vi)
+                        </td>
+
                         <td>
-                            @if (hetHan)
-                            {
-                                <span class="badge bg-secondary">Hết hạn</span>
-                            }
-                            else if (m.HoatDong)
-                            {
-                                <span class="badge bg-success">Đang bật</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-warning text-dark">Đang tắt</span>
-                            }
+                            <span class="status-pill @lopTrangThai">
+                                @trangThai
+                            </span>
                         </td>
+
                         <td>
                             <div class="d-flex justify-content-end flex-wrap gap-2">
-                                <a class="btn btn-outline-primary btn-sm"
-                                   href="@Url.Action("Sua", "KhuyenMai", new { area = "Admin", id = m.MaGiamGia1 })">Sửa</a>
-                                @using (Html.BeginForm("BatTat", "KhuyenMai", new { area = "Admin" }, FormMethod.Post, new { @class = "m-0" }))
+                                <a href="@Url.Action("Sua", "KhuyenMai", new
+                                        {
+                                            area = "Admin",
+                                            id = ma.MaGiamGia1
+                                        })"
+                                   class="btn btn-outline-primary btn-sm"
+                                   aria-label="@("Sửa mã " + ma.MaCode)">
+                                    <i class="bi bi-pencil-square"
+                                       aria-hidden="true"></i>
+                                    Sửa
+                                </a>
+
+                                @using (Html.BeginForm(
+                                    "BatTat",
+                                    "KhuyenMai",
+                                    new { area = "Admin" },
+                                    FormMethod.Post,
+                                    new { @class = "m-0" }))
                                 {
                                     @Html.AntiForgeryToken()
-                                    <input type="hidden" name="id" value="@m.MaGiamGia1" />
-                                    <button type="submit" class="btn btn-outline-secondary btn-sm">@(m.HoatDong ? "Tắt" : "Bật")</button>
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="@ma.MaGiamGia1" />
+
+                                    <button type="submit"
+                                            class="btn btn-outline-secondary btn-sm"
+                                            aria-label="@((ma.HoatDong ? "Tắt mã " : "Bật mã ") + ma.MaCode)">
+                                        @(ma.HoatDong ? "Tắt mã" : "Bật mã")
+                                    </button>
                                 }
                             </div>
                         </td>
@@ -117,20 +273,62 @@
         </table>
     </div>
 
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-3">
-        <span class="text-secondary">@tongSo mã · Trang @trang / @tongTrang</span>
-        @if (tongTrang > 1)
-        {
-            <ul class="pagination pagination-sm mb-0">
-                @if (trang > 1)
+    <div class="product-panel-footer">
+        <span>
+            Hiển thị @Model.Count / @tongSo mã giảm giá
+            · Trang @trang / @tongTrang
+        </span>
+
+        <nav aria-label="Phân trang mã giảm giá">
+            <ul class="pagination pagination-sm">
+                @NutTrang(1, "«", "Trang đầu", trang == 1, tuKhoa)
+
+                @NutTrang(
+                    trang - 1,
+                    "‹",
+                    "Trang trước",
+                    trang == 1,
+                    tuKhoa)
+
+                @for (int i = batDau; i <= ketThuc; i++)
                 {
-                    <li class="page-item"><a class="page-link" href="@Url.Action("Index", "KhuyenMai", new { area = "Admin", tuKhoa = tuKhoa, trang = trang - 1 })">Trang trước</a></li>
+                    <li class="page-item @(i == trang ? "active" : "")">
+                        @if (i == trang)
+                        {
+                            <span class="page-link" aria-current="page">
+                                @i
+                            </span>
+                        }
+                        else
+                        {
+                            <a class="page-link"
+                               aria-label="@("Trang " + i)"
+                               href="@Url.Action("Index", "KhuyenMai", new
+                                    {
+                                        area = "Admin",
+                                        tuKhoa = tuKhoa,
+                                        trang = i
+                                    })">
+                                @i
+                            </a>
+                        }
+                    </li>
                 }
-                @if (trang < tongTrang)
-                {
-                    <li class="page-item"><a class="page-link" href="@Url.Action("Index", "KhuyenMai", new { area = "Admin", tuKhoa = tuKhoa, trang = trang + 1 })">Trang sau</a></li>
-                }
+
+                @NutTrang(
+                    trang + 1,
+                    "›",
+                    "Trang sau",
+                    trang == tongTrang,
+                    tuKhoa)
+
+                @NutTrang(
+                    tongTrang,
+                    "»",
+                    "Trang cuối",
+                    trang == tongTrang,
+                    tuKhoa)
             </ul>
-        }
+        </nav>
     </div>
 </div>
