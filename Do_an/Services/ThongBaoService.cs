@@ -20,9 +20,8 @@ namespace Do_an.Services
 
     public class ThongBaoService
     {
-        private static readonly MemoryCache boNhoToken = new MemoryCache("sportix-hub-token");
-
-        // ---------- Token kết nối SignalR ----------
+        private static readonly MemoryCache boNhoToken =
+            new MemoryCache("sportix-hub-token");
 
         public static string TaoToken(int maAdmin)
         {
@@ -31,86 +30,124 @@ namespace Do_an.Services
             boNhoToken.Set(
                 token,
                 maAdmin,
-                new CacheItemPolicy { SlidingExpiration = TimeSpan.FromHours(12) });
+                new CacheItemPolicy
+                {
+                    SlidingExpiration = TimeSpan.FromHours(12)
+                });
 
             return token;
         }
 
         public static int? LayMaAdminTuToken(string token)
         {
-            if (string.IsNullOrEmpty(token)) return null;
+            if (string.IsNullOrEmpty(token))
+            {
+                return null;
+            }
 
             object giaTri = boNhoToken.Get(token);
 
-            return giaTri is int ? (int?)(int)giaTri : null;
+            return giaTri is int
+                ? (int?)(int)giaTri
+                : null;
         }
 
-        // ---------- Gọi từ TV3 sau khi lưu đơn hàng thành công ----------
-        // Ghi 1 dòng ThongBao cho MỖI admin đang hoạt động rồi đẩy qua SignalR.
-        // Lỗi SignalR không được làm hỏng việc đặt hàng nên được nuốt lại.
+        // Gọi sau khi đơn hàng đã được lưu thành công.
         public void ThongBaoDonMoi(int maDonHang)
         {
-            var danhSachDay = new List<Tuple<int, ThongBaoDto>>();
+            var danhSachDay =
+                new List<Tuple<int, ThongBaoDto>>();
 
             using (var db = new SPORTIXEntities())
             {
                 DonHang don = db.DonHangs
                     .AsNoTracking()
-                    .FirstOrDefault(x => x.MaDonHang == maDonHang);
+                    .FirstOrDefault(
+                        x => x.MaDonHang == maDonHang);
 
-                if (don == null) return;
+                if (don == null)
+                {
+                    return;
+                }
 
-                int[] admins = db.TaiKhoans
-                    .Where(x => x.VaiTro == XacThucService.VaiTroAdmin && x.HoatDong)
+                int[] danhSachAdmin = db.TaiKhoans
+                    .Where(x =>
+                        x.VaiTro == XacThucService.VaiTroAdmin &&
+                        x.HoatDong)
                     .Select(x => x.MaTaiKhoan)
                     .ToArray();
 
-                string tieuDe = "Đơn hàng mới #" + don.MaDonHang;
+                if (danhSachAdmin.Length == 0)
+                {
+                    return;
+                }
+
+                string tieuDe =
+                    "Đơn hàng mới #" + don.MaDonHang;
+
                 string noiDung = string.Format(
                     "{0} vừa đặt đơn trị giá {1:N0}đ.",
                     don.HoTenNguoiNhan,
-                    don.TongTien ?? (don.TienHang - don.TienGiam + don.PhiVanChuyen));
+                    don.TongTien ??
+                    (don.TienHang -
+                     don.TienGiam +
+                     don.PhiVanChuyen));
 
                 DateTime bayGio = DateTime.Now;
 
-                var cacDong = admins.Select(ma => new ThongBao
-                {
-                    MaTaiKhoan = ma,
-                    MaDonHang = don.MaDonHang,
-                    TieuDe = tieuDe,
-                    NoiDung = noiDung,
-                    DaDoc = false,
-                    NgayTao = bayGio
-                }).ToList();
+                var cacDong = new List<ThongBao>();
 
-                db.ThongBaos.AddRange(cacDong);
+                foreach (int maAdmin in danhSachAdmin)
+                {
+                    var thongBao = new ThongBao
+                    {
+                        MaTaiKhoan = maAdmin,
+                        MaDonHang = don.MaDonHang,
+                        TieuDe = tieuDe,
+                        NoiDung = noiDung,
+                        DaDoc = false,
+                        NgayTao = bayGio
+                    };
+
+                    db.ThongBaos.Add(thongBao);
+                    cacDong.Add(thongBao);
+                }
+
                 db.SaveChanges();
 
-                foreach (var dong in cacDong)
+                foreach (ThongBao thongBao in cacDong)
                 {
-                    danhSachDay.Add(Tuple.Create(dong.MaTaiKhoan, Dto(dong)));
+                    danhSachDay.Add(
+                        Tuple.Create(
+                            thongBao.MaTaiKhoan,
+                            Dto(thongBao)));
                 }
             }
 
             try
             {
-                var hub = GlobalHost.ConnectionManager.GetHubContext<ThongBaoHub>();
+                var hub = GlobalHost.ConnectionManager
+                    .GetHubContext<ThongBaoHub>();
 
                 foreach (var item in danhSachDay)
                 {
-                    hub.Clients.Group(ThongBaoHub.TenNhom(item.Item1))
-                        .nhanThongBao(item.Item2, DemChuaDoc(item.Item1));
+                    hub.Clients
+                        .Group(ThongBaoHub.TenNhom(item.Item1))
+                        .nhanThongBao(
+                            item.Item2,
+                            DemChuaDoc(item.Item1));
                 }
             }
             catch (Exception)
             {
-                // Thông báo đã nằm trong DB; Admin vẫn thấy khi tải lại.
+                // Thông báo đã được lưu trong database.
+                // Admin vẫn có thể xem lại khi tải trang.
             }
         }
 
-        // ---------- Phía Admin ----------
-
-        public List<ThongBaoDto> LayDanhSach(int maAdmin, int soLuong)
+        public List<ThongBaoDto> LayDanhSach(
+            int maAdmin,
+            int soLuong)
         {
             using (var db = new SPORTIXEntities())
             {
@@ -130,23 +167,32 @@ namespace Do_an.Services
         {
             using (var db = new SPORTIXEntities())
             {
-                return db.ThongBaos.Count(x => x.MaTaiKhoan == maAdmin && !x.DaDoc);
+                return db.ThongBaos.Count(x =>
+                    x.MaTaiKhoan == maAdmin &&
+                    !x.DaDoc);
             }
         }
 
-        // Chỉ đánh dấu được thông báo của chính mình.
-        public bool DanhDauDaDoc(int maAdmin, int maThongBao)
+        // Chỉ đánh dấu thông báo thuộc tài khoản đang thao tác.
+        public bool DanhDauDaDoc(
+            int maAdmin,
+            int maThongBao)
         {
             using (var db = new SPORTIXEntities())
             {
-                ThongBao tb = db.ThongBaos.FirstOrDefault(x =>
-                    x.MaThongBao == maThongBao && x.MaTaiKhoan == maAdmin);
+                ThongBao thongBao = db.ThongBaos
+                    .FirstOrDefault(x =>
+                        x.MaThongBao == maThongBao &&
+                        x.MaTaiKhoan == maAdmin);
 
-                if (tb == null) return false;
-
-                if (!tb.DaDoc)
+                if (thongBao == null)
                 {
-                    tb.DaDoc = true;
+                    return false;
+                }
+
+                if (!thongBao.DaDoc)
+                {
+                    thongBao.DaDoc = true;
                     db.SaveChanges();
                 }
 
@@ -159,21 +205,25 @@ namespace Do_an.Services
             using (var db = new SPORTIXEntities())
             {
                 db.Database.ExecuteSqlCommand(
-                    "UPDATE dbo.ThongBao SET DaDoc = 1 WHERE MaTaiKhoan = @p0 AND DaDoc = 0",
+                    @"UPDATE dbo.ThongBao
+                      SET DaDoc = 1
+                      WHERE MaTaiKhoan = @p0
+                        AND DaDoc = 0",
                     maAdmin);
             }
         }
 
-        private static ThongBaoDto Dto(ThongBao x)
+        private static ThongBaoDto Dto(ThongBao thongBao)
         {
             return new ThongBaoDto
             {
-                MaThongBao = x.MaThongBao,
-                MaDonHang = x.MaDonHang,
-                TieuDe = x.TieuDe,
-                NoiDung = x.NoiDung,
-                DaDoc = x.DaDoc,
-                NgayTao = x.NgayTao.ToString("dd/MM/yyyy HH:mm")
+                MaThongBao = thongBao.MaThongBao,
+                MaDonHang = thongBao.MaDonHang,
+                TieuDe = thongBao.TieuDe,
+                NoiDung = thongBao.NoiDung,
+                DaDoc = thongBao.DaDoc,
+                NgayTao = thongBao.NgayTao.ToString(
+                    "dd/MM/yyyy HH:mm")
             };
         }
     }
