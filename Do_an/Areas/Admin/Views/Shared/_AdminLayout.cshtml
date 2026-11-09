@@ -2,7 +2,15 @@
     string controller = Convert.ToString(
         ViewContext.RouteData.Values["controller"]);
 
-    bool trangSanPham = controller == "SanPham";
+    bool trangTongQuan = controller == "Dashboard";
+
+    bool trangSanPham =
+        controller == "SanPham" ||
+        controller == "XoaSanPham" ||
+        controller == "LoaiHang" ||
+        controller == "ThuongHieu";
+
+    bool trangTaiKhoan = controller == "TaiKhoan";
     bool trangDonHang = controller == "DonHang";
     bool trangKhuyenMai = controller == "KhuyenMai";
     bool trangThongBaoWeb = controller == "ThongBaoWebsite";
@@ -15,7 +23,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1" />
 
-    <title>@ViewBag.Title - SPORTIX Admin</title>
+    <title>@ViewBag.Title - Quản trị SPORTIX</title>
 
     <link href="@Url.Content("~/Content/bootstrap.min.css")"
           rel="stylesheet" />
@@ -26,7 +34,10 @@
     <link href="@Url.Content("~/Content/validation.css")"
           rel="stylesheet" />
 
-    <link href="@Url.Content("~/Content/admin.css")?v=3"
+    <link href="@Url.Content("~/Content/admin.css")"
+          rel="stylesheet" />
+
+    <link href="@Url.Content("~/Content/admin-layout.css")"
           rel="stylesheet" />
 
     @RenderSection("styles", required: false)
@@ -35,9 +46,9 @@
 <body class="sportix-admin">
     <div class="admin-shell">
         <aside class="admin-sidebar">
-            <a href="@Url.Action("Index", "SanPham", new { area = "Admin" })"
+            <a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })"
                class="admin-brand"
-               aria-label="SPORTIX - Quản lý sản phẩm">
+               aria-label="SPORTIX - Trang quản trị">
                 <img src="@Url.Content("~/Content/sportix/img/logo.jpg")"
                      alt="SPORTIX" />
             </a>
@@ -45,12 +56,12 @@
             <p class="admin-caption">QUẢN TRỊ CỬA HÀNG</p>
 
             <nav class="admin-menu" aria-label="Menu quản trị">
-                <span class="admin-menu-item"
-                      aria-disabled="true"
-                      title="Chưa kết nối chức năng">
+                <a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })"
+                   class="admin-menu-item @(trangTongQuan ? "active" : "")"
+                   aria-current="@(trangTongQuan ? "page" : null)">
                     <i class="bi bi-grid" aria-hidden="true"></i>
-                    Dashboard
-                </span>
+                    Tổng quan
+                </a>
 
                 <a href="@Url.Action("Index", "SanPham", new { area = "Admin" })"
                    class="admin-menu-item @(trangSanPham ? "active" : "")"
@@ -60,7 +71,8 @@
                 </a>
 
                 <a href="@Url.Action("Index", "TaiKhoan", new { area = "Admin" })"
-                   class="admin-menu-item">
+                   class="admin-menu-item @(trangTaiKhoan ? "active" : "")"
+                   aria-current="@(trangTaiKhoan ? "page" : null)">
                     <i class="bi bi-people" aria-hidden="true"></i>
                     Quản lý tài khoản
                 </a>
@@ -79,7 +91,8 @@
                     Thống kê
                 </span>
 
-                <details class="admin-menu-group" @((trangKhuyenMai || trangThongBaoWeb) ? "open" : "")>
+                <details class="admin-menu-group"
+                         @((trangKhuyenMai || trangThongBaoWeb) ? "open" : "")>
                     <summary>
                         <span>
                             <i class="bi bi-tag" aria-hidden="true"></i>
@@ -92,24 +105,32 @@
 
                     <div class="admin-submenu">
                         <a href="@Url.Action("Index", "KhuyenMai", new { area = "Admin" })"
-                           class="admin-menu-item @(trangKhuyenMai ? "active" : "")">
+                           class="admin-menu-item @(trangKhuyenMai ? "active" : "")"
+                           aria-current="@(trangKhuyenMai ? "page" : null)">
                             Mã giảm giá
                         </a>
 
                         <a href="@Url.Action("Index", "ThongBaoWebsite", new { area = "Admin" })"
-                           class="admin-menu-item @(trangThongBaoWeb ? "active" : "")">
+                           class="admin-menu-item @(trangThongBaoWeb ? "active" : "")"
+                           aria-current="@(trangThongBaoWeb ? "page" : null)">
                             Thông báo khuyến mãi
                         </a>
                     </div>
                 </details>
 
-                @using (Html.BeginForm("DangXuat", "TaiKhoan", new { area = "" },
-                        FormMethod.Post, new { style = "display: contents;" }))
+                @using (Html.BeginForm(
+                    "DangXuat",
+                    "TaiKhoan",
+                    new { area = "" },
+                    FormMethod.Post,
+                    new { @class = "admin-logout-form" }))
                 {
                     @Html.AntiForgeryToken()
 
-                    <button type="submit" class="admin-menu-item admin-logout">
-                        <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                    <button type="submit"
+                            class="admin-menu-item admin-logout">
+                        <i class="bi bi-box-arrow-right"
+                           aria-hidden="true"></i>
                         Đăng xuất
                     </button>
                 }
@@ -117,7 +138,7 @@
 
             <div class="admin-sidebar-note">
                 <span></span>
-                <p>SPORTIX MANAGEMENT</p>
+                <p>QUẢN TRỊ SPORTIX</p>
             </div>
         </aside>
 
@@ -128,46 +149,65 @@
                         <li>
                             <i class="bi bi-house-door"
                                aria-hidden="true"></i>
-                            <span class="visually-hidden">Trang quản trị</span>
+                            <span class="visually-hidden">
+                                Trang quản trị
+                            </span>
                         </li>
 
                         <li>Quản trị</li>
-
-                        <li class="current">
-                            @(trangSanPham ? "Sản phẩm" : Convert.ToString(ViewBag.Title))
-                        </li>
+                        <li class="current">@ViewBag.Title</li>
                     </ol>
                 </nav>
 
-                <div class="d-flex align-items-center gap-2">
-                    <div class="dropdown" id="chuongThongBao"
+                <div class="admin-topbar-actions">
+                    <div class="dropdown"
+                         id="chuongThongBao"
                          data-url-danh-sach="@Url.Action("DanhSach", "ThongBao", new { area = "Admin" })"
                          data-url-token="@Url.Action("Token", "ThongBao", new { area = "Admin" })"
                          data-url-da-doc="@Url.Action("DaDoc", "ThongBao", new { area = "Admin" })"
                          data-url-doc-tat-ca="@Url.Action("DocTatCa", "ThongBao", new { area = "Admin" })"
                          data-url-don="@Url.Action("ChiTiet", "DonHang", new { area = "Admin" })">
-                        <button type="button" class="btn btn-outline-secondary position-relative"
-                                id="nutChuong" aria-expanded="false" aria-label="Thông báo">
+
+                        <button type="button"
+                                class="btn btn-outline-secondary position-relative"
+                                id="nutChuong"
+                                aria-expanded="false"
+                                aria-controls="khungThongBao"
+                                aria-label="Thông báo">
                             <i class="bi bi-bell" aria-hidden="true"></i>
+
                             <span id="soChuaDoc"
                                   class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                  hidden>0</span>
+                                  hidden>
+                                0
+                            </span>
                         </button>
-                        <div class="dropdown-menu dropdown-menu-end p-0" id="khungThongBao"
-                             style="width: 360px; max-width: 92vw; right: 0; left: auto; top: 100%;">
-                            <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+
+                        <div class="dropdown-menu admin-notifications"
+                             id="khungThongBao"
+                             aria-label="Danh sách thông báo">
+                            <div class="admin-notifications-heading">
                                 <strong>Thông báo</strong>
-                                <button type="button" class="btn btn-link btn-sm p-0" id="nutDocTatCa">Đánh dấu đã đọc tất cả</button>
+
+                                <button type="button"
+                                        class="btn btn-link btn-sm p-0"
+                                        id="nutDocTatCa">
+                                    Đọc tất cả
+                                </button>
                             </div>
-                            <div id="danhSachThongBao" style="max-height: 360px; overflow-y: auto;">
-                                <p class="text-secondary text-center py-3 mb-0">Đang tải...</p>
+
+                            <div id="danhSachThongBao"
+                                 class="admin-notifications-list">
+                                <p class="text-secondary text-center py-3 mb-0">
+                                    Đang tải...
+                                </p>
                             </div>
                         </div>
                     </div>
 
                     <a href="@Url.Action("Index", "Home", new { area = "" })"
                        class="btn btn-outline-primary">
-                        <i class="bi bi-box-arrow-up-right me-2"
+                        <i class="bi bi-box-arrow-up-right"
                            aria-hidden="true"></i>
                         Về trang cửa hàng
                     </a>
@@ -203,10 +243,13 @@
         }, true);
     </script>
 
-    <form id="bieuMauCsrf" hidden>@Html.AntiForgeryToken()</form>
+    <form id="bieuMauCsrf" hidden>
+        @Html.AntiForgeryToken()
+    </form>
+
     <script src="@Url.Content("~/Scripts/jquery.signalR-2.4.3.min.js")"></script>
     <script src="@Url.Content("~/signalr/hubs")"></script>
-    <script src="@Url.Content("~/Scripts/sportix-thongbao-admin.js")?v=1"></script>
+    <script src="@Url.Content("~/Scripts/sportix-thongbao-admin.js")"></script>
 
     @RenderSection("scripts", required: false)
 </body>

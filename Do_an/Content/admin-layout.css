@@ -1,0 +1,59 @@
+﻿.sportix-admin .admin-logout-form {
+    margin: 0;
+}
+
+.sportix-admin .admin-logout:hover {
+    background: rgba(17, 157, 255, .12);
+    color: #fff;
+}
+
+.sportix-admin .admin-topbar-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.sportix-admin .admin-notifications {
+    top: calc(100% + 10px);
+    right: 0;
+    left: auto;
+    width: min(360px, calc(100vw - 36px));
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, .12);
+    color: var(--admin-text);
+    font-size: 14px;
+}
+
+.sportix-admin .admin-notifications-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.sportix-admin .admin-notifications-list {
+    max-height: min(360px, 60vh);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.sportix-admin .admin-notifications .dropdown-item {
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+
+.sportix-admin .admin-menu button:focus-visible,
+.sportix-admin .admin-topbar a:focus-visible,
+.sportix-admin .admin-topbar button:focus-visible {
+    outline: 3px solid var(--admin-cyan);
+    outline-offset: 3px;
+}
