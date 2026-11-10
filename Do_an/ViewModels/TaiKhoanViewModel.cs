@@ -7,7 +7,7 @@ namespace Do_an.ViewModels
     {
         public const string TenDangNhap = @"^[A-Za-z0-9._]{4,50}$";
         public const string SoDienThoai = @"^(0\d{9}|\+84\d{9})$";
-        public const string MatKhau = @"^(?=.*[A-Za-z])(?=.*\d).{6,100}$";
+        public const string MatKhau = @"^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,100}$";
     }
 
     public class HoSoViewModel
@@ -41,7 +41,7 @@ namespace Do_an.ViewModels
 
         [Required(ErrorMessage = "Vui lòng nhập mật khẩu mới.")]
         [RegularExpression(QuyTacNhapLieu.MatKhau,
-            ErrorMessage = "Mật khẩu từ 6 ký tự, gồm cả chữ và số.")]
+            ErrorMessage = "Mật khẩu từ 8 ký tự, gồm chữ hoa, chữ số và ký tự đặc biệt.")]
         [DataType(DataType.Password)]
         [Display(Name = "Mật khẩu mới")]
         public string MatKhauMoi { get; set; }

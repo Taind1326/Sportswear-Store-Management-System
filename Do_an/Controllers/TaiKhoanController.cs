@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using Do_an.Models;
 using Do_an.Services;
 using Do_an.ViewModels;
+using System.Text.RegularExpressions;
 
 namespace Do_an.Controllers
 {
@@ -43,29 +44,24 @@ namespace Do_an.Controllers
         {
             model.ReturnUrl = LamSachReturnUrl(model.ReturnUrl);
 
-            string tenDangNhap = (model.TenDangNhap ?? "").Trim();
             string email = (model.Email ?? "").Trim();
+            string hoTen = ((model.Ho ?? "").Trim() + " " + (model.Ten ?? "").Trim()).Trim();
 
-            if (ModelState.IsValid)
-            {
-                if (db.TaiKhoans.Any(x => x.TenDangNhap == tenDangNhap))
-                    ModelState.AddModelError("TenDangNhap", "Tên đăng nhập đã được sử dụng.");
+            if (!model.DongYDieuKhoan)
+                ModelState.AddModelError("DongYDieuKhoan", "Bạn cần đồng ý với điều khoản để tiếp tục.");
 
-                if (db.TaiKhoans.Any(x => x.Email == email))
-                    ModelState.AddModelError("Email", "Email đã được sử dụng.");
-            }
+            if (ModelState.IsValid && db.TaiKhoans.Any(x => x.Email == email))
+                ModelState.AddModelError("Email", "Email đã được sử dụng.");
 
             if (!ModelState.IsValid) return View(model);
 
             var tk = new TaiKhoan
             {
-                TenDangNhap = tenDangNhap,
+                TenDangNhap = TaoTenDangNhap(email),
                 MatKhauHash = MatKhauHelper.BamMatKhau(model.MatKhau),
-                HoTen = model.HoTen.Trim(),
+                HoTen = hoTen,
                 Email = email,
-                SoDienThoai = string.IsNullOrWhiteSpace(model.SoDienThoai)
-                    ? null
-                    : model.SoDienThoai.Trim(),
+                SoDienThoai = model.SoDienThoai.Trim(),
                 VaiTro = XacThucService.VaiTroUser, // luôn là User, không nhận từ form
                 HoatDong = true,
                 NgayTao = DateTime.Now
@@ -79,15 +75,36 @@ namespace Do_an.Controllers
             }
             catch (DbUpdateException)
             {
-                ModelState.AddModelError("",
-                    "Không thể tạo tài khoản. Tên đăng nhập hoặc email có thể đã được sử dụng, vui lòng thử lại.");
+                ModelState.AddModelError("Email",
+                    "Không thể tạo tài khoản. Email có thể đã được sử dụng, vui lòng thử lại.");
                 return View(model);
             }
 
             XacThucService.DangNhap(tk);
+            XacThucService.XoaCookieGhiNho();
+
             TempData["ThanhCong"] = "Đăng ký thành công. Chào mừng " + tk.HoTen + " đến với SPORTIX!";
 
             return ChuyenSauDangNhap(model.ReturnUrl, tk.VaiTro);
+        }
+
+        // Sinh tên đăng nhập duy nhất từ phần trước @ của email.
+        private string TaoTenDangNhap(string email)
+        {
+            string goc = Regex.Replace(email.Split('@')[0], "[^A-Za-z0-9._]", "");
+            if (goc.Length == 0) goc = "user";
+            if (goc.Length > 40) goc = goc.Substring(0, 40);
+
+            string ung = goc;
+            int so = 1;
+
+            while (db.TaiKhoans.Any(x => x.TenDangNhap == ung))
+            {
+                ung = goc + so;
+                so++;
+            }
+
+            return ung;
         }
 
         // ===================== ĐĂNG NHẬP / ĐĂNG XUẤT =====================
@@ -125,7 +142,7 @@ namespace Do_an.Controllers
 
             if (tk == null || !MatKhauHelper.KiemTra(model.MatKhau, tk.MatKhauHash))
             {
-                ModelState.AddModelError("", "Tên đăng nhập/email hoặc mật khẩu không đúng.");
+                ModelState.AddModelError("", "Email hoặc mật khẩu không đúng.");
                 return View(model);
             }
 
@@ -137,6 +154,9 @@ namespace Do_an.Controllers
             }
 
             XacThucService.DangNhap(tk);
+
+            if (model.GhiNho) XacThucService.GhiNhoDangNhap(tk.MaTaiKhoan);
+            else XacThucService.XoaCookieGhiNho();
 
             return ChuyenSauDangNhap(model.ReturnUrl, tk.VaiTro);
         }

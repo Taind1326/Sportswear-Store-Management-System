@@ -309,7 +309,9 @@
     <Content Include="Areas\Admin\Views\KhuyenMai\Form.cshtml" />
     <Content Include="Areas\Admin\Views\ThongBaoWebsite\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ThongBaoWebsite\Form.cshtml" />
+    <Content Include="Content\auth.css" />
     <Content Include="Content\khuyen-mai-popup.css" />
+    <Content Include="Scripts\auth.js" />
     <Content Include="Scripts\khuyen-mai-popup.js" />
     <Content Include="Views\ThongBaoWebsite\Index.cshtml" />
     <Content Include="Views\ThongBaoWebsite\GanDay.cshtml" />

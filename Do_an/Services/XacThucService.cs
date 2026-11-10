@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Do_an.Models;
+using System.Web.Security;
 
 namespace Do_an.Services
 {
@@ -90,10 +91,77 @@ namespace Do_an.Services
                 HttpContext.Current.Session[KhoaHoTen] = hoTen;
         }
 
+        private const string TenCookieGhiNho = "SPORTIX_REMEMBER";
+        private const int SoNgayGhiNho = 30;
+
         public static void DangXuat()
         {
+            XoaCookieGhiNho();
+
             if (HttpContext.Current != null && HttpContext.Current.Session != null)
                 HttpContext.Current.Session.Clear();
+        }
+
+        // "Ghi nhớ đăng nhập": cookie mã hóa chứa mã tài khoản, hết hạn sau 30 ngày.
+        public static void GhiNhoDangNhap(int maTaiKhoan)
+        {
+            HttpContext ctx = HttpContext.Current;
+            if (ctx == null) return;
+
+            DateTime het = DateTime.Now.AddDays(SoNgayGhiNho);
+            var ve = new FormsAuthenticationTicket(
+                1, maTaiKhoan.ToString(), DateTime.Now, het, true, "remember");
+
+            ctx.Response.Cookies.Add(new HttpCookie(TenCookieGhiNho, FormsAuthentication.Encrypt(ve))
+            {
+                HttpOnly = true,
+                Secure = ctx.Request.IsSecureConnection,
+                Expires = het
+            });
+        }
+
+        public static void XoaCookieGhiNho()
+        {
+            HttpContext ctx = HttpContext.Current;
+            if (ctx == null) return;
+
+            ctx.Response.Cookies.Add(new HttpCookie(TenCookieGhiNho, "")
+            {
+                HttpOnly = true,
+                Expires = DateTime.Now.AddDays(-1)
+            });
+        }
+
+        // Gọi khi bắt đầu một phiên mới: nếu có cookie hợp lệ và tài khoản chưa bị khóa thì đăng nhập lại.
+        public static void KhoiPhucTuCookie()
+        {
+            HttpContext ctx = HttpContext.Current;
+            if (ctx == null || ctx.Session == null) return;
+            if (LayMaTaiKhoanHienTai().HasValue) return;
+
+            HttpCookie cookie = ctx.Request.Cookies[TenCookieGhiNho];
+            if (cookie == null || string.IsNullOrEmpty(cookie.Value)) return;
+
+            try
+            {
+                FormsAuthenticationTicket ve = FormsAuthentication.Decrypt(cookie.Value);
+
+                int ma;
+                if (ve == null || ve.Expired || ve.UserData != "remember"
+                    || !int.TryParse(ve.Name, out ma)) return;
+
+                using (var db = new SPORTIXEntities())
+                {
+                    TaiKhoan tk = db.TaiKhoans.AsNoTracking()
+                        .FirstOrDefault(x => x.MaTaiKhoan == ma && x.HoatDong);
+
+                    if (tk != null) DangNhap(tk);
+                }
+            }
+            catch (Exception)
+            {
+                // Cookie hỏng hoặc DB lỗi: coi như chưa đăng nhập.
+            }
         }
 
         // Tạo tài khoản Admin demo nếu DB chưa có admin nào.
