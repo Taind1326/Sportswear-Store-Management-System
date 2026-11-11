@@ -5,16 +5,16 @@
 }
 
 @section Styles {
-    <link href="@Url.Content("~/Content/tai-khoan.css")" rel="stylesheet" />
-    <link href="@Url.Content("~/Content/validation.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/auth.css")" rel="stylesheet" />
 }
 
-<section class="tk-page">
-    <div class="container">
-        <div class="tk-card">
-            <h1 class="tk-title">Đăng nhập</h1>
-            <p class="tk-sub">Chào mừng bạn quay lại SPORTIX.</p>
+<section class="auth-page">
+    <div class="auth-card auth-card-login">
+        <span class="auth-tag">WELCOME BACK</span>
+        <h1 class="auth-title">Đăng nhập</h1>
+        <p class="auth-sub">Đăng nhập để tiếp tục mua sắm tại SPORTIX.</p>
 
+        <div style="margin-top: 28px;">
             @if (TempData["ThanhCong"] != null)
             {
                 <div class="alert alert-success" role="alert">@TempData["ThanhCong"]</div>
@@ -26,45 +26,91 @@
             }
 
             @using (Html.BeginForm("DangNhap", "TaiKhoan", new { area = "" },
-                FormMethod.Post, new { novalidate = "novalidate" }))
+                FormMethod.Post, new { id = "formDangNhap", novalidate = "novalidate" }))
             {
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(m => m.ReturnUrl)
+                @Html.ValidationSummary(true)
 
-                @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
-
-                <div class="mb-3">
-                    @Html.LabelFor(m => m.TenDangNhap, new { @class = "form-label" })
-                    @Html.TextBoxFor(m => m.TenDangNhap, new
-                    {
-                        @class = "form-control",
-                        maxlength = "254",
-                        autocomplete = "username",
-                        autofocus = "autofocus"
-                    })
-                    @Html.ValidationMessageFor(m => m.TenDangNhap, "", new { @class = "text-danger" })
+                <div class="auth-field">
+                    <label class="auth-label" for="TenDangNhap">Email</label>
+                    <div class="auth-input">
+                        <i class="bi bi-person lead" aria-hidden="true"></i>
+                        @Html.TextBoxFor(m => m.TenDangNhap, new
+                        {
+                            placeholder = "ten@email.com",
+                            maxlength = "254",
+                            autocomplete = "username",
+                            autofocus = "autofocus"
+                        })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.TenDangNhap, "", new { @class = "auth-error" })
                 </div>
 
-                <div class="mb-4">
-                    @Html.LabelFor(m => m.MatKhau, new { @class = "form-label" })
-                    @Html.PasswordFor(m => m.MatKhau, new
-                    {
-                        @class = "form-control",
-                        autocomplete = "current-password"
-                    })
-                    @Html.ValidationMessageFor(m => m.MatKhau, "", new { @class = "text-danger" })
+                <div class="auth-field">
+                    <label class="auth-label" for="MatKhau">Mật khẩu</label>
+                    <div class="auth-input">
+                        <i class="bi bi-shield-lock-fill lead" aria-hidden="true"></i>
+                        @Html.PasswordFor(m => m.MatKhau, new
+                        {
+                            placeholder = "Nhập mật khẩu",
+                            autocomplete = "current-password"
+                        })
+                        <button type="button" class="auth-eye" data-toggle-password aria-label="Hiện mật khẩu">
+                            <i class="bi bi-eye" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.MatKhau, "", new { @class = "auth-error" })
                 </div>
 
-                <button type="submit" class="tk-btn">Đăng nhập</button>
+                <div class="auth-row-between">
+                    <label class="auth-check">
+                        <input type="checkbox" name="GhiNho" value="true"
+                               checked="@(Model.GhiNho ? "checked" : null)" />
+                        <span class="auth-box" aria-hidden="true"></span>
+                        <span>Ghi nhớ đăng nhập</span>
+                    </label>
+
+                    <a class="auth-link" href="@Url.Action("LienHe", "Home", new { area = "" })">Quên mật khẩu?</a>
+                </div>
+
+                <button type="submit" class="auth-submit">
+                    <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+                    Đăng nhập
+                </button>
             }
 
-            <p class="text-center mt-4 mb-0">
+            <div class="auth-divider">Hoặc tiếp tục với</div>
+
+            <div class="auth-social">
+                <button type="button" data-social="Google">
+                    <svg viewBox="0 0 48 48" aria-hidden="true">
+                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+                    </svg>
+                    Google
+                </button>
+                <button type="button" data-social="Facebook">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill="#1877F2" d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.02 4.39 11.02 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.88v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.09 24 18.09 24 12.07z" />
+                    </svg>
+                    Facebook
+                </button>
+            </div>
+            <p class="auth-note" id="authSocialNote" hidden></p>
+
+            <p class="auth-foot">
                 Chưa có tài khoản?
-                <a class="tk-link"
-                   href="@Url.Action("DangKy", "TaiKhoan", new { area = "", returnUrl = Model.ReturnUrl })">
-                    Đăng ký ngay
+                <a class="auth-link" href="@Url.Action("DangKy", "TaiKhoan", new { area = "", returnUrl = Model.ReturnUrl })">
+                    Đăng ký tài khoản mới
                 </a>
             </p>
         </div>
     </div>
 </section>
+
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/auth.js")"></script>
+}

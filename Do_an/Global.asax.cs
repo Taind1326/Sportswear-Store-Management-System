@@ -21,6 +21,7 @@ namespace Do_an
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             XacThucService.TaoAdminMacDinh();
+            XacThucService.KhoiPhucTuCookie();
         }
     }
 }
