@@ -1,7 +1,112 @@
 ﻿
+@model Do_an.Models.DonHang
+
 @{
-    ViewBag.Title = "ThanhCong";
+    ViewBag.Title = "Đặt hàng thành công";
+
+    var thanhToan = ViewBag.ThanhToan as Do_an.Models.ThanhToan;
 }
 
-<h2>ThanhCong</h2>
+<div class="container py-5">
 
+    <div class="mx-auto text-center" style="max-width:650px;">
+
+        <div class="mb-4">
+            <i class="bi bi-check-circle-fill text-success"
+               style="font-size:65px;"
+               aria-hidden="true"></i>
+        </div>
+
+        <h2 class="fw-bold text-success">
+            ĐẶT HÀNG THÀNH CÔNG!
+        </h2>
+
+        <p class="text-secondary mt-3">
+            Cảm ơn bạn đã mua sắm tại SPORTIX.
+            Đơn hàng của bạn đã được ghi nhận.
+        </p>
+
+        <div class="card shadow-sm mt-4">
+
+            <div class="card-body text-start">
+
+                <h5 class="fw-bold mb-3">Thông tin đơn hàng</h5>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Mã đơn hàng</span>
+                    <strong>#@Model.MaDonHang</strong>
+                </div>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Người nhận</span>
+                    <strong>@Model.HoTenNguoiNhan</strong>
+                </div>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Số điện thoại</span>
+                    <strong>@Model.SoDienThoai</strong>
+                </div>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Ngày đặt</span>
+                    <strong>@Model.NgayDat.ToString("dd/MM/yyyy HH:mm")</strong>
+                </div>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Trạng thái đơn hàng</span>
+                    <strong class="text-primary">Chờ xác nhận</strong>
+                </div>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Phương thức thanh toán</span>
+                    <strong>
+                        @(thanhToan == null
+                            ? "Chưa xác định"
+                            : thanhToan.PhuongThuc == "COD"
+                                ? "Thanh toán khi nhận hàng (COD)"
+                                : "Chuyển khoản SePay")
+                    </strong>
+                </div>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Trạng thái thanh toán</span>
+                    <strong>
+                        @(thanhToan == null
+                            ? "Chưa xác định"
+                            : thanhToan.TrangThai == "DaThanhToan"
+                                ? "Đã thanh toán"
+                                : "Chưa thanh toán")
+                    </strong>
+                </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">Tổng thanh toán</span>
+
+                    <span class="fs-4 fw-bold text-danger">
+                        @((Model.TongTien ?? 0m).ToString("N0")) đ
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="mt-4">
+
+            <a href="@Url.Action("LichSu", "DonHang")"
+               class="btn btn-dark px-4 py-2">
+                Xem lịch sử đơn hàng
+            </a>
+
+            <a href="@Url.Action("Index", "SanPham")"
+               class="btn btn-outline-secondary px-4 py-2 ms-2">
+                Tiếp tục mua sắm
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
