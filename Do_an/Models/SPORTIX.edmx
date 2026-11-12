@@ -133,6 +133,15 @@
           <Property Name="MoTa" Type="nvarchar" MaxLength="500" />
           <Property Name="HoatDong" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="LuotXemThongBaoWebsite">
+          <Key>
+            <PropertyRef Name="MaTaiKhoan" />
+            <PropertyRef Name="MaThongBaoWebsite" />
+          </Key>
+          <Property Name="MaTaiKhoan" Type="int" Nullable="false" />
+          <Property Name="MaThongBaoWebsite" Type="int" Nullable="false" />
+          <Property Name="NgayXem" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
         <EntityType Name="MaGiamGia">
           <Key>
             <PropertyRef Name="MaGiamGia" />
@@ -216,6 +225,12 @@
           <Property Name="MaThongBaoWebsite" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TieuDe" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="NoiDung" Type="nvarchar" MaxLength="2000" Nullable="false" />
+          <Property Name="NhanTrai" Type="nvarchar" MaxLength="40" />
+          <Property Name="GiaTriTrai" Type="nvarchar" MaxLength="30" />
+          <Property Name="MoTaTrai" Type="nvarchar" MaxLength="160" />
+          <Property Name="NhanPhai" Type="nvarchar" MaxLength="40" />
+          <Property Name="GiaTriPhai" Type="nvarchar" MaxLength="30" />
+          <Property Name="MoTaPhai" Type="nvarchar" MaxLength="160" />
           <Property Name="HienThi" Type="bit" Nullable="false" />
           <Property Name="MaNguoiTao" Type="int" Nullable="false" />
           <Property Name="NgayTao" Type="datetime2" Precision="7" Nullable="false" />
@@ -242,7 +257,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__CanhBaoTo__MaBie__339FAB6E">
+        <Association Name="FK__CanhBaoTo__MaBie__37703C52">
           <End Role="BienTheSanPham" Type="Self.BienTheSanPham" Multiplicity="1" />
           <End Role="CanhBaoTonKho" Type="Self.CanhBaoTonKho" Multiplicity="0..1" />
           <ReferentialConstraint>
@@ -362,7 +377,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__LichSuTon__MaBie__29221CFB">
+        <Association Name="FK__LichSuTon__MaBie__2CF2ADDF">
           <End Role="BienTheSanPham" Type="Self.BienTheSanPham" Multiplicity="1" />
           <End Role="LichSuTonKho" Type="Self.LichSuTonKho" Multiplicity="*" />
           <ReferentialConstraint>
@@ -374,7 +389,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__LichSuTon__MaTai__2A164134">
+        <Association Name="FK__LichSuTon__MaTai__2DE6D218">
           <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="1" />
           <End Role="LichSuTonKho" Type="Self.LichSuTonKho" Multiplicity="*" />
           <ReferentialConstraint>
@@ -470,6 +485,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_LuotXemThongBaoWebsite_TaiKhoan">
+          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="1" />
+          <End Role="LuotXemThongBaoWebsite" Type="Self.LuotXemThongBaoWebsite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaiKhoan">
+              <PropertyRef Name="MaTaiKhoan" />
+            </Principal>
+            <Dependent Role="LuotXemThongBaoWebsite">
+              <PropertyRef Name="MaTaiKhoan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LuotXemThongBaoWebsite_ThongBaoWebsite">
+          <End Role="ThongBaoWebsite" Type="Self.ThongBaoWebsite" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="LuotXemThongBaoWebsite" Type="Self.LuotXemThongBaoWebsite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ThongBaoWebsite">
+              <PropertyRef Name="MaThongBaoWebsite" />
+            </Principal>
+            <Dependent Role="LuotXemThongBaoWebsite">
+              <PropertyRef Name="MaThongBaoWebsite" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="SPORTIXModelStoreContainer">
           <EntitySet Name="BienTheSanPham" EntityType="Self.BienTheSanPham" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CanhBaoTonKho" EntityType="Self.CanhBaoTonKho" Schema="dbo" store:Type="Tables" />
@@ -481,6 +522,7 @@
           <EntitySet Name="HinhAnhSanPham" EntityType="Self.HinhAnhSanPham" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LichSuTonKho" EntityType="Self.LichSuTonKho" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoaiHang" EntityType="Self.LoaiHang" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LuotXemThongBaoWebsite" EntityType="Self.LuotXemThongBaoWebsite" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MaGiamGia" EntityType="Self.MaGiamGia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SanPham" EntityType="Self.SanPham" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TaiKhoan" EntityType="Self.TaiKhoan" Schema="dbo" store:Type="Tables" />
@@ -492,7 +534,7 @@
             <End Role="SanPham" EntitySet="SanPham" />
             <End Role="BienTheSanPham" EntitySet="BienTheSanPham" />
           </AssociationSet>
-          <AssociationSet Name="FK__CanhBaoTo__MaBie__339FAB6E" Association="Self.FK__CanhBaoTo__MaBie__339FAB6E">
+          <AssociationSet Name="FK__CanhBaoTo__MaBie__37703C52" Association="Self.FK__CanhBaoTo__MaBie__37703C52">
             <End Role="BienTheSanPham" EntitySet="BienTheSanPham" />
             <End Role="CanhBaoTonKho" EntitySet="CanhBaoTonKho" />
           </AssociationSet>
@@ -532,11 +574,11 @@
             <End Role="SanPham" EntitySet="SanPham" />
             <End Role="HinhAnhSanPham" EntitySet="HinhAnhSanPham" />
           </AssociationSet>
-          <AssociationSet Name="FK__LichSuTon__MaBie__29221CFB" Association="Self.FK__LichSuTon__MaBie__29221CFB">
+          <AssociationSet Name="FK__LichSuTon__MaBie__2CF2ADDF" Association="Self.FK__LichSuTon__MaBie__2CF2ADDF">
             <End Role="BienTheSanPham" EntitySet="BienTheSanPham" />
             <End Role="LichSuTonKho" EntitySet="LichSuTonKho" />
           </AssociationSet>
-          <AssociationSet Name="FK__LichSuTon__MaTai__2A164134" Association="Self.FK__LichSuTon__MaTai__2A164134">
+          <AssociationSet Name="FK__LichSuTon__MaTai__2DE6D218" Association="Self.FK__LichSuTon__MaTai__2DE6D218">
             <End Role="TaiKhoan" EntitySet="TaiKhoan" />
             <End Role="LichSuTonKho" EntitySet="LichSuTonKho" />
           </AssociationSet>
@@ -567,6 +609,14 @@
           <AssociationSet Name="FK__ThongBaoW__MaNgu__25518C17" Association="Self.FK__ThongBaoW__MaNgu__25518C17">
             <End Role="TaiKhoan" EntitySet="TaiKhoan" />
             <End Role="ThongBaoWebsite" EntitySet="ThongBaoWebsite" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LuotXemThongBaoWebsite_TaiKhoan" Association="Self.FK_LuotXemThongBaoWebsite_TaiKhoan">
+            <End Role="TaiKhoan" EntitySet="TaiKhoan" />
+            <End Role="LuotXemThongBaoWebsite" EntitySet="LuotXemThongBaoWebsite" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LuotXemThongBaoWebsite_ThongBaoWebsite" Association="Self.FK_LuotXemThongBaoWebsite_ThongBaoWebsite">
+            <End Role="ThongBaoWebsite" EntitySet="ThongBaoWebsite" />
+            <End Role="LuotXemThongBaoWebsite" EntitySet="LuotXemThongBaoWebsite" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -781,6 +831,7 @@
           <NavigationProperty Name="ThanhToans" Relationship="Self.FK__ThanhToan__MaNgu__151B244E" FromRole="TaiKhoan" ToRole="ThanhToan" />
           <NavigationProperty Name="ThongBaos" Relationship="Self.FK__ThongBao__MaTaiK__1EA48E88" FromRole="TaiKhoan" ToRole="ThongBao" />
           <NavigationProperty Name="ThongBaoWebsites" Relationship="Self.FK__ThongBaoW__MaNgu__245D67DE" FromRole="TaiKhoan" ToRole="ThongBaoWebsite" />
+          <NavigationProperty Name="LuotXemThongBaoWebsites" Relationship="SPORTIXModel.FK_LuotXemThongBaoWebsite_TaiKhoan" FromRole="TaiKhoan" ToRole="LuotXemThongBaoWebsite" />
         </EntityType>
         <EntityType Name="ThanhToan">
           <Key>
@@ -827,6 +878,13 @@
           <Property Name="NgayTao" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="NgayCapNhat" Type="DateTime" Precision="7" />
           <NavigationProperty Name="TaiKhoan" Relationship="Self.FK__ThongBaoW__MaNgu__245D67DE" FromRole="ThongBaoWebsite" ToRole="TaiKhoan" />
+          <Property Name="NhanTrai" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="GiaTriTrai" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="MoTaTrai" Type="String" MaxLength="160" FixedLength="false" Unicode="true" />
+          <Property Name="NhanPhai" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="GiaTriPhai" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="MoTaPhai" Type="String" MaxLength="160" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="LuotXemThongBaoWebsites" Relationship="SPORTIXModel.FK_LuotXemThongBaoWebsite_ThongBaoWebsite" FromRole="ThongBaoWebsite" ToRole="LuotXemThongBaoWebsite" />
         </EntityType>
         <EntityType Name="ThuongHieu">
           <Key>
@@ -1176,7 +1234,53 @@
             <End Role="TaiKhoan" EntitySet="TaiKhoans" />
             <End Role="ThongBaoWebsite" EntitySet="ThongBaoWebsites" />
           </AssociationSet>
+          <EntitySet Name="LuotXemThongBaoWebsites" EntityType="SPORTIXModel.LuotXemThongBaoWebsite" />
+          <AssociationSet Name="FK_LuotXemThongBaoWebsite_TaiKhoan" Association="SPORTIXModel.FK_LuotXemThongBaoWebsite_TaiKhoan">
+            <End Role="TaiKhoan" EntitySet="TaiKhoans" />
+            <End Role="LuotXemThongBaoWebsite" EntitySet="LuotXemThongBaoWebsites" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LuotXemThongBaoWebsite_ThongBaoWebsite" Association="SPORTIXModel.FK_LuotXemThongBaoWebsite_ThongBaoWebsite">
+            <End Role="ThongBaoWebsite" EntitySet="ThongBaoWebsites" />
+            <End Role="LuotXemThongBaoWebsite" EntitySet="LuotXemThongBaoWebsites" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="LuotXemThongBaoWebsite">
+          <Key>
+            <PropertyRef Name="MaTaiKhoan" />
+            <PropertyRef Name="MaThongBaoWebsite" />
+          </Key>
+          <Property Name="MaTaiKhoan" Type="Int32" Nullable="false" />
+          <Property Name="MaThongBaoWebsite" Type="Int32" Nullable="false" />
+          <Property Name="NgayXem" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="TaiKhoan" Relationship="SPORTIXModel.FK_LuotXemThongBaoWebsite_TaiKhoan" FromRole="LuotXemThongBaoWebsite" ToRole="TaiKhoan" />
+          <NavigationProperty Name="ThongBaoWebsite" Relationship="SPORTIXModel.FK_LuotXemThongBaoWebsite_ThongBaoWebsite" FromRole="LuotXemThongBaoWebsite" ToRole="ThongBaoWebsite" />
+        </EntityType>
+        <Association Name="FK_LuotXemThongBaoWebsite_TaiKhoan">
+          <End Type="SPORTIXModel.TaiKhoan" Role="TaiKhoan" Multiplicity="1" />
+          <End Type="SPORTIXModel.LuotXemThongBaoWebsite" Role="LuotXemThongBaoWebsite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaiKhoan">
+              <PropertyRef Name="MaTaiKhoan" />
+            </Principal>
+            <Dependent Role="LuotXemThongBaoWebsite">
+              <PropertyRef Name="MaTaiKhoan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LuotXemThongBaoWebsite_ThongBaoWebsite">
+          <End Type="SPORTIXModel.ThongBaoWebsite" Role="ThongBaoWebsite" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="SPORTIXModel.LuotXemThongBaoWebsite" Role="LuotXemThongBaoWebsite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ThongBaoWebsite">
+              <PropertyRef Name="MaThongBaoWebsite" />
+            </Principal>
+            <Dependent Role="LuotXemThongBaoWebsite">
+              <PropertyRef Name="MaThongBaoWebsite" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1405,6 +1509,12 @@
           <EntitySetMapping Name="ThongBaoWebsites">
             <EntityTypeMapping TypeName="SPORTIXModel.ThongBaoWebsite">
               <MappingFragment StoreEntitySet="ThongBaoWebsite">
+                <ScalarProperty Name="MoTaPhai" ColumnName="MoTaPhai" />
+                <ScalarProperty Name="GiaTriPhai" ColumnName="GiaTriPhai" />
+                <ScalarProperty Name="NhanPhai" ColumnName="NhanPhai" />
+                <ScalarProperty Name="MoTaTrai" ColumnName="MoTaTrai" />
+                <ScalarProperty Name="GiaTriTrai" ColumnName="GiaTriTrai" />
+                <ScalarProperty Name="NhanTrai" ColumnName="NhanTrai" />
                 <ScalarProperty Name="MaThongBaoWebsite" ColumnName="MaThongBaoWebsite" />
                 <ScalarProperty Name="TieuDe" ColumnName="TieuDe" />
                 <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
@@ -1422,6 +1532,15 @@
                 <ScalarProperty Name="TenThuongHieu" ColumnName="TenThuongHieu" />
                 <ScalarProperty Name="MoTa" ColumnName="MoTa" />
                 <ScalarProperty Name="HoatDong" ColumnName="HoatDong" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LuotXemThongBaoWebsites">
+            <EntityTypeMapping TypeName="SPORTIXModel.LuotXemThongBaoWebsite">
+              <MappingFragment StoreEntitySet="LuotXemThongBaoWebsite">
+                <ScalarProperty Name="NgayXem" ColumnName="NgayXem" />
+                <ScalarProperty Name="MaThongBaoWebsite" ColumnName="MaThongBaoWebsite" />
+                <ScalarProperty Name="MaTaiKhoan" ColumnName="MaTaiKhoan" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -23,6 +23,7 @@ namespace Do_an.Models
             this.ThanhToans = new HashSet<ThanhToan>();
             this.ThongBaos = new HashSet<ThongBao>();
             this.ThongBaoWebsites = new HashSet<ThongBaoWebsite>();
+            this.LuotXemThongBaoWebsites = new HashSet<LuotXemThongBaoWebsite>();
         }
     
         public int MaTaiKhoan { get; set; }
@@ -42,5 +43,6 @@ namespace Do_an.Models
         public virtual ICollection<ThanhToan> ThanhToans { get; set; }
         public virtual ICollection<ThongBao> ThongBaos { get; set; }
         public virtual ICollection<ThongBaoWebsite> ThongBaoWebsites { get; set; }
+        public virtual ICollection<LuotXemThongBaoWebsite> LuotXemThongBaoWebsites { get; set; }
     }
 }

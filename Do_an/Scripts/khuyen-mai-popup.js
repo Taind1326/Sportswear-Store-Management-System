@@ -4,68 +4,80 @@
     function khoiTao() {
         var popup = document.getElementById("sportixPromotion");
 
-        if (!popup ||
-            !window.bootstrap ||
-            !window.bootstrap.Modal) {
+        if (!popup || !window.bootstrap || !window.bootstrap.Modal) {
             return;
         }
 
-        var khoa = "sportix-promotion:" +
-            popup.getAttribute("data-notice-key");
+        var ma = popup.getAttribute("data-notice-id");
+        var taiKhoan = popup.getAttribute("data-account-id");
+        var khoa = "sportix-promotion:" + (taiKhoan || "guest") + ":" + ma;
 
         try {
             if (window.sessionStorage.getItem(khoa) === "1") {
                 return;
             }
-        } catch (error) {
-            // Vẫn cho xem khi trình duyệt chặn sessionStorage.
+        } catch (loi) {
+            // Vẫn cho xem nếu trình duyệt chặn lưu trữ.
         }
 
-        var modal = window.bootstrap.Modal
-            .getOrCreateInstance(popup);
+        function ghiNhanTaiKhoan(lanThu) {
+            var form = popup.querySelector(".promotion-seen-form");
+
+            if (!taiKhoan || !form || !window.jQuery) {
+                return;
+            }
+
+            window.jQuery.ajax({
+                url: form.action,
+                type: "POST",
+                data: window.jQuery(form).serialize(),
+                error: function () {
+                    if (lanThu < 2) {
+                        window.setTimeout(function () {
+                            ghiNhanTaiKhoan(lanThu + 1);
+                        }, 1000);
+                    }
+                }
+            });
+        }
 
         popup.addEventListener("shown.bs.modal", function () {
             try {
                 window.sessionStorage.setItem(khoa, "1");
-            } catch (error) {
-                // Không ảnh hưởng thao tác đóng popup.
+            } catch (loi) {
+                // Việc ghi nhận tài khoản vẫn thực hiện ở server.
             }
-        }, { once: true });
+
+            ghiNhanTaiKhoan(0);
+        });
 
         var soLanCho = 0;
 
         function hienKhiSanSang() {
             var splash = document.getElementById("sportixSplash");
 
-            var splashDangHien =
-                splash &&
+            var dangSplash = splash &&
                 !splash.hidden &&
                 splash.getClientRects().length > 0;
 
-            var modalKhac = document.querySelector(".modal.show");
-
-            if (splashDangHien || modalKhac) {
-                soLanCho += 1;
-
-                if (soLanCho < 100) {
+            if (dangSplash || document.querySelector(".modal.show")) {
+                if (++soLanCho < 100) {
                     window.setTimeout(hienKhiSanSang, 100);
                 }
 
                 return;
             }
 
-            modal.show();
+            window.bootstrap.Modal
+                .getOrCreateInstance(popup)
+                .show();
         }
 
         hienKhiSanSang();
     }
 
     if (document.readyState === "loading") {
-        document.addEventListener(
-            "DOMContentLoaded",
-            khoiTao,
-            { once: true }
-        );
+        document.addEventListener("DOMContentLoaded", khoiTao);
     } else {
         khoiTao();
     }

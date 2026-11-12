@@ -6,30 +6,147 @@
 }
 
 <div class="product-page-heading">
-    <div><h1>@ViewBag.Title</h1></div>
-    <a href="@Url.Action("Index", "ThongBaoWebsite", new { area = "Admin" })" class="btn btn-outline-secondary">Quay lại</a>
+    <div>
+        <h1>@ViewBag.Title</h1>
+        <p>Nhập nội dung chương trình hiển thị trên trang chủ.</p>
+    </div>
+
+    <a href="@Url.Action("Index", "ThongBaoWebsite", new { area = "Admin" })"
+       class="btn btn-outline-secondary">
+        Quay lại
+    </a>
 </div>
 
-@using (Html.BeginForm(laSua ? "Sua" : "Them", "ThongBaoWebsite",
-    new { area = "Admin", id = laSua ? (int?)Model.MaThongBaoWebsite : null },
-    FormMethod.Post, new { @class = "product-panel", novalidate = "novalidate" }))
+@using (Html.BeginForm(
+    laSua ? "Sua" : "Them",
+    "ThongBaoWebsite",
+    new
+    {
+        area = "Admin",
+        id = laSua ? (int?)Model.MaThongBaoWebsite : null
+    },
+    FormMethod.Post,
+    new { @class = "product-panel" }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
 
     <div class="mb-3">
         @Html.LabelFor(m => m.TieuDe, new { @class = "form-label" })
-        @Html.TextBoxFor(m => m.TieuDe, new { @class = "form-control", maxlength = "200" })
+        @Html.TextBoxFor(m => m.TieuDe, new
+        {
+            @class = "form-control",
+            maxlength = "200",
+            placeholder = "Ví dụ: Ưu đãi chào hè"
+        })
         @Html.ValidationMessageFor(m => m.TieuDe, "", new { @class = "text-danger" })
     </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <fieldset class="border rounded-3 p-3 h-100">
+                <legend class="float-none w-auto px-2 fs-6 fw-bold">
+                    Cột bên trái
+                </legend>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.NhanTrai, new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.NhanTrai, new
+                    {
+                        @class = "form-control",
+                        maxlength = "40",
+                        placeholder = "Ví dụ: Giảm"
+                    })
+                    @Html.ValidationMessageFor(m => m.NhanTrai, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.GiaTriTrai, new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.GiaTriTrai, new
+                    {
+                        @class = "form-control",
+                        maxlength = "30",
+                        placeholder = "Ví dụ: 30%"
+                    })
+                    @Html.ValidationMessageFor(m => m.GiaTriTrai, "", new { @class = "text-danger" })
+                </div>
+
+                <div>
+                    @Html.LabelFor(m => m.MoTaTrai, new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.MoTaTrai, new
+                    {
+                        @class = "form-control",
+                        maxlength = "160",
+                        placeholder = "Ví dụ: Cho một số mẫu giày chạy bộ"
+                    })
+                    @Html.ValidationMessageFor(m => m.MoTaTrai, "", new { @class = "text-danger" })
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="col-md-6">
+            <fieldset class="border rounded-3 p-3 h-100">
+                <legend class="float-none w-auto px-2 fs-6 fw-bold">
+                    Cột bên phải
+                </legend>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.NhanPhai, new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.NhanPhai, new
+                    {
+                        @class = "form-control",
+                        maxlength = "40",
+                        placeholder = "Ví dụ: Freeship"
+                    })
+                    @Html.ValidationMessageFor(m => m.NhanPhai, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.GiaTriPhai, new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.GiaTriPhai, new
+                    {
+                        @class = "form-control",
+                        maxlength = "30",
+                        placeholder = "Ví dụ: 0đ"
+                    })
+                    @Html.ValidationMessageFor(m => m.GiaTriPhai, "", new { @class = "text-danger" })
+                </div>
+
+                <div>
+                    @Html.LabelFor(m => m.MoTaPhai, new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.MoTaPhai, new
+                    {
+                        @class = "form-control",
+                        maxlength = "160",
+                        placeholder = "Ví dụ: Đơn từ 2.000.000đ"
+                    })
+                    @Html.ValidationMessageFor(m => m.MoTaPhai, "", new { @class = "text-danger" })
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+    <p class="text-secondary small">
+        Nhập đủ hai cột để dùng bố cục ưu đãi.
+        Có thể bỏ trống cả hai cột nếu chỉ cần thông báo văn bản.
+    </p>
+
     <div class="mb-3">
         @Html.LabelFor(m => m.NoiDung, new { @class = "form-label" })
-        @Html.TextAreaFor(m => m.NoiDung, 6, 60, new { @class = "form-control", maxlength = "2000" })
+        @Html.TextAreaFor(m => m.NoiDung, 4, 60, new
+        {
+            @class = "form-control",
+            maxlength = "2000"
+        })
         @Html.ValidationMessageFor(m => m.NoiDung, "", new { @class = "text-danger" })
     </div>
-    <div class="form-check mb-3">
+
+    <div class="form-check mb-4">
         @Html.CheckBoxFor(m => m.HienThi, new { @class = "form-check-input" })
-        <label class="form-check-label" for="HienThi">Hiển thị cho khách hàng</label>
+        @Html.LabelFor(m => m.HienThi, new { @class = "form-check-label" })
     </div>
-    <button type="submit" class="btn btn-primary">@(laSua ? "Lưu thay đổi" : "Tạo thông báo")</button>
+
+    <button type="submit" class="btn btn-primary">
+        @(laSua ? "Lưu thay đổi" : "Tạo thông báo")
+    </button>
 }

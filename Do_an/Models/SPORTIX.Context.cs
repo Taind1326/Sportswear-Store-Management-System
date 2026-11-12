@@ -42,5 +42,6 @@ namespace Do_an.Models
         public DbSet<ThongBao> ThongBaos { get; set; }
         public DbSet<ThongBaoWebsite> ThongBaoWebsites { get; set; }
         public DbSet<ThuongHieu> ThuongHieux { get; set; }
+        public DbSet<LuotXemThongBaoWebsite> LuotXemThongBaoWebsites { get; set; }
     }
 }

@@ -42,6 +42,9 @@
         <AssociationConnector Association="SPORTIXModel.FK__ThanhToan__MaNgu__151B244E" ManuallyRouted="false" />
         <AssociationConnector Association="SPORTIXModel.FK__ThongBao__MaTaiK__1EA48E88" ManuallyRouted="false" />
         <AssociationConnector Association="SPORTIXModel.FK__ThongBaoW__MaNgu__245D67DE" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="SPORTIXModel.LuotXemThongBaoWebsite" Width="1.5" PointX="5.25" PointY="22.5" />
+        <AssociationConnector Association="SPORTIXModel.FK_LuotXemThongBaoWebsite_TaiKhoan" />
+        <AssociationConnector Association="SPORTIXModel.FK_LuotXemThongBaoWebsite_ThongBaoWebsite" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

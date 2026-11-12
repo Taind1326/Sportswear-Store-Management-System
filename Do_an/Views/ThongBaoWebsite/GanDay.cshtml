@@ -1,17 +1,8 @@
-@model System.Collections.Generic.List<Do_an.Models.ThongBaoWebsite>
-@using System.Linq
+@model Do_an.ViewModels.ThongBaoWebsitePopupViewModel
 
-@{
-    var thongBao = Model.FirstOrDefault();
-}
-
-@if (thongBao != null)
+@if (Model != null && Model.ThongBao != null)
 {
-    string khoaThongBao =
-        thongBao.MaThongBaoWebsite.ToString()
-        + "-"
-        + (thongBao.NgayCapNhat ?? thongBao.NgayTao)
-            .Ticks.ToString();
+    var thongBao = Model.ThongBao;
 
     <div class="modal fade sportix-promotion"
          id="sportixPromotion"
@@ -19,7 +10,8 @@
          aria-labelledby="promotionTitle"
          aria-describedby="promotionContent"
          aria-hidden="true"
-         data-notice-key="@khoaThongBao">
+         data-notice-id="@thongBao.MaThongBaoWebsite"
+         data-account-id="@Model.MaTaiKhoan">
 
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content promotion-card">
@@ -31,24 +23,64 @@
                 </button>
 
                 <div class="modal-body promotion-body">
-                    <span class="promotion-tag">
-                        ƯU ĐÃI SPORTIX
-                    </span>
+                    <span class="promotion-tag">SPORTIX SALE</span>
 
-                    <h2 id="promotionTitle"
-                        class="promotion-title">
+                    <h2 class="promotion-title" id="promotionTitle">
                         @thongBao.TieuDe
                     </h2>
 
-                    <p id="promotionContent"
-                       class="promotion-content">@thongBao.NoiDung</p>
+                    @if (Model.CoHaiCot)
+                    {
+                        <div class="promotion-offers">
+                            <div class="promotion-offer">
+                                <span class="promotion-label">
+                                    @thongBao.NhanTrai
+                                </span>
+                                <strong class="promotion-value">
+                                    @thongBao.GiaTriTrai
+                                </strong>
+                                <span class="promotion-note">
+                                    @thongBao.MoTaTrai
+                                </span>
+                            </div>
+
+                            <div class="promotion-offer">
+                                <span class="promotion-label">
+                                    @thongBao.NhanPhai
+                                </span>
+                                <strong class="promotion-value">
+                                    @thongBao.GiaTriPhai
+                                </strong>
+                                <span class="promotion-note">
+                                    @thongBao.MoTaPhai
+                                </span>
+                            </div>
+                        </div>
+                    }
+
+                    <p class="promotion-content" id="promotionContent">@thongBao.NoiDung</p>
 
                     <a href="@Url.Action("Index", "ThongBaoWebsite", new { area = "" })"
                        class="promotion-button">
                         Xem ưu đãi ngay
-                        <i class="bi bi-arrow-right"
-                           aria-hidden="true"></i>
+                        <i class="bi bi-arrow-right" aria-hidden="true"></i>
                     </a>
+
+                    @if (Model.MaTaiKhoan.HasValue)
+                    {
+                        using (Html.BeginForm(
+                            "DaXem",
+                            "ThongBaoWebsite",
+                            new { area = "" },
+                            FormMethod.Post,
+                            new { @class = "promotion-seen-form", hidden = "hidden" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="hidden"
+                                   name="id"
+                                   value="@thongBao.MaThongBaoWebsite" />
+                        }
+                    }
                 </div>
             </div>
         </div>

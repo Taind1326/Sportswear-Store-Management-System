@@ -219,6 +219,9 @@
     <Compile Include="Models\LoaiHang.cs">
       <DependentUpon>SPORTIX.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\LuotXemThongBaoWebsite.cs">
+      <DependentUpon>SPORTIX.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MaGiamGia.cs">
       <DependentUpon>SPORTIX.tt</DependentUpon>
     </Compile>

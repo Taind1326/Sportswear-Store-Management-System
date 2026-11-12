@@ -16,7 +16,8 @@ namespace Do_an.Areas.Admin.Controllers
             using (var db = new SPORTIXEntities())
             {
                 return View(db.ThongBaoWebsites.AsNoTracking()
-                    .OrderByDescending(x => x.NgayTao).ThenByDescending(x => x.MaThongBaoWebsite)
+                    .OrderByDescending(x => x.NgayTao)
+                    .ThenByDescending(x => x.MaThongBaoWebsite)
                     .ToList());
             }
         }
@@ -24,24 +25,33 @@ namespace Do_an.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Them()
         {
-            return View("Form", new ThongBaoWebsiteFormViewModel { HienThi = true });
+            return View("Form", new ThongBaoWebsiteFormViewModel
+            {
+                HienThi = true
+            });
         }
 
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Them(ThongBaoWebsiteFormViewModel vm)
         {
-            if (!ModelState.IsValid) return View("Form", vm);
+            if (!ModelState.IsValid)
+                return View("Form", vm);
+
+            int? maTaiKhoan = XacThucService.LayMaTaiKhoanHienTai();
+
+            if (!maTaiKhoan.HasValue)
+                return new HttpStatusCodeResult(401);
 
             using (var db = new SPORTIXEntities())
             {
-                db.ThongBaoWebsites.Add(new ThongBaoWebsite
+                var thongBao = new ThongBaoWebsite
                 {
-                    TieuDe = vm.TieuDe.Trim(),
-                    NoiDung = vm.NoiDung.Trim(),
-                    HienThi = vm.HienThi,
-                    MaNguoiTao = XacThucService.LayMaTaiKhoanHienTai().Value,
+                    MaNguoiTao = maTaiKhoan.Value,
                     NgayTao = DateTime.Now
-                });
+                };
+
+                GanNoiDung(thongBao, vm);
+                db.ThongBaoWebsites.Add(thongBao);
                 db.SaveChanges();
             }
 
@@ -54,15 +64,24 @@ namespace Do_an.Areas.Admin.Controllers
         {
             using (var db = new SPORTIXEntities())
             {
-                var t = db.ThongBaoWebsites.AsNoTracking().FirstOrDefault(x => x.MaThongBaoWebsite == id);
-                if (t == null) return HttpNotFound();
+                var thongBao = db.ThongBaoWebsites.AsNoTracking()
+                    .FirstOrDefault(x => x.MaThongBaoWebsite == id);
+
+                if (thongBao == null)
+                    return HttpNotFound();
 
                 return View("Form", new ThongBaoWebsiteFormViewModel
                 {
-                    MaThongBaoWebsite = t.MaThongBaoWebsite,
-                    TieuDe = t.TieuDe,
-                    NoiDung = t.NoiDung,
-                    HienThi = t.HienThi
+                    MaThongBaoWebsite = thongBao.MaThongBaoWebsite,
+                    TieuDe = thongBao.TieuDe,
+                    NoiDung = thongBao.NoiDung,
+                    HienThi = thongBao.HienThi,
+                    NhanTrai = thongBao.NhanTrai,
+                    GiaTriTrai = thongBao.GiaTriTrai,
+                    MoTaTrai = thongBao.MoTaTrai,
+                    NhanPhai = thongBao.NhanPhai,
+                    GiaTriPhai = thongBao.GiaTriPhai,
+                    MoTaPhai = thongBao.MoTaPhai
                 });
             }
         }
@@ -71,17 +90,20 @@ namespace Do_an.Areas.Admin.Controllers
         public ActionResult Sua(int id, ThongBaoWebsiteFormViewModel vm)
         {
             vm.MaThongBaoWebsite = id;
-            if (!ModelState.IsValid) return View("Form", vm);
+
+            if (!ModelState.IsValid)
+                return View("Form", vm);
 
             using (var db = new SPORTIXEntities())
             {
-                var t = db.ThongBaoWebsites.FirstOrDefault(x => x.MaThongBaoWebsite == id);
-                if (t == null) return HttpNotFound();
+                var thongBao = db.ThongBaoWebsites
+                    .FirstOrDefault(x => x.MaThongBaoWebsite == id);
 
-                t.TieuDe = vm.TieuDe.Trim();
-                t.NoiDung = vm.NoiDung.Trim();
-                t.HienThi = vm.HienThi;
-                t.NgayCapNhat = DateTime.Now;
+                if (thongBao == null)
+                    return HttpNotFound();
+
+                GanNoiDung(thongBao, vm);
+                thongBao.NgayCapNhat = DateTime.Now;
                 db.SaveChanges();
             }
 
@@ -94,11 +116,14 @@ namespace Do_an.Areas.Admin.Controllers
         {
             using (var db = new SPORTIXEntities())
             {
-                var t = db.ThongBaoWebsites.FirstOrDefault(x => x.MaThongBaoWebsite == id);
-                if (t == null) return HttpNotFound();
+                var thongBao = db.ThongBaoWebsites
+                    .FirstOrDefault(x => x.MaThongBaoWebsite == id);
 
-                t.HienThi = !t.HienThi;
-                t.NgayCapNhat = DateTime.Now;
+                if (thongBao == null)
+                    return HttpNotFound();
+
+                thongBao.HienThi = !thongBao.HienThi;
+                thongBao.NgayCapNhat = DateTime.Now;
                 db.SaveChanges();
             }
 
@@ -110,16 +135,42 @@ namespace Do_an.Areas.Admin.Controllers
         {
             using (var db = new SPORTIXEntities())
             {
-                var t = db.ThongBaoWebsites.FirstOrDefault(x => x.MaThongBaoWebsite == id);
-                if (t != null)
-                {
-                    db.ThongBaoWebsites.Remove(t);
-                    db.SaveChanges();
-                    TempData["ThanhCong"] = "Đã xóa thông báo.";
-                }
+                var thongBao = db.ThongBaoWebsites
+                    .FirstOrDefault(x => x.MaThongBaoWebsite == id);
+
+                if (thongBao == null)
+                    return HttpNotFound();
+
+                db.ThongBaoWebsites.Remove(thongBao);
+                db.SaveChanges();
             }
 
+            TempData["ThanhCong"] = "Đã xóa thông báo.";
             return RedirectToAction("Index");
+        }
+
+        private static void GanNoiDung(
+            ThongBaoWebsite thongBao,
+            ThongBaoWebsiteFormViewModel vm)
+        {
+            thongBao.TieuDe = vm.TieuDe.Trim();
+            thongBao.NoiDung = vm.NoiDung.Trim();
+            thongBao.HienThi = vm.HienThi;
+
+            thongBao.NhanTrai = ChuanHoa(vm.NhanTrai);
+            thongBao.GiaTriTrai = ChuanHoa(vm.GiaTriTrai);
+            thongBao.MoTaTrai = ChuanHoa(vm.MoTaTrai);
+
+            thongBao.NhanPhai = ChuanHoa(vm.NhanPhai);
+            thongBao.GiaTriPhai = ChuanHoa(vm.GiaTriPhai);
+            thongBao.MoTaPhai = ChuanHoa(vm.MoTaPhai);
+        }
+
+        private static string ChuanHoa(string noiDung)
+        {
+            return string.IsNullOrWhiteSpace(noiDung)
+                ? null
+                : noiDung.Trim();
         }
     }
 }

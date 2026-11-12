@@ -14,6 +14,11 @@ namespace Do_an.Models
     
     public partial class ThongBaoWebsite
     {
+        public ThongBaoWebsite()
+        {
+            this.LuotXemThongBaoWebsites = new HashSet<LuotXemThongBaoWebsite>();
+        }
+    
         public int MaThongBaoWebsite { get; set; }
         public string TieuDe { get; set; }
         public string NoiDung { get; set; }
@@ -21,7 +26,14 @@ namespace Do_an.Models
         public int MaNguoiTao { get; set; }
         public System.DateTime NgayTao { get; set; }
         public Nullable<System.DateTime> NgayCapNhat { get; set; }
+        public string NhanTrai { get; set; }
+        public string GiaTriTrai { get; set; }
+        public string MoTaTrai { get; set; }
+        public string NhanPhai { get; set; }
+        public string GiaTriPhai { get; set; }
+        public string MoTaPhai { get; set; }
     
         public virtual TaiKhoan TaiKhoan { get; set; }
+        public virtual ICollection<LuotXemThongBaoWebsite> LuotXemThongBaoWebsites { get; set; }
     }
 }

@@ -1,20 +1,14 @@
 ﻿@using System
 
 @{
-    string controller = Convert.ToString(
-        ViewContext.RouteData.Values["controller"]);
-
-    string action = Convert.ToString(
-        ViewContext.RouteData.Values["action"]);
-
     bool trangChu =
         string.Equals(
-            controller,
+            Convert.ToString(ViewContext.RouteData.Values["controller"]),
             "Home",
             StringComparison.OrdinalIgnoreCase)
         &&
         string.Equals(
-            action,
+            Convert.ToString(ViewContext.RouteData.Values["action"]),
             "Index",
             StringComparison.OrdinalIgnoreCase);
 }
@@ -23,8 +17,7 @@
 <html lang="vi" class="sportix-public-page">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>@ViewBag.Title - SPORTIX</title>
 
@@ -51,7 +44,6 @@
 
     @RenderSection("Styles", required: false)
 </head>
-
 <body class="sportix-public">
     @Html.Partial("_Splash")
     @Html.Partial("_Header")
@@ -65,10 +57,7 @@
 
     @if (trangChu)
     {
-        @Html.Action(
-            "GanDay",
-            "ThongBaoWebsite",
-            new { area = "" })
+        @Html.Action("GanDay", "ThongBaoWebsite", new { area = "" })
     }
 
     @Scripts.Render("~/bundles/jquery")
