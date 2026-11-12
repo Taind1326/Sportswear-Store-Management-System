@@ -1,5 +1,12 @@
-﻿/* ===== Trang đăng nhập / đăng ký ===== */
+﻿/* ===== Trang đăng nhập / đăng ký =====
+   Mọi kích thước dùng calc(N * var(--u)) với N là số px ở màn hình rộng ~1920px.
+   --u co giãn theo chiều rộng cửa sổ nên card luôn chiếm tỉ lệ ~43% nền. */
+
 .auth-page {
+	--auth-scale-min: .82px;
+	--auth-scale-vw: .0524vw;
+	--auth-scale-max: 1.25px;
+	--u: clamp(var(--auth-scale-min), var(--auth-scale-vw), var(--auth-scale-max));
 	min-height: 78vh;
 	padding: 14px 16px 40px;
 	background: radial-gradient(520px 420px at 6% 28%, rgba(168, 232, 170, .85), transparent 70%), radial-gradient(600px 500px at 94% 92%, rgba(110, 210, 200, .85), transparent 70%), radial-gradient(500px 380px at 18% 90%, rgba(120, 200, 255, .6), transparent 70%), linear-gradient(115deg, #a9dfd0 0%, #55adff 30%, #3b9bff 55%, #4aa9ff 75%, #6fcad0 100%);
@@ -7,10 +14,11 @@
 
 .auth-card {
 	position: relative;
-	max-width: 820px;
+	width: 100%;
+	max-width: calc(820 * var(--u));
 	margin: 0 auto;
-	padding: 52px;
-	border-radius: 30px;
+	padding: calc(52 * var(--u));
+	border-radius: calc(30 * var(--u));
 	background: rgba(250, 253, 255, .97);
 	box-shadow: 0 30px 80px rgba(6, 60, 140, .22);
 	overflow: hidden;
@@ -19,10 +27,10 @@
 	.auth-card::after {
 		content: "";
 		position: absolute;
-		top: -84px;
-		right: -70px;
-		width: 230px;
-		height: 230px;
+		top: calc(-84 * var(--u));
+		right: calc(-70 * var(--u));
+		width: calc(230 * var(--u));
+		height: calc(230 * var(--u));
 		border-radius: 50%;
 		background: linear-gradient(135deg, rgba(196, 236, 230, .85), rgba(208, 242, 170, .9));
 		pointer-events: none;
@@ -39,21 +47,21 @@
 
 .auth-tag {
 	display: inline-block;
-	padding: 8px 16px;
+	padding: calc(8 * var(--u)) calc(16 * var(--u));
 	border: 1px solid #d6efb3;
 	border-radius: 999px;
 	background: #f2fce0;
 	color: #0a6bd6;
-	font-size: 12px;
+	font-size: calc(12 * var(--u));
 	font-weight: 800;
 	letter-spacing: .2em;
 }
 
 .auth-title {
-	margin: 18px 0 8px;
+	margin: calc(18 * var(--u)) 0 calc(8 * var(--u));
 	color: #0a1a33;
 	font-family: 'Montserrat', sans-serif;
-	font-size: clamp(30px, 5vw, 44px);
+	font-size: calc(44 * var(--u));
 	font-weight: 800;
 	letter-spacing: -.03em;
 	line-height: 1.15;
@@ -62,34 +70,34 @@
 .auth-sub {
 	margin: 0;
 	color: #6b7a90;
-	font-size: 1.05rem;
+	font-size: calc(16.8 * var(--u));
 }
 
 /* ----- Thanh các bước ----- */
 .auth-steps {
 	display: flex;
 	align-items: flex-start;
-	margin: 30px 0 28px;
+	margin: calc(30 * var(--u)) 0 calc(28 * var(--u));
 }
 
 .auth-step {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 8px;
+	gap: calc(8 * var(--u));
 }
 
 .auth-dot {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 40px;
-	height: 40px;
+	width: calc(40 * var(--u));
+	height: calc(40 * var(--u));
 	border: 1px solid #dbe7f3;
 	border-radius: 50%;
 	background: #f1f6fb;
 	color: #94a3b8;
-	font-size: .9rem;
+	font-size: calc(14.4 * var(--u));
 	font-weight: 800;
 	transition: .2s;
 }
@@ -98,7 +106,7 @@
 	border-color: transparent;
 	background: linear-gradient(135deg, var(--blue), var(--lime));
 	color: #fff;
-	box-shadow: 0 0 0 5px rgba(17, 157, 255, .12), 0 6px 14px rgba(17, 157, 255, .3);
+	box-shadow: 0 0 0 calc(5 * var(--u)) rgba(17, 157, 255, .12), 0 6px 14px rgba(17, 157, 255, .3);
 }
 
 .auth-step.is-done .auth-dot {
@@ -121,7 +129,7 @@
 
 .auth-step-label {
 	color: #7b8ba0;
-	font-size: .78rem;
+	font-size: calc(12.5 * var(--u));
 	font-weight: 700;
 	white-space: nowrap;
 }
@@ -133,8 +141,9 @@
 
 .auth-line {
 	flex: 1;
-	height: 3px;
-	margin: 19px 16px 0;
+	height: calc(3 * var(--u));
+	min-height: 2px;
+	margin: calc(19 * var(--u)) calc(16 * var(--u)) 0;
 	border-radius: 3px;
 	background: #e3ecf5;
 }
@@ -147,36 +156,36 @@
 .auth-row2 {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	gap: 20px;
+	gap: calc(20 * var(--u));
 }
 
 .auth-field {
-	margin-bottom: 22px;
+	margin-bottom: calc(22 * var(--u));
 }
 
 .auth-label {
 	display: block;
-	margin-bottom: 10px;
+	margin-bottom: calc(10 * var(--u));
 	color: #16243b;
-	font-size: .95rem;
+	font-size: calc(15.2 * var(--u));
 	font-weight: 700;
 }
 
 .auth-input {
 	display: flex;
 	align-items: center;
-	gap: 14px;
-	height: 62px;
-	padding: 0 20px;
+	gap: calc(14 * var(--u));
+	height: calc(62 * var(--u));
+	padding: 0 calc(20 * var(--u));
 	border: 1px solid #e1ebf5;
-	border-radius: 18px;
+	border-radius: calc(18 * var(--u));
 	background: #f8fbfe;
 	transition: border-color .15s, box-shadow .15s, background .15s;
 }
 
 	.auth-input > i.lead {
 		color: #8fa0b5;
-		font-size: 1.05rem;
+		font-size: calc(16.8 * var(--u));
 	}
 
 	.auth-input input {
@@ -188,7 +197,7 @@
 		background: transparent;
 		color: #0f172a;
 		font: inherit;
-		font-size: 1rem;
+		font-size: calc(16 * var(--u));
 	}
 
 		.auth-input input::placeholder {
@@ -214,7 +223,7 @@
 	border: 0;
 	background: none;
 	color: #8fa0b5;
-	font-size: 1.1rem;
+	font-size: calc(17.6 * var(--u));
 	cursor: pointer;
 }
 
@@ -226,40 +235,42 @@
 .auth-error.field-validation-error {
 	display: flex;
 	align-items: center;
-	gap: 8px;
-	margin-top: 8px;
+	gap: calc(8 * var(--u));
+	margin-top: calc(8 * var(--u));
 	color: #dc3545;
-	font-size: .82rem;
+	font-size: calc(13.1 * var(--u));
 	font-weight: 700;
 }
 
 	.auth-error.field-validation-error::before {
 		content: "\00d7";
 		flex: none;
-		width: 15px;
-		height: 15px;
+		width: calc(15 * var(--u));
+		height: calc(15 * var(--u));
 		border-radius: 50%;
 		background: #dc3545;
 		color: #fff;
-		font-size: 12px;
+		font-size: calc(12 * var(--u));
 		font-weight: 800;
-		line-height: 15px;
+		line-height: calc(15 * var(--u));
 		text-align: center;
 	}
 
 .auth-card .validation-summary-errors {
-	margin-bottom: 18px;
-	padding: 12px 16px;
+	margin-bottom: calc(18 * var(--u));
+	padding: calc(12 * var(--u)) calc(16 * var(--u));
 	border: 1px solid #f5c2c7;
-	border-radius: 14px;
+	border-radius: calc(14 * var(--u));
 	background: #fff5f5;
+	font-size: calc(14 * var(--u));
 	font-weight: 600;
 }
 
 /* ----- Thanh độ mạnh mật khẩu ----- */
 .auth-meter {
-	height: 6px;
-	margin-top: 10px;
+	height: calc(6 * var(--u));
+	min-height: 4px;
+	margin-top: calc(10 * var(--u));
 	border-radius: 6px;
 	background: #e6eef6;
 	overflow: hidden;
@@ -290,10 +301,10 @@
 	}
 
 .auth-meter-text {
-	min-height: 20px;
-	margin-top: 6px;
+	min-height: calc(20 * var(--u));
+	margin-top: calc(6 * var(--u));
 	text-align: right;
-	font-size: .8rem;
+	font-size: calc(12.8 * var(--u));
 	font-weight: 800;
 }
 
@@ -315,18 +326,18 @@
 
 /* ----- Khung yêu cầu mật khẩu ----- */
 .auth-req {
-	margin-bottom: 22px;
-	padding: 18px 20px;
+	margin-bottom: calc(22 * var(--u));
+	padding: calc(18 * var(--u)) calc(20 * var(--u));
 	border: 1px solid #e0ecf5;
-	border-radius: 18px;
+	border-radius: calc(18 * var(--u));
 	background: linear-gradient(135deg, #f2f9ff, #f1fadf);
 }
 
 	.auth-req strong {
 		display: block;
-		margin-bottom: 12px;
+		margin-bottom: calc(12 * var(--u));
 		color: #16243b;
-		font-size: .9rem;
+		font-size: calc(14.4 * var(--u));
 	}
 
 	.auth-req ul {
@@ -338,10 +349,10 @@
 	.auth-req li {
 		display: flex;
 		align-items: center;
-		gap: 10px;
-		margin-bottom: 8px;
+		gap: calc(10 * var(--u));
+		margin-bottom: calc(8 * var(--u));
 		color: #5b6b80;
-		font-size: .88rem;
+		font-size: calc(14.1 * var(--u));
 		font-weight: 600;
 	}
 
@@ -355,17 +366,17 @@
 
 /* ----- Khung xác nhận thông tin ----- */
 .auth-summary {
-	margin-bottom: 22px;
-	padding: 22px 24px;
+	margin-bottom: calc(22 * var(--u));
+	padding: calc(22 * var(--u)) calc(24 * var(--u));
 	border: 1px solid #e0ecf5;
-	border-radius: 20px;
+	border-radius: calc(20 * var(--u));
 	background: linear-gradient(135deg, #f2f9ff, #f1fadf);
 }
 
 .auth-summary-title {
-	margin-bottom: 14px;
+	margin-bottom: calc(14 * var(--u));
 	color: #0a6bd6;
-	font-size: .85rem;
+	font-size: calc(13.6 * var(--u));
 	font-weight: 800;
 	letter-spacing: .12em;
 	text-transform: uppercase;
@@ -374,9 +385,9 @@
 .auth-summary-row {
 	display: flex;
 	justify-content: space-between;
-	gap: 16px;
-	margin-bottom: 10px;
-	font-size: 1rem;
+	gap: calc(16 * var(--u));
+	margin-bottom: calc(10 * var(--u));
+	font-size: calc(16 * var(--u));
 }
 
 	.auth-summary-row:last-child {
@@ -397,10 +408,10 @@
 .auth-check {
 	display: flex;
 	align-items: center;
-	gap: 12px;
-	margin-bottom: 12px;
+	gap: calc(12 * var(--u));
+	margin-bottom: calc(12 * var(--u));
 	color: #5b6b80;
-	font-size: .95rem;
+	font-size: calc(15.2 * var(--u));
 	cursor: pointer;
 }
 
@@ -413,10 +424,10 @@
 .auth-box {
 	position: relative;
 	flex: none;
-	width: 20px;
-	height: 20px;
+	width: calc(20 * var(--u));
+	height: calc(20 * var(--u));
 	border: 1.5px solid #aebfd1;
-	border-radius: 6px;
+	border-radius: calc(6 * var(--u));
 	background: #fff;
 	transition: .15s;
 }
@@ -429,10 +440,10 @@
 	.auth-check input:checked + .auth-box::after {
 		content: "";
 		position: absolute;
-		top: 3px;
-		left: 6px;
-		width: 5px;
-		height: 10px;
+		top: calc(3 * var(--u));
+		left: calc(6 * var(--u));
+		width: calc(5 * var(--u));
+		height: calc(10 * var(--u));
 		border: solid #fff;
 		border-width: 0 2px 2px 0;
 		transform: rotate(45deg);
@@ -457,7 +468,8 @@
 	justify-content: space-between;
 	align-items: center;
 	gap: 12px;
-	margin-bottom: 26px;
+	margin-bottom: calc(26 * var(--u));
+	font-size: calc(15.2 * var(--u));
 }
 
 	.auth-row-between .auth-check {
@@ -467,8 +479,8 @@
 /* ----- Nút ----- */
 .auth-actions {
 	display: flex;
-	gap: 10px;
-	margin-top: 6px;
+	gap: calc(10 * var(--u));
+	margin-top: calc(6 * var(--u));
 }
 
 .auth-submit {
@@ -476,16 +488,16 @@
 	flex: 1;
 	align-items: center;
 	justify-content: center;
-	gap: 10px;
+	gap: calc(10 * var(--u));
 	width: 100%;
-	height: 64px;
+	height: calc(64 * var(--u));
 	border: 0;
-	border-radius: 20px;
+	border-radius: calc(20 * var(--u));
 	background: linear-gradient(105deg, #1a9bff 0%, #0a6cf0 62%, #a4e32f 100%);
 	box-shadow: 0 14px 30px rgba(17, 157, 255, .35);
 	color: #fff;
 	font: inherit;
-	font-size: 1.1rem;
+	font-size: calc(17.6 * var(--u));
 	font-weight: 800;
 	cursor: pointer;
 	transition: transform .15s, filter .15s;
@@ -503,13 +515,13 @@
 
 .auth-back {
 	flex: none;
-	width: 64px;
-	height: 64px;
+	width: calc(64 * var(--u));
+	height: calc(64 * var(--u));
 	border: 0;
-	border-radius: 20px;
+	border-radius: calc(20 * var(--u));
 	background: #e8f4ff;
 	color: var(--blue-dark);
-	font-size: 1.15rem;
+	font-size: calc(18.4 * var(--u));
 	cursor: pointer;
 }
 
@@ -521,10 +533,10 @@
 .auth-divider {
 	display: flex;
 	align-items: center;
-	gap: 16px;
-	margin: 26px 0 18px;
+	gap: calc(16 * var(--u));
+	margin: calc(26 * var(--u)) 0 calc(18 * var(--u));
 	color: #9aa8ba;
-	font-size: .75rem;
+	font-size: calc(12 * var(--u));
 	font-weight: 800;
 	letter-spacing: .16em;
 	text-transform: uppercase;
@@ -541,20 +553,21 @@
 .auth-social {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	gap: 12px;
+	gap: calc(12 * var(--u));
 }
 
 	.auth-social button {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 10px;
-		height: 56px;
+		gap: calc(10 * var(--u));
+		height: calc(56 * var(--u));
 		border: 1px solid #e3ecf5;
-		border-radius: 18px;
+		border-radius: calc(18 * var(--u));
 		background: #fff;
 		color: #1b2a41;
 		font: inherit;
+		font-size: calc(16 * var(--u));
 		font-weight: 700;
 		cursor: pointer;
 		transition: box-shadow .15s;
@@ -565,39 +578,49 @@
 		}
 
 	.auth-social svg {
-		width: 22px;
-		height: 22px;
+		width: calc(22 * var(--u));
+		height: calc(22 * var(--u));
 	}
 
 .auth-note {
-	margin: 12px 0 0;
+	margin: calc(12 * var(--u)) 0 0;
 	color: #64748b;
-	font-size: .85rem;
+	font-size: calc(13.6 * var(--u));
 	text-align: center;
 }
 
 .auth-foot {
-	margin: 22px 0 0;
+	margin: calc(22 * var(--u)) 0 0;
 	color: #8795a8;
+	font-size: calc(15.2 * var(--u));
 	text-align: center;
-	font-size: .95rem;
 }
 
-/* ----- Riêng trang đăng nhập (ô và nút cao hơn) ----- */
+/* ----- Riêng trang đăng nhập (ô và nút cao hơn một chút) ----- */
 .auth-card-login .auth-input {
-	height: 76px;
+	height: calc(76 * var(--u));
 }
 
 .auth-card-login .auth-submit {
-	height: 80px;
-	border-radius: 24px;
+	height: calc(80 * var(--u));
+	border-radius: calc(24 * var(--u));
 }
 
-/* ----- Điện thoại ----- */
+/* ----- Điện thoại: dùng kích thước cố định, card gần full chiều ngang ----- */
 @media (max-width: 575.98px) {
+	.auth-page {
+		--u: .9px;
+		padding: 10px 12px 28px;
+	}
+
 	.auth-card {
-		padding: 30px 20px;
+		max-width: 100%;
+		padding: 28px 20px;
 		border-radius: 24px;
+	}
+
+	.auth-title {
+		font-size: 30px;
 	}
 
 	.auth-row2 {
@@ -605,15 +628,15 @@
 		gap: 0;
 	}
 
+	.auth-line {
+		margin-inline: 8px;
+	}
+
 	.auth-card-login .auth-input {
-		height: 64px;
+		height: calc(62 * var(--u));
 	}
 
 	.auth-card-login .auth-submit {
-		height: 68px;
-	}
-
-	.auth-line {
-		margin-inline: 8px;
+		height: calc(66 * var(--u));
 	}
 }
