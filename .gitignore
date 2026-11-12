@@ -1,7 +1,14 @@
-.vs/
 bin/
 obj/
 packages/
 *.user
-*.suo/Do_an.zip
-Do_an/Secrets.config
+*.suo
+/Do_an.zip
+/Do_an/Secrets.config
+
+# Local secrets and generated files
+**/Secrets.config
+**/.vs/
+**/bin/
+**/obj/
+**/*.csproj.user

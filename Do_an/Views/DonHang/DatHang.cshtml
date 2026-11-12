@@ -1,7 +1,421 @@
 ﻿
+@model Do_an.ViewModels.DatHangViewModel
+@using System.Linq
+
 @{
-    ViewBag.Title = "DatHang";
+    ViewBag.Title = "Đặt hàng";
 }
 
-<h2>DatHang</h2>
+<style>
+    .checkout-container {
+        max-width: 1100px;
+        margin: 35px auto;
+        padding: 0 15px;
+    }
 
+    .checkout-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 25px;
+    }
+
+    .checkout-card {
+        background: #fff;
+        border: 1px solid #e5e5e5;
+        border-radius: 9px;
+        padding: 22px;
+        margin-bottom: 20px;
+    }
+
+        .checkout-card h3 {
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+    .checkout-form-group {
+        margin-bottom: 16px;
+    }
+
+        .checkout-form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .checkout-form-group input,
+        .checkout-form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+        }
+
+    .checkout-product {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+        .checkout-product img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+    .checkout-product-info {
+        flex: 1;
+    }
+
+    .checkout-muted {
+        color: #777;
+        font-size: 13px;
+    }
+
+    .checkout-price {
+        color: #dc3545;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .checkout-total {
+        font-size: 22px;
+        font-weight: 700;
+        color: #dc3545;
+    }
+
+    .checkout-submit {
+        display: block;
+        width: 100%;
+        border: none;
+        border-radius: 6px;
+        padding: 13px;
+        background: #212529;
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+        .checkout-submit:hover {
+            background: #424649;
+        }
+
+    .checkout-validation {
+        color: #dc3545;
+        font-size: 13px;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .payment-choice {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px;
+        border: 1px solid #ddd;
+        border-radius: 7px;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
+
+        .payment-choice input {
+            margin-top: 4px;
+        }
+
+        .payment-choice strong {
+            display: block;
+        }
+
+    @@media (min-width: 768px) {
+        .checkout-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 22px;
+            align-items: start;
+        }
+    }
+</style>
+
+<div class="checkout-container">
+
+    <h2 class="checkout-title">THÔNG TIN ĐẶT HÀNG</h2>
+
+    @using (Html.BeginForm(
+        "DatHang",
+        "DonHang",
+        FormMethod.Post,
+        new { id = "formDatHang" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(
+                 false,
+                 "Vui lòng kiểm tra lại:",
+                 new { @class = "alert alert-danger" })
+
+        <div class="checkout-layout">
+
+            <div>
+
+                <div class="checkout-card">
+
+                    <h3>Thông tin người nhận</h3>
+
+                    <div class="checkout-form-group">
+                        @Html.LabelFor(m => m.HoTenNguoiNhan, "Họ tên người nhận")
+
+                        @Html.TextBoxFor(
+                                 m => m.HoTenNguoiNhan,
+                                 new
+                                 {
+                                     @class = "form-control",
+                                     placeholder = "Nhập họ tên người nhận",
+                                     maxlength = "100"
+                                 })
+
+                        @Html.ValidationMessageFor(
+                                 m => m.HoTenNguoiNhan,
+                                 "",
+                                 new { @class = "checkout-validation" })
+                    </div>
+
+                    <div class="checkout-form-group">
+                        @Html.LabelFor(m => m.SoDienThoai, "Số điện thoại")
+
+                        @Html.TextBoxFor(
+                                 m => m.SoDienThoai,
+                                 new
+                                 {
+                                     @class = "form-control",
+                                     type = "tel",
+                                     placeholder = "Nhập số điện thoại",
+                                     maxlength = "20"
+                                 })
+
+                        @Html.ValidationMessageFor(
+                                 m => m.SoDienThoai,
+                                 "",
+                                 new { @class = "checkout-validation" })
+                    </div>
+
+                    <div class="checkout-form-group">
+                        @Html.LabelFor(m => m.TinhThanh, "Tỉnh / thành phố")
+
+                        @Html.TextBoxFor(
+                                 m => m.TinhThanh,
+                                 new
+                                 {
+                                     @class = "form-control",
+                                     placeholder = "Nhập tỉnh / thành phố",
+                                     maxlength = "100"
+                                 })
+
+                        @Html.ValidationMessageFor(
+                                 m => m.TinhThanh,
+                                 "",
+                                 new { @class = "checkout-validation" })
+                    </div>
+
+                    <div class="checkout-form-group">
+                        @Html.LabelFor(m => m.PhuongXa, "Phường / xã")
+
+                        @Html.TextBoxFor(
+                                 m => m.PhuongXa,
+                                 new
+                                 {
+                                     @class = "form-control",
+                                     placeholder = "Nhập phường / xã",
+                                     maxlength = "100"
+                                 })
+
+                        @Html.ValidationMessageFor(
+                                 m => m.PhuongXa,
+                                 "",
+                                 new { @class = "checkout-validation" })
+                    </div>
+
+                    <div class="checkout-form-group">
+                        @Html.LabelFor(m => m.DiaChiCuThe, "Địa chỉ cụ thể")
+
+                        @Html.TextBoxFor(
+                                 m => m.DiaChiCuThe,
+                                 new
+                                 {
+                                     @class = "form-control",
+                                     placeholder = "Số nhà, tên đường...",
+                                     maxlength = "255"
+                                 })
+
+                        @Html.ValidationMessageFor(
+                                 m => m.DiaChiCuThe,
+                                 "",
+                                 new { @class = "checkout-validation" })
+                    </div>
+
+                    <div class="checkout-form-group">
+                        @Html.LabelFor(m => m.GhiChu, "Ghi chú đơn hàng")
+
+                        @Html.TextAreaFor(
+                                 m => m.GhiChu,
+                                 new
+                                 {
+                                     @class = "form-control",
+                                     rows = "3",
+                                     placeholder = "Ghi chú cho người bán...",
+                                     maxlength = "1000"
+                                 })
+                    </div>
+
+                </div>
+
+                <div class="checkout-card">
+
+                    <h3>Phương thức thanh toán</h3>
+
+                    <label class="payment-choice">
+                        @Html.RadioButtonFor(
+                                 m => m.PhuongThucThanhToan,
+                                 "COD",
+                                 new { id = "thanhToanCOD" })
+
+                        <span>
+                            <strong>Thanh toán khi nhận hàng (COD)</strong>
+                            <small class="checkout-muted">
+                                Thanh toán trực tiếp cho nhân viên giao hàng.
+                            </small>
+                        </span>
+                    </label>
+
+                    <label class="payment-choice">
+                        @Html.RadioButtonFor(
+                                 m => m.PhuongThucThanhToan,
+                                 "ChuyenKhoan",
+                                 new { id = "thanhToanSePay" })
+
+                        <span>
+                            <strong>Chuyển khoản ngân hàng qua SePay</strong>
+                            <small class="checkout-muted">
+                                Quét mã QR và thanh toán. Hệ thống xác nhận qua webhook.
+                            </small>
+                        </span>
+                    </label>
+
+                    @Html.ValidationMessageFor(
+                             m => m.PhuongThucThanhToan,
+                             "",
+                             new { @class = "checkout-validation" })
+
+                </div>
+
+            </div>
+
+            <div>
+
+                <div class="checkout-card">
+
+                    <h3>Đơn hàng của bạn</h3>
+
+                    @if (Model.DongHang != null &&
+                         Model.DongHang.Any())
+                    {
+                        foreach (var item in Model.DongHang)
+                        {
+                            <div class="checkout-product">
+
+                                @if (!string.IsNullOrWhiteSpace(item.DuongDanAnh))
+                                {
+                                    <img src="@Url.Content(item.DuongDanAnh)"
+                                         alt="@item.TenSanPham" />
+                                }
+
+                                <div class="checkout-product-info">
+                                    <strong>@item.TenSanPham</strong>
+
+                                    <div class="checkout-muted">
+                                        @item.MauSac / @item.KichThuoc
+                                    </div>
+
+                                    <div class="checkout-muted">
+                                        Số lượng: @item.SoLuong
+                                    </div>
+                                </div>
+
+                                <div class="checkout-price">
+                                    @item.ThanhTien.ToString("N0") đ
+                                </div>
+
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>Giỏ hàng đang trống.</p>
+                    }
+
+                    <div class="checkout-form-group mt-3">
+                        @Html.LabelFor(m => m.MaCode, "Mã giảm giá")
+
+                        @Html.TextBoxFor(
+                                 m => m.MaCode,
+                                 new
+                                 {
+                                     @class = "form-control",
+                                     placeholder = "Nhập mã giảm giá nếu có",
+                                     maxlength = "30"
+                                 })
+
+                        @Html.ValidationMessageFor(
+                                 m => m.MaCode,
+                                 "",
+                                 new { @class = "checkout-validation" })
+
+                        <small class="checkout-muted">
+                            Mã giảm giá được kiểm tra lại trên máy chủ khi đặt hàng.
+                        </small>
+                    </div>
+
+                    <hr />
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Tổng tiền hàng</span>
+                        <strong>@Model.TienHang.ToString("N0") đ</strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Giảm giá</span>
+                        <strong>@Model.TienGiam.ToString("N0") đ</strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Phí vận chuyển</span>
+                        <strong>@Model.PhiVanChuyen.ToString("N0") đ</strong>
+                    </div>
+
+                    <hr />
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="fw-bold">Tổng thanh toán</span>
+                        <span class="checkout-total">
+                            @Model.TongTien.ToString("N0") đ
+                        </span>
+                    </div>
+
+                    <p class="checkout-muted">
+                        Phí vận chuyển hiện tạm tính 0 đồng.
+                    </p>
+
+                    <button type="submit" class="checkout-submit">
+                        XÁC NHẬN ĐẶT HÀNG
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>
