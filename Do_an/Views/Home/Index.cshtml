@@ -269,7 +269,7 @@
         </section>
 
         <section id="homeProducts"
-                 class="home-section"
+                 class="home-section sportix-catalog-page"
                  aria-labelledby="homeProductTitle">
             <div class="home-section-heading" data-reveal>
                 <div>
@@ -313,49 +313,61 @@
                             sanPham.NgayTao,
                             thoiDiem);
 
+                        string lopNhan = "";
+
+                        if (nhan == "Hàng mới")
+                        {
+                            lopNhan = "catalog-badge-new";
+                        }
+                        else if (nhan == "Giảm giá")
+                        {
+                            lopNhan = "catalog-badge-sale";
+                        }
+
                         <div class="col-6 col-lg-3" data-reveal>
                             <a class="catalog-card"
                                href="@Url.Action("ChiTiet", "SanPham", new
-                                    {
-                                        area = "",
-                                        id = sanPham.MaSanPham
-                                    })">
+                               {
+                                   area = "",
+                                   id = sanPham.MaSanPham
+                               })">
                                 <div class="catalog-card-media">
                                     @if (anh != null)
                                     {
                                         <img src="@Url.Content(anh.DuongDanAnh)"
-                                             alt="@sanPham.TenSanPham"
+                                             alt=""
                                              loading="lazy" />
                                     }
                                     else
                                     {
-                                        <span class="home-image-placeholder">
+                                        <span class="catalog-card-placeholder">
                                             Chưa có ảnh
                                         </span>
                                     }
 
                                     @if (!string.IsNullOrEmpty(nhan))
                                     {
-                                        <span class="catalog-badge">
+                                        <span class="catalog-badge @lopNhan">
                                             @nhan
                                         </span>
                                     }
                                 </div>
 
                                 <div class="catalog-card-body">
-                                    <h3>@sanPham.TenSanPham</h3>
-
-                                    <p class="home-product-category">
-                                        @sanPham.LoaiHang.TenLoaiHang
+                                    <p class="catalog-card-category">
+                                        @(sanPham.LoaiHang == null
+                                            ? "Sản phẩm thể thao"
+                                            : sanPham.LoaiHang.TenLoaiHang)
                                     </p>
+
+                                    <h3>@sanPham.TenSanPham</h3>
 
                                     <div class="catalog-card-prices">
                                         @if (giaGoc.HasValue)
                                         {
-                                            var giaSale =
-                                                QuyTacSanPham.GiaSauGiam(
-                                                    giaGoc.Value,
-                                                    sanPham.PhanTramGiam);
+                                            var giaSale = QuyTacSanPham.GiaSauGiam(
+                                                giaGoc.Value,
+                                                sanPham.PhanTramGiam);
 
                                             <strong>
                                                 Từ @giaSale.ToString("N0", vi) đ
@@ -373,12 +385,6 @@
                                             <strong>Xem chi tiết</strong>
                                         }
                                     </div>
-
-                                    <span class="home-product-detail">
-                                        Xem sản phẩm
-                                        <i class="bi bi-arrow-right"
-                                           aria-hidden="true"></i>
-                                    </span>
                                 </div>
                             </a>
                         </div>
