@@ -4,7 +4,8 @@
 
     bool daDangNhap = Session["MaTaiKhoan"] != null;
     string hoTen = Convert.ToString(Session["HoTen"]);
-    bool laAdmin = Convert.ToString(Session["VaiTro"]) == "Admin";
+    string vaiTro = Convert.ToString(Session["VaiTro"]);
+    bool laAdmin = vaiTro == "Admin";
 
     string chuCai = "?";
     if (!string.IsNullOrWhiteSpace(hoTen))
@@ -78,7 +79,17 @@
                 }
                 else
                 {
-                    @* TV3: chèn icon giỏ hàng <li> ở ngay trước mục avatar này *@
+                    if (vaiTro == "User")
+                    {
+                        <li class="nav-item">
+                            <a href="@Url.Action("Index", "GioHang", new { area = "" })"
+                               class="nav-link sz-nav-link d-flex align-items-center justify-content-center p-2"
+                               aria-label="Giỏ hàng"
+                               title="Giỏ hàng">
+                                <i class="bi bi-cart3 fs-2 lh-1" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    }
                     <li class="nav-item dropdown ms-md-2">
                         <a class="nav-link sz-nav-link dropdown-toggle sz-user-toggle"
                            href="#"
