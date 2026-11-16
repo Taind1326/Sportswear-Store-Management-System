@@ -83,10 +83,15 @@
                     {
                         <li class="nav-item text-center">
                             <a href="@Url.Action("Index", "GioHang", new { area = "" })"
-                               class="btn btn-primary bg-gradient rounded-3 shadow-sm d-inline-flex align-items-center justify-content-center p-2"
-                               aria-label="Giỏ hàng"
+                               class="btn btn-primary bg-gradient position-relative rounded-3 shadow-sm d-inline-flex align-items-center justify-content-center p-2"
                                title="Giỏ hàng">
                                 <i class="bi bi-cart3 fs-4 lh-1" aria-hidden="true"></i>
+                                <span class="visually-hidden">Giỏ hàng, </span>
+                                <span class="position-absolute top-0 end-0 badge rounded-pill bg-danger border border-white px-1 py-0"
+                                      style="min-width: 1rem; font-size: .625rem; line-height: .875rem; transform: translateX(25%);">
+                                    @Html.Action("SoLuongHienTai", "GioHang", new { area = "" })
+                                </span>
+                                <span class="visually-hidden"> sản phẩm</span>
                             </a>
                         </li>
                     }

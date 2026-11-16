@@ -1,9 +1,9 @@
-﻿
-using System;
+﻿using System;
 using System.Data;
 using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using Do_an.Models;
@@ -53,6 +53,26 @@ namespace Do_an.Controllers
             return ketNoi.BeginTransaction(
                 IsolationLevel.Serializable
             );
+        }
+
+        [ChildActionOnly]
+        public ActionResult SoLuongHienTai()
+        {
+            int? maTaiKhoan = LayMaTaiKhoanHienTai();
+            if (!maTaiKhoan.HasValue ||
+                Convert.ToString(Session["VaiTro"]) != XacThucService.VaiTroUser)
+            {
+                return Content("0");
+            }
+
+            using (var db = new SPORTIXEntities())
+            {
+                long soLuong = db.ChiTietGioHangs
+                    .Where(x => x.GioHang.MaTaiKhoan == maTaiKhoan.Value)
+                    .Sum(x => (long?)x.SoLuong) ?? 0;
+
+                return Content(soLuong.ToString(CultureInfo.InvariantCulture));
+            }
         }
 
         // GET: GioHang
