@@ -182,7 +182,6 @@
     <Compile Include="Controllers\SanPhamController.cs" />
     <Compile Include="Controllers\SePayWebhookController.cs" />
     <Compile Include="Controllers\TaiKhoanController.cs" />
-    <Compile Include="Controllers\ThongKeController.cs" />
     <Compile Include="Controllers\TroLyAIController.cs" />
     <Compile Include="Controllers\ThongBaoWebsiteController.cs" />
     <Compile Include="Global.asax.cs">
