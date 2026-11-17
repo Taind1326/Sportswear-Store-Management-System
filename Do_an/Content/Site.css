@@ -140,6 +140,133 @@ body.sportix-public {
         filter: brightness(.9);
     }
 
+/* Menu tài khoản */
+
+.sz-account .sz-user-toggle {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 11px 5px 5px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--text);
+    font-size: .88rem;
+    font-weight: 600;
+}
+
+    .sz-account .sz-user-toggle:hover,
+    .sz-account .sz-user-toggle[aria-expanded="true"] {
+        border-color: var(--blue);
+        background: var(--blue-soft);
+    }
+
+    .sz-account .sz-user-toggle:focus-visible {
+        outline: 2px solid var(--blue-dark);
+        outline-offset: 2px;
+    }
+
+.sz-account .sz-avatar {
+    display: inline-flex;
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--lime));
+    color: var(--text);
+    font-size: .85rem;
+    font-weight: 800;
+}
+
+.sz-account .sz-user-name {
+    max-width: clamp(5rem, 12vw, 9rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sz-account .sz-user-chevron {
+    flex-shrink: 0;
+    color: var(--muted);
+    font-size: .7rem;
+}
+
+.sz-account .sz-user-toggle[aria-expanded="true"] .sz-user-chevron {
+    transform: rotate(180deg);
+}
+
+.sz-account .sz-account-menu {
+    --bs-dropdown-link-color: var(--text);
+    --bs-dropdown-link-hover-color: var(--blue-dark);
+    --bs-dropdown-link-hover-bg: var(--blue-soft);
+    --bs-dropdown-link-active-color: var(--blue-dark);
+    --bs-dropdown-link-active-bg: var(--blue-soft);
+    --bs-dropdown-divider-bg: var(--border);
+    --bs-dropdown-spacer: 8px;
+    width: 15rem;
+    padding: 6px;
+    border-color: var(--border);
+    border-radius: 14px;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, .12);
+    font-size: .875rem;
+}
+
+.sz-account .sz-account-name {
+    padding: 8px 10px;
+    color: var(--muted);
+    font-size: .8rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.sz-account .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    white-space: normal;
+}
+
+    .sz-account .dropdown-item .bi {
+        flex: 0 0 1.1em;
+        color: var(--blue-dark);
+        text-align: center;
+    }
+
+    .sz-account .dropdown-item:focus-visible {
+        outline: 2px solid var(--blue-dark);
+        outline-offset: -2px;
+    }
+
+.sz-account .sz-account-logout,
+.sz-account .sz-account-logout .bi {
+    color: #b91c1c;
+}
+
+    .sz-account .sz-account-logout:hover,
+    .sz-account .sz-account-logout:focus,
+    .sz-account .sz-account-logout:active {
+        background: #fff1f2;
+    }
+
+@media (max-width: 767.98px) {
+    .sz-account {
+        align-self: center;
+        text-align: center;
+    }
+
+        .sz-account .sz-account-menu {
+            width: min(15rem, calc(100vw - 4rem));
+            min-width: 0;
+            margin-inline: auto;
+            text-align: left;
+        }
+}
+
 /* Footer */
 
 .sz-footer {
@@ -373,30 +500,4 @@ html.sportix-public-page {
             opacity: 0;
             transform: translateY(16px);
         }
-}
-
-.sz-user-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.sz-avatar {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--blue), var(--lime));
-    color: #fff;
-    font-weight: 800;
-    font-size: 0.9rem;
-}
-
-.sz-user-name {
-    max-width: 140px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }

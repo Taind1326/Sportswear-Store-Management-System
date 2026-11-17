@@ -61,12 +61,15 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a href="@Url.Action("LienHe", "Home", new { area = "" })"
-                       class="nav-link sz-nav-link @(controller == "Home" && action == "LienHe" ? "active" : "")">
-                        Liên hệ
-                    </a>
-                </li>
+                @if (!laAdmin)
+                {
+                    <li class="nav-item">
+                        <a href="@Url.Action("LienHe", "Home", new { area = "" })"
+                           class="nav-link sz-nav-link @(controller == "Home" && action == "LienHe" ? "active" : "")">
+                            Liên hệ
+                        </a>
+                    </li>
+                }
 
                 @if (!daDangNhap)
                 {
@@ -95,43 +98,58 @@
                             </a>
                         </li>
                     }
-                    <li class="nav-item dropdown ms-md-2">
-                        <a class="nav-link sz-nav-link dropdown-toggle sz-user-toggle"
-                           href="#"
-                           role="button"
-                           data-bs-toggle="dropdown"
-                           aria-expanded="false">
+                    <li class="nav-item dropdown sz-account ms-md-2">
+                        <button type="button"
+                                id="szAccountToggle"
+                                class="sz-user-toggle"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
                             <span class="sz-avatar" aria-hidden="true">@chuCai</span>
-                            <span class="sz-user-name">@hoTen</span>
-                        </a>
+                            <span class="sz-user-name">@(string.IsNullOrWhiteSpace(hoTen) ? "Tài khoản" : hoTen)</span>
+                            <i class="bi bi-chevron-down sz-user-chevron" aria-hidden="true"></i>
+                        </button>
 
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            @if (laAdmin)
+                        <ul class="dropdown-menu dropdown-menu-end sz-account-menu"
+                            aria-labelledby="szAccountToggle">
+                            @if (!string.IsNullOrWhiteSpace(hoTen))
+                            {
+                                <li class="sz-account-name">@hoTen</li>
+                            }
+
+                            <li>
+                                <a class="dropdown-item"
+                                   href="@Url.Action("HoSo", "TaiKhoan", new { area = "" })">
+                                    <i class="bi bi-person" aria-hidden="true"></i>
+                                    @(laAdmin ? "Hồ sơ của tôi" : "Hồ sơ")
+                                </a>
+                            </li>
+                            @if (vaiTro == "User")
                             {
                                 <li>
                                     <a class="dropdown-item"
-                                       href="@Url.Action("Index", "Dashboard", new { area = "Admin" })">Trang quản trị</a>
+                                       href="@Url.Action("DiaChi", "TaiKhoan", new { area = "" })">
+                                        <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                                        Địa chỉ
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                       href="@Url.Action("Index", "DonHang", new { area = "" })">
+                                        <i class="bi bi-box-seam" aria-hidden="true"></i>
+                                        Đơn hàng của tôi
+                                    </a>
                                 </li>
                             }
-                            <li>
-                                <a class="dropdown-item"
-                                   href="@Url.Action("HoSo", "TaiKhoan", new { area = "" })">Hồ sơ</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item"
-                                   href="@Url.Action("DiaChi", "TaiKhoan", new { area = "" })">Địa chỉ</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item"
-                                   href="@Url.Action("Index", "DonHang", new { area = "" })">Đơn hàng của tôi</a>
-                            </li>
                             <li><hr class="dropdown-divider" /></li>
                             <li>
                                 @using (Html.BeginForm("DangXuat", "TaiKhoan", new { area = "" },
                                     FormMethod.Post, new { @class = "m-0" }))
                                 {
                                     @Html.AntiForgeryToken()
-                                    <button type="submit" class="dropdown-item">Đăng xuất</button>
+                                    <button type="submit" class="dropdown-item sz-account-logout">
+                                        <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                                        Đăng xuất
+                                    </button>
                                 }
                             </li>
                         </ul>
