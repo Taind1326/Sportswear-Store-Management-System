@@ -1,0 +1,97 @@
+.sportix-logout {
+    --bs-modal-width: 400px;
+    --bs-modal-margin: 1rem;
+    --bs-modal-border-color: #d9eaf8;
+    --bs-modal-border-radius: 24px;
+    font-family: Inter, "Segoe UI", sans-serif;
+}
+
+.sportix-logout .modal-content {
+    overflow: hidden;
+    color: #0f172a;
+    background: radial-gradient(ellipse at top, #eaf6ff 0%, #fff 70%);
+    box-shadow: 0 24px 64px rgba(15, 43, 78, .26);
+}
+
+.sportix-logout .modal-content::before {
+    content: "";
+    display: block;
+    height: 4px;
+    background: linear-gradient(90deg, #119dff, #a8e82e);
+}
+
+.sportix-logout .modal-body {
+    padding: clamp(1.25rem, 5vw, 2rem);
+    text-align: center;
+}
+
+.sportix-logout-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 1rem;
+    border: 1px solid #cbe6ff;
+    border-radius: 15px;
+    color: #0065c9;
+    background: #e0f0ff;
+    font-size: 1.35rem;
+}
+
+.sportix-logout h2 {
+    margin: 0 0 .5rem;
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1.35;
+}
+
+.sportix-logout p {
+    max-width: 28ch;
+    margin: 0 auto;
+    color: #506176;
+    font-size: .875rem;
+    line-height: 1.6;
+}
+
+.sportix-logout-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .625rem;
+    margin-top: 1.5rem;
+}
+
+.sportix-logout-actions .btn {
+    min-height: 44px;
+    border-radius: 11px;
+    font-size: .875rem;
+    font-weight: 700;
+}
+
+.sportix-logout-stay {
+    --bs-btn-color: #33465d;
+    --bs-btn-bg: #fff;
+    --bs-btn-border-color: #d9eaf8;
+    --bs-btn-hover-color: #123b63;
+    --bs-btn-hover-bg: #eaf6ff;
+    --bs-btn-hover-border-color: #badcff;
+    --bs-btn-active-color: #123b63;
+    --bs-btn-active-bg: #daedff;
+    --bs-btn-active-border-color: #badcff;
+}
+
+.sportix-logout-confirm {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #0065c9;
+    --bs-btn-border-color: #0065c9;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #0058b2;
+    --bs-btn-hover-border-color: #0058b2;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #004b99;
+    --bs-btn-active-border-color: #004b99;
+}
+
+.sportix-logout-actions .btn:focus-visible {
+    outline: 2px solid #0065c9;
+    outline-offset: 3px;
+}

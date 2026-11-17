@@ -1,0 +1,24 @@
+<div class="modal fade sportix-logout" id="sportixLogoutModal" tabindex="-1"
+     aria-labelledby="sportixLogoutTitle" aria-describedby="sportixLogoutDescription" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <span class="sportix-logout-icon" aria-hidden="true">
+                    <i class="bi bi-box-arrow-right"></i>
+                </span>
+                <h2 id="sportixLogoutTitle">Đăng xuất khỏi SPORTIX?</h2>
+                <p id="sportixLogoutDescription">
+                    Bạn cần đăng nhập lại để dùng các tính năng của tài khoản.
+                </p>
+
+                @using (Html.BeginForm("DangXuat", "TaiKhoan", new { area = "" },
+                    FormMethod.Post, new { @class = "sportix-logout-actions" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <button type="button" class="btn sportix-logout-stay" data-bs-dismiss="modal">Ở lại</button>
+                    <button type="submit" class="btn sportix-logout-confirm">Đăng xuất</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
