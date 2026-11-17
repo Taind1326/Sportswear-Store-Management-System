@@ -143,7 +143,7 @@
                             <li><hr class="dropdown-divider" /></li>
                             <li>
                                 <button type="button" class="dropdown-item sz-account-logout"
-                                        data-bs-toggle="modal" data-bs-target="#szLogoutModal">
+                                        data-bs-toggle="modal" data-bs-target="#sportixLogoutModal">
                                     <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
                                     Đăng xuất
                                 </button>
@@ -158,29 +158,11 @@
 
 @if (daDangNhap)
 {
-    <div class="modal fade" id="szLogoutModal" tabindex="-1"
-         aria-labelledby="szLogoutTitle" aria-describedby="szLogoutDescription" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content rounded-4 shadow">
-                <div class="modal-body p-4">
-                    <h2 class="h5 mb-2" id="szLogoutTitle">Bạn có muốn đăng xuất không?</h2>
-                    <p class="text-muted small mb-0" id="szLogoutDescription">
-                        Bạn sẽ cần đăng nhập lại để dùng các chức năng của tài khoản.
-                    </p>
-                </div>
+    @Html.Partial("~/Views/Shared/_LogoutConfirmation.cshtml")
 
-                @using (Html.BeginForm("DangXuat", "TaiKhoan", new { area = "" },
-                    FormMethod.Post, new { @class = "modal-footer border-0 pt-0 px-4 pb-4" }))
-                {
-                    @Html.AntiForgeryToken()
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Ở lại</button>
-                    <button type="submit" class="btn btn-danger">Đăng xuất</button>
-                }
-            </div>
-        </div>
-    </div>
-
-    <script>document.getElementById("szLogoutModal").addEventListener("hidden.bs.modal", function () {
+    <script>
+        document.getElementById("sportixLogoutModal").addEventListener("hidden.bs.modal", function () {
             document.getElementById("szAccountToggle").focus();
-        });</script>
+        });
+    </script>
 }

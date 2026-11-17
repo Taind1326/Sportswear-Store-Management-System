@@ -315,7 +315,6 @@
     <Content Include="Areas\Admin\Views\ThongBaoWebsite\Form.cshtml" />
     <Content Include="Content\auth.css" />
     <Content Include="Content\khuyen-mai-popup.css" />
-    <Content Include="Content\logout-confirmation.css" />
     <Content Include="Scripts\auth.js" />
     <Content Include="Scripts\khuyen-mai-popup.js" />
     <Content Include="Views\ThongBaoWebsite\Index.cshtml" />
@@ -351,6 +350,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\logout-confirmation.css" />
     <Content Include="Models\SPORTIX.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>SPORTIX.edmx</DependentUpon>
@@ -422,6 +422,7 @@
     <Content Include="Views\DonHang\LichSu.cshtml" />
     <Content Include="Views\DonHang\ChiTiet.cshtml" />
     <Content Include="Views\Shared\_Header.cshtml" />
+    <Content Include="Views\Shared\_LogoutConfirmation.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
     <Content Include="Views\Shared\_Splash.cshtml" />
     <Content Include="Views\Shared\_ChatAI.cshtml" />
@@ -433,7 +434,6 @@
     <Content Include="Views\TaiKhoan\DiaChi.cshtml" />
     <Content Include="Secrets.config" />
     <Content Include="Views\DonHang\ThanhToanSePay.cshtml" />
-    <Content Include="Views\Shared\_LogoutConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
