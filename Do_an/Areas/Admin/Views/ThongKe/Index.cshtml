@@ -11,7 +11,7 @@
 }
 
 @section styles {
-    <link href="@Url.Content("~/Content/admin-thong-ke.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/admin-thong-ke.css?v=20261119-3")" rel="stylesheet" />
 }
 
 <div class="admin-statistics">
@@ -194,6 +194,6 @@
     @if (ViewData.ModelState.IsValid && (Model.TienThu != 0 || Model.TienHoan != 0))
     {
         <script src="@chartJsUrl" defer></script>
-        <script src="@Url.Content("~/Scripts/admin/thong-ke.js")" defer></script>
+        <script src="@Url.Content("~/Scripts/admin/thong-ke.js?v=20261119-2")" defer></script>
     }
 }
