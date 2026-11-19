@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 @model Do_an.Models.SanPham
 @using System
 @using System.Linq
@@ -8,6 +8,11 @@
 @{
     ViewBag.Title = Model.TenSanPham;
     var vi = CultureInfo.GetCultureInfo("vi-VN");
+    bool laAdmin;
+    using (var db = new Do_an.Models.SPORTIXEntities())
+    {
+        laAdmin = XacThucService.LaAdmin(db);
+    }
 
     var danhSachAnh = Model.HinhAnhSanPhams
         .Where(x => !string.IsNullOrWhiteSpace(x.DuongDanAnh))
@@ -251,48 +256,52 @@
                    aria-live="polite">
                 </p>
 
-                using (Html.BeginForm(
-                    "Them",
-                    "GioHang",
-                    FormMethod.Post,
-                    new { id = "formThemGioHang" }))
+                if (!laAdmin)
                 {
-                    @Html.AntiForgeryToken()
+                    using (Html.BeginForm(
+                        "Them",
+                        "GioHang",
+                        FormMethod.Post,
+                        new { id = "formThemGioHang" }))
+                    {
+                        @Html.AntiForgeryToken()
 
-                    <div id="vungSoLuong" hidden>
+                        <div id="vungSoLuong" hidden>
 
-                        <div class="mb-3">
+                            <div class="mb-3">
 
-                            <label for="soLuongSanPham"
-                                   class="form-label">
-                                Số lượng
-                            </label>
+                                <label for="soLuongSanPham"
+                                       class="form-label">
+                                    Số lượng
+                                </label>
 
-                            <input id="soLuongSanPham"
-                                   name="soLuong"
-                                   type="number"
-                                   class="form-control"
-                                   value="1"
-                                   min="1"
-                                   step="1"
-                                   disabled />
+                                <input id="soLuongSanPham"
+                                       name="soLuong"
+                                       type="number"
+                                       class="form-control"
+                                       value="1"
+                                       min="1"
+                                       step="1"
+                                       disabled />
 
-                            <input id="maBienTheDangChon"
-                                   name="maBienThe"
-                                   type="hidden" />
+                                <input id="maBienTheDangChon"
+                                       name="maBienThe"
+                                       type="hidden" />
+                            </div>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                <i class="bi bi-cart-plus"
+                                   aria-hidden="true"></i>
+
+                                Thêm vào giỏ hàng
+                            </button>
+
                         </div>
-
-                        <button type="submit"
-                                class="btn btn-primary">
-
-                            <i class="bi bi-cart-plus"
-                               aria-hidden="true"></i>
-
-                            Thêm vào giỏ hàng
-                        </button>
-
-                    </div>
+                    }
                 }
+
             }
 
         </div>
@@ -537,6 +546,8 @@
                                 : "Hết hàng";
 
                         }
+
+                        if (!soLuong || !maBienThe || !vungSoLuong) return;
 
                         if (bienThe.ConHang && bienThe.SoLuongTon > 0) {
 

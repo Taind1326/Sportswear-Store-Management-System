@@ -9,9 +9,9 @@ namespace Do_an.Services
     // Yêu cầu đã đăng nhập (kiểm tra lại DB mỗi lần: bắt được tài khoản bị khóa giữa chừng).
     public class YeuCauDangNhapAttribute : ActionFilterAttribute
     {
-        protected virtual bool CanQuyenAdmin
+        protected virtual string VaiTroBatBuoc
         {
-            get { return false; }
+            get { return null; }
         }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -36,7 +36,7 @@ namespace Do_an.Services
                 return;
             }
 
-            if (CanQuyenAdmin && tk.VaiTro != XacThucService.VaiTroAdmin)
+            if (VaiTroBatBuoc != null && tk.VaiTro != VaiTroBatBuoc)
             {
                 filterContext.Result = new HttpStatusCodeResult(
                     403, "Bạn không có quyền truy cập chức năng này.");
@@ -79,9 +79,19 @@ namespace Do_an.Services
     // Yêu cầu đăng nhập VÀ có vai trò Admin (User thường nhận 403).
     public class YeuCauAdminAttribute : YeuCauDangNhapAttribute
     {
-        protected override bool CanQuyenAdmin
+        protected override string VaiTroBatBuoc
         {
-            get { return true; }
+            get { return XacThucService.VaiTroAdmin; }
         }
     }
+
+    // Chỉ khách hàng đang hoạt động được sử dụng giỏ hàng và đặt hàng.
+    public class YeuCauKhachHangAttribute : YeuCauDangNhapAttribute
+    {
+        protected override string VaiTroBatBuoc
+        {
+            get { return XacThucService.VaiTroUser; }
+        }
+    }
+
 }

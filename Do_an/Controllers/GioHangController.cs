@@ -76,6 +76,7 @@ namespace Do_an.Controllers
         }
 
         // GET: GioHang
+        [YeuCauKhachHang]
         public ActionResult Index()
         {
             int? maTaiKhoan = LayMaTaiKhoanHienTai();
@@ -162,6 +163,7 @@ namespace Do_an.Controllers
         // POST: GioHang/Them
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [YeuCauKhachHang]
         public ActionResult Them(int maBienThe, int soLuong = 1)
         {
             int? maTaiKhoan = LayMaTaiKhoanHienTai();
@@ -268,6 +270,7 @@ namespace Do_an.Controllers
         // POST: GioHang/CapNhat
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [YeuCauKhachHang]
         public ActionResult CapNhat(int id, int soLuong)
         {
             int? maTaiKhoan = LayMaTaiKhoanHienTai();
@@ -343,6 +346,7 @@ namespace Do_an.Controllers
         // POST: GioHang/Xoa
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [YeuCauKhachHang]
         public ActionResult Xoa(int id)
         {
             int? maTaiKhoan = LayMaTaiKhoanHienTai();

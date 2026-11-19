@@ -16,7 +16,7 @@ using Do_an.ViewModels;
 
 namespace Do_an.Controllers
 {
-    [YeuCauDangNhap]
+    [YeuCauKhachHang]
     public partial class DonHangController : Controller
     {
         private readonly DonHangService dichVu = new DonHangService();
