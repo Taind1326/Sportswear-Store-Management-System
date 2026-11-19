@@ -1,0 +1,199 @@
+@model Do_an.ViewModels.ThongKeViewModel
+@using Do_an.Services
+@using System.Globalization
+@using System.Linq
+
+@{
+    ViewBag.Title = "Thống kê";
+    var vi = CultureInfo.GetCultureInfo("vi-VN");
+    var dinhDangKy = Model.TheoNgay ? "dd/MM/yyyy" : "MM/yyyy";
+    const string chartJsUrl = "https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js";
+}
+
+@section styles {
+    <link href="@Url.Content("~/Content/admin-thong-ke.css")" rel="stylesheet" />
+}
+
+<div class="admin-statistics">
+    <header class="statistics-heading">
+        <h1>Thống kê bán hàng</h1>
+        <p>Theo dõi dòng tiền, đơn hàng và sản phẩm bán chạy.</p>
+    </header>
+
+    <div class="product-panel statistics-filter">
+        <form class="statistics-filter-form" method="get" aria-label="Lọc theo khoảng ngày"
+              action="@Url.Action("Index", "ThongKe", new { area = "Admin" })">
+            <div class="statistics-date">
+                <label class="form-label fw-semibold" for="tuNgay">Từ ngày</label>
+                <input class="form-control" id="tuNgay" name="tuNgay" type="date" value="@Model.TuNgay" required />
+            </div>
+            <div class="statistics-date">
+                <label class="form-label fw-semibold" for="denNgay">Đến ngày</label>
+                <input class="form-control" id="denNgay" name="denNgay" type="date" value="@Model.DenNgay" required />
+            </div>
+            <button class="btn btn-primary" type="submit">Lọc theo ngày</button>
+        </form>
+
+        <form class="statistics-filter-form" method="get" aria-label="Lọc theo tháng"
+              action="@Url.Action("Index", "ThongKe", new { area = "Admin" })">
+            <div class="statistics-date">
+                <label class="form-label fw-semibold" for="thang">Tháng / năm</label>
+                <input class="form-control" id="thang" name="thang" type="month" value="@Model.Thang" required />
+            </div>
+            <div class="statistics-filter-actions">
+                <button class="btn btn-outline-primary" type="submit">Lọc theo tháng</button>
+                <a class="btn btn-link" href="@Url.Action("Index", "ThongKe", new { area = "Admin" })">Tháng này</a>
+            </div>
+        </form>
+    </div>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+    }
+    else
+    {
+        var tongSoDon = Model.TrangThaiDon.Sum(x => x.SoDon);
+        var trangThai = TrangThaiDonHang.TatCa.Concat(Model.TrangThaiDon.Select(x => x.TrangThai))
+            .Distinct(System.StringComparer.OrdinalIgnoreCase);
+
+        <dl class="statistics-metrics">
+            <div class="product-panel statistics-metric statistics-metric-primary">
+                <dt>
+                    <span class="statistics-metric-icon"><i class="bi bi-wallet2" aria-hidden="true"></i></span>
+                    Thực thu
+                </dt>
+                <dd>@Model.ThucThu.ToString("N0", vi) đ</dd>
+            </div>
+            <div class="product-panel statistics-metric statistics-metric-income">
+                <dt>
+                    <span class="statistics-metric-icon"><i class="bi bi-arrow-down-left-circle" aria-hidden="true"></i></span>
+                    Tổng tiền thu
+                </dt>
+                <dd>@Model.TienThu.ToString("N0", vi) đ</dd>
+            </div>
+            <div class="product-panel statistics-metric statistics-metric-refund">
+                <dt>
+                    <span class="statistics-metric-icon"><i class="bi bi-arrow-return-left" aria-hidden="true"></i></span>
+                    Tổng hoàn tiền
+                </dt>
+                <dd>@Model.TienHoan.ToString("N0", vi) đ</dd>
+            </div>
+            <div class="product-panel statistics-metric statistics-metric-orders">
+                <dt>
+                    <span class="statistics-metric-icon"><i class="bi bi-receipt" aria-hidden="true"></i></span>
+                    Đơn đã đặt
+                </dt>
+                <dd>@tongSoDon.ToString("N0", vi)</dd>
+            </div>
+        </dl>
+
+        <div class="statistics-overview">
+            <section class="product-panel statistics-revenue" aria-labelledby="thongKeThucThu">
+                <h2 id="thongKeThucThu" class="h5 fw-bold mb-1">Thực thu theo @(Model.TheoNgay ? "ngày" : "tháng")</h2>
+                <p class="product-meta mb-3">Tiền thu trừ tiền hoàn theo ngày phát sinh. Số hoàn gồm cả hoàn tiền mô phỏng.</p>
+
+                @if (Model.TienThu == 0 && Model.TienHoan == 0)
+                {
+                    <div class="statistics-empty statistics-empty-chart">
+                        <i class="bi bi-bar-chart" aria-hidden="true"></i>
+                        <p class="mb-0">Chưa có khoản thu hoặc hoàn tiền trong kỳ này.</p>
+                    </div>
+                }
+                else
+                {
+                    <div id="thongKeBieuDo" class="statistics-chart" hidden>
+                        <canvas id="thongKeCanvas" role="img"
+                                aria-label="Biểu đồ thực thu. Các giá trị chi tiết có trong bảng bên dưới."></canvas>
+                    </div>
+
+                    <details class="statistics-breakdown" id="thongKeChiTiet" open>
+                        <summary>Xem bảng tiền thu và hoàn tiền</summary>
+                        <div class="table-responsive mt-2">
+                            <table class="table product-table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">@(Model.TheoNgay ? "Ngày" : "Tháng")</th>
+                                        <th scope="col" class="text-end">Tiền thu</th>
+                                        <th scope="col" class="text-end">Hoàn tiền</th>
+                                        <th scope="col" class="text-end">Thực thu</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var ky in Model.CacKy)
+                                    {
+                                        <tr data-ky="@ky.BatDau.ToString(dinhDangKy, vi)"
+                                            data-thuc-thu="@ky.ThucThu.ToString(CultureInfo.InvariantCulture)">
+                                            <th scope="row">@ky.BatDau.ToString(dinhDangKy, vi)</th>
+                                            <td class="text-end text-nowrap">@ky.TienThu.ToString("N0", vi) đ</td>
+                                            <td class="text-end text-nowrap">@ky.TienHoan.ToString("N0", vi) đ</td>
+                                            <td class="text-end text-nowrap fw-semibold">@ky.ThucThu.ToString("N0", vi) đ</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                }
+            </section>
+
+            <section class="product-panel statistics-status" aria-labelledby="thongKeTrangThai">
+                <h2 id="thongKeTrangThai" class="h5 fw-bold mb-1">Trạng thái đơn hàng</h2>
+                <p class="product-meta mb-3">Trạng thái hiện tại của các đơn đặt trong kỳ.</p>
+                <dl class="statistics-orders mb-0">
+                    @foreach (var ma in trangThai)
+                    {
+                        var soDon = Model.TrangThaiDon.Where(x => string.Equals(x.TrangThai, ma,
+                            System.StringComparison.OrdinalIgnoreCase)).Sum(x => x.SoDon);
+                        <div>
+                            <dt>@(TrangThaiDonHang.Ten(ma) ?? "Chưa có trạng thái")</dt>
+                            <dd><span class="badge rounded-pill @TrangThaiDonHang.LopBadge(ma)">@soDon.ToString("N0", vi)</span></dd>
+                        </div>
+                    }
+                </dl>
+            </section>
+        </div>
+
+        <section class="product-panel statistics-products" aria-labelledby="thongKeBanChay">
+            <h2 id="thongKeBanChay" class="h5 fw-bold mb-1">Sản phẩm bán chạy</h2>
+            <p class="product-meta mb-3">Top 5 theo số lượng trong các đơn đặt trong kỳ và đã giao.</p>
+            @if (Model.SanPhamBanChay.Count == 0)
+            {
+                <p class="statistics-empty">Chưa có sản phẩm nào được giao trong các đơn đặt trong kỳ.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table product-table align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">Sản phẩm</th>
+                                <th scope="col" class="text-end text-nowrap">Đã giao</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var sanPham in Model.SanPhamBanChay)
+                            {
+                                <tr>
+                                    <td>
+                                        <a class="product-name" href="@Url.Action("ChiTiet", "SanPham",
+                                            new { area = "Admin", id = sanPham.MaSanPham })">@sanPham.TenSanPham</a>
+                                        </td>
+                                        <td class="text-end fw-semibold">@sanPham.SoLuong.ToString("N0", vi)</td>
+                                    </tr>
+                                }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </section>
+    }
+</div>
+
+@section scripts {
+    @if (ViewData.ModelState.IsValid && (Model.TienThu != 0 || Model.TienHoan != 0))
+    {
+        <script src="@chartJsUrl" defer></script>
+        <script src="@Url.Content("~/Scripts/admin/thong-ke.js")" defer></script>
+    }
+}

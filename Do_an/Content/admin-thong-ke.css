@@ -1,0 +1,104 @@
+.admin-statistics .statistics-filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: .75rem;
+    margin-bottom: 1rem;
+}
+
+.statistics-filter > div {
+    flex: 0 1 12rem;
+}
+
+.statistics-metrics,
+.statistics-details {
+    display: grid;
+    gap: 1rem;
+}
+
+.statistics-metrics {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+    margin-bottom: 1rem;
+}
+
+.admin-statistics .statistics-metric,
+.admin-statistics .statistics-details > section {
+    min-width: 0;
+    margin: 0;
+}
+
+.statistics-metric dt {
+    color: var(--admin-muted);
+    font-size: .85rem;
+}
+
+.statistics-metric dt i {
+    margin-right: .25rem;
+    color: var(--admin-blue);
+}
+
+.statistics-metric dd {
+    margin: .5rem 0 0;
+    font-size: clamp(1.15rem, 2vw, 1.65rem);
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.admin-statistics .statistics-metric-primary {
+    border-top: 3px solid var(--admin-blue);
+    background: linear-gradient(135deg, #e9f5ff, #fff 80%);
+}
+
+.statistics-revenue {
+    margin-bottom: 1rem;
+}
+
+.statistics-chart {
+    position: relative;
+    height: clamp(15rem, 34vw, 21rem);
+    margin: 0 0 1rem;
+}
+
+.statistics-breakdown summary {
+    width: fit-content;
+    color: #0064c9;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.statistics-details {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+}
+
+.statistics-orders > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: .65rem .15rem;
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.statistics-orders > div:last-child {
+    border-bottom: 0;
+}
+
+.statistics-empty {
+    margin-bottom: 0;
+    padding: .9rem 1rem;
+    border-radius: .65rem;
+    color: var(--admin-muted);
+    background: #eef6ff;
+}
+
+@media (max-width: 991.98px) {
+    .statistics-details {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 575.98px) {
+    .statistics-filter > div {
+        flex: 1 1 100%;
+    }
+}

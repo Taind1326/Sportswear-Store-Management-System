@@ -12,6 +12,7 @@
 
     bool trangTaiKhoan = controller == "TaiKhoan";
     bool trangDonHang = controller == "DonHang";
+    bool trangThongKe = controller == "ThongKe";
     bool trangKhuyenMai = controller == "KhuyenMai";
     bool trangThongBaoWeb = controller == "ThongBaoWebsite";
 }
@@ -87,12 +88,12 @@
                     Quản lý đơn hàng
                 </a>
 
-                <span class="admin-menu-item"
-                      aria-disabled="true"
-                      title="Chưa kết nối chức năng">
+                <a href="@Url.Action("Index", "ThongKe", new { area = "Admin" })"
+                   class="admin-menu-item @(trangThongKe ? "active" : "")"
+                   aria-current="@(trangThongKe ? "page" : null)">
                     <i class="bi bi-bar-chart" aria-hidden="true"></i>
                     Thống kê
-                </span>
+                </a>
 
                 <details class="admin-menu-group"
                          @((trangKhuyenMai || trangThongBaoWeb) ? "open" : "")>
