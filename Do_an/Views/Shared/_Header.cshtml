@@ -82,7 +82,18 @@
                 }
                 else
                 {
-                    if (vaiTro == "User")
+                    if (laAdmin)
+                    {
+                        <li class="nav-item text-center">
+                            <a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })"
+                               class="btn btn-outline-primary d-inline-flex align-items-center gap-2"
+                               aria-label="Trang quản trị" title="Trang quản trị">
+                                <i class="bi bi-speedometer2" aria-hidden="true"></i>
+                                <span class="d-md-none d-lg-inline">Trang quản trị</span>
+                            </a>
+                        </li>
+                    }
+                    else if (vaiTro == "User")
                     {
                         <li class="nav-item text-center">
                             <a href="@Url.Action("Index", "GioHang", new { area = "" })"
